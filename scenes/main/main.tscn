@@ -1,0 +1,402 @@
+[gd_scene load_steps=9 format=3 uid="uid://j74nbcwgfaeb"]
+
+[ext_resource type="Script" uid="uid://c8l40e2t7qf3r" path="res://scenes/main/main.gd" id="1_l3cfh"]
+[ext_resource type="PackedScene" uid="uid://bca3cjm2s2o6d" path="res://scenes/world/world.tscn" id="2_3s6yk"]
+[ext_resource type="Texture2D" uid="uid://fmv6ac8qq7r7" path="res://res/sprites/aim.png" id="3_ab7mr"]
+[ext_resource type="Texture2D" uid="uid://dwlrxn5cvf8ov" path="res://res/sprites/choose_slot.png" id="4_l3cfh"]
+
+[sub_resource type="GDScript" id="GDScript_k2fmo"]
+script/source = "extends CanvasLayer
+
+@onready var main_menu = $MainMenu
+@onready var hud = $HUD
+"
+
+[sub_resource type="GDScript" id="GDScript_l3cfh"]
+script/source = "extends Node
+
+@onready var target_label := %TargetLabel
+@onready var inventory := %Inventory
+"
+
+[sub_resource type="GDScript" id="GDScript_6q06x"]
+script/source = "extends MarginContainer
+
+@onready var label := $PanelContainer/MarginContainer/Label
+
+
+func update(txt: String):
+	self.visible = bool(txt.length())
+	label.text = txt
+"
+
+[sub_resource type="GDScript" id="GDScript_ow5a4"]
+script/source = "extends MarginContainer
+
+@onready var choose_slot := $PanelContainer/MarginContainer/Node2D
+@onready var slot := [
+	$PanelContainer/MarginContainer/HBoxContainer/Slot1,
+	$PanelContainer/MarginContainer/HBoxContainer/Slot2,
+	$PanelContainer/MarginContainer/HBoxContainer/Slot3,
+	$PanelContainer/MarginContainer/HBoxContainer/Slot4,
+	$PanelContainer/MarginContainer/HBoxContainer/Slot5,
+	$PanelContainer/MarginContainer/HBoxContainer/Slot6,
+	$PanelContainer/MarginContainer/HBoxContainer/Slot7,
+	$PanelContainer/MarginContainer/HBoxContainer/Slot8,
+	$PanelContainer/MarginContainer/HBoxContainer/Slot9,
+	$PanelContainer/MarginContainer/HBoxContainer/Slot10,
+]
+
+
+func set_hotbar_slot(pos: int) -> void:
+	choose_slot.global_position = slot[pos-1].global_position
+
+
+func update(inventory: Dictionary) -> void:
+	for i in range(10):
+		var item_data = inventory.get(i + 1) # Получаем данные слота (может быть null)
+		var current_slot = slot[i]
+		var label = current_slot.get_node(\"Label\")
+
+		if item_data != null:
+			# Если в слоте есть предмет
+			current_slot.texture = R.items[item_data[\"name\"]][\"texture\"]
+			label.text = str(item_data[\"amount\"]) if item_data[\"amount\"] > 1 else \"\"
+			label.show()
+		else:
+			# Если слот пустой — очищаем визуализацию
+			current_slot.texture = R.items[\"empty\"][\"texture\"]
+			label.text = \"\"
+			label.hide()
+"
+
+[node name="Main" type="Node"]
+script = ExtResource("1_l3cfh")
+
+[node name="Environment" type="Node3D" parent="."]
+
+[node name="World" parent="Environment" instance=ExtResource("2_3s6yk")]
+
+[node name="PlayerSpawner" type="MultiplayerSpawner" parent="Environment"]
+_spawnable_scenes = PackedStringArray("uid://dp83o7qw4ht4w")
+spawn_path = NodePath("..")
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="Environment"]
+_spawnable_scenes = PackedStringArray("uid://dnsaxsytyrrus", "uid://cddn37g14j7yf", "uid://1oleq1fyx67g", "uid://bcy5qk4r0ciq0", "uid://cphuj5sn1yibw", "uid://ctabmibvqd5dl", "uid://bn42xbb6rt2b8", "uid://cf368heu0gty2")
+spawn_path = NodePath("..")
+
+[node name="GUI" type="CanvasLayer" parent="."]
+script = SubResource("GDScript_k2fmo")
+
+[node name="HUD" type="Node" parent="GUI"]
+script = SubResource("GDScript_l3cfh")
+
+[node name="Aim" type="TextureRect" parent="GUI/HUD"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -19.0
+offset_top = -19.0
+offset_right = 61.0
+offset_bottom = 61.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("3_ab7mr")
+
+[node name="TargetLabel" type="MarginContainer" parent="GUI/HUD"]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+script = SubResource("GDScript_6q06x")
+
+[node name="PanelContainer" type="PanelContainer" parent="GUI/HUD/TargetLabel"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="GUI/HUD/TargetLabel/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="Label" type="Label" parent="GUI/HUD/TargetLabel/PanelContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_constants/outline_size = 5
+horizontal_alignment = 1
+
+[node name="Inventory" type="MarginContainer" parent="GUI/HUD"]
+unique_name_in_owner = true
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -370.0
+offset_top = -90.0
+offset_right = 3326.0
+offset_bottom = 330.0
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(0.2, 0.2)
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+script = SubResource("GDScript_ow5a4")
+
+[node name="PanelContainer" type="PanelContainer" parent="GUI/HUD/Inventory"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="GUI/HUD/Inventory/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="Node2D" type="Node2D" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer"]
+top_level = true
+scale = Vector2(0.99999994, 0.99999994)
+
+[node name="ChooseSlot" type="TextureRect" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/Node2D"]
+offset_right = 360.0
+offset_bottom = 360.0
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("4_l3cfh")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="Slot1" type="TextureRect" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer/Slot1"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -23.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 72
+
+[node name="Slot2" type="TextureRect" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer/Slot2"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -23.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 72
+
+[node name="Slot3" type="TextureRect" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer/Slot3"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -23.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 72
+
+[node name="Slot4" type="TextureRect" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer/Slot4"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -23.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 72
+
+[node name="Slot5" type="TextureRect" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer/Slot5"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -23.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 72
+
+[node name="Slot6" type="TextureRect" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer/Slot6"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -23.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 72
+
+[node name="Slot7" type="TextureRect" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer/Slot7"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -23.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 72
+
+[node name="Slot8" type="TextureRect" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer/Slot8"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -23.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 72
+
+[node name="Slot9" type="TextureRect" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer/Slot9"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -23.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 72
+
+[node name="Slot10" type="TextureRect" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer/Slot10"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -23.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 72
+
+[node name="MainMenu" type="PanelContainer" parent="GUI"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="GUI/MainMenu"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GUI/MainMenu/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+
+[node name="HostButton" type="Button" parent="GUI/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "HOST"
+
+[node name="JoinButton" type="Button" parent="GUI/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "JOIN"
+
+[node name="AddresLabel" type="LineEdit" parent="GUI/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "IP"
+alignment = 1
+
+[connection signal="spawned" from="Environment/PlayerSpawner" to="." method="_on_player_spawner_spawned"]
+[connection signal="pressed" from="GUI/MainMenu/MarginContainer/VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
+[connection signal="pressed" from="GUI/MainMenu/MarginContainer/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]

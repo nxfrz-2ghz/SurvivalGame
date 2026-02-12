@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3 uid="uid://cf368heu0gty2"]
+
+[ext_resource type="PackedScene" uid="uid://dnsaxsytyrrus" path="res://scenes/objects/object.tscn" id="1_kr1go"]
+[ext_resource type="Texture2D" uid="uid://cfuet63b7wtr4" path="res://res/sprites/objects/iron_ore.png" id="2_kr1go"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_u3fxr"]
+height = 2.1967773
+radius = 1.2216797
+
+[node name="IronOre" instance=ExtResource("1_kr1go")]
+nname = "iron_ore"
+drop_name = "iron_ore"
+
+[node name="HealthComponent" parent="." index="0"]
+resists = {
+"axe": 0.0,
+"melee": 0.0,
+"pickaxe": 0.6
+}
+max_health = 15.0
+
+[node name="CollisionShape3D" parent="." index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4514947, 0)
+shape = SubResource("CylinderShape3D_u3fxr")
+
+[node name="Sprite3D" parent="." index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8018018, 0)
+texture = ExtResource("2_kr1go")
