@@ -27,6 +27,7 @@ window/size/viewport_height=720
 window/size/mode=3
 window/stretch/mode="viewport"
 window/stretch/aspect="expand"
+window/vsync/vsync_mode=0
 
 [global_group]
 
@@ -158,7 +159,3 @@ voice_chat={
 3d_physics/layer_2="player"
 3d_physics/layer_3="object"
 3d_physics/layer_4="item"
-
-[physics]
-
-3d/physics_engine="Jolt Physics"

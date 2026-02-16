@@ -11,9 +11,9 @@ signal died
 
 func _ready() -> void:
 	current_health = max_health
-	changed.emit(current_health, max_health)
 
 
+@rpc("any_peer", "call_local")
 func take_damage(base_damage: float, incoming_types: Dictionary):
 	var total_damage = 0.0
 	for type in incoming_types:

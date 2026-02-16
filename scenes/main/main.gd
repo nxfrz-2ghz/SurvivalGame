@@ -21,7 +21,6 @@ func prepare_for_a_game(type: String) -> void:
 		
 		# Добавляем серверного игрока
 		add_player(multiplayer.get_unique_id())
-		start_game()
 	
 	elif type == "client":
 		var address = "localhost" # Или возьмите из UI: menu.adress_entry.text
@@ -29,12 +28,12 @@ func prepare_for_a_game(type: String) -> void:
 		var error = enet_peer.create_client(address, PORT)
 		if error != OK: return
 		multiplayer.multiplayer_peer = enet_peer
-		start_game()
 
 
 func add_player(peer_id: int) -> void:
 	var player = PLAYER_SCENE.instantiate()
 	player.name = str(peer_id)
+	player.position.y = 50
 	# Используем call_deferred для безопасности физики
 	G.world.add_child.call_deferred(player, true)
 	
@@ -47,7 +46,7 @@ func add_player(peer_id: int) -> void:
 	
 	else:
 		var world_node = G.world.get_node("World")
-		world_node.rpc_id(peer_id, "join_world", world_node.world_seed)
+		world_node.rpc_id(peer_id, "join_world", world_node.world_seed, int(G.gui.main_menu.world_size.text))
 
 
 func remove_player(peer_id: int) -> void:
@@ -55,10 +54,10 @@ func remove_player(peer_id: int) -> void:
 	player.queue_free()
 
 
-func start_game(load: bool = false) -> void:
+func start_game(is_load: bool = false) -> void:
 	G.gui.main_menu.hide()
 	if multiplayer.get_unique_id() == 1:
-		if load:
+		if is_load:
 			G.world.get_node("World").load_world()
 		else:
 			G.world.get_node("World").start_gen()
@@ -66,18 +65,25 @@ func start_game(load: bool = false) -> void:
 
 
 func _on_create_button_pressed() -> void:
-	add_player(1)
-	start_game()
+	if G.gui.main_menu.host_button.button_pressed:
+		prepare_for_a_game("server")
+		start_game()
+	else:
+		add_player(1)
+		start_game()
 
 func _on_load_button_pressed() -> void:
-	add_player(1)
-	start_game(true)
+	if G.gui.main_menu.host_button.button_pressed:
+		prepare_for_a_game("server")
+		start_game(true)
+	else:
+		add_player(1)
+		start_game(true)
 
-func _on_host_button_pressed() -> void:
-	prepare_for_a_game("server")
 
 func _on_join_button_pressed():
 	prepare_for_a_game("client")
+	start_game()
 
 
 # Clients

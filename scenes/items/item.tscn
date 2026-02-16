@@ -28,12 +28,13 @@ shape = SubResource("SphereShape3D_xhhhv")
 
 [node name="Sprite3D" type="Sprite3D" parent="." groups=["items"]]
 transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
-visibility_range_end = 500.0
+visibility_range_end = 120.0
 billboard = 1
-
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
-replication_config = SubResource("SceneReplicationConfig_xhhhv")
 
 [node name="Shadow" type="Sprite3D" parent="."]
 transform = Transform3D(0.15, 0, 0, 0, -6.5567085e-09, -0.15, 0, 0.15, -6.5567085e-09, 0, -0.4699551, 0)
+visibility_range_end = 120.0
 texture = ExtResource("2_jgeia")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_xhhhv")

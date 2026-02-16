@@ -41,8 +41,16 @@ func server_attack(dmg: float, damage_types: Dictionary, peer_id: int) -> void:
 	var player = G.world.get_node(str(peer_id))
 	var actions_node = player.weapon.actions
 	for body in actions_node.get_overlapping_bodies():
+		
+		# Отключение урона по себе от самого себя
 		if body.name == str(peer_id): continue
-		if body.get_node_or_null("HealthComponent"):
+		
+		# Урон по игрокам
+		if body.is_in_group("players"):
+			body.health.take_damage.rpc_id(int(body.name), dmg, damage_types)
+		
+		# Урон по объектам
+		if body.is_in_group("objects"):
 			body.health.take_damage(dmg, damage_types)
 
 

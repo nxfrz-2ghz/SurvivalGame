@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://ccuilgc2uer2y"]
+
+[ext_resource type="Script" uid="uid://c8srq56yg303u" path="res://components/fps_label/fps_label.gd" id="1_7cv8m"]
+
+[node name="FPSLabel" type="Label"]
+script = ExtResource("1_7cv8m")

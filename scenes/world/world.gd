@@ -49,8 +49,7 @@ var noise: FastNoiseLite
 var biome_noise: FastNoiseLite
 
 # object gen
-const WORLD_SIZE := 1000
-const SPAWN_RADIUS := 600
+@export var world_size := 500
 const SPAWN_STEP := 2  # Генерируем объекты с шагом 4 единицы (экономит спавны)
 # mesh gen
 const CHUNK_SIZE := 64  # Размер одного чанка в вершинах
@@ -58,27 +57,26 @@ const CHUNK_VERTEX_COUNT := CHUNK_SIZE + 1
 const spacing := 1.0     # Расстояние между вершинами
 const noise_scale := 5.0
 const height_max := 10.0
-const visible_mesh_range := 100.0
+const visible_mesh_range := 120.0
 const ground_material := preload("res://scenes/world/world_material.tres")
 
 var server: bool
 
-func _input(event: InputEvent) -> void:
-	if Input.is_action_just_pressed("rmb"):
-		save_world()
 
 func start_gen() -> void:
 	server = true
 	world_seed = randi()
+	world_size = int(G.gui.main_menu.world_size.text)
 	
 	_init_noise()
 	_generate_world()
 
 
 @rpc("call_local")
-func join_world(sseed: int) -> void:
+func join_world(sseed: int, wworld_size: int) -> void:
 	server = false
 	world_seed = sseed
+	world_size = wworld_size
 	
 	_init_noise()
 	_generate_world()
@@ -100,10 +98,10 @@ func _init_noise() -> void:
 func _generate_world() -> void:
 	# Генерируем меш террейна разбитый на чанки
 	
-	var offset := (WORLD_SIZE - 1) * spacing / 2.0
+	var offset := (world_size - 1) * spacing / 2.0
 	
 	# Вычисляем количество чанков
-	var chunks_count = ceili(float(WORLD_SIZE) / float(CHUNK_SIZE))
+	var chunks_count = ceili(float(world_size) / float(CHUNK_SIZE))
 	
 	# Создаем чанки
 	for chunk_z in range(chunks_count):
@@ -113,8 +111,8 @@ func _generate_world() -> void:
 			
 			var start_x = chunk_x * CHUNK_SIZE
 			var start_z = chunk_z * CHUNK_SIZE
-			var end_x = mini(start_x + CHUNK_SIZE, WORLD_SIZE - 1)
-			var end_z = mini(start_z + CHUNK_SIZE, WORLD_SIZE - 1)
+			var end_x = mini(start_x + CHUNK_SIZE, world_size - 1)
+			var end_z = mini(start_z + CHUNK_SIZE, world_size - 1)
 			
 			# Создаем вершины для этого чанка
 			var vertex_map = {}
@@ -127,7 +125,7 @@ func _generate_world() -> void:
 					
 					var height_y = noise.get_noise_2d(pos_x / noise_scale, pos_z / noise_scale) * height_max
 					
-					st.set_uv(Vector2(float(x) / float(WORLD_SIZE - 1), float(z) / float(WORLD_SIZE - 1)))
+					st.set_uv(Vector2(float(x) / float(world_size - 1), float(z) / float(world_size - 1)))
 					st.add_vertex(Vector3(pos_x, height_y, pos_z))
 					
 					vertex_map[Vector2i(x, z)] = vertex_index
@@ -162,29 +160,29 @@ func _generate_world() -> void:
 			mesh_instance.material_overlay = ground_material
 			terrain.call_deferred("add_child", mesh_instance)
 			terrain.call_deferred("add_child", collider)
-
+	
 	if !server: return
-
+	
 	# Генерируем все объекты одновременно
-	var offset2 := (WORLD_SIZE - 1) * spacing / 2.0
+	var offset2 := (world_size - 1) * spacing / 2.0
 	var rng = RandomNumberGenerator.new()
 	rng.seed = int(world_seed)
-
+	
 	var gx = 0
-	while gx < WORLD_SIZE:
+	while gx < world_size:
 		var gz = 0
-		while gz < WORLD_SIZE:
+		while gz < world_size:
 			var world_x = gx * spacing - offset2
 			var world_z = gz * spacing - offset2
-
+			
 			# Определяем биом в этой позиции
 			var biom_value = biome_noise.get_noise_2d(world_x / 20.0, world_z / 20.0)
 			var biome = _get_biome_from_value(biom_value)
 			var biome_config = BIOME_CONFIG[biome]
-
+			
 			# Шум для принятия решения о спавне и для выбора варианта
 			var noise_value = noise.get_noise_2d(world_x / noise_scale, world_z / noise_scale)
-
+			
 			var object_name = _select_object_for_biome(biome_config, noise_value, rng)
 			if object_name != "":
 				var obj_scene = objects.get(object_name)
@@ -198,6 +196,7 @@ func _generate_world() -> void:
 
 			gz += SPAWN_STEP
 		gx += SPAWN_STEP
+
 
 func _get_biome_from_value(value: float) -> int:
 	if value < -0.25:

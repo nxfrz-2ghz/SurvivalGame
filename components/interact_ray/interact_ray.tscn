@@ -6,3 +6,9 @@
 target_position = Vector3(0, 0, -3)
 collide_with_areas = true
 script = ExtResource("1_8o5nu")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

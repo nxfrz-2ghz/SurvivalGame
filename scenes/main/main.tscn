@@ -1,7 +1,8 @@
-[gd_scene load_steps=14 format=3 uid="uid://j74nbcwgfaeb"]
+[gd_scene load_steps=16 format=3 uid="uid://j74nbcwgfaeb"]
 
 [ext_resource type="Script" uid="uid://c8l40e2t7qf3r" path="res://scenes/main/main.gd" id="1_l3cfh"]
 [ext_resource type="PackedScene" uid="uid://bca3cjm2s2o6d" path="res://scenes/world/world.tscn" id="2_3s6yk"]
+[ext_resource type="PackedScene" uid="uid://ccuilgc2uer2y" path="res://components/fps_label/fps_label.tscn" id="3_a8run"]
 [ext_resource type="Texture2D" uid="uid://fmv6ac8qq7r7" path="res://res/sprites/aim.png" id="3_ab7mr"]
 [ext_resource type="Texture2D" uid="uid://dwlrxn5cvf8ov" path="res://res/sprites/choose_slot.png" id="4_l3cfh"]
 [ext_resource type="Texture2D" uid="uid://c15oyjyrjx8jo" path="res://res/sprites/gui/empty_heart.png" id="5_b1x3f"]
@@ -77,6 +78,13 @@ func update(inventory: Dictionary) -> void:
 			label.hide()
 "
 
+[sub_resource type="GDScript" id="GDScript_a8run"]
+script/source = "extends PanelContainer
+
+@onready var host_button := $MarginContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/HostButton
+@onready var world_size := $MarginContainer/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer/LineEdit
+"
+
 [node name="Main" type="Node"]
 script = ExtResource("1_l3cfh")
 
@@ -97,6 +105,10 @@ script = SubResource("GDScript_k2fmo")
 
 [node name="HUD" type="Node" parent="GUI"]
 script = SubResource("GDScript_l3cfh")
+
+[node name="FPSLabel" parent="GUI/HUD" instance=ExtResource("3_a8run")]
+offset_right = 1.0
+offset_bottom = 23.0
 
 [node name="Aim" type="TextureRect" parent="GUI/HUD"]
 anchors_preset = 8
@@ -374,7 +386,6 @@ grow_vertical = 0
 theme_override_font_sizes/font_size = 72
 
 [node name="HPBar" type="TextureProgressBar" parent="GUI/HUD"]
-visible = false
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -391,7 +402,6 @@ texture_progress = ExtResource("6_a8run")
 script = ExtResource("7_ouso4")
 
 [node name="EatBar" type="TextureProgressBar" parent="GUI/HUD"]
-visible = false
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -401,6 +411,7 @@ offset_right = 520.0
 offset_bottom = 220.00037
 grow_vertical = 0
 scale = Vector2(0.3, 0.3)
+value = 100.0
 fill_mode = 3
 texture_under = ExtResource("8_blune")
 texture_progress = ExtResource("9_th5th")
@@ -412,6 +423,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = SubResource("GDScript_a8run")
 
 [node name="MarginContainer" type="MarginContainer" parent="GUI/MainMenu"]
 layout_mode = 2
@@ -429,21 +441,34 @@ size_flags_vertical = 4
 layout_mode = 2
 text = "START:"
 
-[node name="CreateButton" type="Button" parent="GUI/MainMenu/MarginContainer/VBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="GUI/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="GUI/MainMenu/MarginContainer/VBoxContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GUI/MainMenu/MarginContainer/VBoxContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="CreateButton" type="Button" parent="GUI/MainMenu/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "CREATE"
 
-[node name="LoadButton" type="Button" parent="GUI/MainMenu/MarginContainer/VBoxContainer"]
+[node name="LoadButton" type="Button" parent="GUI/MainMenu/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "LOAD"
 
-[node name="Label" type="Label" parent="GUI/MainMenu/MarginContainer/VBoxContainer"]
-layout_mode = 2
-text = "IN TESTING:"
-
-[node name="HostButton" type="Button" parent="GUI/MainMenu/MarginContainer/VBoxContainer"]
+[node name="HostButton" type="CheckButton" parent="GUI/MainMenu/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "HOST"
+
+[node name="Join" type="Label" parent="GUI/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "JOIN:"
 
 [node name="JoinButton" type="Button" parent="GUI/MainMenu/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -454,8 +479,35 @@ layout_mode = 2
 placeholder_text = "IP"
 alignment = 1
 
+[node name="VBoxContainer2" type="VBoxContainer" parent="GUI/MainMenu/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+
+[node name="PanelContainer" type="PanelContainer" parent="GUI/MainMenu/MarginContainer/VBoxContainer2"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="GUI/MainMenu/MarginContainer/VBoxContainer2/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GUI/MainMenu/MarginContainer/VBoxContainer2/PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="GUI/MainMenu/MarginContainer/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Размер мира
+(влияет на производительность)"
+
+[node name="LineEdit" type="LineEdit" parent="GUI/MainMenu/MarginContainer/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "500"
+placeholder_text = "500"
+
 [connection signal="spawned" from="Environment/PlayerSpawner" to="." method="_on_player_spawner_spawned"]
-[connection signal="pressed" from="GUI/MainMenu/MarginContainer/VBoxContainer/CreateButton" to="." method="_on_create_button_pressed"]
-[connection signal="pressed" from="GUI/MainMenu/MarginContainer/VBoxContainer/LoadButton" to="." method="_on_load_button_pressed"]
-[connection signal="pressed" from="GUI/MainMenu/MarginContainer/VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
+[connection signal="pressed" from="GUI/MainMenu/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/CreateButton" to="." method="_on_create_button_pressed"]
+[connection signal="pressed" from="GUI/MainMenu/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/LoadButton" to="." method="_on_load_button_pressed"]
 [connection signal="pressed" from="GUI/MainMenu/MarginContainer/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]

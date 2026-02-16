@@ -9,6 +9,10 @@ var last_target: Node = null
 
 
 func update() -> void:
+	if $Timer.is_stopped(): $Timer.start()
+
+
+func _on_timer_timeout() -> void:
 	last_target = current_target
 	# Если нашли объект — шлем имя, если нет — пустую строку
 	var target_name = ""
