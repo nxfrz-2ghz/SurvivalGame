@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://cf368heu0gty2"]
 
-[ext_resource type="PackedScene" uid="uid://dnsaxsytyrrus" path="res://scenes/objects/object.tscn" id="1_kr1go"]
+[ext_resource type="PackedScene" uid="uid://darxc13rlkwt7" path="res://scenes/objects/object.tscn" id="1_kr1go"]
 [ext_resource type="Texture2D" uid="uid://cfuet63b7wtr4" path="res://res/sprites/objects/iron_ore.png" id="2_kr1go"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_u3fxr"]

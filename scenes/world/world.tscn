@@ -1,8 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://bca3cjm2s2o6d"]
+[gd_scene load_steps=5 format=3 uid="uid://bca3cjm2s2o6d"]
 
-[ext_resource type="Script" uid="uid://o3a6n4dybnis" path="res://scenes/world/world.gd" id="1_bq33v"]
-[ext_resource type="Script" uid="uid://dd3vt1ty1mqbi" path="res://scenes/world/terrain.gd" id="2_1fp7r"]
-[ext_resource type="Texture2D" uid="uid://cq03tj2hg3bm6" path="res://res/sprites/dirt.jpg" id="3_1fp7r"]
+[ext_resource type="Script" uid="uid://tatfdb5ym3tv" path="res://scenes/world/world.gd" id="1_bq33v"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_6fy3g"]
 sky_top_color = Color(1, 1, 1, 1)
@@ -18,11 +16,9 @@ background_mode = 2
 sky = SubResource("Sky_3s6yk")
 tonemap_mode = 4
 fog_enabled = true
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6m72w"]
-albedo_color = Color(0.38928655, 0.38928664, 0.38928658, 1)
-albedo_texture = ExtResource("3_1fp7r")
-uv1_scale = Vector3(500, 500, 500)
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.01
+volumetric_fog_length = 96.0
 
 [node name="World" type="Node3D"]
 script = ExtResource("1_bq33v")
@@ -36,9 +32,3 @@ environment = SubResource("Environment_jte2u")
 
 [node name="Terrain" type="StaticBody3D" parent="."]
 transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0, 0, 0)
-script = ExtResource("2_1fp7r")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Terrain"]
-material_override = SubResource("StandardMaterial3D_6m72w")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Terrain"]

@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://bcy5qk4r0ciq0"]
 
-[ext_resource type="PackedScene" uid="uid://dnsaxsytyrrus" path="res://scenes/objects/object.tscn" id="1_p18ys"]
+[ext_resource type="PackedScene" uid="uid://darxc13rlkwt7" path="res://scenes/objects/object.tscn" id="1_p18ys"]
 [ext_resource type="Texture2D" uid="uid://8r11dpj65l13" path="res://res/sprites/objects/grass.png" id="2_uh5ru"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ujv02"]
@@ -18,5 +18,5 @@ shape = SubResource("BoxShape3D_ujv02")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7450361, 0)
 texture = ExtResource("2_uh5ru")
 
-[node name="Shadow" parent="." index="5"]
+[node name="Shadow" parent="." index="4"]
 visible = false

@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://dp83o7qw4ht4w"]
+[gd_scene load_steps=41 format=3 uid="uid://dp83o7qw4ht4w"]
 
 [ext_resource type="Script" uid="uid://dfihb6cfu6jk3" path="res://scenes/player/player.gd" id="1_4anbu"]
 [ext_resource type="PackedScene" uid="uid://c8q18w2yckeeh" path="res://components/health_component/health_component.tscn" id="2_75vfm"]
@@ -19,6 +19,13 @@
 [ext_resource type="PackedScene" uid="uid://b0ubt0f8epxbi" path="res://components/sway_container/sway_container.tscn" id="14_007i1"]
 [ext_resource type="Script" uid="uid://cek85ohvrestp" path="res://components/sway_container/sway_container.gd" id="15_6cv16"]
 [ext_resource type="Texture2D" uid="uid://crbe50sl1agx4" path="res://res/sprites/items/arm.png" id="16_j4nxn"]
+[ext_resource type="Texture2D" uid="uid://nuea13giuwk5" path="res://res/sprites/Pickup_anim/1.png" id="17_6cv16"]
+[ext_resource type="Texture2D" uid="uid://bludxqo7346wv" path="res://res/sprites/Pickup_anim/2.png" id="18_j4nxn"]
+[ext_resource type="Texture2D" uid="uid://cmw2iu4wcsh13" path="res://res/sprites/Pickup_anim/3.png" id="19_28m0y"]
+[ext_resource type="Texture2D" uid="uid://bad74ra1vdglh" path="res://res/sprites/Pickup_anim/4.png" id="20_uniwh"]
+[ext_resource type="Texture2D" uid="uid://b6k56fkuypfyi" path="res://res/sprites/Pickup_anim/5.png" id="21_iqsei"]
+[ext_resource type="Texture2D" uid="uid://eyvpmunmmthv" path="res://res/sprites/Pickup_anim/6.png" id="22_tffgl"]
+[ext_resource type="Texture2D" uid="uid://b5sc6uxp5futb" path="res://res/sprites/Pickup_anim/7.png" id="23_pk8ii"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qnmj6"]
 
@@ -116,6 +123,18 @@ tracks/2/keys = {
 "update": 0,
 "values": [0.0]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("AnimSprite:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(660, 360)]
+}
 
 [sub_resource type="Animation" id="Animation_jej8l"]
 resource_name = "use"
@@ -134,14 +153,14 @@ tracks/0/keys = {
 tracks/1/type = "method"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("AttackSprite")
+tracks/1/path = NodePath("AnimSprite")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "values": [{
-"args": [&"", 1.0, false],
+"args": [&"attack", 1.0, false],
 "method": &"play"
 }]
 }
@@ -169,24 +188,79 @@ tracks/3/keys = {
 "update": 0,
 "values": [0.0, 1.0]
 }
-tracks/4/type = "method"
+tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("%InteractRay")
+tracks/4/path = NodePath("AnimSprite:position")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(660, 360)]
+}
+
+[sub_resource type="Animation" id="Animation_lgqa7"]
+resource_name = "pickup"
+length = 2.0
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimSprite")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&"pickup", 1.0, false],
+"method": &"play"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SwayContainer/Sprites:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(1, 2),
+"transitions": PackedFloat32Array(-2, -2),
+"update": 0,
+"values": [Vector2(0, 453.055), Vector2(0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimSprite:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(980, 400)]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../Actions")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.53333336),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
-"method": &"update"
+"method": &"pickup"
 }]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_lopa8"]
 _data = {
 &"RESET": SubResource("Animation_iyg5g"),
+&"pickup": SubResource("Animation_lgqa7"),
 &"use": SubResource("Animation_jej8l")
 }
 
@@ -218,8 +292,40 @@ animations = [{
 "texture": null
 }],
 "loop": false,
-"name": &"default",
+"name": &"attack",
 "speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_6cv16")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_j4nxn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_28m0y")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_uniwh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_iqsei")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_tffgl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_pk8ii")
+}, {
+"duration": 1.0,
+"texture": null
+}],
+"loop": false,
+"name": &"pickup",
+"speed": 8.0
 }]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uf5tr"]
@@ -238,6 +344,12 @@ properties/1/replication_mode = 2
 properties/2/path = NodePath("Head:rotation")
 properties/2/spawn = true
 properties/2/replication_mode = 2
+properties/3/path = NodePath(".:rotation")
+properties/3/spawn = true
+properties/3/replication_mode = 2
+properties/4/path = NodePath("HealthComponent:current_health")
+properties/4/spawn = true
+properties/4/replication_mode = 2
 
 [node name="Player" type="CharacterBody3D" groups=["players"]]
 collision_layer = 2
@@ -246,6 +358,7 @@ script = ExtResource("1_4anbu")
 
 [node name="HealthComponent" parent="." instance=ExtResource("2_75vfm")]
 unique_name_in_owner = true
+max_health = 10.0
 
 [node name="InventoryController" type="Node" parent="."]
 unique_name_in_owner = true
@@ -307,11 +420,12 @@ libraries = {
 }
 speed_scale = 1.2
 
-[node name="AttackSprite" type="AnimatedSprite2D" parent="Head/Weapon/Arms"]
+[node name="AnimSprite" type="AnimatedSprite2D" parent="Head/Weapon/Arms"]
 top_level = true
 position = Vector2(660, 360)
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_byj34")
+animation = &"pickup"
 
 [node name="ProgressBar" type="ProgressBar" parent="Head/Weapon/Arms"]
 visible = false

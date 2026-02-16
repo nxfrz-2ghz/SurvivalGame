@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://1oleq1fyx67g"]
 
-[ext_resource type="PackedScene" uid="uid://dnsaxsytyrrus" path="res://scenes/objects/object.tscn" id="1_8vn3u"]
+[ext_resource type="PackedScene" uid="uid://darxc13rlkwt7" path="res://scenes/objects/object.tscn" id="1_8vn3u"]
 [ext_resource type="Texture2D" uid="uid://b0yknsbcg4kyy" path="res://res/sprites/objects/tree.png" id="2_83v3r"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_83v3r"]

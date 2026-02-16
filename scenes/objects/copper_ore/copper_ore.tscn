@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://bn42xbb6rt2b8"]
 
-[ext_resource type="PackedScene" uid="uid://dnsaxsytyrrus" path="res://scenes/objects/object.tscn" id="1_cu152"]
+[ext_resource type="PackedScene" uid="uid://darxc13rlkwt7" path="res://scenes/objects/object.tscn" id="1_cu152"]
 [ext_resource type="Texture2D" uid="uid://dk7wo66724omw" path="res://res/sprites/objects/copper_ore.png" id="2_cu152"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_u3fxr"]

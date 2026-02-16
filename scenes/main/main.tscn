@@ -1,9 +1,14 @@
-[gd_scene load_steps=9 format=3 uid="uid://j74nbcwgfaeb"]
+[gd_scene load_steps=14 format=3 uid="uid://j74nbcwgfaeb"]
 
 [ext_resource type="Script" uid="uid://c8l40e2t7qf3r" path="res://scenes/main/main.gd" id="1_l3cfh"]
 [ext_resource type="PackedScene" uid="uid://bca3cjm2s2o6d" path="res://scenes/world/world.tscn" id="2_3s6yk"]
 [ext_resource type="Texture2D" uid="uid://fmv6ac8qq7r7" path="res://res/sprites/aim.png" id="3_ab7mr"]
 [ext_resource type="Texture2D" uid="uid://dwlrxn5cvf8ov" path="res://res/sprites/choose_slot.png" id="4_l3cfh"]
+[ext_resource type="Texture2D" uid="uid://c15oyjyrjx8jo" path="res://res/sprites/gui/empty_heart.png" id="5_b1x3f"]
+[ext_resource type="Texture2D" uid="uid://bobrqwkwa1aj1" path="res://res/sprites/gui/full_heart.png" id="6_a8run"]
+[ext_resource type="Script" uid="uid://8ts1kih1l0re" path="res://scenes/main/gui/progress_bar.gd" id="7_ouso4"]
+[ext_resource type="Texture2D" uid="uid://bxrsurap3nh60" path="res://res/sprites/gui/empty_burger.png" id="8_blune"]
+[ext_resource type="Texture2D" uid="uid://ce08md4b5l5ba" path="res://res/sprites/gui/full_burger.png" id="9_th5th"]
 
 [sub_resource type="GDScript" id="GDScript_k2fmo"]
 script/source = "extends CanvasLayer
@@ -17,6 +22,7 @@ script/source = "extends Node
 
 @onready var target_label := %TargetLabel
 @onready var inventory := %Inventory
+@onready var health_bar := $HPBar
 "
 
 [sub_resource type="GDScript" id="GDScript_6q06x"]
@@ -53,6 +59,7 @@ func set_hotbar_slot(pos: int) -> void:
 
 
 func update(inventory: Dictionary) -> void:
+	show()
 	for i in range(10):
 		var item_data = inventory.get(i + 1) # Получаем данные слота (может быть null)
 		var current_slot = slot[i]
@@ -82,7 +89,7 @@ _spawnable_scenes = PackedStringArray("uid://dp83o7qw4ht4w")
 spawn_path = NodePath("..")
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="Environment"]
-_spawnable_scenes = PackedStringArray("uid://dnsaxsytyrrus", "uid://cddn37g14j7yf", "uid://1oleq1fyx67g", "uid://bcy5qk4r0ciq0", "uid://cphuj5sn1yibw", "uid://ctabmibvqd5dl", "uid://bn42xbb6rt2b8", "uid://cf368heu0gty2")
+_spawnable_scenes = PackedStringArray("uid://darxc13rlkwt7", "uid://cddn37g14j7yf", "uid://1oleq1fyx67g", "uid://bcy5qk4r0ciq0", "uid://ctabmibvqd5dl", "uid://chyo4mcdq1b6f", "uid://bn42xbb6rt2b8", "uid://cf368heu0gty2", "uid://bqbsfxetmgd68")
 spawn_path = NodePath("..")
 
 [node name="GUI" type="CanvasLayer" parent="."]
@@ -141,6 +148,7 @@ horizontal_alignment = 1
 
 [node name="Inventory" type="MarginContainer" parent="GUI/HUD"]
 unique_name_in_owner = true
+visible = false
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
@@ -365,6 +373,39 @@ grow_horizontal = 0
 grow_vertical = 0
 theme_override_font_sizes/font_size = 72
 
+[node name="HPBar" type="TextureProgressBar" parent="GUI/HUD"]
+visible = false
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = -140.0
+offset_right = 400.0
+offset_bottom = 220.00037
+grow_vertical = 0
+scale = Vector2(0.3, 0.3)
+value = 100.0
+fill_mode = 3
+texture_under = ExtResource("5_b1x3f")
+texture_progress = ExtResource("6_a8run")
+script = ExtResource("7_ouso4")
+
+[node name="EatBar" type="TextureProgressBar" parent="GUI/HUD"]
+visible = false
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 160.0
+offset_top = -140.0
+offset_right = 520.0
+offset_bottom = 220.00037
+grow_vertical = 0
+scale = Vector2(0.3, 0.3)
+fill_mode = 3
+texture_under = ExtResource("8_blune")
+texture_progress = ExtResource("9_th5th")
+script = ExtResource("7_ouso4")
+
 [node name="MainMenu" type="PanelContainer" parent="GUI"]
 anchors_preset = 15
 anchor_right = 1.0
@@ -384,6 +425,22 @@ layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
 
+[node name="Start" type="Label" parent="GUI/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "START:"
+
+[node name="CreateButton" type="Button" parent="GUI/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "CREATE"
+
+[node name="LoadButton" type="Button" parent="GUI/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "LOAD"
+
+[node name="Label" type="Label" parent="GUI/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "IN TESTING:"
+
 [node name="HostButton" type="Button" parent="GUI/MainMenu/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "HOST"
@@ -398,5 +455,7 @@ placeholder_text = "IP"
 alignment = 1
 
 [connection signal="spawned" from="Environment/PlayerSpawner" to="." method="_on_player_spawner_spawned"]
+[connection signal="pressed" from="GUI/MainMenu/MarginContainer/VBoxContainer/CreateButton" to="." method="_on_create_button_pressed"]
+[connection signal="pressed" from="GUI/MainMenu/MarginContainer/VBoxContainer/LoadButton" to="." method="_on_load_button_pressed"]
 [connection signal="pressed" from="GUI/MainMenu/MarginContainer/VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
 [connection signal="pressed" from="GUI/MainMenu/MarginContainer/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]

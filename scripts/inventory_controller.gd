@@ -16,7 +16,7 @@ func _ready():
 	for i in range(1, MAX_SLOTS + 1):
 		inventory[i] = null
 		
-	#add_item("axe")
+	add_item("axe")
 	add_item("pickaxe")
 
 

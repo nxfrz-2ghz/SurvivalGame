@@ -14,7 +14,7 @@ func update() -> void:
 	var target_name = ""
 	if current_target:
 		target_name = current_target.nname 
-		if current_target.is_in_group("objects"):
+		if current_target.is_in_group("objects") or current_target.is_in_group("players"):
 			target_name += "\n" + str(current_target.health.current_health) + "/" + str(current_target.health.max_health)
 		if current_target.is_in_group("items"):
 			target_name += "\nPRESS [F] TO PICKUP"

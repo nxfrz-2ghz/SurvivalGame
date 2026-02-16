@@ -7,8 +7,8 @@ extends CharacterBody3D
 @onready var arm_anim := %ArmAnim
 @onready var health := %HealthComponent
 
-const SPEED = 5.0
-const JUMP_VELOCITY = 4
+const SPEED = 3.0
+const JUMP_VELOCITY = 4.0
 
 @export var nname := "Player"
 
@@ -47,9 +47,18 @@ func _input(event: InputEvent) -> void:
 		weapon.weapon_anim.play("use")
 		weapon.actions.attack(weapon.stats.damage, weapon.stats.damage_types)
 		weapon.attack.emit()
+		interact_ray.update()
 	
-	if Input.is_action_pressed("pickup"):
-		weapon.actions.pickup()
+	if Input.is_action_just_pressed("rmb"):
+		if interact_ray.is_colliding():
+			var collider: Node = interact_ray.get_collider()
+			if collider.nname == "furnace":
+				var item_in_arm: String = inventory.inventory[inventory.current_item-1]
+				collider.craft.rpc_id(1, item_in_arm)
+	
+	if Input.is_action_just_pressed("pickup") and !weapon.weapon_anim.is_playing():
+		weapon.weapon_anim.speed_scale = 1
+		weapon.weapon_anim.play("pickup")
 		interact_ray.update()
 	
 	if Input.is_action_just_pressed("drop"):
@@ -108,7 +117,7 @@ func _physics_process(delta: float) -> void:
 	
 	moving(delta)
 	
-	if position.y < -200:
-		position.y = 100
+	if position.y < -50:
+		position.y = 50
 	
 	move_and_slide()

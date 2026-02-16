@@ -1,5 +1,22 @@
 extends Node
 
+const objects := {
+	"campfire": {
+		"object": preload("res://scenes/objects/furnace/furnace.tscn"),
+		"recipe": {
+			"craft-station": "arm",
+			"log":3,
+		},
+	},
+	"furnace": {
+		"object": preload("res://scenes/objects/furnace/furnace.tscn"),
+		"recipe": {
+			"craft-station": "arm",
+			"stone":5,
+		},
+	},
+}
+
 const items := {
 	"": {
 		"attack_speed": 1.2,
@@ -14,6 +31,7 @@ const items := {
 	"axe": {
 		"texture": preload("res://res/sprites/items/axe.png"),
 		"recipe": {
+			"craft-station": "arm",
 			"log":3,
 			"stone":2,
 		},
@@ -29,6 +47,7 @@ const items := {
 	"pickaxe": {
 		"texture": preload("res://res/sprites/items/pickaxe.png"),
 		"recipe": {
+			"craft-station": "arm",
 			"log":2,
 			"stone":3,
 		},
@@ -71,6 +90,22 @@ const items := {
 	},
 	"iron_ore": {
 		"texture": preload("res://res/sprites/items/iron_ore.png"),
+		"stack_size": 30,
+	},
+	"copper_bar": {
+		"texture": preload("res://res/sprites/items/copper_bar.png"),
+		"recipe": {
+			"craft-station": "furnace",
+			"copper_ore": 2,
+		},
+		"stack_size": 30,
+	},
+	"iron_bar": {
+		"texture": preload("res://res/sprites/items/iron_bar.png"),
+		"recipe": {
+			"craft-station": "furnace",
+			"iron_ore": 2,
+		},
 		"stack_size": 30,
 	},
 	"empty": {

@@ -1,6 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://cphuj5sn1yibw"]
+[gd_scene load_steps=4 format=3 uid="uid://ctabmibvqd5dl"]
 
-[ext_resource type="PackedScene" uid="uid://dnsaxsytyrrus" path="res://scenes/objects/object.tscn" id="1_bfce7"]
+[ext_resource type="PackedScene" uid="uid://darxc13rlkwt7" path="res://scenes/objects/object.tscn" id="1_bfce7"]
 [ext_resource type="Texture2D" uid="uid://dtve7grlocjnn" path="res://res/sprites/objects/stone.png" id="2_bfce7"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_u3fxr"]

@@ -49,16 +49,23 @@ var noise: FastNoiseLite
 var biome_noise: FastNoiseLite
 
 # object gen
-const WORLD_SIZE = 500
-const CHUNK_SIZE = 10
-const SPAWN_RADIUS = 300
-const SPAWN_STEP = 2  # Генерируем объекты с шагом 4 единицы (экономит спавны)
+const WORLD_SIZE := 1000
+const SPAWN_RADIUS := 600
+const SPAWN_STEP := 2  # Генерируем объекты с шагом 4 единицы (экономит спавны)
 # mesh gen
+const CHUNK_SIZE := 64  # Размер одного чанка в вершинах
+const CHUNK_VERTEX_COUNT := CHUNK_SIZE + 1
 const spacing := 1.0     # Расстояние между вершинами
 const noise_scale := 5.0
 const height_max := 10.0
+const visible_mesh_range := 100.0
+const ground_material := preload("res://scenes/world/world_material.tres")
 
 var server: bool
+
+func _input(event: InputEvent) -> void:
+	if Input.is_action_just_pressed("rmb"):
+		save_world()
 
 func start_gen() -> void:
 	server = true
@@ -69,9 +76,9 @@ func start_gen() -> void:
 
 
 @rpc("call_local")
-func join_world(seed: int) -> void:
+func join_world(sseed: int) -> void:
 	server = false
-	world_seed = seed
+	world_seed = sseed
 	
 	_init_noise()
 	_generate_world()
@@ -91,75 +98,89 @@ func _init_noise() -> void:
 	biome_noise.frequency = 0.02
 
 func _generate_world() -> void:
-	WorkerThreadPool.add_task(Callable(self, "_generate_around_position").bind(Vector3.ZERO))
-
-func _generate_around_position(center_pos: Vector3) -> void:
-	var grid_x_min = int(center_pos.x - SPAWN_RADIUS) / CHUNK_SIZE
-	var grid_x_max = int(center_pos.x + SPAWN_RADIUS) / CHUNK_SIZE
-	var grid_z_min = int(center_pos.z - SPAWN_RADIUS) / CHUNK_SIZE
-	var grid_z_max = int(center_pos.z + SPAWN_RADIUS) / CHUNK_SIZE
+	# Генерируем меш террейна разбитый на чанки
 	
-	for chunk_x in range(grid_x_min, grid_x_max + 1):
-		for chunk_z in range(grid_z_min, grid_z_max + 1):
-			_generate_chunk(chunk_x, chunk_z)
+	var offset := (WORLD_SIZE - 1) * spacing / 2.0
+	
+	# Вычисляем количество чанков
+	var chunks_count = ceili(float(WORLD_SIZE) / float(CHUNK_SIZE))
+	
+	# Создаем чанки
+	for chunk_z in range(chunks_count):
+		for chunk_x in range(chunks_count):
+			var st := SurfaceTool.new()
+			st.begin(Mesh.PRIMITIVE_TRIANGLES)
+			
+			var start_x = chunk_x * CHUNK_SIZE
+			var start_z = chunk_z * CHUNK_SIZE
+			var end_x = mini(start_x + CHUNK_SIZE, WORLD_SIZE - 1)
+			var end_z = mini(start_z + CHUNK_SIZE, WORLD_SIZE - 1)
+			
+			# Создаем вершины для этого чанка
+			var vertex_map = {}
+			var vertex_index = 0
+			
+			for z in range(start_z, end_z + 1):
+				for x in range(start_x, end_x + 1):
+					var pos_x = x * spacing - offset
+					var pos_z = z * spacing - offset
+					
+					var height_y = noise.get_noise_2d(pos_x / noise_scale, pos_z / noise_scale) * height_max
+					
+					st.set_uv(Vector2(float(x) / float(WORLD_SIZE - 1), float(z) / float(WORLD_SIZE - 1)))
+					st.add_vertex(Vector3(pos_x, height_y, pos_z))
+					
+					vertex_map[Vector2i(x, z)] = vertex_index
+					vertex_index += 1
+			
+			# Индексы для треугольников в этом чанке
+			for z in range(start_z, end_z):
+				for x in range(start_x, end_x):
+					var i0 = vertex_map.get(Vector2i(x, z), -1)
+					var i1 = vertex_map.get(Vector2i(x + 1, z), -1)
+					var i2 = vertex_map.get(Vector2i(x, z + 1), -1)
+					var i3 = vertex_map.get(Vector2i(x + 1, z + 1), -1)
+					
+					if i0 >= 0 and i1 >= 0 and i2 >= 0 and i3 >= 0:
+						st.add_index(i0)
+						st.add_index(i1)
+						st.add_index(i2)
+						
+						st.add_index(i2)
+						st.add_index(i1)
+						st.add_index(i3)
+			
+			st.generate_normals()
+			var mesh = st.commit()
+			
+			# Создаем геометрия для визуализации чанка
+			var mesh_instance = MeshInstance3D.new()
+			var collider = CollisionShape3D.new()
+			mesh_instance.mesh = mesh
+			collider.shape = mesh_instance.mesh.create_trimesh_shape()
+			mesh_instance.visibility_range_end = visible_mesh_range
+			mesh_instance.material_overlay = ground_material
+			terrain.call_deferred("add_child", mesh_instance)
+			terrain.call_deferred("add_child", collider)
 
-func _generate_chunk(chunk_x: int, chunk_z: int) -> void:
-	# Генерируем/устанавливаем меш террейна один раз (избегаем пересоздания для каждого чанка)
-	if not terrain.mesh_instance.mesh:
-		var st := SurfaceTool.new()
-		st.begin(Mesh.PRIMITIVE_TRIANGLES)
-		var offset := (WORLD_SIZE - 1) * spacing / 2.0
+	if !server: return
 
-		# Создаем вершины террейна
-		for z in range(WORLD_SIZE):
-			for x in range(WORLD_SIZE):
-				var pos_x = x * spacing - offset
-				var pos_z = z * spacing - offset
-				
-				var height_y = noise.get_noise_2d(pos_x / noise_scale, pos_z / noise_scale) * height_max
-				
-				st.set_uv(Vector2(float(x) / float(WORLD_SIZE - 1), float(z) / float(WORLD_SIZE - 1)))
-				st.add_vertex(Vector3(pos_x, height_y, pos_z))
-
-		# Индексы для треугольников
-		for z in range(WORLD_SIZE - 1):
-			for x in range(WORLD_SIZE - 1):
-				var i0 = z * WORLD_SIZE + x
-				var i1 = z * WORLD_SIZE + x + 1
-				var i2 = (z + 1) * WORLD_SIZE + x
-				var i3 = (z + 1) * WORLD_SIZE + x + 1
-
-				st.add_index(i0)
-				st.add_index(i1)
-				st.add_index(i2)
-
-				st.add_index(i2)
-				st.add_index(i1)
-				st.add_index(i3)
-
-		st.generate_normals()
-		var mesh = st.commit()
-		terrain.call_deferred("set_mesh", mesh)
-
-	# Спавн объектов — используем координаты в мировом пространстве и детерминированный RNG
-	var start_x = chunk_x * CHUNK_SIZE
-	var start_z = chunk_z * CHUNK_SIZE
+	# Генерируем все объекты одновременно
 	var offset2 := (WORLD_SIZE - 1) * spacing / 2.0
-
-	# Определяем биом для этого чанка
-	var biom_value = biome_noise.get_noise_2d(chunk_x * 2.0, chunk_z * 2.0)
-	var biome = _get_biome_from_value(biom_value)
-	var biome_config = BIOME_CONFIG[biome]
-
 	var rng = RandomNumberGenerator.new()
-	rng.seed = int(world_seed) + chunk_x * 1007 + chunk_z * 1009
+	rng.seed = int(world_seed)
 
-	var gx = start_x
-	while gx < start_x + CHUNK_SIZE:
-		var gz = start_z
-		while gz < start_z + CHUNK_SIZE:
+	var gx = 0
+	while gx < WORLD_SIZE:
+		var gz = 0
+		while gz < WORLD_SIZE:
 			var world_x = gx * spacing - offset2
 			var world_z = gz * spacing - offset2
+
+			# Определяем биом в этой позиции
+			var biom_value = biome_noise.get_noise_2d(world_x / 20.0, world_z / 20.0)
+			var biome = _get_biome_from_value(biom_value)
+			var biome_config = BIOME_CONFIG[biome]
 
 			# Шум для принятия решения о спавне и для выбора варианта
 			var noise_value = noise.get_noise_2d(world_x / noise_scale, world_z / noise_scale)
@@ -172,6 +193,7 @@ func _generate_chunk(chunk_x: int, chunk_z: int) -> void:
 					# Высота спавна — берем с того же шума, чтобы объект стоял на поверхности
 					var spawn_y = noise.get_noise_2d(world_x / noise_scale, world_z / noise_scale) * height_max
 					instance.position = Vector3(world_x, spawn_y, world_z)
+					instance.set_meta("object_name", object_name)
 					G.world.call_deferred("add_child", instance, true)
 
 			gz += SPAWN_STEP
@@ -210,3 +232,72 @@ func _select_object_for_biome(biome_config: Dictionary, noise_value: float, rng 
 				return ""
 
 	return ""
+
+
+func save_world(path: String = "user://world.save") -> bool:
+	var save_data := {
+		"seed": world_seed,
+		"objects": []
+	}
+
+	for child in G.world.get_children():
+		if child == terrain:
+			continue
+		if child is RigidBody3D or child is StaticBody3D:
+			var obj_name = str(child.get_meta("object_name"))
+			var pos: Vector3 = child.position if child.has_method("position") else Vector3.ZERO
+			var entry := {"name": obj_name, "position": [pos.x, pos.y, pos.z]}
+			if child.has_method("get_save_data"):
+				entry["state"] = child.call("get_save_data")
+			save_data["objects"].append(entry)
+
+	var f := FileAccess.open(path, FileAccess.WRITE)
+	if f == null:
+		push_error("Failed to open save file: %s" % path)
+		return false
+
+	f.store_var(save_data)
+	f.close()
+	return true
+
+
+func load_world(path: String = "user://world.save") -> bool:
+	var f := FileAccess.open(path, FileAccess.READ)
+	if f == null:
+		push_error("Failed to open save file: %s" % path)
+		return false
+
+	var data = f.get_var()
+	f.close()
+
+	# Restore seed and noise
+	world_seed = int(data.get("seed", world_seed))
+	_init_noise()
+
+	# Remove existing spawned objects (keep terrain)
+	var to_remove := []
+	for child in get_children():
+		if child == terrain:
+			continue
+		to_remove.append(child)
+	for c in to_remove:
+		c.queue_free()
+
+	# Instantiate saved objects
+	for obj in data.get("objects", []):
+		var name: String = str(obj.get("name", ""))
+		var pos_val = obj.get("position", [])
+		var pos: Vector3 = Vector3.ZERO
+		if typeof(pos_val) == TYPE_ARRAY and pos_val.size() >= 3:
+			pos = Vector3(float(pos_val[0]), float(pos_val[1]), float(pos_val[2]))
+		var scene = objects.get(name, null)
+		if scene:
+			var instance = scene.instantiate()
+			instance.position = pos
+			instance.set_meta("object_name", name)
+			G.world.add_child(instance)
+			var state = obj.get("state", null)
+			if state != null and instance.has_method("load_save_data"):
+				instance.call("load_save_data", state)
+
+	return true

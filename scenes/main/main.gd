@@ -38,11 +38,12 @@ func add_player(peer_id: int) -> void:
 	# Используем call_deferred для безопасности физики
 	G.world.add_child.call_deferred(player, true)
 	
-	# Если игрок это мы, то подключаем сигналы
+	# Если игрок это мы, отложенно подключаем сигналы (узел должен быть в дереве)
 	if peer_id == multiplayer.get_unique_id():
 		player.get_node("%InteractRay").target_found.connect(G.gui.hud.target_label.update)
 		player.get_node("%InventoryController").update.connect(G.gui.hud.inventory.update)
 		player.get_node("%InventoryController").set_hotbar_slot.connect(G.gui.hud.inventory.set_hotbar_slot)
+		player.get_node("%HealthComponent").changed.connect(G.gui.hud.health_bar.update)
 	
 	else:
 		var world_node = G.world.get_node("World")
@@ -54,11 +55,23 @@ func remove_player(peer_id: int) -> void:
 	player.queue_free()
 
 
-func start_game() -> void:
+func start_game(load: bool = false) -> void:
 	G.gui.main_menu.hide()
 	if multiplayer.get_unique_id() == 1:
-		G.world.get_node("World").start_gen()
+		if load:
+			G.world.get_node("World").load_world()
+		else:
+			G.world.get_node("World").start_gen()
+		G.game = true
 
+
+func _on_create_button_pressed() -> void:
+	add_player(1)
+	start_game()
+
+func _on_load_button_pressed() -> void:
+	add_player(1)
+	start_game(true)
 
 func _on_host_button_pressed() -> void:
 	prepare_for_a_game("server")
@@ -69,6 +82,8 @@ func _on_join_button_pressed():
 
 # Clients
 func _on_player_spawner_spawned(node: Node) -> void:
-	node.get_node("%InteractRay").target_found.connect(G.gui.hud.target_label.update)
-	node.get_node("%InventoryController").update.connect(G.gui.hud.inventory.update)
-	node.get_node("%InventoryController").set_hotbar_slot.connect(G.gui.hud.inventory.set_hotbar_slot)
+	if str(multiplayer.get_unique_id()) == node.name:
+		node.get_node("%InteractRay").target_found.connect(G.gui.hud.target_label.update)
+		node.get_node("%InventoryController").update.connect(G.gui.hud.inventory.update)
+		node.get_node("%InventoryController").set_hotbar_slot.connect(G.gui.hud.inventory.set_hotbar_slot)
+		node.get_node("%HealthComponent").changed.connect(G.gui.hud.health_bar.update)

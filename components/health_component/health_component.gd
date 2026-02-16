@@ -1,6 +1,6 @@
 extends Node
 
-signal changed()
+signal changed(current: float, max: float)
 signal died
 
 @export var resists := {}
@@ -11,6 +11,7 @@ signal died
 
 func _ready() -> void:
 	current_health = max_health
+	changed.emit(current_health, max_health)
 
 
 func take_damage(base_damage: float, incoming_types: Dictionary):
@@ -23,7 +24,7 @@ func take_damage(base_damage: float, incoming_types: Dictionary):
 	
 	if total_damage > 0.0:
 		current_health -= total_damage
-		changed.emit()
+		changed.emit(current_health, max_health)
 	
 	if current_health <= 0:
 		died.emit()
