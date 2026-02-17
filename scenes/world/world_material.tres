@@ -3,6 +3,6 @@
 [ext_resource type="Texture2D" uid="uid://cq03tj2hg3bm6" path="res://res/sprites/dirt.jpg" id="1_6krkj"]
 
 [resource]
-albedo_color = Color(0.38928655, 0.38928664, 0.38928658, 1)
+albedo_color = Color(0.49747366, 0.49747366, 0.49747366, 1)
 albedo_texture = ExtResource("1_6krkj")
 uv1_scale = Vector3(500, 500, 500)

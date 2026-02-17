@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://bca3cjm2s2o6d"]
+[gd_scene load_steps=6 format=3 uid="uid://bca3cjm2s2o6d"]
 
 [ext_resource type="Script" uid="uid://tatfdb5ym3tv" path="res://scenes/world/world.gd" id="1_bq33v"]
+[ext_resource type="Script" uid="uid://d2ptcu2co03fy" path="res://scenes/world/directional_light_3d.gd" id="2_sl2e5"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_6fy3g"]
 sky_top_color = Color(1, 1, 1, 1)
@@ -16,6 +17,8 @@ background_mode = 2
 sky = SubResource("Sky_3s6yk")
 tonemap_mode = 4
 fog_enabled = true
+fog_light_energy = 0.5
+fog_sun_scatter = 1.0
 volumetric_fog_enabled = true
 volumetric_fog_density = 0.01
 volumetric_fog_length = 96.0
@@ -25,7 +28,12 @@ script = ExtResource("1_bq33v")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+light_color = Color(1, 1, 0.9019608, 1)
 light_energy = 3.0
+directional_shadow_mode = 0
+script = ExtResource("2_sl2e5")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="DirectionalLight3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_jte2u")

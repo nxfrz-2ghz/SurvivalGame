@@ -6,6 +6,7 @@
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_xhhhv"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_xhhhv"]
+radius = 0.3
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_xhhhv"]
 properties/0/path = NodePath(".:position")

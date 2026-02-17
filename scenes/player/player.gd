@@ -43,10 +43,13 @@ func _input(event: InputEvent) -> void:
 		head._apply_camera_limits()
 	
 	if Input.is_action_just_pressed("lmb") and !weapon.weapon_anim.is_playing():
-		weapon.weapon_anim.speed_scale = weapon.stats.attack_speed
-		weapon.weapon_anim.play("use")
-		weapon.actions.attack(weapon.stats.damage, weapon.stats.damage_types)
-		weapon.attack.emit()
+		if weapon.actions.crafting_mode:
+			weapon.actions.craft()
+		else:
+			weapon.weapon_anim.speed_scale = weapon.stats.attack_speed
+			weapon.weapon_anim.play("use")
+			weapon.actions.attack(weapon.stats.damage, weapon.stats.damage_types)
+			weapon.attack.emit()
 		interact_ray.update()
 	
 	if Input.is_action_just_pressed("rmb"):
@@ -66,7 +69,7 @@ func _input(event: InputEvent) -> void:
 		weapon.actions.drop(weapon.stats.current_name)
 	
 	if Input.is_action_just_pressed("craft"):
-		weapon.actions.craft()
+		weapon.actions.crafting_mode = !weapon.actions.crafting_mode
 
 
 func moving(delta: float) -> void:
@@ -82,8 +85,10 @@ func moving(delta: float) -> void:
 	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	
 	# Arm animation
-	if input_dir and is_on_floor(): arm_anim.play("walk")
-	else: arm_anim.play("idle")
+	if input_dir and is_on_floor():
+		arm_anim.play("walk", 0.2)
+	else:
+		arm_anim.play("idle", 0.2)
 	
 	# Moving
 	if is_on_floor():

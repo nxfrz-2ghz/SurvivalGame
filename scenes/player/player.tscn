@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://dp83o7qw4ht4w"]
+[gd_scene load_steps=44 format=4 uid="uid://dp83o7qw4ht4w"]
 
 [ext_resource type="Script" uid="uid://dfihb6cfu6jk3" path="res://scenes/player/player.gd" id="1_4anbu"]
 [ext_resource type="PackedScene" uid="uid://c8q18w2yckeeh" path="res://components/health_component/health_component.tscn" id="2_75vfm"]
@@ -31,6 +31,27 @@
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ylpk0"]
 size = Vector3(2, 1.3305664, 2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6cv16"]
+transparency = 1
+albedo_color = Color(0.29803923, 1, 0.29803923, 0.1764706)
+
+[sub_resource type="BoxMesh" id="BoxMesh_j4nxn"]
+material = SubResource("StandardMaterial3D_6cv16")
+size = Vector3(2, 1.3305664, 2)
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_6cv16"]
+_surfaces = [{
+"aabb": AABB(-1.0288675, -0.6941507, -1.0288675, 2.057735, 1.3883014, 2.057735),
+"attribute_data": PackedByteArray("AAAAAAAAAACrqio/AAAAAKuqqj4AAAAAAACAPwAAAAAAAAAAAAAAP6uqKj8AAAA/q6qqPgAAAD8AAIA/AAAAP6uqqj4AAAAAAAAAAAAAAD+rqio/AAAAAKuqqj4AAAA/q6qqPgAAAD8AAAAAAACAP6uqKj8AAAA/q6qqPgAAgD+rqqo+AAAAP6uqKj8AAAA/q6oqPwAAAD8AAIA/AAAAP6uqqj4AAIA/q6oqPwAAgD+rqio/AACAPwAAgD8AAIA/"),
+"format": 34359742487,
+"index_count": 36,
+"index_data": PackedByteArray("AAAEAAIAAgAEAAYAAQAFAAMAAwAFAAcACAAMAAoACgAMAA4ACQANAAsACwANAA8AEAAUABIAEgAUABYAEQAVABMAEwAVABcA"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("7rGDv9yzMT/usYM/7rGDP9yzMT/usYO/7rGDP9yzMT/usYM/7rGDv9yzMT/usYO/7rGDv9yzMb/usYM/7rGDP9yzMb/usYO/7rGDP9yzMb/usYM/7rGDv9yzMb/usYO/7rGDP9yzMT/usYM/7rGDv9yzMT/usYO/7rGDP9yzMT/usYO/7rGDv9yzMT/usYM/7rGDP9yzMb/usYM/7rGDv9yzMb/usYO/7rGDP9yzMb/usYO/7rGDv9yzMb/usYM/7rGDP9yzMT/usYM/7rGDv9yzMb/usYM/7rGDv9yzMT/usYM/7rGDP9yzMb/usYM/7rGDP9yzMT/usYO/7rGDv9yzMb/usYO/7rGDv9yzMT/usYO/7rGDP9yzMb/usYO//3//f////7//////AAD/v/9//3////+//////wAA/7//f/9/////v/////8AAP+//3//f////7//////AAD/v///AID/////AAAAgP9//7///wCA/////wAAAID/f/+///8AgP////8AAACA/3//v///AID/////AAAAgP9//78AgP//AAD/vwCAAAD///+/AID//wAA/78AgAAA////vwCA//8AAP+/AIAAAP///78AgP//AAD/vwCAAAD///+/")
+}]
 
 [sub_resource type="Animation" id="Animation_5f2sf"]
 length = 0.001
@@ -404,6 +425,18 @@ script = ExtResource("8_uf5tr")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1652832, 0)
 shape = SubResource("BoxShape3D_ylpk0")
 
+[node name="CraftZone" type="MeshInstance3D" parent="Head/Weapon/Actions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.165, 0)
+visible = false
+mesh = SubResource("BoxMesh_j4nxn")
+
+[node name="Label3D" type="Label3D" parent="Head/Weapon/Actions/CraftZone"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5304802, 0.6547494)
+font_size = 24
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Head/Weapon/Actions/CraftZone"]
+mesh = SubResource("ArrayMesh_6cv16")
+
 [node name="Arms" type="Node2D" parent="Head/Weapon"]
 position = Vector2(2, 2)
 
@@ -452,7 +485,6 @@ script = ExtResource("15_6cv16")
 [node name="Sprites" type="Node2D" parent="Head/Weapon/Arms/SwayContainer"]
 
 [node name="Arms" type="Node2D" parent="Head/Weapon/Arms/SwayContainer/Sprites"]
-visible = false
 
 [node name="Sprite2D" type="Sprite2D" parent="Head/Weapon/Arms/SwayContainer/Sprites/Arms"]
 position = Vector2(880.915, 309)

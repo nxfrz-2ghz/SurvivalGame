@@ -1,9 +1,16 @@
 extends Area3D
 
-@onready var item := preload("res://scenes/items/item.tscn")
-
 signal add_item(nname: String)
 signal drop_item(nname: String)
+
+const item := preload("res://scenes/items/item.tscn")
+
+@onready var craft_zone_label := $CraftZone/Label3D
+
+var crafting_mode := false:
+	set(value):
+		crafting_mode = value
+		$CraftZone.visible = value
 
 
 func attack(dmg: float, damage_types: Dictionary) -> void:
@@ -19,6 +26,7 @@ func drop(item_name: String) -> void:
 
 
 func craft() -> void:
+	crafting_mode = false
 	server_craft.rpc(multiplayer.get_unique_id())
 
 
@@ -88,82 +96,88 @@ func server_drop(item_name: String, peer_id: int) -> void:
 
 @rpc("authority", "call_local")
 func server_craft(peer_id: int) -> void:
-	
-	if not multiplayer.is_server():
-		return
+	if not multiplayer.is_server(): return
 	
 	var player = G.world.get_node_or_null(str(peer_id))
 	if not player: return
+	
 	var actions_node = player.weapon.actions
-
-	# 1. Получаем все тела в зоне
-	var bodies = actions_node.get_overlapping_bodies()
+	var available_nodes = _get_available_nodes(actions_node)
 	
-	# 2. Создаем словарь: { "имя": [список_узлов] }
-	# Сохраняем ссылки на сами узлы, чтобы их потом было легко удалять
-	var available_nodes = {}
-	for body in bodies:
-		if "nname" in body:
-			var item_name = body.nname
-			if not available_nodes.has(item_name):
-				available_nodes[item_name] = []
-			available_nodes[item_name].append(body)
-
-	# 3. Ищем подходящий рецепт в объектах
-	for result_object in R.objects:
-		var data = R.objects[result_object]
-		if not data.has("recipe"):
-			continue
-		var recipe = data["recipe"]
-		if can_craft(recipe, available_nodes):
-			# 4. Если ресурсов хватает — крафтим объект!
-			actions_node.execute_craft_object(peer_id, result_object, recipe, available_nodes)
-			return # Выходим после первого успешного рецепта
+	# Ищем первый подходящий рецепт
+	var craft_data = get_available_recipe(available_nodes)
 	
-	# 5. Ищем подходящий рецепт в предметах (если не нашли в объектах)
-	for result_item in R.items:
-		var data = R.items[result_item]
-		if not data.has("recipe"):
-			continue
-			
-		var recipe = data["recipe"]
-		if can_craft(recipe, available_nodes):
-			# 6. Если ресурсов хватает — крафтим!
-			actions_node.execute_craft(peer_id,result_item, recipe, available_nodes)
-			return # Выходим после первого успешного рецепта
+	if craft_data:
+		var result_id = craft_data["id"]
+		var recipe = craft_data["recipe"]
+		
+		if craft_data["type"] == "object":
+			actions_node.execute_craft_object(peer_id, result_id, recipe, available_nodes)
+		else:
+			actions_node.execute_craft(peer_id, result_id, recipe, available_nodes)
 
-# Проверка: хватает ли предметов для конкретного рецепта
+# Возвращает словарь с данными рецепта или null
+func get_available_recipe(available_nodes: Dictionary) -> Variant:
+	# Сначала проверяем объекты, потом предметы
+	for collection in [{"data": R.objects, "type": "object"}, {"data": R.items, "type": "item"}]:
+		for id in collection.data:
+			var item_data = collection.data[id]
+			if item_data.has("recipe") and can_craft(item_data["recipe"], available_nodes):
+				return {"id": id, "recipe": item_data["recipe"], "type": collection.type}
+	return null
+
 func can_craft(recipe: Dictionary, available_nodes: Dictionary) -> bool:
-	if recipe["craft-station"] != "arm": return false
+	if recipe.get("craft-station") != "arm": return false
 	for ingredient in recipe:
-		var required_count = recipe[ingredient]
-		# Если такого предмета нет вообще или его меньше, чем нужно
-		if not available_nodes.has(ingredient) or available_nodes[ingredient].size() < required_count:
+		if ingredient == "craft-station": continue
+		var required = recipe[ingredient]
+		if available_nodes.get(ingredient, []).size() < required:
 			return false
 	return true
 
-# Удаление ресурсов и вызов сигнала
-func execute_craft(peer_id: int, result_name: String, recipe: Dictionary, available_nodes: Dictionary):
+# Вспомогательная функция для сбора предметов в зоне
+func _get_available_nodes(actions_node) -> Dictionary:
+	var nodes = {}
+	for body in actions_node.get_overlapping_bodies():
+		if "nname" in body:
+			if not nodes.has(body.nname): nodes[body.nname] = []
+			nodes[body.nname].append(body)
+	return nodes
+
+# Общий метод удаления ресурсов
+func _consume_ingredients(recipe: Dictionary, available_nodes: Dictionary):
 	for ingredient in recipe:
-		var count_to_remove = recipe[ingredient]
-		for i in range(count_to_remove):
-			var node_to_delete = available_nodes[ingredient].pop_back()
-			node_to_delete.queue_free()
-	
+		if ingredient == "craft-station": continue
+		for i in range(recipe[ingredient]):
+			var node = available_nodes[ingredient].pop_back()
+			if is_instance_valid(node): node.queue_free()
+
+func execute_craft(peer_id: int, result_name: String, recipe: Dictionary, available_nodes: Dictionary):
+	_consume_ingredients(recipe, available_nodes)
 	client_receive_item.rpc_id(peer_id, result_name)
 
-# Спавнирование объекта вместо добавления в инвентарь
 func execute_craft_object(peer_id: int, result_object: String, recipe: Dictionary, available_nodes: Dictionary):
-	# Удаляем ресурсы
-	for ingredient in recipe:
-		var count_to_remove = recipe[ingredient]
-		for i in range(count_to_remove):
-			var node_to_delete = available_nodes[ingredient].pop_back()
-			node_to_delete.queue_free()
+	_consume_ingredients(recipe, available_nodes)
 	
-	# Спавним объект в мире
-	var object_data = R.objects[result_object]
-	var object_scene = object_data["object"]
-	var spawned_object: Node3D = object_scene.instantiate()
+	var spawned_object = R.objects[result_object]["object"].instantiate()
 	G.world.add_child(spawned_object, true)
-	spawned_object.position = G.world.get_node_or_null(str(peer_id)).weapon.actions.global_position
+	
+	var player = G.world.get_node_or_null(str(peer_id))
+	spawned_object.global_position = player.weapon.actions.global_position
+
+
+func _physics_process(_delta: float) -> void:
+	if crafting_mode:
+		# 1. Получаем ноды в зоне (через вспомогательную функцию)
+		var available_nodes = _get_available_nodes(self) 
+		
+		# 2. Ищем рецепт
+		var craft_data = get_available_recipe(available_nodes)
+		
+		# 3. Выводим текст: если рецепт есть — его ID, если нет — пусто
+		if craft_data:
+			var result_id = craft_data["id"]
+			# Если в R.items/objects есть поле "name", лучше взять его, иначе берем ID
+			craft_zone_label.text = "Ready to craft: " + result_id
+		else:
+			craft_zone_label.text = "Drop ingridients in green box"
