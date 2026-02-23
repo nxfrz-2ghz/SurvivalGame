@@ -1,7 +1,7 @@
 extends "res://scenes/objects/object.gd"
 
 @onready var toogle_on := $ToggleOn
-@onready var craft_timer := $CraftTimer
+@onready var craft_timer := $Timers/CraftTimer
 
 var queue: Array = []
 
@@ -19,6 +19,7 @@ func drop_queue() -> void:
 func toggle() -> void:
 	toogle_on.visible = !toogle_on.visible
 	sprite.visible = !sprite.visible
+	$Shadow.visible = !$Shadow.visible
 
 
 @rpc("any_peer", "call_local")
@@ -30,7 +31,8 @@ func craft(input: String):
 
 
 func _on_craft_timer_timeout() -> void:
-	drop(queue.pop_front())
+	toggle()
+	drop(R.furnace_items.get(queue.pop_front())["output"])
 	
 	# Продолжение плавки
 	if !queue.is_empty():

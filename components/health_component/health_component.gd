@@ -14,7 +14,7 @@ func _ready() -> void:
 
 
 @rpc("any_peer", "call_local")
-func take_damage(base_damage: float, incoming_types: Dictionary):
+func take_damage(base_damage: float, incoming_types: Dictionary = {"melee": 1.0}):
 	var total_damage = 0.0
 	for type in incoming_types:
 		var multiplier = incoming_types[type]

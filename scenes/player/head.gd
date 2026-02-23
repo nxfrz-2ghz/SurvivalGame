@@ -3,6 +3,7 @@ extends Node3D
 
 func _physics_process(_delta: float) -> void:
 	if not is_multiplayer_authority(): return
+	if G.state_machine != "game": return
 	
 	if Input.is_action_pressed("right") and self.rotation.z > -0.04:
 		self.rotation.z -= 0.005

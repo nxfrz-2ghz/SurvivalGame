@@ -3,8 +3,6 @@ extends Area3D
 signal add_item(nname: String)
 signal drop_item(nname: String)
 
-const item := preload("res://scenes/items/item.tscn")
-
 @onready var craft_zone_label := $CraftZone/Label3D
 
 var crafting_mode := false:
@@ -87,7 +85,7 @@ func server_drop(item_name: String, peer_id: int) -> void:
 	if not player: return
 	var actions_node = player.weapon.actions
 
-	var node: RigidBody3D = item.instantiate()
+	var node: RigidBody3D = R.item.instantiate()
 	node.nname = item_name
 	G.world.add_child(node, true)
 	node.position = actions_node.global_position
@@ -118,8 +116,8 @@ func server_craft(peer_id: int) -> void:
 
 # Возвращает словарь с данными рецепта или null
 func get_available_recipe(available_nodes: Dictionary) -> Variant:
-	# Сначала проверяем объекты, потом предметы
-	for collection in [{"data": R.objects, "type": "object"}, {"data": R.items, "type": "item"}]:
+	# Сначала проверяем предметы, потом объекты
+	for collection in [{"data": R.items, "type": "item"}, {"data": R.objects, "type": "object"}]:
 		for id in collection.data:
 			var item_data = collection.data[id]
 			if item_data.has("recipe") and can_craft(item_data["recipe"], available_nodes):
@@ -127,9 +125,7 @@ func get_available_recipe(available_nodes: Dictionary) -> Variant:
 	return null
 
 func can_craft(recipe: Dictionary, available_nodes: Dictionary) -> bool:
-	if recipe.get("craft-station") != "arm": return false
 	for ingredient in recipe:
-		if ingredient == "craft-station": continue
 		var required = recipe[ingredient]
 		if available_nodes.get(ingredient, []).size() < required:
 			return false
@@ -159,7 +155,7 @@ func execute_craft(peer_id: int, result_name: String, recipe: Dictionary, availa
 func execute_craft_object(peer_id: int, result_object: String, recipe: Dictionary, available_nodes: Dictionary):
 	_consume_ingredients(recipe, available_nodes)
 	
-	var spawned_object = R.objects[result_object]["object"].instantiate()
+	var spawned_object = R.objects[result_object]["scene"].instantiate()
 	G.world.add_child(spawned_object, true)
 	
 	var player = G.world.get_node_or_null(str(peer_id))

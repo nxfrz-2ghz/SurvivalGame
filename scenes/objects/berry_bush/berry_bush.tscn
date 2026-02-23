@@ -1,0 +1,81 @@
+[gd_scene format=3 uid="uid://bynks25qxbe74"]
+
+[ext_resource type="PackedScene" uid="uid://darxc13rlkwt7" path="res://scenes/objects/object.tscn" id="1_mom5n"]
+[ext_resource type="Script" uid="uid://vf6qjyjytc5q" path="res://scenes/objects/berry_bush/berry_bush.gd" id="2_8hlsa"]
+[ext_resource type="Texture2D" uid="uid://d1880fj30dior" path="res://res/sprites/objects/empty_berry_bush.png" id="2_ikb77"]
+[ext_resource type="Texture2D" uid="uid://c66vre25lbual" path="res://res/sprites/objects/full_berry_bush.png" id="3_8hlsa"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_5tb2u"]
+height = 2.2060547
+radius = 1.5786133
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_mom5n"]
+properties/0/path = NodePath("Sprite3D:visible")
+properties/0/spawn = true
+properties/0/replication_mode = 2
+properties/1/path = NodePath(".:full")
+properties/1/spawn = true
+properties/1/replication_mode = 2
+properties/2/path = NodePath("FullSprite3D:visible")
+properties/2/spawn = true
+properties/2/replication_mode = 2
+
+[sub_resource type="GDScript" id="GDScript_ikb77"]
+script/source = "extends RayCast3D
+
+@onready var parent := get_parent()
+
+
+func _physics_process(_delta: float) -> void:
+	if not is_colliding():
+		parent.global_position.y -= 0.1
+	else:
+		self.queue_free()
+"
+
+[node name="BerryBush" unique_id=1717522636 instance=ExtResource("1_mom5n")]
+script = ExtResource("2_8hlsa")
+full = true
+nname = "berry_bush"
+drop_items = {
+"berry": 3,
+"log": 1
+}
+
+[node name="GrowUp" type="Timer" parent="Timers" parent_id_path=PackedInt32Array(203408184) index="1" unique_id=1477719022]
+
+[node name="HealthComponent" parent="." index="1" unique_id=1086116789]
+resists = {
+"axe": 1.0,
+"melee": 0.5,
+"pickaxe": 0.6
+}
+max_health = 3.0
+
+[node name="CollisionShape3D" parent="." index="2" unique_id=1161658582]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4326432, 0)
+shape = SubResource("CylinderShape3D_5tb2u")
+
+[node name="FullSprite3D" type="Sprite3D" parent="." index="3" unique_id=1269310682]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8481705, 0)
+visible = false
+visibility_range_end = 120.0
+billboard = 2
+shaded = true
+double_sided = false
+alpha_cut = 1
+texture = ExtResource("3_8hlsa")
+
+[node name="Sprite3D" parent="." index="5" unique_id=57594410]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8481705, 0)
+texture = ExtResource("2_ikb77")
+
+[node name="MultiplayerSynchronizer2" type="MultiplayerSynchronizer" parent="." index="7" unique_id=1901462937]
+replication_config = SubResource("SceneReplicationConfig_mom5n")
+
+[node name="FallRay" type="RayCast3D" parent="." index="9" unique_id=1620168224]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.024490118, 0)
+target_position = Vector3(0, -0.12, 0)
+script = SubResource("GDScript_ikb77")
+
+[connection signal="timeout" from="Timers/GrowUp" to="." method="_on_grow_up_timeout"]

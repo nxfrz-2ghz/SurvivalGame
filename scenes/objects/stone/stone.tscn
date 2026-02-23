@@ -9,7 +9,9 @@ radius = 1.2216797
 
 [node name="Stone" instance=ExtResource("1_bfce7")]
 nname = "stone"
-drop_name = "stone"
+drop_items = {
+"stone": 3
+}
 
 [node name="HealthComponent" parent="." index="0"]
 resists = {

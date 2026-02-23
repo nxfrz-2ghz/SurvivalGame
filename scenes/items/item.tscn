@@ -22,7 +22,6 @@ collision_mask = 13
 physics_material_override = SubResource("PhysicsMaterial_xhhhv")
 lock_rotation = true
 script = ExtResource("1_xhhhv")
-nname = "pebble"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_xhhhv")
@@ -31,11 +30,16 @@ shape = SubResource("SphereShape3D_xhhhv")
 transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
 visibility_range_end = 120.0
 billboard = 1
+shaded = true
+double_sided = false
 
-[node name="Shadow" type="Sprite3D" parent="."]
-transform = Transform3D(0.15, 0, 0, 0, -6.5567085e-09, -0.15, 0, 0.15, -6.5567085e-09, 0, -0.4699551, 0)
-visibility_range_end = 120.0
-texture = ExtResource("2_jgeia")
+[node name="Shadow" type="Decal" parent="."]
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0, -0.27959847, 0)
+size = Vector3(1, 0.2, 1)
+texture_albedo = ExtResource("2_jgeia")
+texture_normal = ExtResource("2_jgeia")
+texture_orm = ExtResource("2_jgeia")
+distance_fade_enabled = true
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_xhhhv")

@@ -1,15 +1,7 @@
 extends Node3D
 
 @onready var terrain := $Terrain
-
-const objects := {
-	"grass": preload("res://scenes/objects/grass/grass.tscn"),
-	"tree": preload("res://scenes/objects/tree/tree.tscn"),
-	"stone": preload("res://scenes/objects/stone/stone.tscn"),
-	"rock": preload("res://scenes/objects/rock/rock.tscn"),
-	"copper_ore": preload("res://scenes/objects/copper_ore/copper_ore.tscn"),
-	"iron_ore": preload("res://scenes/objects/iron_ore/iron_ore.tscn"),
-}
+@onready var time_controller := $DirectionalLight3D 
 
 # Биомы и их параметры
 enum Biome { FOREST, MOUNTAINS, PLAINS }
@@ -19,9 +11,10 @@ const BIOME_CONFIG = {
 		"name": "Forest",
 		"noise_threshold": 0.4,
 		"objects": {
-			"grass": {"weight": 40, "density": 0.08},
-			"tree": {"weight": 45, "density": 0.05},
-			"stone": {"weight": 15, "density": 0.02},
+			"grass": {"weight": 25, "density": 0.08},
+			"tree": {"weight": 60, "density": 0.05},
+			"stone": {"weight": 5, "density": 0.02},
+			"berry_bush" : {"weight": 10, "density": 0.05},
 		}
 	},
 	Biome.MOUNTAINS: {
@@ -37,9 +30,10 @@ const BIOME_CONFIG = {
 		"name": "Plains",
 		"noise_threshold": 0.0,
 		"objects": {
-			"grass": {"weight": 60, "density": 0.06},
-			"stone": {"weight": 25, "density": 0.02},
-			"tree": {"weight": 15, "density": 0.02},
+			"grass": {"weight": 93, "density": 0.06},
+			"stone": {"weight": 3, "density": 0.01},
+			"tree": {"weight": 2, "density": 0.01},
+			"berry_bush" : {"weight": 2, "density": 0.05},
 		}
 	},
 }
@@ -48,13 +42,15 @@ var world_seed: int
 var noise: FastNoiseLite
 var biome_noise: FastNoiseLite
 
-# object gen
 @export var world_size := 500
-const SPAWN_STEP := 2  # Генерируем объекты с шагом 4 единицы (экономит спавны)
+const spacing := 1.0     # Расстояние между вершинами
+# object gen
+const OBJ_SPAWN_STEP := 1.5  # Генерируем объекты с шагом (экономит спавны)
+# drop gen
+const DROP_SPAWN_STEP := 15.0  # Генерируем объекты с шагом (экономит спавны)
 # mesh gen
 const CHUNK_SIZE := 64  # Размер одного чанка в вершинах
 const CHUNK_VERTEX_COUNT := CHUNK_SIZE + 1
-const spacing := 1.0     # Расстояние между вершинами
 const noise_scale := 5.0
 const height_max := 10.0
 const visible_mesh_range := 120.0
@@ -95,11 +91,9 @@ func _init_noise() -> void:
 	biome_noise.noise_type = FastNoiseLite.TYPE_PERLIN
 	biome_noise.frequency = 0.02
 
-func _generate_world() -> void:
+func _generate_terrain() -> void:
 	# Генерируем меш террейна разбитый на чанки
-	
 	var offset := (world_size - 1) * spacing / 2.0
-	
 	# Вычисляем количество чанков
 	var chunks_count = ceili(float(world_size) / float(CHUNK_SIZE))
 	
@@ -160,6 +154,10 @@ func _generate_world() -> void:
 			mesh_instance.material_overlay = ground_material
 			terrain.call_deferred("add_child", mesh_instance)
 			terrain.call_deferred("add_child", collider)
+
+func _generate_world() -> void:
+	
+	_generate_terrain()
 	
 	if !server: return
 	
@@ -169,8 +167,9 @@ func _generate_world() -> void:
 	rng.seed = int(world_seed)
 	
 	var gx = 0
+	var gz = 0
 	while gx < world_size:
-		var gz = 0
+		gz = 0
 		while gz < world_size:
 			var world_x = gx * spacing - offset2
 			var world_z = gz * spacing - offset2
@@ -185,7 +184,7 @@ func _generate_world() -> void:
 			
 			var object_name = _select_object_for_biome(biome_config, noise_value, rng)
 			if object_name != "":
-				var obj_scene = objects.get(object_name)
+				var obj_scene = R.objects.get(object_name)["scene"]
 				if obj_scene:
 					var instance = obj_scene.instantiate()
 					# Высота спавна — берем с того же шума, чтобы объект стоял на поверхности
@@ -193,29 +192,46 @@ func _generate_world() -> void:
 					instance.position = Vector3(world_x, spawn_y, world_z)
 					instance.set_meta("object_name", object_name)
 					G.world.call_deferred("add_child", instance, true)
-
-			gz += SPAWN_STEP
-		gx += SPAWN_STEP
+		
+			gz += OBJ_SPAWN_STEP
+		gx += OBJ_SPAWN_STEP
+	
+	# Раскидываем предметы по карте
+	gx = 0
+	while gx < world_size:
+		gz = 0
+		while gz < world_size:
+			var world_x = gx * spacing - offset2
+			var world_z = gz * spacing - offset2
+			
+			
+			var instance: RigidBody3D = R.item.instantiate() 
+			# Высота спавна — берем с того же шума, чтобы объект стоял на поверхности
+			var spawn_y = noise.get_noise_2d(world_x / noise_scale, world_z / noise_scale) * height_max
+			instance.position = Vector3(world_x, spawn_y, world_z)
+			instance.nname = "stone"
+			G.world.call_deferred("add_child", instance, true)
+		
+			gz += DROP_SPAWN_STEP
+		gx += DROP_SPAWN_STEP
 
 
 func _get_biome_from_value(value: float) -> int:
-	if value < -0.25:
+	if value < -0.15:
 		return Biome.MOUNTAINS
-	elif value < 0.1:
+	elif value < 0.05:
 		return Biome.PLAINS
 	else:
 		return Biome.FOREST
 
-func _select_object_for_biome(biome_config: Dictionary, noise_value: float, rng = null) -> String:
-	# Нормализуем шум к 0..1
-	var normalized_noise = (noise_value + 1.0) / 2.0
-
-	# Выбираем объект по весам с учетом плотности
+func _select_object_for_biome(biome_config: Dictionary, _noise_value: float, rng: RandomNumberGenerator) -> String:
+	# 1. Сначала считаем общий вес
 	var total_weight = 0.0
 	for obj_name in biome_config["objects"]:
 		total_weight += biome_config["objects"][obj_name]["weight"]
 
-	var selection = normalized_noise * total_weight
+	# 2. ВЫБИРАЕМ ТИП ОБЪЕКТА ЧЕРЕЗ РАНДОМ (а не через шум)
+	var selection = rng.randf() * total_weight
 	var current_weight = 0.0
 
 	for obj_name in biome_config["objects"]:
@@ -223,80 +239,119 @@ func _select_object_for_biome(biome_config: Dictionary, noise_value: float, rng 
 		current_weight += obj_config["weight"]
 
 		if selection <= current_weight:
-			# Используем переданный RNG для детерминированности, иначе fallback на randf()
-			var roll = (rng.randf() if rng != null else randf())
-			if roll < obj_config["density"]:
+			# 3. Проверяем плотность (тоже через рандом)
+			if rng.randf() < obj_config["density"]:
 				return obj_name
-			else:
-				return ""
+			return ""
 
 	return ""
 
 
-func save_world(path: String = "user://world.save") -> bool:
+
+func save_world(path: String = "user://world.save") -> void:
 	var save_data := {
 		"seed": world_seed,
-		"objects": []
+		"world_size": world_size,
+		"sun_rotation": time_controller.rotation_degrees.x,
+		"objects": [],
+		"player": {},
 	}
 
+	# Перебираем все объекты, которые мы заспавнили
+	var entry := {}
 	for child in G.world.get_children():
-		if child == terrain:
-			continue
-		if child is RigidBody3D or child is StaticBody3D:
-			var obj_name = str(child.get_meta("object_name"))
-			var pos: Vector3 = child.position if child.has_method("position") else Vector3.ZERO
-			var entry := {"name": obj_name, "position": [pos.x, pos.y, pos.z]}
-			if child.has_method("get_save_data"):
-				entry["state"] = child.call("get_save_data")
+		if child.is_in_group("objects"):
+			entry = {
+				"name": child.nname,
+				"pos": [child.position.x, child.position.y, child.position.z],
+				"hp": child.health.current_health,
+			}
 			save_data["objects"].append(entry)
+		
+		elif child.is_in_group("items"):
+			entry = {
+				"name": child.nname,
+				"pos": [child.position.x, child.position.y, child.position.z],
+				"is_drop": true,
+			}
+			save_data["objects"].append(entry)
+	
+	# Сохранение игрока
+	var player: CharacterBody3D = G.world.get_node(str(multiplayer.get_unique_id()))
+	entry = {
+		"name": player.nname,
+		"pos": [player.position.x, player.position.y, player.position.z],
+		"rot": [player.rotation.y, player.head.rotation.x],
+		"health": player.health.current_health,
+		"hunger": player.hunger.current_hunger,
+		"inventory": player.inventory.inventory,
+	}
+	save_data["player"] = entry
+	
+	# Запись файла
+	var file = FileAccess.open(path, FileAccess.WRITE)
+	if file:
+		file.store_string(JSON.stringify(save_data))
+		file.close()
+		print("World saved to: ", path)
 
-	var f := FileAccess.open(path, FileAccess.WRITE)
-	if f == null:
-		push_error("Failed to open save file: %s" % path)
-		return false
 
-	f.store_var(save_data)
-	f.close()
-	return true
+func load_world(path: String = "user://world.save") -> void:
+	if not FileAccess.file_exists(path):
+		print("Save file not found!")
+		return
 
+	var file = FileAccess.open(path, FileAccess.READ)
+	var json_str = file.get_as_text()
+	file.close()
 
-func load_world(path: String = "user://world.save") -> bool:
-	var f := FileAccess.open(path, FileAccess.READ)
-	if f == null:
-		push_error("Failed to open save file: %s" % path)
-		return false
+	var data = JSON.parse_string(json_str)
+	if data == null: return
 
-	var data = f.get_var()
-	f.close()
-
-	# Restore seed and noise
-	world_seed = int(data.get("seed", world_seed))
+	# Восстанавливаем параметры мира
+	world_seed = data["seed"]
+	world_size = data["world_size"]
+	time_controller.rotation_degrees.x = data["sun_rotation"]
+	server = true # Обычно загрузку делает только сервер
+	
+	# Пересоздаем террейн
 	_init_noise()
+	_generate_terrain()
 
-	# Remove existing spawned objects (keep terrain)
-	var to_remove := []
-	for child in get_children():
-		if child == terrain:
-			continue
-		to_remove.append(child)
-	for c in to_remove:
-		c.queue_free()
-
-	# Instantiate saved objects
-	for obj in data.get("objects", []):
-		var name: String = str(obj.get("name", ""))
-		var pos_val = obj.get("position", [])
-		var pos: Vector3 = Vector3.ZERO
-		if typeof(pos_val) == TYPE_ARRAY and pos_val.size() >= 3:
-			pos = Vector3(float(pos_val[0]), float(pos_val[1]), float(pos_val[2]))
-		var scene = objects.get(name, null)
-		if scene:
-			var instance = scene.instantiate()
-			instance.position = pos
-			instance.set_meta("object_name", name)
-			G.world.add_child(instance)
-			var state = obj.get("state", null)
-			if state != null and instance.has_method("load_save_data"):
-				instance.call("load_save_data", state)
-
-	return true
+	# Спавним сохраненные объекты
+	for obj_data in data["objects"]:
+		var pos = Vector3(obj_data["pos"][0], obj_data["pos"][1], obj_data["pos"][2])
+		var obj_name = obj_data["name"]
+		
+		if obj_data.has("is_drop"):
+			# Загрузка предметов (дропа)
+			var item_instance = R.item.instantiate()
+			item_instance.position = pos
+			item_instance.nname = obj_name
+			G.world.add_child(item_instance, true)
+		else:
+			# Загрузка статичных объектов (деревья, руда)
+			var obj_scene = R.objects.get(obj_name)["scene"]
+			if obj_scene:
+				var instance = obj_scene.instantiate()
+				instance.position = pos
+				instance.nname = obj_name
+				instance.get_node("HealthComponent").current_health = obj_data["hp"]
+				G.world.add_child(instance, true)
+	
+	# Загружаем данные игрока
+	var player: CharacterBody3D = G.world.get_node(str(multiplayer.get_unique_id()))
+	var player_data: Dictionary = data["player"]
+	
+	player.nname = player_data["name"]
+	
+	player.position = Vector3(player_data["pos"][0], player_data["pos"][1], player_data["pos"][2])
+	player.rotation.y = player_data["rot"][0]
+	player.head.rotation.x = player_data["rot"][1]
+	
+	player.health.current_health = player_data["health"]
+	player.hunger.current_hunger = player_data["hunger"]
+	
+	for item in player_data["inventory"].values():
+		if item:
+			player.inventory.add_item(item["name"], item["amount"])

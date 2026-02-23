@@ -15,9 +15,6 @@ func _ready():
 	# Инициализируем пустые слоты
 	for i in range(1, MAX_SLOTS + 1):
 		inventory[i] = null
-		
-	add_item("axe")
-	add_item("pickaxe")
 
 
 func update_signals() -> void:

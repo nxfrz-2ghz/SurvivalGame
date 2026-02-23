@@ -1,9 +1,10 @@
-[gd_scene load_steps=44 format=4 uid="uid://dp83o7qw4ht4w"]
+[gd_scene format=4 uid="uid://dp83o7qw4ht4w"]
 
 [ext_resource type="Script" uid="uid://dfihb6cfu6jk3" path="res://scenes/player/player.gd" id="1_4anbu"]
 [ext_resource type="PackedScene" uid="uid://c8q18w2yckeeh" path="res://components/health_component/health_component.tscn" id="2_75vfm"]
 [ext_resource type="Script" uid="uid://o5ox0n51dvy3" path="res://scenes/player/head.gd" id="2_rxibo"]
 [ext_resource type="Script" uid="uid://d15gnbwci6yhk" path="res://scenes/player/camera.gd" id="3_244u8"]
+[ext_resource type="Script" uid="uid://dhu0i8rhtp7a3" path="res://scenes/player/hunger_controller.gd" id="3_j4nxn"]
 [ext_resource type="Script" uid="uid://b52ief0l2f0vj" path="res://scripts/inventory_controller.gd" id="3_uf5tr"]
 [ext_resource type="Texture2D" uid="uid://djxkb4t6kfbt3" path="res://icon.svg" id="4_lgqa7"]
 [ext_resource type="PackedScene" uid="uid://dvoyamcy01saq" path="res://components/interact_ray/interact_ray.tscn" id="4_p47bc"]
@@ -18,14 +19,31 @@
 [ext_resource type="Texture2D" uid="uid://dsvrbtqjxwxas" path="res://res/sprites/attack_anim/attack6.png" id="13_cnsyf"]
 [ext_resource type="PackedScene" uid="uid://b0ubt0f8epxbi" path="res://components/sway_container/sway_container.tscn" id="14_007i1"]
 [ext_resource type="Script" uid="uid://cek85ohvrestp" path="res://components/sway_container/sway_container.gd" id="15_6cv16"]
-[ext_resource type="Texture2D" uid="uid://crbe50sl1agx4" path="res://res/sprites/items/arm.png" id="16_j4nxn"]
-[ext_resource type="Texture2D" uid="uid://nuea13giuwk5" path="res://res/sprites/Pickup_anim/1.png" id="17_6cv16"]
-[ext_resource type="Texture2D" uid="uid://bludxqo7346wv" path="res://res/sprites/Pickup_anim/2.png" id="18_j4nxn"]
-[ext_resource type="Texture2D" uid="uid://cmw2iu4wcsh13" path="res://res/sprites/Pickup_anim/3.png" id="19_28m0y"]
-[ext_resource type="Texture2D" uid="uid://bad74ra1vdglh" path="res://res/sprites/Pickup_anim/4.png" id="20_uniwh"]
-[ext_resource type="Texture2D" uid="uid://b6k56fkuypfyi" path="res://res/sprites/Pickup_anim/5.png" id="21_iqsei"]
-[ext_resource type="Texture2D" uid="uid://eyvpmunmmthv" path="res://res/sprites/Pickup_anim/6.png" id="22_tffgl"]
-[ext_resource type="Texture2D" uid="uid://b5sc6uxp5futb" path="res://res/sprites/Pickup_anim/7.png" id="23_pk8ii"]
+[ext_resource type="Texture2D" uid="uid://crbe50sl1agx4" path="res://res/sprites/arm.png" id="16_j4nxn"]
+[ext_resource type="Texture2D" uid="uid://nuea13giuwk5" path="res://res/sprites/pickup_anim/1.png" id="17_6cv16"]
+[ext_resource type="Texture2D" uid="uid://bludxqo7346wv" path="res://res/sprites/pickup_anim/2.png" id="18_j4nxn"]
+[ext_resource type="Texture2D" uid="uid://dqs0evsgf44aa" path="res://res/sprites/open_book0/1.png" id="18_ttakn"]
+[ext_resource type="Texture2D" uid="uid://cmw2iu4wcsh13" path="res://res/sprites/pickup_anim/3.png" id="19_28m0y"]
+[ext_resource type="Texture2D" uid="uid://bt2ryvtoayu2q" path="res://res/sprites/open_book0/2.png" id="19_rw8a5"]
+[ext_resource type="Texture2D" uid="uid://boxxnctr3t24x" path="res://res/sprites/open_book0/3.png" id="20_iwuka"]
+[ext_resource type="Texture2D" uid="uid://bad74ra1vdglh" path="res://res/sprites/pickup_anim/4.png" id="20_uniwh"]
+[ext_resource type="Texture2D" uid="uid://cuf863ctiio27" path="res://res/sprites/open_book0/4.png" id="21_hyqqp"]
+[ext_resource type="Texture2D" uid="uid://b6k56fkuypfyi" path="res://res/sprites/pickup_anim/5.png" id="21_iqsei"]
+[ext_resource type="Texture2D" uid="uid://ia6sjgsycjrp" path="res://res/sprites/open_book0/5.png" id="22_ds1xl"]
+[ext_resource type="Texture2D" uid="uid://eyvpmunmmthv" path="res://res/sprites/pickup_anim/6.png" id="22_tffgl"]
+[ext_resource type="Texture2D" uid="uid://b38s1f0113dha" path="res://res/sprites/open_book0/6.png" id="23_1u1sw"]
+[ext_resource type="Texture2D" uid="uid://b5sc6uxp5futb" path="res://res/sprites/pickup_anim/7.png" id="23_pk8ii"]
+[ext_resource type="Texture2D" uid="uid://dmdolrgtndijx" path="res://res/sprites/open_book0/7.png" id="24_2t3bg"]
+[ext_resource type="Texture2D" uid="uid://bpiwbdllflsug" path="res://res/sprites/open_book0/8.png" id="25_jrbya"]
+[ext_resource type="Texture2D" uid="uid://clqyhn8m8lkad" path="res://res/sprites/open_book0/9.png" id="26_ahqnk"]
+[ext_resource type="Texture2D" uid="uid://bhhy8hfx1845f" path="res://res/sprites/open_book0/10.png" id="27_vb1ce"]
+[ext_resource type="Texture2D" uid="uid://bs1aek5d8trp6" path="res://res/sprites/open_book1/Без названия3_20260211182716.png" id="28_0ncpa"]
+[ext_resource type="Texture2D" uid="uid://c1ixaut210e7h" path="res://res/sprites/open_book1/Без названия3_20260211182755.png" id="29_upxxc"]
+[ext_resource type="Texture2D" uid="uid://bhkl87r48vu4n" path="res://res/sprites/open_book1/Без названия3_20260211182758.png" id="30_ln3h3"]
+[ext_resource type="Texture2D" uid="uid://bu2cs0jlc50qi" path="res://res/sprites/open_book1/Без названия3_20260211182801.png" id="31_uygh0"]
+[ext_resource type="Texture2D" uid="uid://cn4bayrp5gmmd" path="res://res/sprites/open_book1/Без названия3_20260211182804.png" id="32_t1aof"]
+[ext_resource type="Texture2D" uid="uid://jlkflkyyl0b8" path="res://res/sprites/open_book1/Без названия3_20260211182808.png" id="33_w8qe1"]
+[ext_resource type="Texture2D" uid="uid://cybs8lovhfynj" path="res://res/sprites/open_book1/Без названия3_20260211182811.png" id="34_hdvrm"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qnmj6"]
 
@@ -147,14 +165,79 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("AnimSprite:position")
+tracks/3/path = NodePath("AnimSprite:scale")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
+"values": [Vector2(2, 2)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("AnimSprite:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
 "values": [Vector2(660, 360)]
+}
+
+[sub_resource type="Animation" id="Animation_ttakn"]
+resource_name = "book_open_page"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimSprite:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.76666665, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(2, 2), Vector2(3, 3)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimSprite:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.75, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(660, 400), Vector2(660, 400), Vector2(660, 240)]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimSprite")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&"book_open_page", 1.0, false],
+"method": &"play"
+}]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SwayContainer/Sprites:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(-2, -2),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 453.055)]
 }
 
 [sub_resource type="Animation" id="Animation_lgqa7"]
@@ -177,26 +260,26 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("SwayContainer/Sprites:position")
+tracks/1/path = NodePath("AnimSprite:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(1, 2),
-"transitions": PackedFloat32Array(-2, -2),
-"update": 0,
-"values": [Vector2(0, 453.055), Vector2(0, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("AnimSprite:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector2(980, 400)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SwayContainer/Sprites:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(1, 2),
+"transitions": PackedFloat32Array(-2, -2),
+"update": 0,
+"values": [Vector2(0, 453.055), Vector2(0, 0)]
 }
 tracks/3/type = "method"
 tracks/3/imported = false
@@ -211,6 +294,18 @@ tracks/3/keys = {
 "args": [],
 "method": &"pickup"
 }]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("AnimSprite:scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(2, 2)]
 }
 
 [sub_resource type="Animation" id="Animation_jej8l"]
@@ -256,31 +351,44 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("ProgressBar:value")
+tracks/3/path = NodePath("AnimSprite:position")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [0.0, 1.0]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("AnimSprite:position")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector2(660, 360)]
 }
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("ProgressBar:value")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("AnimSprite:scale")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(2, 2)]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_lopa8"]
 _data = {
 &"RESET": SubResource("Animation_iyg5g"),
+&"book_open_page": SubResource("Animation_ttakn"),
 &"pickup": SubResource("Animation_lgqa7"),
 &"use": SubResource("Animation_jej8l")
 }
@@ -315,6 +423,76 @@ animations = [{
 "loop": false,
 "name": &"attack",
 "speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_ttakn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_rw8a5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_iwuka")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_hyqqp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_ds1xl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_1u1sw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_2t3bg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_jrbya")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_ahqnk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_vb1ce")
+}, {
+"duration": 1.0,
+"texture": null
+}],
+"loop": false,
+"name": &"book_change_page",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_0ncpa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_upxxc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_ln3h3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_uygh0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_t1aof")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_w8qe1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_hdvrm")
+}],
+"loop": false,
+"name": &"book_open_page",
+"speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -372,95 +550,97 @@ properties/4/path = NodePath("HealthComponent:current_health")
 properties/4/spawn = true
 properties/4/replication_mode = 2
 
-[node name="Player" type="CharacterBody3D" groups=["players"]]
+[node name="Player" type="CharacterBody3D" unique_id=2118560617 groups=["players"]]
 collision_layer = 2
 collision_mask = 5
 script = ExtResource("1_4anbu")
 
-[node name="HealthComponent" parent="." instance=ExtResource("2_75vfm")]
+[node name="HealthComponent" parent="." unique_id=603427587 instance=ExtResource("2_75vfm")]
 unique_name_in_owner = true
 max_health = 10.0
 
-[node name="InventoryController" type="Node" parent="."]
+[node name="HungerController" type="Node" parent="." unique_id=1615523263]
+script = ExtResource("3_j4nxn")
+
+[node name="Timer" type="Timer" parent="HungerController" unique_id=292068303]
+autostart = true
+
+[node name="InventoryController" type="Node" parent="." unique_id=781635327]
 unique_name_in_owner = true
 script = ExtResource("3_uf5tr")
 
-[node name="Sprite3D" type="Sprite3D" parent="."]
+[node name="Sprite3D" type="Sprite3D" parent="." unique_id=1367966238]
 texture = ExtResource("4_lgqa7")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1426141509]
 transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 0, 0, 0)
 shape = SubResource("CapsuleShape3D_qnmj6")
 
-[node name="Head" type="Node3D" parent="."]
+[node name="Head" type="Node3D" parent="." unique_id=377657991]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68520355, 0)
 script = ExtResource("2_rxibo")
 
-[node name="Camera" type="Node3D" parent="Head"]
+[node name="Camera" type="Node3D" parent="Head" unique_id=1053448815]
 script = ExtResource("3_244u8")
 
-[node name="Camera3D" type="Camera3D" parent="Head/Camera"]
+[node name="Camera3D" type="Camera3D" parent="Head/Camera" unique_id=585511788]
 fov = 90.0
 
-[node name="InteractRay" parent="Head" instance=ExtResource("4_p47bc")]
+[node name="InteractRay" parent="Head" unique_id=1585375663 instance=ExtResource("4_p47bc")]
 unique_name_in_owner = true
-collision_mask = 14
+collision_mask = 30
 collide_with_areas = false
 
-[node name="Weapon" type="Node3D" parent="Head"]
+[node name="Weapon" type="Node3D" parent="Head" unique_id=753252549]
 unique_name_in_owner = true
 script = ExtResource("7_kvlxm")
 
-[node name="Stats" type="Node" parent="Head/Weapon"]
+[node name="Stats" type="Node" parent="Head/Weapon" unique_id=771165599]
 script = ExtResource("8_8ydkj")
 
-[node name="Actions" type="Area3D" parent="Head/Weapon"]
+[node name="Actions" type="Area3D" parent="Head/Weapon" unique_id=928031166]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
 collision_layer = 0
-collision_mask = 14
+collision_mask = 30
 input_ray_pickable = false
 script = ExtResource("8_uf5tr")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Head/Weapon/Actions"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Head/Weapon/Actions" unique_id=2145705635]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1652832, 0)
 shape = SubResource("BoxShape3D_ylpk0")
 
-[node name="CraftZone" type="MeshInstance3D" parent="Head/Weapon/Actions"]
+[node name="CraftZone" type="MeshInstance3D" parent="Head/Weapon/Actions" unique_id=404098417]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.165, 0)
 visible = false
 mesh = SubResource("BoxMesh_j4nxn")
 
-[node name="Label3D" type="Label3D" parent="Head/Weapon/Actions/CraftZone"]
+[node name="Label3D" type="Label3D" parent="Head/Weapon/Actions/CraftZone" unique_id=691792025]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5304802, 0.6547494)
 font_size = 24
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Head/Weapon/Actions/CraftZone"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Head/Weapon/Actions/CraftZone" unique_id=1532125777]
 mesh = SubResource("ArrayMesh_6cv16")
 
-[node name="Arms" type="Node2D" parent="Head/Weapon"]
+[node name="Arms" type="Node2D" parent="Head/Weapon" unique_id=747726469]
 position = Vector2(2, 2)
 
-[node name="ArmAnim" type="AnimationPlayer" parent="Head/Weapon/Arms"]
+[node name="ArmAnim" type="AnimationPlayer" parent="Head/Weapon/Arms" unique_id=238871778]
 unique_name_in_owner = true
-libraries = {
-&"": SubResource("AnimationLibrary_jiejy")
-}
+libraries/ = SubResource("AnimationLibrary_jiejy")
 
-[node name="WeaponAnim" type="AnimationPlayer" parent="Head/Weapon/Arms"]
+[node name="WeaponAnim" type="AnimationPlayer" parent="Head/Weapon/Arms" unique_id=1345028875]
 unique_name_in_owner = true
-libraries = {
-&"": SubResource("AnimationLibrary_lopa8")
-}
+libraries/ = SubResource("AnimationLibrary_lopa8")
 speed_scale = 1.2
 
-[node name="AnimSprite" type="AnimatedSprite2D" parent="Head/Weapon/Arms"]
+[node name="AnimSprite" type="AnimatedSprite2D" parent="Head/Weapon/Arms" unique_id=2108194721]
 top_level = true
 position = Vector2(660, 360)
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_byj34")
-animation = &"pickup"
+animation = &"book_open_page"
 
-[node name="ProgressBar" type="ProgressBar" parent="Head/Weapon/Arms"]
+[node name="ProgressBar" type="ProgressBar" parent="Head/Weapon/Arms" unique_id=1900462188]
 visible = false
 top_level = true
 anchors_preset = 8
@@ -479,27 +659,29 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_lgqa7")
 max_value = 1.0
 show_percentage = false
 
-[node name="SwayContainer" parent="Head/Weapon/Arms" instance=ExtResource("14_007i1")]
+[node name="SwayContainer" parent="Head/Weapon/Arms" unique_id=651865889 instance=ExtResource("14_007i1")]
 script = ExtResource("15_6cv16")
 
-[node name="Sprites" type="Node2D" parent="Head/Weapon/Arms/SwayContainer"]
+[node name="Sprites" type="Node2D" parent="Head/Weapon/Arms/SwayContainer" unique_id=1659423955]
 
-[node name="Arms" type="Node2D" parent="Head/Weapon/Arms/SwayContainer/Sprites"]
+[node name="Arms" type="Node2D" parent="Head/Weapon/Arms/SwayContainer/Sprites" unique_id=1072875398]
 
-[node name="Sprite2D" type="Sprite2D" parent="Head/Weapon/Arms/SwayContainer/Sprites/Arms"]
+[node name="ArmR" type="Sprite2D" parent="Head/Weapon/Arms/SwayContainer/Sprites/Arms" unique_id=862674038]
 position = Vector2(880.915, 309)
 scale = Vector2(2.4361112, 2.1555555)
 texture = ExtResource("16_j4nxn")
 
-[node name="Sprite2D2" type="Sprite2D" parent="Head/Weapon/Arms/SwayContainer/Sprites/Arms"]
+[node name="ArmL" type="Sprite2D" parent="Head/Weapon/Arms/SwayContainer/Sprites/Arms" unique_id=209438394]
 position = Vector2(400.0001, 311)
 scale = Vector2(2.4361112, 2.1555555)
 texture = ExtResource("16_j4nxn")
 flip_h = true
 
-[node name="Item" type="Sprite2D" parent="Head/Weapon/Arms/SwayContainer/Sprites"]
+[node name="Item" type="Sprite2D" parent="Head/Weapon/Arms/SwayContainer/Sprites" unique_id=162632288]
 position = Vector2(1060.555, 447)
 scale = Vector2(1.6444445, 1.4833333)
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1021319399]
 replication_config = SubResource("SceneReplicationConfig_mf2ua")
+
+[connection signal="timeout" from="HungerController/Timer" to="HungerController" method="_on_timer_timeout"]

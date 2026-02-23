@@ -1,0 +1,157 @@
+[gd_scene load_steps=17 format=3 uid="uid://3tpmsfmbwfot"]
+
+[ext_resource type="Script" uid="uid://cjg6udkb2tsa6" path="res://scenes/player/arms/right_arm.gd" id="1_1ji82"]
+[ext_resource type="Texture2D" path="res://res/textures/blocks/dirt/dirt.png" id="1_n17ej"]
+[ext_resource type="Texture2D" path="res://res/textures/blocks/cobblestone/cobblestone.png" id="2_1ji82"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_bto4e"]
+size = Vector3(2, 2, 2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lalm6"]
+vertex_color_use_as_albedo = true
+albedo_color = Color(0, 0.5372549, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_m7fv6"]
+material = SubResource("StandardMaterial3D_lalm6")
+size = Vector3(2, 2, 2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_41e5q"]
+albedo_texture = ExtResource("1_n17ej")
+uv1_scale = Vector3(2.5, 2.5, 2.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_bg8j1"]
+material = SubResource("StandardMaterial3D_41e5q")
+size = Vector3(2, 2, 2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3oc2u"]
+albedo_texture = ExtResource("2_1ji82")
+uv1_scale = Vector3(2.5, 2.5, 2.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_lyluy"]
+material = SubResource("StandardMaterial3D_3oc2u")
+size = Vector3(2, 2, 2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nsa6e"]
+vertex_color_use_as_albedo = true
+albedo_color = Color(1, 0.5372549, 0, 1)
+metallic = 1.0
+roughness = 0.5
+
+[sub_resource type="BoxMesh" id="BoxMesh_51j0k"]
+material = SubResource("StandardMaterial3D_nsa6e")
+size = Vector3(2, 2, 2)
+
+[sub_resource type="Animation" id="Animation_n17ej"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../Models:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../Models:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_e8wog"]
+resource_name = "cd"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../Models:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, -0.4153304, 0), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_1ji82"]
+resource_name = "crack"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../Models:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.09083169, 0.1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, -0.31621456, -0.42180753), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../Models:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.09083169, 0.1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-0.5828876, 0, 0), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1ji82"]
+_data = {
+&"RESET": SubResource("Animation_n17ej"),
+&"cd": SubResource("Animation_e8wog"),
+&"crack": SubResource("Animation_1ji82")
+}
+
+[node name="RightArm" type="Node3D"]
+script = ExtResource("1_1ji82")
+
+[node name="Models" type="Node3D" parent="."]
+transform = Transform3D(0.255, 0, 0, 0, 0.255, 0, 0, 0, 0.255, 0, 0, 0)
+
+[node name="Placeholder" type="MeshInstance3D" parent="Models"]
+mesh = SubResource("BoxMesh_bto4e")
+skeleton = NodePath("../..")
+
+[node name="Grass" type="MeshInstance3D" parent="Models"]
+visible = false
+mesh = SubResource("BoxMesh_m7fv6")
+skeleton = NodePath("../..")
+
+[node name="Dirt" type="MeshInstance3D" parent="Models"]
+visible = false
+mesh = SubResource("BoxMesh_bg8j1")
+skeleton = NodePath("../..")
+
+[node name="CobbleStone" type="MeshInstance3D" parent="Models"]
+visible = false
+mesh = SubResource("BoxMesh_lyluy")
+skeleton = NodePath("../..")
+
+[node name="Metal" type="MeshInstance3D" parent="Models"]
+visible = false
+mesh = SubResource("BoxMesh_51j0k")
+skeleton = NodePath("../..")
+
+[node name="Visual" type="Node" parent="."]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Visual"]
+libraries = {
+&"": SubResource("AnimationLibrary_1ji82")
+}

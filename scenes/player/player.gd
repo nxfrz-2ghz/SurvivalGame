@@ -6,6 +6,7 @@ extends CharacterBody3D
 @onready var weapon := %Weapon
 @onready var arm_anim := %ArmAnim
 @onready var health := %HealthComponent
+@onready var hunger := $HungerController
 
 const SPEED = 3.0
 const JUMP_VELOCITY = 4.0
@@ -21,11 +22,15 @@ func _enter_tree() -> void:
 func _ready() -> void:
 	if not is_multiplayer_authority():
 		interact_ray.queue_free()
+		$Head/Weapon/Arms.queue_free()
 	else:
 		weapon.attack.connect(interact_ray.update)
+		weapon.attack.connect(hunger.on_attack)
 		
 		weapon.actions.add_item.connect(inventory.add_item)
 		weapon.actions.drop_item.connect(inventory.drop_item)
+		
+		hunger.hunger_damage.connect(health.take_damage)
 		
 		inventory.set_item_in_arm.connect(weapon.set_item_in_arm)
 		
@@ -34,6 +39,7 @@ func _ready() -> void:
 
 func _input(event: InputEvent) -> void:
 	if not is_multiplayer_authority(): return
+	if G.state_machine != "game": return
 	
 	if event is InputEventMouseMotion:
 		
@@ -53,11 +59,32 @@ func _input(event: InputEvent) -> void:
 		interact_ray.update()
 	
 	if Input.is_action_just_pressed("rmb"):
+		
+		if inventory.inventory[inventory.current_item]:
+			var item_name: String = inventory.inventory[inventory.current_item]["name"]
+			if R.items[item_name].get("nutrition"):
+				inventory.drop_item(item_name)
+				hunger.eat(R.items[item_name]["nutrition"])
+		
 		if interact_ray.is_colliding():
 			var collider: Node = interact_ray.get_collider()
-			if collider.nname == "furnace":
-				var item_in_arm: String = inventory.inventory[inventory.current_item-1]
-				collider.craft.rpc_id(1, item_in_arm)
+			
+			if collider.nname == "furnace" and inventory.inventory[inventory.current_item]:
+				var item_in_arm: String = inventory.inventory[inventory.current_item]["name"]
+				var amount: int = inventory.inventory[inventory.current_item]["amount"]
+				# Если предмет есть в словаре крафтов печи и его количество достаточно
+				if R.furnace_items.get(item_in_arm) and amount >= R.furnace_items.get(item_in_arm)["amount"]:
+					collider.craft.rpc_id(1, item_in_arm)
+					inventory.drop_item(item_in_arm, R.furnace_items.get(item_in_arm)["amount"])
+			
+			elif collider.nname == "berry_bush":
+				if collider.full:
+					inventory.add_item("berry")
+					if randf() > 0:
+						inventory.add_item("berry")
+						if randf() > 0:
+							inventory.add_item("berry")
+				collider.pick.rpc_id(1)
 	
 	if Input.is_action_just_pressed("pickup") and !weapon.weapon_anim.is_playing():
 		weapon.weapon_anim.speed_scale = 1
@@ -70,6 +97,9 @@ func _input(event: InputEvent) -> void:
 	
 	if Input.is_action_just_pressed("craft"):
 		weapon.actions.crafting_mode = !weapon.actions.crafting_mode
+	
+	if Input.is_action_just_pressed("open_book"):
+		weapon.weapon_anim.play("book_open_page")
 
 
 func moving(delta: float) -> void:
@@ -119,6 +149,7 @@ func moving(delta: float) -> void:
 
 func _physics_process(delta: float) -> void:
 	if not is_multiplayer_authority(): return
+	if G.state_machine != "game": return
 	
 	moving(delta)
 	

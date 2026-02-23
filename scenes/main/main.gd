@@ -35,14 +35,15 @@ func add_player(peer_id: int) -> void:
 	player.name = str(peer_id)
 	player.position.y = 50
 	# Используем call_deferred для безопасности физики
-	G.world.add_child.call_deferred(player, true)
+	G.world.add_child(player, true)
 	
-	# Если игрок это мы, отложенно подключаем сигналы (узел должен быть в дереве)
+	# Если игрок это мы, отложенно подключаем сигналы
 	if peer_id == multiplayer.get_unique_id():
 		player.get_node("%InteractRay").target_found.connect(G.gui.hud.target_label.update)
 		player.get_node("%InventoryController").update.connect(G.gui.hud.inventory.update)
 		player.get_node("%InventoryController").set_hotbar_slot.connect(G.gui.hud.inventory.set_hotbar_slot)
 		player.get_node("%HealthComponent").changed.connect(G.gui.hud.health_bar.update)
+		player.get_node("HungerController").changed.connect(G.gui.hud.eat_bar.update)
 	
 	else:
 		var world_node = G.world.get_node("World")
@@ -61,7 +62,8 @@ func start_game(is_load: bool = false) -> void:
 			G.world.get_node("World").load_world()
 		else:
 			G.world.get_node("World").start_gen()
-		G.game = true
+	G.state_machine = "game"
+	G.gui.game_menu.game = true
 
 
 func _on_create_button_pressed() -> void:
@@ -88,6 +90,7 @@ func _on_join_button_pressed():
 
 # Clients
 func _on_player_spawner_spawned(node: Node) -> void:
+	node.position.y = 50
 	if str(multiplayer.get_unique_id()) == node.name:
 		node.get_node("%InteractRay").target_found.connect(G.gui.hud.target_label.update)
 		node.get_node("%InventoryController").update.connect(G.gui.hud.inventory.update)

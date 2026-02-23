@@ -6,9 +6,11 @@ extends Node2D
 var target_pos := Vector2.ZERO
 
 func _input(event: InputEvent) -> void:
+	if G.state_machine != "game": return
 	if event is InputEventMouseMotion:
 		target_pos = -event.relative * intensity
 
-func _process(delta: float) -> void:
+func _physics_process(delta: float) -> void:
+	if G.state_machine != "game": return
 	position = position.lerp(target_pos, smoothing * delta)
 	target_pos = target_pos.lerp(Vector2.ZERO, smoothing * delta)

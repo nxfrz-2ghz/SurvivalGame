@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bqbsfxetmgd68"]
+[gd_scene format=3 uid="uid://bqbsfxetmgd68"]
 
 [ext_resource type="PackedScene" uid="uid://darxc13rlkwt7" path="res://scenes/objects/object.tscn" id="1_mbkog"]
 [ext_resource type="Script" uid="uid://bh2vyc2xkbfr8" path="res://scenes/objects/furnace/furnace.gd" id="2_qnkj5"]
@@ -33,27 +33,29 @@ func _physics_process(_delta: float) -> void:
 		self.queue_free()
 "
 
-[node name="Furnace" instance=ExtResource("1_mbkog")]
+[node name="Furnace" unique_id=1921849884 instance=ExtResource("1_mbkog")]
 script = ExtResource("2_qnkj5")
 nname = "furnace"
-drop_name = "stone"
+drop_items = {
+"stone": 4
+}
 
-[node name="HealthComponent" parent="." index="0"]
+[node name="CraftTimer" type="Timer" parent="Timers" parent_id_path=PackedInt32Array(203408184) index="1" unique_id=16731806]
+wait_time = 5.0
+one_shot = true
+
+[node name="HealthComponent" parent="." index="1" unique_id=1086116789]
 max_health = 5.0
 
-[node name="CollisionShape3D" parent="." index="1"]
+[node name="CollisionShape3D" parent="." index="2" unique_id=1161658582]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03913629, 1.1595132, -0.03717804)
 shape = SubResource("CylinderShape3D_fyjhv")
 
-[node name="Sprite3D" parent="." index="2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.039, 1.541, -0.036)
-texture = ExtResource("4_fn88o")
-
-[node name="ToggleOn" type="Node3D" parent="." index="3"]
+[node name="ToggleOn" type="Node3D" parent="." index="3" unique_id=1471818564]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.039, 1.541, -0.036)
 visible = false
 
-[node name="Sprite3D" type="Sprite3D" parent="ToggleOn" index="0"]
+[node name="Sprite3D" type="Sprite3D" parent="ToggleOn" index="0" unique_id=163627065]
 visibility_range_end = 500.0
 billboard = 2
 shaded = true
@@ -61,19 +63,20 @@ double_sided = false
 alpha_cut = 1
 texture = ExtResource("3_ijwyf")
 
-[node name="OmniLight3D" type="OmniLight3D" parent="ToggleOn" index="1"]
+[node name="OmniLight3D" type="OmniLight3D" parent="ToggleOn" index="1" unique_id=1579709312]
 light_color = Color(1, 0.6862745, 0.39215687, 1)
 light_energy = 6.172
 
-[node name="MultiplayerSynchronizer2" type="MultiplayerSynchronizer" parent="." index="6"]
+[node name="Sprite3D" parent="." index="5" unique_id=57594410]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.039, 1.541, -0.036)
+texture = ExtResource("4_fn88o")
+
+[node name="MultiplayerSynchronizer2" type="MultiplayerSynchronizer" parent="." index="6" unique_id=1235628749]
 replication_config = SubResource("SceneReplicationConfig_mbkog")
 
-[node name="FallRay" type="RayCast3D" parent="." index="7"]
+[node name="FallRay" type="RayCast3D" parent="." index="7" unique_id=1068000691]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.024490118, 0)
 target_position = Vector3(0, -0.12, 0)
 script = SubResource("GDScript_mbkog")
 
-[node name="CraftTimer" type="Timer" parent="." index="8"]
-wait_time = 5.0
-
-[connection signal="timeout" from="CraftTimer" to="." method="_on_craft_timer_timeout"]
+[connection signal="timeout" from="Timers/CraftTimer" to="." method="_on_craft_timer_timeout"]

@@ -1,0 +1,55 @@
+[gd_scene format=3 uid="uid://bsim3q0u5hbul"]
+
+[ext_resource type="PackedScene" uid="uid://s322lfir2gd7" path="res://scenes/mobs/mob.tscn" id="1_524pu"]
+[ext_resource type="Script" uid="uid://belg2o4syxdrm" path="res://scenes/mobs/darkness_eye/darkness_eye.gd" id="2_clm3c"]
+[ext_resource type="Texture2D" uid="uid://cqvph7a67efsh" path="res://res/sprites/mobs/darkness_eye/eye0.png" id="3_s7jgl"]
+[ext_resource type="Texture2D" uid="uid://dhu605mq3ai6i" path="res://res/sprites/mobs/darkness_eye/eye1.png" id="4_e6pli"]
+[ext_resource type="Texture2D" uid="uid://f74p0qn2x4t8" path="res://res/sprites/mobs/darkness_eye/eye2.png" id="5_0v12d"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_clm3c"]
+radius = 0.8901367
+height = 2.7919922
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_0w0fy"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_s7jgl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_e6pli")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_0v12d")
+}],
+"loop": true,
+"name": &"default",
+"speed": 8.0
+}]
+
+[node name="DarknessEye" unique_id=408161229 instance=ExtResource("1_524pu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8155488, 0)
+script = ExtResource("2_clm3c")
+add_damage = 0.0
+nname = "darkness_eye"
+
+[node name="AttackCooldown" type="Timer" parent="Timers" parent_id_path=PackedInt32Array(1401815993) index="1" unique_id=154619054]
+autostart = true
+
+[node name="HealthComponent" parent="." index="1" unique_id=1086839518]
+max_health = 5.0
+
+[node name="CollisionShape3D" parent="." index="2" unique_id=1649019193]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3959961, 0)
+shape = SubResource("CapsuleShape3D_clm3c")
+
+[node name="AnimatedSprite3D" parent="." index="3" unique_id=1249191248]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.36554074, 0)
+sprite_frames = SubResource("SpriteFrames_0w0fy")
+autoplay = "default"
+frame_progress = 0.45816362
+
+[node name="Shadow" parent="." index="5" unique_id=1964977101]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, -2.5216517, 0)
+
+[connection signal="timeout" from="Timers/AttackCooldown" to="." method="_on_attack_cooldown_timeout"]

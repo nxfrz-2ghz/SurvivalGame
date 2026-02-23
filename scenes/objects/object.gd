@@ -4,10 +4,12 @@ extends StaticBody3D
 @onready var sprite := $Sprite3D
 @onready var take_damage_audio := $TakeDamageAudio
 @onready var health := $HealthComponent
-@onready var item := preload("res://scenes/items/item.tscn")
+@onready var damage_frame_timer := $Timers/DamageFrameRemove
+
+const item := preload("res://scenes/items/item.tscn")
 
 @export var nname: String
-@export var drop_name: String
+@export var drop_items := {}
 
 
 func _ready() -> void:
@@ -15,7 +17,6 @@ func _ready() -> void:
 	
 	health.died.connect(despawn)
 	health.changed.connect(on_damage)
-	if randf() < 0.1: drop_loot()
 
 
 func drop(item_name: String) -> void:
@@ -26,40 +27,22 @@ func drop(item_name: String) -> void:
 
 
 func drop_loot() -> void:
-	if !drop_name: return
-	drop(drop_name)
+	if drop_items.is_empty(): return
+	for item_name in drop_items:
+		for i in range(drop_items[item_name] + randi_range(0, 1)):
+			drop(item_name)
 
 
 func on_damage(_current_health: float, _max_health: float) -> void:
 	take_damage_audio.play()
-	if randf() < 0.1: drop_loot()
+	sprite.modulate = Color(1, 0 ,0)
+	damage_frame_timer.start()
 
 
 func despawn() -> void:
-	for i in range(randi_range(3,6)):
-		drop_loot()	
+	drop_loot()
 	queue_free()
 
 
-func get_save_data() -> Dictionary:
-	var data := {
-		"nname": nname,
-		"drop_name": drop_name,
-		"health": {
-			"max": health.max_health,
-			"current": health.current_health,
-		}
-	}
-	return data
-
-
-func load_save_data(data: Dictionary) -> void:
-	if data.has("nname"):
-		nname = String(data["nname"])
-	if data.has("drop_name"):
-		drop_name = String(data["drop_name"])
-	if data.has("health"):
-		var h = data["health"]
-		health.max_health = float(h.get("max", health.max_health))
-		health.current_health = float(h.get("current", health.current_health))
-		health.changed.emit(health.current_health, health.max_health)
+func _on_damage_frame_remove_timeout() -> void:
+	sprite.modulate = Color(1, 1 ,1)

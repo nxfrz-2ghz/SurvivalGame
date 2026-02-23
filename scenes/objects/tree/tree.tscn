@@ -10,7 +10,9 @@ height = 8.988647
 [node name="Tree" instance=ExtResource("1_8vn3u")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.8763304, 0)
 nname = "tree"
-drop_name = "log"
+drop_items = {
+"log": 4
+}
 
 [node name="HealthComponent" parent="." index="0"]
 resists = {
