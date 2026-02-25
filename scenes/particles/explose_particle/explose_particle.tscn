@@ -1,0 +1,57 @@
+[gd_scene format=3 uid="uid://byvvcwl402js6"]
+
+[ext_resource type="Script" uid="uid://d10a0h0ov1itt" path="res://scenes/particles/explose_particle/explose_particle.gd" id="1_pm4yx"]
+
+[sub_resource type="Gradient" id="Gradient_ggmd3"]
+colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_7ytub"]
+gradient = SubResource("Gradient_ggmd3")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_j6mp5"]
+emission_shape = 1
+emission_sphere_radius = 1.0
+direction = Vector3(0, 5, 0)
+spread = 15.0
+initial_velocity_min = 5.0
+initial_velocity_max = 5.0
+gravity = Vector3(0, -5, 0)
+color_ramp = SubResource("GradientTexture1D_7ytub")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sb5y2"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_fyipa"]
+material = SubResource("StandardMaterial3D_sb5y2")
+size = Vector2(0.5, 0.5)
+orientation = 2
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_oag05"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 2
+
+[node name="ExploseParticle" type="GPUParticles3D" unique_id=2097639369]
+emitting = false
+amount = 15
+lifetime = 3.0
+one_shot = true
+explosiveness = 1.0
+randomness = 0.4
+process_material = SubResource("ParticleProcessMaterial_j6mp5")
+draw_pass_1 = SubResource("PlaneMesh_fyipa")
+script = ExtResource("1_pm4yx")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=455069812]
+autoplay = true
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=721578669]
+replication_config = SubResource("SceneReplicationConfig_oag05")
+
+[connection signal="finished" from="." to="." method="_on_finished"]

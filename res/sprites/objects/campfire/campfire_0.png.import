@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bxas7kak8qs4e"
-path.s3tc="res://.godot/imported/furnace_on.png-e03b22aa9fa0542cb9214b2c1f721fb4.s3tc.ctex"
+uid="uid://bck8tpufnwncr"
+path.s3tc="res://.godot/imported/campfire_0.png-4123eb13236be93fd3dc304da8d3b339.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://res/sprites/objects/furnace_on.png"
-dest_files=["res://.godot/imported/furnace_on.png-e03b22aa9fa0542cb9214b2c1f721fb4.s3tc.ctex"]
+source_file="res://res/sprites/objects/campfire/campfire_0.png"
+dest_files=["res://.godot/imported/campfire_0.png-4123eb13236be93fd3dc304da8d3b339.s3tc.ctex"]
 
 [params]
 

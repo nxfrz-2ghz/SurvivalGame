@@ -1,0 +1,11 @@
+extends MultiplayerSpawner
+
+
+func _ready() -> void:
+	# Автоматическое добавление всех, кого надо синхронизировать
+	for obj in R.objects:
+		add_spawnable_scene(R.objects[obj]["scene"].get_path())
+	for mob in R.mobs:
+		add_spawnable_scene(R.mobs[mob]["scene"].get_path())
+	for particle in R.particles:
+		add_spawnable_scene(R.particles[particle].get_path())

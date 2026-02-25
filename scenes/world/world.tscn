@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://tatfdb5ym3tv" path="res://scenes/world/world.gd" id="1_bq33v"]
 [ext_resource type="Script" uid="uid://d2ptcu2co03fy" path="res://scenes/world/directional_light_3d.gd" id="2_sl2e5"]
+[ext_resource type="Script" uid="uid://h5tkleehf2q1" path="res://scenes/world/mob_spawner.gd" id="3_1fp7r"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_6fy3g"]
 sky_top_color = Color(1, 1, 1, 1)
@@ -38,3 +39,12 @@ environment = SubResource("Environment_jte2u")
 
 [node name="Terrain" type="StaticBody3D" parent="." unique_id=1383566486]
 transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0, 0, 0)
+
+[node name="MobSpawner" type="Node" parent="." unique_id=693825507]
+script = ExtResource("3_1fp7r")
+
+[node name="SpawnTimer" type="Timer" parent="MobSpawner" unique_id=2105636915]
+wait_time = 10.0
+autostart = true
+
+[connection signal="timeout" from="MobSpawner/SpawnTimer" to="MobSpawner" method="_on_spawn_timer_timeout"]

@@ -41,6 +41,11 @@ func on_damage(_current_health: float, _max_health: float) -> void:
 
 func despawn() -> void:
 	drop_loot()
+	
+	var died_particles := R.particles["explose"].instantiate()
+	G.world.add_child(died_particles, true)
+	died_particles.position = self.position
+	
 	queue_free()
 
 

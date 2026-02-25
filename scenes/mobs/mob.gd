@@ -46,3 +46,39 @@ func despawn() -> void:
 
 func _on_damage_frame_remove_timeout() -> void:
 	sprite.modulate = Color(1, 1 ,1)
+
+
+func get_target_player() -> CharacterBody3D:
+	var players = get_tree().get_nodes_in_group("players")
+	var closest_dist = INF
+	var closest_player: Node3D = null
+	
+	for player in players:
+		if not is_instance_valid(player):
+			continue
+		var dist = global_position.distance_to(player.global_position)
+		if dist < closest_dist:
+			closest_dist = dist
+			closest_player = player
+
+	return closest_player
+
+
+func loop(_delta: float) -> void:
+	return
+
+
+func _physics_process(delta: float) -> void:
+	if G.state_machine != "game": return
+	
+	loop(delta)
+	
+	if not is_on_floor():
+		velocity += get_gravity() * delta
+	
+	move_and_slide()
+
+
+func _on_update_timer_timeout() -> void:
+	if position.distance_to(get_target_player().position) > 100.0:
+		despawn()

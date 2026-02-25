@@ -55,8 +55,8 @@ func server_attack(dmg: float, damage_types: Dictionary, peer_id: int) -> void:
 		if body.is_in_group("players"):
 			body.health.take_damage.rpc_id(int(body.name), dmg, damage_types)
 		
-		# Урон по объектам
-		if body.is_in_group("objects"):
+		# Урон по объектам и мобам
+		if body.is_in_group("objects") or body.is_in_group("mobs"):
 			body.health.take_damage(dmg, damage_types)
 
 

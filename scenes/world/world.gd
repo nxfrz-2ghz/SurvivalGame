@@ -1,7 +1,6 @@
 extends Node3D
 
 @onready var terrain := $Terrain
-@onready var time_controller := $DirectionalLight3D 
 
 # Биомы и их параметры
 enum Biome { FOREST, MOUNTAINS, PLAINS }
@@ -190,7 +189,6 @@ func _generate_world() -> void:
 					# Высота спавна — берем с того же шума, чтобы объект стоял на поверхности
 					var spawn_y = noise.get_noise_2d(world_x / noise_scale, world_z / noise_scale) * height_max
 					instance.position = Vector3(world_x, spawn_y, world_z)
-					instance.set_meta("object_name", object_name)
 					G.world.call_deferred("add_child", instance, true)
 		
 			gz += OBJ_SPAWN_STEP
@@ -252,8 +250,9 @@ func save_world(path: String = "user://world.save") -> void:
 	var save_data := {
 		"seed": world_seed,
 		"world_size": world_size,
-		"sun_rotation": time_controller.rotation_degrees.x,
+		"sun_rotation": G.time_controller.rotation_degrees.x,
 		"objects": [],
+		"mobs": [],
 		"player": {},
 	}
 
@@ -275,6 +274,14 @@ func save_world(path: String = "user://world.save") -> void:
 				"is_drop": true,
 			}
 			save_data["objects"].append(entry)
+		
+		elif child.is_in_group("mobs"):
+			entry = {
+				"name": child.nname,
+				"pos": [child.position.x, child.position.y, child.position.z],
+				"hp": child.health.current_health,
+			}
+			save_data["mobs"].append(entry)
 	
 	# Сохранение игрока
 	var player: CharacterBody3D = G.world.get_node(str(multiplayer.get_unique_id()))
@@ -311,13 +318,13 @@ func load_world(path: String = "user://world.save") -> void:
 	# Восстанавливаем параметры мира
 	world_seed = data["seed"]
 	world_size = data["world_size"]
-	time_controller.rotation_degrees.x = data["sun_rotation"]
+	G.time_controller.rotation_degrees.x = data["sun_rotation"]
 	server = true # Обычно загрузку делает только сервер
 	
 	# Пересоздаем террейн
 	_init_noise()
 	_generate_terrain()
-
+	
 	# Спавним сохраненные объекты
 	for obj_data in data["objects"]:
 		var pos = Vector3(obj_data["pos"][0], obj_data["pos"][1], obj_data["pos"][2])
@@ -336,8 +343,18 @@ func load_world(path: String = "user://world.save") -> void:
 				var instance = obj_scene.instantiate()
 				instance.position = pos
 				instance.nname = obj_name
-				instance.get_node("HealthComponent").current_health = obj_data["hp"]
 				G.world.add_child(instance, true)
+				instance.get_node("HealthComponent").current_health = obj_data["hp"]
+	
+	# Спавним мобов
+	for mob_data in data["mobs"]:
+		var pos = Vector3(mob_data["pos"][0], mob_data["pos"][1], mob_data["pos"][2])
+		var mob_scene = R.mobs.get(mob_data["name"])["scene"]
+		if mob_scene:
+			var instance = mob_scene.instantiate()
+			instance.position = pos
+			G.world.add_child(instance, true)
+			instance.get_node("HealthComponent").current_health = mob_data["hp"]
 	
 	# Загружаем данные игрока
 	var player: CharacterBody3D = G.world.get_node(str(multiplayer.get_unique_id()))

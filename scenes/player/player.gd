@@ -30,11 +30,13 @@ func _ready() -> void:
 		weapon.actions.add_item.connect(inventory.add_item)
 		weapon.actions.drop_item.connect(inventory.drop_item)
 		
-		hunger.hunger_damage.connect(health.take_damage)
+		hunger.take_damage.connect(health.take_damage)
+		hunger.heal.connect(health.heal)
 		
 		inventory.set_item_in_arm.connect(weapon.set_item_in_arm)
-		
 		inventory.update_signals()
+		
+		$Head/Weapon/Arms/AnimSprite/Book.close_book.connect(_on_close_book)
 
 
 func _input(event: InputEvent) -> void:
@@ -77,6 +79,9 @@ func _input(event: InputEvent) -> void:
 					collider.craft.rpc_id(1, item_in_arm)
 					inventory.drop_item(item_in_arm, R.furnace_items.get(item_in_arm)["amount"])
 			
+			elif collider.nname == "campfire":
+				collider.toggle.rpc_id(1)
+			
 			elif collider.nname == "berry_bush":
 				if collider.full:
 					inventory.add_item("berry")
@@ -87,7 +92,6 @@ func _input(event: InputEvent) -> void:
 				collider.pick.rpc_id(1)
 	
 	if Input.is_action_just_pressed("pickup") and !weapon.weapon_anim.is_playing():
-		weapon.weapon_anim.speed_scale = 1
 		weapon.weapon_anim.play("pickup")
 		interact_ray.update()
 	
@@ -98,8 +102,16 @@ func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("craft"):
 		weapon.actions.crafting_mode = !weapon.actions.crafting_mode
 	
-	if Input.is_action_just_pressed("open_book"):
+	if Input.is_action_just_pressed("open_book") and !weapon.weapon_anim.is_playing():
+		G.state_machine = "book"
 		weapon.weapon_anim.play("book_open_page")
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+
+
+func _on_close_book() -> void:
+	G.state_machine = "game"
+	weapon.weapon_anim.play("book_close_page")
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 
 func moving(delta: float) -> void:

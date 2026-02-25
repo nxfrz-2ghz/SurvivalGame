@@ -4,7 +4,9 @@
 [ext_resource type="PackedScene" uid="uid://bca3cjm2s2o6d" path="res://scenes/world/world.tscn" id="2_3s6yk"]
 [ext_resource type="PackedScene" uid="uid://ccuilgc2uer2y" path="res://components/fps_label/fps_label.tscn" id="3_a8run"]
 [ext_resource type="Texture2D" uid="uid://fmv6ac8qq7r7" path="res://res/sprites/aim.png" id="3_ab7mr"]
+[ext_resource type="Script" uid="uid://sfqqllsbirx2" path="res://scenes/main/multiplayer_spawner.gd" id="3_nvumn"]
 [ext_resource type="Texture2D" uid="uid://dwlrxn5cvf8ov" path="res://res/sprites/choose_slot.png" id="4_l3cfh"]
+[ext_resource type="Script" uid="uid://dhyid6cdqvklf" path="res://scenes/main/gui.gd" id="4_ou6is"]
 [ext_resource type="Texture2D" uid="uid://c15oyjyrjx8jo" path="res://res/sprites/gui/empty_heart.png" id="5_b1x3f"]
 [ext_resource type="Script" uid="uid://cijkd3xjdn8d1" path="res://scenes/main/gui/target_label.gd" id="5_raeie"]
 [ext_resource type="Texture2D" uid="uid://bobrqwkwa1aj1" path="res://res/sprites/gui/full_heart.png" id="6_a8run"]
@@ -17,18 +19,18 @@
 [ext_resource type="Script" uid="uid://bbm1b30lyywvf" path="res://scenes/main/gui/game_menu.gd" id="11_ouso4"]
 [ext_resource type="Script" uid="uid://cwa53nrhb06on" path="res://scenes/main/gui/main_menu.gd" id="11_th5th"]
 
-[sub_resource type="GDScript" id="GDScript_k2fmo"]
-script/source = "extends CanvasLayer
+[sub_resource type="GDScript" id="GDScript_ou6is"]
+script/source = "extends Node3D
 
-@onready var main_menu = $MainMenu
-@onready var game_menu := $GameMenu
-@onready var hud = $HUD
+func _ready() -> void:
+	G.world = self
 "
 
 [node name="Main" type="Node" unique_id=885458657]
 script = ExtResource("1_l3cfh")
 
 [node name="Environment" type="Node3D" parent="." unique_id=1095848115]
+script = SubResource("GDScript_ou6is")
 
 [node name="World" parent="Environment" unique_id=1718531022 instance=ExtResource("2_3s6yk")]
 
@@ -37,11 +39,12 @@ _spawnable_scenes = PackedStringArray("uid://dp83o7qw4ht4w")
 spawn_path = NodePath("..")
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="Environment" unique_id=2101221164]
-_spawnable_scenes = PackedStringArray("uid://darxc13rlkwt7", "uid://cddn37g14j7yf", "uid://1oleq1fyx67g", "uid://bcy5qk4r0ciq0", "uid://ctabmibvqd5dl", "uid://chyo4mcdq1b6f", "uid://bn42xbb6rt2b8", "uid://cf368heu0gty2", "uid://bqbsfxetmgd68", "uid://bynks25qxbe74", "uid://s322lfir2gd7", "uid://bsim3q0u5hbul")
+_spawnable_scenes = PackedStringArray("uid://darxc13rlkwt7", "uid://cddn37g14j7yf", "uid://s322lfir2gd7")
 spawn_path = NodePath("..")
+script = ExtResource("3_nvumn")
 
 [node name="GUI" type="CanvasLayer" parent="." unique_id=222286616]
-script = SubResource("GDScript_k2fmo")
+script = ExtResource("4_ou6is")
 
 [node name="HUD" type="Node" parent="GUI" unique_id=340651958]
 script = ExtResource("6_hxu8e")
@@ -336,7 +339,7 @@ offset_bottom = 220.00037
 grow_vertical = 0
 scale = Vector2(0.3, 0.3)
 value = 100.0
-fill_mode = 3
+fill_mode = 4
 texture_under = ExtResource("5_b1x3f")
 texture_progress = ExtResource("6_a8run")
 script = ExtResource("7_ouso4")
@@ -352,7 +355,7 @@ offset_bottom = 220.00037
 grow_vertical = 0
 scale = Vector2(0.3, 0.3)
 value = 100.0
-fill_mode = 3
+fill_mode = 4
 texture_under = ExtResource("8_blune")
 texture_progress = ExtResource("9_th5th")
 script = ExtResource("7_ouso4")

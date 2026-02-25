@@ -20,6 +20,7 @@ func toggle() -> void:
 	toogle_on.visible = !toogle_on.visible
 	sprite.visible = !sprite.visible
 	$Shadow.visible = !$Shadow.visible
+	$SmokeParticle.emitting = !$SmokeParticle.emitting
 
 
 @rpc("any_peer", "call_local")

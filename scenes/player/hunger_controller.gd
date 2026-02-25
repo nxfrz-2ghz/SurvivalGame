@@ -1,6 +1,7 @@
 extends Node
 
-signal hunger_damage(dmg: float)
+signal take_damage(dmg: float)
+signal heal(health: float)
 signal changed(current_hunger: float)
 
 const HUNGER_DAMAGE := 0.1
@@ -12,7 +13,7 @@ func eat(hng: int) -> void:
 	if current_hunger < MAX_HUNGER:
 		current_hunger += hng
 	else:
-		hunger_damage.emit(-(current_hunger + hng - MAX_HUNGER)/10) # eal if over eating
+		heal.emit(float(hng)/50) # heal if overeating
 		current_hunger = MAX_HUNGER
 	changed.emit(current_hunger, MAX_HUNGER)
 
@@ -21,7 +22,7 @@ func take_hunger(hng: int) -> void:
 		current_hunger -= hng
 		changed.emit(current_hunger, MAX_HUNGER)
 	else:
-		hunger_damage.emit(HUNGER_DAMAGE)
+		take_damage.emit(HUNGER_DAMAGE)
 
 func _on_timer_timeout() -> void:
 	take_hunger(HUNGER_SPEED)

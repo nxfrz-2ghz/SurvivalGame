@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://yxob80tfjj4q"
-path.s3tc="res://.godot/imported/campfire_off.png-1ed20be182def9e85827b5c91be527b7.s3tc.ctex"
+uid="uid://cw2ju52dtn1fv"
+path.s3tc="res://.godot/imported/campfire_3.png-819c01d301db340e1facee5687a6240c.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://res/sprites/objects/campfire_off.png"
-dest_files=["res://.godot/imported/campfire_off.png-1ed20be182def9e85827b5c91be527b7.s3tc.ctex"]
+source_file="res://res/sprites/objects/campfire/campfire_3.png"
+dest_files=["res://.godot/imported/campfire_3.png-819c01d301db340e1facee5687a6240c.s3tc.ctex"]
 
 [params]
 

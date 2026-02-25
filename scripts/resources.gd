@@ -13,6 +13,14 @@ const furnace_items := {
 	},
 }
 
+const mobs := {
+	"darkness_eye": {
+		"scene": preload("res://scenes/mobs/darkness_eye/darkness_eye.tscn"),
+		"requirements": ["night", ],
+		"spawn_weight": 1,
+	}
+}
+
 const objects := {
 	"grass": {
 		"scene": preload("res://scenes/objects/grass/grass.tscn"),
@@ -43,7 +51,7 @@ const objects := {
 		#"recipe": {},
 	},
 	"campfire": {
-		"scene": preload("res://scenes/mobs/darkness_eye/darkness_eye.tscn"),
+		"scene": preload("res://scenes/objects/campfire/campfire.tscn"),
 		"recipe": {"log": 3},
 	},
 	"furnace": {
@@ -171,4 +179,9 @@ const items := {
 	"empty": {
 		"texture": preload("res://res/sprites/items/empty.png"),
 	},
+}
+
+const particles := {
+	"smoke": preload("res://scenes/particles/smoke_particle/smoke_particle.tscn"),
+	"explose": preload("res://scenes/particles/explose_particle/explose_particle.tscn"),
 }

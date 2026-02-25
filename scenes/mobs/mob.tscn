@@ -24,7 +24,7 @@ properties/5/path = NodePath("AnimatedSprite3D:modulate")
 properties/5/spawn = true
 properties/5/replication_mode = 2
 
-[node name="Mob" type="CharacterBody3D" unique_id=408161229]
+[node name="Mob" type="CharacterBody3D" unique_id=408161229 groups=["mobs"]]
 collision_layer = 16
 collision_mask = 7
 script = ExtResource("1_q44lt")
@@ -34,6 +34,10 @@ script = ExtResource("1_q44lt")
 [node name="DamageFrameRemove" type="Timer" parent="Timers" unique_id=1078778412]
 wait_time = 0.1
 one_shot = true
+
+[node name="UpdateTimer" type="Timer" parent="Timers" unique_id=1417228138]
+wait_time = 3.0
+autostart = true
 
 [node name="HealthComponent" parent="." unique_id=1086839518 instance=ExtResource("1_s2wnx")]
 
@@ -58,3 +62,4 @@ distance_fade_enabled = true
 replication_config = SubResource("SceneReplicationConfig_2sf44")
 
 [connection signal="timeout" from="Timers/DamageFrameRemove" to="." method="_on_damage_frame_remove_timeout"]
+[connection signal="timeout" from="Timers/UpdateTimer" to="." method="_on_update_timer_timeout"]

@@ -6,11 +6,17 @@ var max_energy := 1.0
 var time_speed = 0.5 # Скорость смены дня
 
 func _ready() -> void:
+	G.time_controller = self
 	rotation_degrees.x = -150 # Early day
 
+func is_night() -> bool:
+	return rotation_degrees.x > 0
+
 func _physics_process(delta: float) -> void:
+	if G.state_machine != "game": return
+	
 	rotation_degrees.x += time_speed * delta
-	if rotation_degrees.x > 0: # If night
+	if is_night():
 		rotation_degrees.x += time_speed * delta # X2 SPEED
 		
 	if rotation_degrees.x > 180:

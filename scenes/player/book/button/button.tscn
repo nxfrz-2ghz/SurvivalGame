@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://bef4qoo83ksmy"]
+
+[ext_resource type="Script" uid="uid://duabhs3b3kqvq" path="res://scenes/player/book/button/button.gd" id="1_xdkms"]
+
+[node name="Button" type="Button" unique_id=1285330804]
+offset_right = 8.0
+offset_bottom = 8.0
+script = ExtResource("1_xdkms")
+
+[connection signal="pressed" from="." to="." method="_on_pressed"]
