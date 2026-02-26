@@ -769,7 +769,7 @@ visible = false
 offset_left = -134.5
 offset_top = 0.5
 offset_right = 134.5
-offset_bottom = 316.5
+offset_bottom = 284.5
 scale = Vector2(0.5, 0.5)
 
 [node name="ProgressBar" type="ProgressBar" parent="Head/Weapon/Arms" unique_id=1900462188]

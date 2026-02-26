@@ -96,3 +96,4 @@ func _on_player_spawner_spawned(node: Node) -> void:
 		node.get_node("%InventoryController").update.connect(G.gui.hud.inventory.update)
 		node.get_node("%InventoryController").set_hotbar_slot.connect(G.gui.hud.inventory.set_hotbar_slot)
 		node.get_node("%HealthComponent").changed.connect(G.gui.hud.health_bar.update)
+		node.get_node("HungerController").changed.connect(G.gui.hud.eat_bar.update)

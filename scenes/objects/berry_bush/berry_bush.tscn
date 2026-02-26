@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://vf6qjyjytc5q" path="res://scenes/objects/berry_bush/berry_bush.gd" id="2_8hlsa"]
 [ext_resource type="Texture2D" uid="uid://d1880fj30dior" path="res://res/sprites/objects/empty_berry_bush.png" id="2_ikb77"]
 [ext_resource type="Texture2D" uid="uid://c66vre25lbual" path="res://res/sprites/objects/full_berry_bush.png" id="3_8hlsa"]
+[ext_resource type="PackedScene" uid="uid://kqqogxrnnqyf" path="res://components/fall_ray/fall_ray.tscn" id="5_8hlsa"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_5tb2u"]
 height = 2.2060547
@@ -19,19 +20,6 @@ properties/1/replication_mode = 2
 properties/2/path = NodePath("FullSprite3D:visible")
 properties/2/spawn = true
 properties/2/replication_mode = 2
-
-[sub_resource type="GDScript" id="GDScript_ikb77"]
-script/source = "extends RayCast3D
-
-@onready var parent := get_parent()
-
-
-func _physics_process(_delta: float) -> void:
-	if not is_colliding():
-		parent.global_position.y -= 0.1
-	else:
-		self.queue_free()
-"
 
 [node name="BerryBush" unique_id=1717522636 instance=ExtResource("1_mom5n")]
 script = ExtResource("2_8hlsa")
@@ -73,9 +61,6 @@ texture = ExtResource("2_ikb77")
 [node name="MultiplayerSynchronizer2" type="MultiplayerSynchronizer" parent="." index="7" unique_id=1901462937]
 replication_config = SubResource("SceneReplicationConfig_mom5n")
 
-[node name="FallRay" type="RayCast3D" parent="." index="9" unique_id=1620168224]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.024490118, 0)
-target_position = Vector3(0, -0.12, 0)
-script = SubResource("GDScript_ikb77")
+[node name="FallRay" parent="." index="9" unique_id=2065431078 instance=ExtResource("5_8hlsa")]
 
 [connection signal="timeout" from="Timers/GrowUp" to="." method="_on_grow_up_timeout"]

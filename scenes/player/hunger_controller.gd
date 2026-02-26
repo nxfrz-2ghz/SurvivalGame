@@ -25,11 +25,19 @@ func take_hunger(hng: int) -> void:
 		take_damage.emit(HUNGER_DAMAGE)
 
 func _on_timer_timeout() -> void:
+	if G.state_machine != "game": return
 	take_hunger(HUNGER_SPEED)
+	
+	if Input.is_action_pressed("space"):
+		take_hunger(HUNGER_SPEED)
+	if Input.is_action_pressed("up"):
+		take_hunger(HUNGER_SPEED)
+	if Input.is_action_pressed("down"):
+		take_hunger(HUNGER_SPEED)
+	if Input.is_action_pressed("left"):
+		take_hunger(HUNGER_SPEED)
+	if Input.is_action_pressed("right"):
+		take_hunger(HUNGER_SPEED)
 
 func on_attack() -> void:
 	take_hunger(HUNGER_SPEED * 5)
-
-func _physics_process(_delta: float) -> void:
-	if Input.is_action_just_pressed("space"):
-		take_hunger(HUNGER_SPEED * 3)

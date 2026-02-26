@@ -15,6 +15,7 @@ const furnace_items := {
 
 const mobs := {
 	"darkness_eye": {
+		"texture": "res://res/sprites/mobs/darkness_eye/eye0.png",
 		"scene": preload("res://scenes/mobs/darkness_eye/darkness_eye.tscn"),
 		"requirements": ["night", ],
 		"spawn_weight": 1,

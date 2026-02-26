@@ -2,11 +2,9 @@
 
 [ext_resource type="Script" uid="uid://7vfxvypf0utu" path="res://scenes/player/book/book.gd" id="1_uah28"]
 
-[node name="Book" type="MarginContainer" unique_id=2119037644]
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_top = 15
-theme_override_constants/margin_right = 15
-theme_override_constants/margin_bottom = 15
+[node name="Book" type="ScrollContainer" unique_id=1639389443]
+offset_right = 30.0
+offset_bottom = 30.0
 script = ExtResource("1_uah28")
 
 [node name="MainPage" type="GridContainer" parent="." unique_id=460235386]
