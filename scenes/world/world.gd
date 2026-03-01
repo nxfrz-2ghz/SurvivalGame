@@ -151,6 +151,8 @@ func _generate_terrain() -> void:
 			collider.shape = mesh_instance.mesh.create_trimesh_shape()
 			mesh_instance.visibility_range_end = visible_mesh_range
 			mesh_instance.material_overlay = ground_material
+			mesh_instance.set_layer_mask_value(2, true) # Enable shadow decal support
+			mesh_instance.set_layer_mask_value(3, true) # Enable corruption decal support
 			terrain.call_deferred("add_child", mesh_instance)
 			terrain.call_deferred("add_child", collider)
 

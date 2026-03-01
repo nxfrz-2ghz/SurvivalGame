@@ -5,6 +5,7 @@ extends StaticBody3D
 @onready var take_damage_audio := $TakeDamageAudio
 @onready var health := $HealthComponent
 @onready var damage_frame_timer := $Timers/DamageFrameRemove
+@onready var shadow := $Shadow
 
 const item := preload("res://scenes/items/item.tscn")
 
@@ -16,7 +17,7 @@ func _ready() -> void:
 	if not is_multiplayer_authority(): return
 	
 	health.died.connect(despawn)
-	health.changed.connect(on_damage)
+	health.on_damage.connect(on_damage)
 
 
 func drop(item_name: String) -> void:
@@ -33,7 +34,7 @@ func drop_loot() -> void:
 			drop(item_name)
 
 
-func on_damage(_current_health: float, _max_health: float) -> void:
+func on_damage() -> void:
 	take_damage_audio.play()
 	sprite.modulate = Color(1, 0 ,0)
 	damage_frame_timer.start()

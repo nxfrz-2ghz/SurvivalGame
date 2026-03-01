@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://4ffu5apey8sh"]
+
+[ext_resource type="Texture2D" uid="uid://c1jlfqd8di4u5" path="res://res/sprites/objects/round_shadow.png" id="1_3wud3"]
+
+[node name="Shadow" type="Decal" unique_id=437352595]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+texture_albedo = ExtResource("1_3wud3")
+distance_fade_enabled = true
+cull_mask = 2

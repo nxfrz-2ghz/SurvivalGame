@@ -1,0 +1,198 @@
+[gd_scene format=3 uid="uid://cd47urrjvalgn"]
+
+[ext_resource type="PackedScene" uid="uid://darxc13rlkwt7" path="res://scenes/objects/object.tscn" id="1_3awjx"]
+[ext_resource type="Script" uid="uid://dgnp5qym0tan7" path="res://scenes/objects/heart/heart.gd" id="2_xfilk"]
+[ext_resource type="Texture2D" uid="uid://bvwsqdju62i5r" path="res://res/sprites/objects/heart/heart100/Без названия16_20260228111525.png" id="3_0a7st"]
+[ext_resource type="Texture2D" uid="uid://ptj3is54ak44" path="res://res/sprites/objects/heart/heart100/Без названия16_20260228111523.png" id="4_quc8c"]
+[ext_resource type="Texture2D" uid="uid://b4e4x7jt7jeic" path="res://res/sprites/objects/heart/heart100/Без названия16_20260228111528.png" id="5_ybadl"]
+[ext_resource type="Texture2D" uid="uid://bknadut1bo1xr" path="res://res/sprites/objects/heart/heart100/Без названия16_20260228111530.png" id="6_gbr1q"]
+[ext_resource type="Texture2D" uid="uid://bv7c6ycf3i4cs" path="res://res/sprites/objects/heart/heart33/Без названия17_20260228111636.png" id="7_tljm1"]
+[ext_resource type="Texture2D" uid="uid://drhextkcjtri4" path="res://res/sprites/objects/heart/heart33/Без названия17_20260228111639.png" id="8_gv50l"]
+[ext_resource type="Texture2D" uid="uid://cy5orixqo2pr8" path="res://res/sprites/objects/heart/heart33/Без названия17_20260228111642.png" id="9_ws1c0"]
+[ext_resource type="Texture2D" uid="uid://dyhbjrvhkg6c4" path="res://res/sprites/objects/heart/heart33/Без названия17_20260228111644.png" id="10_1cmcs"]
+[ext_resource type="Texture2D" uid="uid://dlr3ygmlj0gpn" path="res://res/sprites/objects/heart/heart66/Без названия15_20260228122238.png" id="11_221hr"]
+[ext_resource type="Texture2D" uid="uid://cbnt8jr5qebdp" path="res://res/sprites/objects/heart/heart66/Без названия15_20260228122241.png" id="12_rf5v7"]
+[ext_resource type="Texture2D" uid="uid://biq8ds1bydl0d" path="res://res/sprites/objects/heart/heart66/Без названия15_20260228122243.png" id="13_x71hx"]
+[ext_resource type="Texture2D" uid="uid://c5scqhjfykgkn" path="res://res/sprites/objects/heart/heart66/Без названия15_20260228122245.png" id="14_5wku2"]
+[ext_resource type="Texture2D" uid="uid://dc57434ug746i" path="res://res/sprites/objects/heart/heart_on_damage/Без названия14_20260228111750.png" id="15_v4des"]
+[ext_resource type="Texture2D" uid="uid://bxycmxtqhmfal" path="res://res/sprites/objects/heart/heart_on_damage/Без названия14_20260228111752.png" id="16_mbihm"]
+[ext_resource type="Texture2D" uid="uid://bc8kro7do3fc2" path="res://res/sprites/objects/heart/heart_on_damage/Без названия14_20260228111755.png" id="17_67xlv"]
+[ext_resource type="Texture2D" uid="uid://dgma361olwah5" path="res://res/sprites/objects/heart/heart_on_damage/Без названия14_20260228111757.png" id="18_pg7au"]
+[ext_resource type="Texture2D" uid="uid://bril0msq0cqj3" path="res://res/sprites/objects/heart/heart_on_damage/Без названия14_20260228111816.png" id="19_syqph"]
+[ext_resource type="Texture2D" uid="uid://guvjk0j0r6m4" path="res://res/sprites/objects/heart/heart_on_summon/Без названия13_20260228110725.png" id="20_4wqpr"]
+[ext_resource type="Texture2D" uid="uid://yhgq2n5wjjyg" path="res://res/sprites/objects/heart/heart_on_summon/Без названия13_20260228110732.png" id="21_gjpsr"]
+[ext_resource type="Texture2D" uid="uid://cbud6xieuyof5" path="res://res/sprites/objects/heart/heart_on_summon/Без названия13_20260228110736.png" id="22_s3wdj"]
+[ext_resource type="Texture2D" uid="uid://b0mr8wb70s0ol" path="res://res/sprites/objects/heart/heart_on_summon/Без названия13_20260228110744.png" id="23_7iche"]
+[ext_resource type="Texture2D" uid="uid://cj50b0i7lbwer" path="res://res/sprites/objects/heart/heart_on_summon/Без названия13_20260228110747.png" id="24_46wnq"]
+[ext_resource type="Texture2D" uid="uid://nwvgpkgo5278" path="res://res/sprites/objects/heart/heart_on_summon/Без названия13_20260228110751.png" id="25_06tso"]
+[ext_resource type="Script" uid="uid://d082vtr77otw6" path="res://scenes/objects/heart/animated_sprite_3d.gd" id="26_1cmcs"]
+[ext_resource type="Texture2D" uid="uid://datmrtfbs3a5m" path="res://res/sprites/terrain/corruption_texture.png" id="27_1cmcs"]
+[ext_resource type="PackedScene" uid="uid://kqqogxrnnqyf" path="res://components/fall_ray/fall_ray.tscn" id="27_ws1c0"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0sola"]
+radius = 1.128418
+height = 2.486084
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_55jf0"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_quc8c")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_0a7st")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_ybadl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_gbr1q")
+}],
+"loop": true,
+"name": &"100",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_tljm1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_gv50l")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_ws1c0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_1cmcs")
+}],
+"loop": true,
+"name": &"33",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("11_221hr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_rf5v7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_x71hx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_5wku2")
+}],
+"loop": true,
+"name": &"66",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("15_v4des")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_mbihm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_67xlv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_pg7au")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_syqph")
+}],
+"loop": false,
+"name": &"on_damage",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("20_4wqpr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_gjpsr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_s3wdj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_7iche")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_46wnq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_06tso")
+}],
+"loop": false,
+"name": &"on_summon",
+"speed": 8.0
+}]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_1cmcs"]
+properties/0/path = NodePath("Corruption:size")
+properties/0/spawn = true
+properties/0/replication_mode = 2
+
+[node name="Heart" unique_id=1331540241 instance=ExtResource("1_3awjx")]
+script = ExtResource("2_xfilk")
+nname = "Heart"
+drop_items = {
+"raw_meet": 4
+}
+
+[node name="RegenerationTimer" type="Timer" parent="Timers" parent_id_path=PackedInt32Array(203408184) index="1" unique_id=1664654667]
+wait_time = 10.0
+autostart = true
+
+[node name="GrowTimer" type="Timer" parent="Timers" parent_id_path=PackedInt32Array(203408184) index="2" unique_id=477196302]
+wait_time = 40.0
+autostart = true
+
+[node name="SummonTimer" type="Timer" parent="Timers" parent_id_path=PackedInt32Array(203408184) index="3" unique_id=948914908]
+wait_time = 30.0
+one_shot = true
+autostart = true
+
+[node name="HealthComponent" parent="." index="1" unique_id=1086116789]
+max_health = 18.0
+
+[node name="CollisionShape3D" parent="." index="2" unique_id=1161658582]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5682256, 0)
+shape = SubResource("CapsuleShape3D_0sola")
+
+[node name="Sprite3D" parent="." index="4" unique_id=57594410]
+visible = false
+texture = ExtResource("3_0a7st")
+
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="." index="5" unique_id=1127619502]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.485882, 0)
+cast_shadow = 0
+visibility_range_end = 120.0
+billboard = 2
+shaded = true
+double_sided = false
+sprite_frames = SubResource("SpriteFrames_55jf0")
+animation = &"on_damage"
+autoplay = "100"
+frame = 4
+frame_progress = 1.0
+script = ExtResource("26_1cmcs")
+
+[node name="Corruption" type="Decal" parent="." index="7" unique_id=734265432]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, -0.6811723, 0)
+texture_albedo = ExtResource("27_1cmcs")
+texture_emission = ExtResource("27_1cmcs")
+distance_fade_enabled = true
+cull_mask = 4
+
+[node name="FallRay" parent="." index="8" unique_id=2065431078 instance=ExtResource("27_ws1c0")]
+
+[node name="MultiplayerSynchronizer2" type="MultiplayerSynchronizer" parent="." index="10" unique_id=378733149]
+replication_config = SubResource("SceneReplicationConfig_1cmcs")
+
+[connection signal="timeout" from="Timers/RegenerationTimer" to="." method="_on_regeneration_timer_timeout"]
+[connection signal="timeout" from="Timers/GrowTimer" to="." method="_on_grow_timer_timeout"]
+[connection signal="timeout" from="Timers/SummonTimer" to="." method="_on_summon_timer_timeout"]
+[connection signal="animation_finished" from="AnimatedSprite3D" to="." method="_on_animated_sprite_3d_animation_finished"]

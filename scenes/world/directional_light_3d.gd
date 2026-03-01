@@ -1,5 +1,12 @@
 extends DirectionalLight3D
 
+@onready var parent := get_parent()
+
+signal night_come
+signal day_come
+
+var night := false
+
 const min_energy := 0.0
 var max_energy := 1.0
 
@@ -9,19 +16,27 @@ func _ready() -> void:
 	G.time_controller = self
 	rotation_degrees.x = -150 # Early day
 
-func is_night() -> bool:
-	return rotation_degrees.x > 0
 
 func _physics_process(delta: float) -> void:
 	if G.state_machine != "game": return
 	
 	rotation_degrees.x += time_speed * delta
-	if is_night():
+	if night:
 		rotation_degrees.x += time_speed * delta # X2 SPEED
-		
-	if rotation_degrees.x > 180:
+	
+	if Input.is_action_pressed("x"):
+		for i in range(100):
+			rotation_degrees.x += time_speed * delta
+	
+	if rotation_degrees.x > 180 and night:
+		night = false
 		rotation_degrees.x = -rotation_degrees.x
 		max_energy = randf_range(0.8, 1.5)
+		if parent.server: day_come.emit()
+	
+	if rotation_degrees.x > 0 and !night:
+		night = true
+		if parent.server: night_come.emit()
 	
 	# Контроль яркости солнца
 	# Вычисляем яркость

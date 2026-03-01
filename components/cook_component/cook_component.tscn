@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://b6olv5upxm2st"]
+
+[ext_resource type="Script" uid="uid://kxi6kj4s0xmd" path="res://components/cook_component/cook_component.gd" id="1_s4n4u"]
+
+[node name="CookComponent" type="Node" unique_id=837939887]
+script = ExtResource("1_s4n4u")

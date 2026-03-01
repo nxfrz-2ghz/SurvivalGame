@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://jgawxn8gcnr2" path="res://scenes/mobs/mob.gd" id="1_q44lt"]
 [ext_resource type="PackedScene" uid="uid://c8q18w2yckeeh" path="res://components/health_component/health_component.tscn" id="1_s2wnx"]
-[ext_resource type="Texture2D" uid="uid://c1jlfqd8di4u5" path="res://res/sprites/objects/round_shadow.png" id="3_62b1e"]
+[ext_resource type="PackedScene" uid="uid://4ffu5apey8sh" path="res://components/shadow/shadow.tscn" id="3_q44lt"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_2sf44"]
 properties/0/path = NodePath(".:position")
@@ -50,13 +50,7 @@ double_sided = false
 
 [node name="TakeDamageAudio" type="AudioStreamPlayer3D" parent="." unique_id=168789702]
 
-[node name="Shadow" type="Decal" parent="." unique_id=1964977101]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, -0.6811723, 0)
-size = Vector3(2, 1.0682373, 2)
-texture_albedo = ExtResource("3_62b1e")
-texture_normal = ExtResource("3_62b1e")
-texture_orm = ExtResource("3_62b1e")
-distance_fade_enabled = true
+[node name="Shadow" parent="." unique_id=437352595 instance=ExtResource("3_q44lt")]
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=100035993]
 replication_config = SubResource("SceneReplicationConfig_2sf44")

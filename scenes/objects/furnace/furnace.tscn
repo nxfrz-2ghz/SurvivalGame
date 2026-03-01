@@ -1,7 +1,8 @@
 [gd_scene format=3 uid="uid://bqbsfxetmgd68"]
 
 [ext_resource type="PackedScene" uid="uid://darxc13rlkwt7" path="res://scenes/objects/object.tscn" id="1_mbkog"]
-[ext_resource type="Script" uid="uid://bh2vyc2xkbfr8" path="res://scenes/objects/furnace/furnace.gd" id="2_qnkj5"]
+[ext_resource type="PackedScene" uid="uid://b6olv5upxm2st" path="res://components/cook_component/cook_component.tscn" id="2_ijwyf"]
+[ext_resource type="Script" uid="uid://b4l7jwebryc2x" path="res://scenes/objects/furnace/furnace.gd" id="2_qnkj5"]
 [ext_resource type="Texture2D" uid="uid://bxas7kak8qs4e" path="res://res/sprites/objects/furnace/furnace_on.png" id="3_ijwyf"]
 [ext_resource type="Texture2D" uid="uid://8qgko7xxw0yh" path="res://res/sprites/objects/furnace/furnace_off.png" id="4_fn88o"]
 [ext_resource type="PackedScene" uid="uid://c4bc1csuh283u" path="res://scenes/particles/smoke_particle/smoke_particle.tscn" id="4_ijwyf"]
@@ -36,11 +37,14 @@ one_shot = true
 [node name="HealthComponent" parent="." index="1" unique_id=1086116789]
 max_health = 5.0
 
-[node name="CollisionShape3D" parent="." index="2" unique_id=1161658582]
+[node name="CookComponent" parent="." index="2" unique_id=837939887 instance=ExtResource("2_ijwyf")]
+cook_category = "furnace"
+
+[node name="CollisionShape3D" parent="." index="3" unique_id=1161658582]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03913629, 1.1595132, -0.03717804)
 shape = SubResource("CylinderShape3D_fyjhv")
 
-[node name="ToggleOn" type="Node3D" parent="." index="3" unique_id=1471818564]
+[node name="ToggleOn" type="Node3D" parent="." index="4" unique_id=1471818564]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.039, 1.541, -0.036)
 visible = false
 
@@ -56,18 +60,18 @@ texture = ExtResource("3_ijwyf")
 light_color = Color(1, 0.6862745, 0.39215687, 1)
 light_energy = 6.172
 
-[node name="SmokeParticle" parent="." index="4" unique_id=2097639369 instance=ExtResource("4_ijwyf")]
+[node name="SmokeParticle" parent="." index="5" unique_id=2097639369 instance=ExtResource("4_ijwyf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.0835304, 0)
 emitting = false
 
-[node name="Sprite3D" parent="." index="6" unique_id=57594410]
+[node name="Sprite3D" parent="." index="7" unique_id=57594410]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.039, 1.541, -0.036)
 texture = ExtResource("4_fn88o")
 
-[node name="MultiplayerSynchronizer2" type="MultiplayerSynchronizer" parent="." index="7" unique_id=1235628749]
+[node name="MultiplayerSynchronizer2" type="MultiplayerSynchronizer" parent="." index="8" unique_id=1235628749]
 replication_config = SubResource("SceneReplicationConfig_mbkog")
 
-[node name="FallRay" parent="." index="8" unique_id=2065431078 instance=ExtResource("5_qnkj5")]
+[node name="FallRay" parent="." index="9" unique_id=2065431078 instance=ExtResource("5_qnkj5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.024490118, 0)
 
 [connection signal="timeout" from="Timers/CraftTimer" to="." method="_on_craft_timer_timeout"]

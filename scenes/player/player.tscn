@@ -10,7 +10,6 @@
 [ext_resource type="Texture2D" uid="uid://djxkb4t6kfbt3" path="res://icon.svg" id="4_lgqa7"]
 [ext_resource type="PackedScene" uid="uid://dvoyamcy01saq" path="res://components/interact_ray/interact_ray.tscn" id="4_p47bc"]
 [ext_resource type="Script" uid="uid://cw5xjlkj437o" path="res://scenes/player/weapon/weapon.gd" id="7_kvlxm"]
-[ext_resource type="Script" uid="uid://kub5y404kdqg" path="res://scenes/player/weapon/stats.gd" id="8_8ydkj"]
 [ext_resource type="Texture2D" uid="uid://dh5m1mos2v01r" path="res://res/sprites/attack_anim/attack1.png" id="8_lgqa7"]
 [ext_resource type="Script" uid="uid://dddal05iv80hr" path="res://scenes/player/weapon/actions.gd" id="8_uf5tr"]
 [ext_resource type="Texture2D" uid="uid://bm5qrehnvp7bt" path="res://res/sprites/attack_anim/attack2.png" id="9_8ydkj"]
@@ -691,6 +690,8 @@ unique_name_in_owner = true
 script = ExtResource("3_uf5tr")
 
 [node name="Sprite3D" type="Sprite3D" parent="." unique_id=1367966238]
+billboard = 2
+double_sided = false
 texture = ExtResource("4_lgqa7")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1426141509]
@@ -715,9 +716,6 @@ collide_with_areas = false
 [node name="Weapon" type="Node3D" parent="Head" unique_id=753252549]
 unique_name_in_owner = true
 script = ExtResource("7_kvlxm")
-
-[node name="Stats" type="Node" parent="Head/Weapon" unique_id=771165599]
-script = ExtResource("8_8ydkj")
 
 [node name="Actions" type="Area3D" parent="Head/Weapon" unique_id=928031166]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)

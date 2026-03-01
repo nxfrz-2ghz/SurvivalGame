@@ -2,14 +2,26 @@ extends Node
 
 const item := preload("res://scenes/items/item.tscn")
 
-const furnace_items := {
-	"copper_ore": {
-		"amount": 2,
-		"output": "copper_bar",
+const exchangeable_items := {
+	"campfire": {
+		"raw_berry": {
+			"amount": 1,
+			"output": "cooked_berry",
+		},
+		"raw_meet": {
+			"amount": 1,
+			"output": "cooked_meet",
+		},
 	},
-	"iron_ore": {
-		"amount": 2,
-		"output": "iron_bar",
+	"furnace": {
+		"copper_ore": {
+			"amount": 2,
+			"output": "copper_bar",
+		},
+		"iron_ore": {
+			"amount": 2,
+			"output": "iron_bar",
+		},
 	},
 }
 
@@ -29,7 +41,7 @@ const objects := {
 	},
 	"berry_bush": {
 		"scene": preload("res://scenes/objects/berry_bush/berry_bush.tscn"),
-		"recipe": {"log": 2, "berry": 5},
+		"recipe": {"log": 2, "raw_berry": 5},
 	},
 	"tree": {
 		"scene": preload("res://scenes/objects/tree/tree.tscn"),
@@ -59,12 +71,14 @@ const objects := {
 		"scene": preload("res://scenes/objects/furnace/furnace.tscn"),
 		"recipe": {"stone": 5},
 	},
+	"heart": {
+		"scene": preload("res://scenes/objects/heart/heart.tscn"),
+	}
 }
 
 const items := {
 	"": {
 		"attack_speed": 1.2,
-		"damage": 1.0,
 		"damage_types":
 			{
 				"melee": 1.0,
@@ -132,10 +146,25 @@ const items := {
 				"pickaxe": 1.1,
 			},
 	},
-	"berry": {
-		"texture": preload("res://res/sprites/items/berry.png"),
+	"raw_berry": {
+		"texture": preload("res://res/sprites/items/berry/raw_berry.png"),
 		"stack_size": 20,
-		"nutrition": 60,
+		"nutrition": 40,
+	},
+	"cooked_berry": {
+		"texture": preload("res://res/sprites/items/berry/cooked_berry.png"),
+		"stack_size": 20,
+		"nutrition": 80,
+	},
+	"raw_meet": {
+		"texture": preload("res://res/sprites/items/meat/raw_meet.png"),
+		"stack_size": 8,
+		"nutrition": 50,
+	},
+	"cooked_meet": {
+		"texture": preload("res://res/sprites/items/meat/cooked_meat.png"),
+		"stack_size": 8,
+		"nutrition": 200,
 	},
 	"log": {
 		"texture": preload("res://res/sprites/items/log.png"),

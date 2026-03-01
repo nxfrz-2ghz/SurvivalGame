@@ -2,8 +2,9 @@
 
 [ext_resource type="PackedScene" uid="uid://darxc13rlkwt7" path="res://scenes/objects/object.tscn" id="1_yqtuu"]
 [ext_resource type="Texture2D" uid="uid://bck8tpufnwncr" path="res://res/sprites/objects/campfire/campfire_0.png" id="2_fyjhv"]
-[ext_resource type="Script" uid="uid://b70be2hcg65a1" path="res://scenes/objects/campfire/campfire.gd" id="2_gdl1i"]
+[ext_resource type="Script" uid="uid://bh2vyc2xkbfr8" path="res://scenes/objects/campfire/campfire.gd" id="2_gdl1i"]
 [ext_resource type="Texture2D" uid="uid://devf7kgkx35n1" path="res://res/sprites/objects/campfire/campfire_1.png" id="3_gdl1i"]
+[ext_resource type="PackedScene" uid="uid://b6olv5upxm2st" path="res://components/cook_component/cook_component.tscn" id="3_x1bif"]
 [ext_resource type="Texture2D" uid="uid://cw2ju52dtn1fv" path="res://res/sprites/objects/campfire/campfire_3.png" id="4_irh8k"]
 [ext_resource type="PackedScene" uid="uid://c4bc1csuh283u" path="res://scenes/particles/smoke_particle/smoke_particle.tscn" id="4_wkwmc"]
 [ext_resource type="Texture2D" uid="uid://dlf5ve55ng67a" path="res://res/sprites/objects/campfire/campfire_2.png" id="5_wkwmc"]
@@ -43,27 +44,39 @@ properties/2/replication_mode = 2
 [node name="Campfire" unique_id=1331540241 instance=ExtResource("1_yqtuu")]
 script = ExtResource("2_gdl1i")
 nname = "campfire"
+drop_items = {
+"log": 1
+}
 
-[node name="CollisionShape3D" parent="." index="2" unique_id=1161658582]
+[node name="CraftTimer" type="Timer" parent="Timers" parent_id_path=PackedInt32Array(203408184) index="1" unique_id=1484711805]
+wait_time = 3.0
+one_shot = true
+
+[node name="CookComponent" parent="." index="2" unique_id=837939887 instance=ExtResource("3_x1bif")]
+cook_category = "campfire"
+
+[node name="CollisionShape3D" parent="." index="3" unique_id=1161658582]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.48779297, 0)
 shape = SubResource("CylinderShape3D_x1bif")
 
-[node name="Sprite3D" parent="." index="4" unique_id=57594410]
+[node name="Sprite3D" parent="." index="5" unique_id=57594410]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7948087, 0)
 texture = ExtResource("2_fyjhv")
 
-[node name="Shadow" parent="." index="5" unique_id=1900625988]
+[node name="Shadow" parent="." index="6" unique_id=1900625988]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, -0.7917417, 0)
 
-[node name="SmokeParticle" parent="." index="6" unique_id=2097639369 instance=ExtResource("4_wkwmc")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5075673, 0)
-emitting = false
-
-[node name="Toogle" type="Node3D" parent="." index="7" unique_id=643226939]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7948087, 0)
+[node name="ToggleOn" type="Node3D" parent="." index="7" unique_id=440124899]
 visible = false
 
-[node name="AnimSprite3D" type="AnimatedSprite3D" parent="Toogle" index="0" unique_id=1256987556]
+[node name="OmniLight3D" type="OmniLight3D" parent="ToggleOn" index="0" unique_id=1416207734]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7948087, 0)
+light_color = Color(1, 0.6862745, 0.39215687, 1)
+light_energy = 6.0
+omni_range = 10.0
+
+[node name="AnimSprite3D" type="AnimatedSprite3D" parent="ToggleOn" index="1" unique_id=1256987556]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7948087, 0)
 visibility_range_end = 120.0
 billboard = 2
 shaded = true
@@ -73,11 +86,11 @@ sprite_frames = SubResource("SpriteFrames_ncuph")
 autoplay = "default"
 frame_progress = 0.0647054
 
-[node name="OmniLight3D" type="OmniLight3D" parent="Toogle" index="1" unique_id=1416207734]
-light_color = Color(1, 0.6862745, 0.39215687, 1)
-light_energy = 6.172
+[node name="SmokeParticle" parent="." index="8" unique_id=2097639369 instance=ExtResource("4_wkwmc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5075673, 0)
+emitting = false
 
-[node name="MultiplayerSynchronizer2" type="MultiplayerSynchronizer" parent="." index="9" unique_id=333321540]
+[node name="MultiplayerSynchronizer2" type="MultiplayerSynchronizer" parent="." index="10" unique_id=333321540]
 replication_config = SubResource("SceneReplicationConfig_irh8k")
 
-[node name="FallRay" parent="." index="10" unique_id=2065431078 instance=ExtResource("8_x1bif")]
+[node name="FallRay" parent="." index="11" unique_id=2065431078 instance=ExtResource("8_x1bif")]

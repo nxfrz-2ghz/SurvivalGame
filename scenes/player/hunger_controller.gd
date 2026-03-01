@@ -5,7 +5,7 @@ signal heal(health: float)
 signal changed(current_hunger: float)
 
 const HUNGER_DAMAGE := 0.1
-const HUNGER_SPEED := 2
+const HUNGER_SPEED := 1
 const MAX_HUNGER := 1000
 var current_hunger := MAX_HUNGER
 

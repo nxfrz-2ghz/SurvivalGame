@@ -54,50 +54,50 @@ func _input(event: InputEvent) -> void:
 		if weapon.actions.crafting_mode:
 			weapon.actions.craft()
 		else:
-			weapon.weapon_anim.speed_scale = weapon.stats.attack_speed
+			weapon.weapon_anim.speed_scale = weapon.attack_speed
 			weapon.weapon_anim.play("use")
-			weapon.actions.attack(weapon.stats.damage, weapon.stats.damage_types)
+			weapon.actions.attack(weapon.damage, weapon.damage_types, weapon.push_velocity)
 			weapon.attack.emit()
 		interact_ray.update()
 	
 	if Input.is_action_just_pressed("rmb"):
+		
+		if interact_ray.is_colliding():
+			var collider: Node = interact_ray.get_collider()
+			
+			if collider.nname in R.exchangeable_items.keys() and inventory.inventory[inventory.current_item]:
+				var item_in_arm: String = inventory.inventory[inventory.current_item]["name"]
+				var amount: int = inventory.inventory[inventory.current_item]["amount"]
+				# Если предмет есть в словаре крафтов печи и его количество достаточно
+				var ex_items: Dictionary = R.exchangeable_items[collider.nname]
+				if ex_items.get(item_in_arm) and amount >= ex_items.get(item_in_arm)["amount"]:
+					collider.cook.craft.rpc_id(1, item_in_arm)
+					inventory.drop_item(item_in_arm, ex_items.get(item_in_arm)["amount"])
+					return
+			
+			elif collider.nname == "berry_bush":
+				if collider.full:
+					inventory.add_item("raw_berry")
+					if randf() > 0:
+						inventory.add_item("raw_berry")
+						if randf() > 0:
+							inventory.add_item("raw_berry")
+				collider.pick.rpc_id(1)
+				return
 		
 		if inventory.inventory[inventory.current_item]:
 			var item_name: String = inventory.inventory[inventory.current_item]["name"]
 			if R.items[item_name].get("nutrition"):
 				inventory.drop_item(item_name)
 				hunger.eat(R.items[item_name]["nutrition"])
-		
-		if interact_ray.is_colliding():
-			var collider: Node = interact_ray.get_collider()
-			
-			if collider.nname == "furnace" and inventory.inventory[inventory.current_item]:
-				var item_in_arm: String = inventory.inventory[inventory.current_item]["name"]
-				var amount: int = inventory.inventory[inventory.current_item]["amount"]
-				# Если предмет есть в словаре крафтов печи и его количество достаточно
-				if R.furnace_items.get(item_in_arm) and amount >= R.furnace_items.get(item_in_arm)["amount"]:
-					collider.craft.rpc_id(1, item_in_arm)
-					inventory.drop_item(item_in_arm, R.furnace_items.get(item_in_arm)["amount"])
-			
-			elif collider.nname == "campfire":
-				collider.toggle.rpc_id(1)
-			
-			elif collider.nname == "berry_bush":
-				if collider.full:
-					inventory.add_item("berry")
-					if randf() > 0:
-						inventory.add_item("berry")
-						if randf() > 0:
-							inventory.add_item("berry")
-				collider.pick.rpc_id(1)
 	
 	if Input.is_action_just_pressed("pickup") and !weapon.weapon_anim.is_playing():
 		weapon.weapon_anim.play("pickup")
 		interact_ray.update()
 	
 	if Input.is_action_just_pressed("drop"):
-		if weapon.stats.current_name == "": return
-		weapon.actions.drop(weapon.stats.current_name)
+		if weapon.current_name == "": return
+		weapon.actions.drop(weapon.current_name)
 	
 	if Input.is_action_just_pressed("craft"):
 		weapon.actions.crafting_mode = !weapon.actions.crafting_mode
@@ -112,6 +112,11 @@ func _on_close_book() -> void:
 	G.state_machine = "game"
 	weapon.weapon_anim.play("book_close_page")
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+
+@rpc("any_peer", "call_local")
+func apply_push(direction_vector: Vector3, velocity_power: float) -> void:
+	velocity += direction_vector * velocity_power
 
 
 func moving(delta: float) -> void:

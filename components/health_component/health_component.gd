@@ -1,6 +1,7 @@
 extends Node
 
 signal changed(current: float, max: float)
+signal on_damage
 signal died
 
 @export var resists := {}
@@ -32,6 +33,7 @@ func take_damage(base_damage: float, incoming_types: Dictionary = {"melee": 1.0}
 	if total_damage > 0.0:
 		current_health -= total_damage
 		changed.emit(current_health, max_health)
+		on_damage.emit()
 	
 	if current_health <= 0:
 		died.emit()

@@ -56,5 +56,7 @@ frame_progress = 0.45816362
 
 [node name="Shadow" parent="." index="5" unique_id=1964977101]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, -2.5216517, 0)
+layers = 1
+cull_mask = 2
 
 [connection signal="timeout" from="Timers/AttackCooldown" to="." method="_on_attack_cooldown_timeout"]
