@@ -127,13 +127,16 @@ animations = [{
 }],
 "loop": false,
 "name": &"on_summon",
-"speed": 8.0
+"speed": 7.0
 }]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_1cmcs"]
 properties/0/path = NodePath("Corruption:size")
 properties/0/spawn = true
 properties/0/replication_mode = 2
+properties/1/path = NodePath("HealthComponent:max_health")
+properties/1/spawn = true
+properties/1/replication_mode = 2
 
 [node name="Heart" unique_id=1331540241 instance=ExtResource("1_3awjx")]
 script = ExtResource("2_xfilk")
@@ -174,9 +177,9 @@ billboard = 2
 shaded = true
 double_sided = false
 sprite_frames = SubResource("SpriteFrames_55jf0")
-animation = &"on_damage"
+animation = &"on_summon"
 autoplay = "100"
-frame = 4
+frame = 5
 frame_progress = 1.0
 script = ExtResource("26_1cmcs")
 

@@ -3,12 +3,12 @@ extends PanelContainer
 var game: bool = false
 
 func _physics_process(_delta: float) -> void:
-	if Input.is_action_just_pressed("esc") and game:
-		if visible:
+	if Input.is_action_just_pressed("esc"):
+		if visible and G.state_machine == "game_menu":
 			visible = false
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 			G.state_machine = "game"
-		else:
+		elif !visible and G.state_machine == "game":
 			visible = true
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 			G.state_machine = "game_menu"

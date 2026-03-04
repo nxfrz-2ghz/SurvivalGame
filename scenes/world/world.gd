@@ -204,7 +204,6 @@ func _generate_world() -> void:
 			var world_x = gx * spacing - offset2
 			var world_z = gz * spacing - offset2
 			
-			
 			var instance: RigidBody3D = R.item.instantiate() 
 			# Высота спавна — берем с того же шума, чтобы объект стоял на поверхности
 			var spawn_y = noise.get_noise_2d(world_x / noise_scale, world_z / noise_scale) * height_max

@@ -10,16 +10,10 @@
 height = 2.2060547
 radius = 1.5786133
 
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_mom5n"]
-properties/0/path = NodePath("Sprite3D:visible")
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_8hlsa"]
+properties/0/path = NodePath(".:full")
 properties/0/spawn = true
-properties/0/replication_mode = 2
-properties/1/path = NodePath(".:full")
-properties/1/spawn = true
-properties/1/replication_mode = 2
-properties/2/path = NodePath("FullSprite3D:visible")
-properties/2/spawn = true
-properties/2/replication_mode = 2
+properties/0/replication_mode = 0
 
 [node name="BerryBush" unique_id=1717522636 instance=ExtResource("1_mom5n")]
 script = ExtResource("2_8hlsa")
@@ -31,6 +25,7 @@ drop_items = {
 }
 
 [node name="GrowUp" type="Timer" parent="Timers" parent_id_path=PackedInt32Array(203408184) index="1" unique_id=1477719022]
+wait_time = 100.0
 
 [node name="HealthComponent" parent="." index="1" unique_id=1086116789]
 resists = {
@@ -58,9 +53,9 @@ texture = ExtResource("3_8hlsa")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8481705, 0)
 texture = ExtResource("2_ikb77")
 
-[node name="MultiplayerSynchronizer2" type="MultiplayerSynchronizer" parent="." index="7" unique_id=1901462937]
-replication_config = SubResource("SceneReplicationConfig_mom5n")
+[node name="FallRay" parent="." index="8" unique_id=2065431078 instance=ExtResource("5_8hlsa")]
 
-[node name="FallRay" parent="." index="9" unique_id=2065431078 instance=ExtResource("5_8hlsa")]
+[node name="MultiplayerSynchronizer2" type="MultiplayerSynchronizer" parent="." index="9" unique_id=2102612397]
+replication_config = SubResource("SceneReplicationConfig_8hlsa")
 
 [connection signal="timeout" from="Timers/GrowUp" to="." method="_on_grow_up_timeout"]

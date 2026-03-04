@@ -37,7 +37,7 @@ properties/0/replication_mode = 2
 properties/1/path = NodePath("Shadow:visible")
 properties/1/spawn = true
 properties/1/replication_mode = 2
-properties/2/path = NodePath("Toogle:visible")
+properties/2/path = NodePath("ToggleOn:visible")
 properties/2/spawn = true
 properties/2/replication_mode = 2
 
@@ -63,7 +63,7 @@ shape = SubResource("CylinderShape3D_x1bif")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7948087, 0)
 texture = ExtResource("2_fyjhv")
 
-[node name="Shadow" parent="." index="6" unique_id=1900625988]
+[node name="Shadow" parent="." index="6" unique_id=437352595]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, -0.7917417, 0)
 
 [node name="ToggleOn" type="Node3D" parent="." index="7" unique_id=440124899]

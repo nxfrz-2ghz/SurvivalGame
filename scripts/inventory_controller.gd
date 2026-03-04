@@ -25,6 +25,7 @@ func update_signals() -> void:
 
 
 func _input(_event: InputEvent) -> void:
+	if G.state_machine != "game": return
 	
 	if Input.is_action_just_pressed("1"):
 		current_item = 1

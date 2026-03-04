@@ -95,6 +95,17 @@ func set_page(page: String) -> void:
 			
 			spawn_label(txt + ": " + str(R.items[page][txt]), craft_page)
 		
+		
+		# Add exchagable recipe
+		for station in R.exchangeable_items.keys():
+			for ingidient in R.exchangeable_items[station].keys():
+				if R.exchangeable_items[station][ingidient]["output"] == page:
+					var text := "[STATION RECIPE]:\n"
+					text += "> station: " + station
+					text += "\n> ingridient: " + ingidient
+					text += "\n> amount: " + str(R.exchangeable_items[station][ingidient]["amount"])
+					spawn_label(text, craft_page)
+		
 		# Add Back Button
 		spawn_button("CONTENT", craft_page)
 		

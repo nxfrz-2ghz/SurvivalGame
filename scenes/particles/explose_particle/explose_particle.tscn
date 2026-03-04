@@ -35,7 +35,7 @@ orientation = 2
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_oag05"]
 properties/0/path = NodePath(".:position")
 properties/0/spawn = true
-properties/0/replication_mode = 1
+properties/0/replication_mode = 0
 
 [node name="ExploseParticle" type="GPUParticles3D" unique_id=2097639369]
 emitting = false

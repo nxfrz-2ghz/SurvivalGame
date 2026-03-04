@@ -35,7 +35,7 @@ func craft(input: String):
 
 func _on_craft_timer_timeout() -> void:
 	toggle()
-	parent.drop(R.exchangeable_items["campfire"].get(queue.pop_front())["output"])
+	parent.drop(R.exchangeable_items[parent.nname].get(queue.pop_front())["output"])
 	
 	# Продолжение плавки
 	if !queue.is_empty():

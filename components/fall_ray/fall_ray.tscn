@@ -7,6 +7,7 @@ script/source = "extends RayCast3D
 
 
 func _physics_process(_delta: float) -> void:
+	if !$Timer.is_stopped(): return
 	if not is_colliding():
 		parent.global_position.y -= 0.1
 	else:
@@ -16,3 +17,7 @@ func _physics_process(_delta: float) -> void:
 [node name="FallRay" type="RayCast3D" unique_id=2065431078]
 target_position = Vector3(0, -0.12, 0)
 script = SubResource("GDScript_mbkog")
+
+[node name="Timer" type="Timer" parent="." unique_id=1416286650]
+one_shot = true
+autostart = true

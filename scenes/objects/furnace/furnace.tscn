@@ -68,10 +68,10 @@ emitting = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.039, 1.541, -0.036)
 texture = ExtResource("4_fn88o")
 
-[node name="MultiplayerSynchronizer2" type="MultiplayerSynchronizer" parent="." index="8" unique_id=1235628749]
-replication_config = SubResource("SceneReplicationConfig_mbkog")
-
-[node name="FallRay" parent="." index="9" unique_id=2065431078 instance=ExtResource("5_qnkj5")]
+[node name="FallRay" parent="." index="8" unique_id=2065431078 instance=ExtResource("5_qnkj5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.024490118, 0)
+
+[node name="MultiplayerSynchronizer2" type="MultiplayerSynchronizer" parent="." index="11" unique_id=1235628749]
+replication_config = SubResource("SceneReplicationConfig_mbkog")
 
 [connection signal="timeout" from="Timers/CraftTimer" to="." method="_on_craft_timer_timeout"]

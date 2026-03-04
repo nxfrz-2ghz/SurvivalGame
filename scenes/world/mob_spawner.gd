@@ -5,19 +5,25 @@ const MAX_SPAWN_RADIUS := 90.0
 const MIN_SPAWN_RADIUS := 60.0
 
 
+func _ready() -> void:
+	G.mob_spawner = self
+
+
 func spawn_mob(mob_scene: PackedScene, position: Vector3) -> void:
 	var mob_instance := mob_scene.instantiate()
+	mob_instance.position = position
 	G.world.add_child(mob_instance, true)
-	mob_instance.global_position = position
 
 
 func _on_directional_light_3d_night_come() -> void:
+	if !get_parent().server: return
 	# Выбор случайного игрока
 	var players := get_tree().get_nodes_in_group("players")
 	if players.is_empty(): return
 	var target_player: CharacterBody3D = players.pick_random()
 	# Вычисляем случайную точку в кольце вокруг игрока
-	var spawn_pos := _get_random_spawn_position(target_player.global_position)
+	var spawn_pos := get_random_spawn_position(target_player.global_position)
+	spawn_pos.y = 50
 	# Создание экземпляра
 	spawn_mob(R.objects["heart"]["scene"], spawn_pos)
 
@@ -60,15 +66,16 @@ func _on_spawn_timer_timeout() -> void:
 	for target_player in players:
 		
 		# Вычисляем случайную точку в кольце вокруг игрока
-		var spawn_pos := _get_random_spawn_position(target_player.global_position)
+		var spawn_pos := get_random_spawn_position(target_player.global_position)
+		spawn_pos.y = 50
 		
 		# Создание экземпляра
 		spawn_mob(selected_mob_scene, spawn_pos)
 
 
-func _get_random_spawn_position(center: Vector3) -> Vector3:
+func get_random_spawn_position(center: Vector3, min_spawn_radius := MIN_SPAWN_RADIUS, max_spawn_radius := MAX_SPAWN_RADIUS) -> Vector3:
 	var angle := randf() * TAU # Случайный угол в радианах
-	var distance := randf_range(MIN_SPAWN_RADIUS, MAX_SPAWN_RADIUS)
+	var distance := randf_range(min_spawn_radius, max_spawn_radius)
 	
 	var offset := Vector3(cos(angle) * distance, 0, sin(angle) * distance)
 	return center + offset

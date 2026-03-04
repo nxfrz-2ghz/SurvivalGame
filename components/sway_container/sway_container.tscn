@@ -1,3 +1,6 @@
 [gd_scene format=3 uid="uid://b0ubt0f8epxbi"]
 
-[node name="SwayContainer" type="Node2D"]
+[ext_resource type="Script" uid="uid://cek85ohvrestp" path="res://components/sway_container/sway_container.gd" id="1_j2yqw"]
+
+[node name="SwayContainer" type="Node2D" unique_id=898145464]
+script = ExtResource("1_j2yqw")

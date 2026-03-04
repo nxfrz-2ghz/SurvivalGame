@@ -6,8 +6,8 @@ signal attack
 @onready var weapon_anim := %WeaponAnim
 @onready var actions := $Actions
 
-@onready var arms_sprite := $Arms/SwayContainer/Sprites/Arms
-@onready var item_sprite := $Arms/SwayContainer/Sprites/Item
+@onready var arms_sprite := $Arms/ShakingContainer/SwayContainer/Sprites/Arms
+@onready var item_sprite := $Arms/ShakingContainer/SwayContainer/Sprites/Item
 
 
 var current_name: String

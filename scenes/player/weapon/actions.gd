@@ -93,8 +93,8 @@ func server_drop(item_name: String, peer_id: int) -> void:
 
 	var node: RigidBody3D = R.item.instantiate()
 	node.nname = item_name
-	G.world.add_child(node, true)
 	node.position = actions_node.global_position
+	G.world.add_child(node, true)
 	client_drop_item.rpc_id(peer_id, item_name)
 
 
@@ -162,10 +162,11 @@ func execute_craft_object(peer_id: int, result_object: String, recipe: Dictionar
 	_consume_ingredients(recipe, available_nodes)
 	
 	var spawned_object = R.objects[result_object]["scene"].instantiate()
-	G.world.add_child(spawned_object, true)
 	
 	var player = G.world.get_node_or_null(str(peer_id))
-	spawned_object.global_position = player.weapon.actions.global_position
+	spawned_object.position = player.weapon.actions.global_position
+	
+	G.world.add_child(spawned_object, true)
 
 
 func _physics_process(_delta: float) -> void:

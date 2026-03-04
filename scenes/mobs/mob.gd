@@ -17,7 +17,7 @@ func _ready() -> void:
 	if not is_multiplayer_authority(): return
 	
 	health.died.connect(despawn)
-	health.on_damage.connect(on_damage)
+	health.on_damage.connect(on_damage.rpc)
 	
 	G.time_controller.night_come.connect(shadow.hide)
 	G.time_controller.day_come.connect(shadow.show)
@@ -26,8 +26,8 @@ func _ready() -> void:
 func drop(item_name: String) -> void:
 	var drop_item: RigidBody3D = item.instantiate()
 	drop_item.nname = item_name
-	G.world.add_child(drop_item, true)
 	drop_item.position = self.position + Vector3(randi_range(-1,1), 2, randi_range(-1,1))
+	G.world.add_child(drop_item, true)
 
 
 func drop_loot() -> void:
@@ -37,6 +37,7 @@ func drop_loot() -> void:
 			drop(item_name)
 
 
+@rpc("authority", "call_local")
 func on_damage() -> void:
 	take_damage_audio.play()
 	sprite.modulate = Color(1, 0 ,0)
@@ -47,8 +48,8 @@ func despawn() -> void:
 	drop_loot()
 	
 	var died_particles := R.particles["explose"].instantiate()
-	G.world.add_child(died_particles, true)
 	died_particles.position = self.position
+	G.world.add_child(died_particles, true)
 	
 	queue_free()
 
