@@ -9,6 +9,7 @@ size = Vector3(2.5444336, 1.5430908, 2.673584)
 [node name="Grass" unique_id=233065811 instance=ExtResource("1_p18ys")]
 collision_layer = 8
 nname = "grass"
+despawn_particles_size = 0.5
 
 [node name="CollisionShape3D" parent="." index="2" unique_id=1161658582]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.11743164, 0.8657026, 0.18322754)

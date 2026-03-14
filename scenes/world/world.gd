@@ -3,11 +3,12 @@ extends Node3D
 @onready var terrain := $Terrain
 
 # Биомы и их параметры
-enum Biome { FOREST, MOUNTAINS, PLAINS }
+enum Biome { FOREST, ORE_PLATEAU, MOUNTAINS, PLAINS, UNDERWATER }
 
 const BIOME_CONFIG = {
 	Biome.FOREST: {
 		"name": "Forest",
+		"height_multiplier": 2.0,
 		"noise_threshold": 0.4,
 		"objects": {
 			"grass": {"weight": 25, "density": 0.08},
@@ -16,17 +17,30 @@ const BIOME_CONFIG = {
 			"berry_bush" : {"weight": 10, "density": 0.05},
 		}
 	},
-	Biome.MOUNTAINS: {
-		"name": "Mountains",
+	Biome.ORE_PLATEAU: {
+		"name": "Ore_plateu",
+		"height_multiplier": 1.0,
 		"noise_threshold": 0.7,
 		"objects": {
-			"rock": {"weight": 50, "density": 0.08},
+			"rock": {"weight": 50, "density": 0.05},
 			"copper_ore": {"weight": 30, "density": 0.03},
-			"iron_ore": {"weight": 20, "density": 0.02},
+			"iron_ore": {"weight": 20, "density": 0.03},
+		}
+	},
+	Biome.MOUNTAINS: {
+		"name": "Mountains",
+		"height_multiplier": 5.0,
+		"noise_threshold": 0.7,
+		"objects": {
+			"rock": {"weight": 50, "density": 0.01},
+			"copper_ore": {"weight": 20, "density": 0.005},
+			"iron_ore": {"weight": 20, "density": 0.005},
+			"tree": {"weight": 10, "density": 0.01},
 		}
 	},
 	Biome.PLAINS: {
 		"name": "Plains",
+		"height_multiplier": 1.0,
 		"noise_threshold": 0.0,
 		"objects": {
 			"grass": {"weight": 93, "density": 0.06},
@@ -35,13 +49,26 @@ const BIOME_CONFIG = {
 			"berry_bush" : {"weight": 2, "density": 0.05},
 		}
 	},
+	Biome.UNDERWATER: {
+		"name": "Underwater",
+		"noise_threshold": 0.0,
+		"objects": {}
+	},
 }
+
+const BIOME_BLEND := 0.01
+const BIOME_BORDER_MOUNTAIN := -0.13  # горы / лес
+const BIOME_BORDER_FOREST   := -0.1   # лес / равнина
+const BIOME_BORDER_PLAINS   := 0.08   # равнина / горы (MOUNTAINS)
 
 var world_seed: int
 var noise: FastNoiseLite
 var biome_noise: FastNoiseLite
 
 @export var world_size := 500
+@export var height_max := 10.0
+@export var visible_mesh_range := 120.0
+const WATER_LEVEL := -5.5
 const spacing := 1.0     # Расстояние между вершинами
 # object gen
 const OBJ_SPAWN_STEP := 1.5  # Генерируем объекты с шагом (экономит спавны)
@@ -51,16 +78,19 @@ const DROP_SPAWN_STEP := 15.0  # Генерируем объекты с шаго
 const CHUNK_SIZE := 64  # Размер одного чанка в вершинах
 const CHUNK_VERTEX_COUNT := CHUNK_SIZE + 1
 const noise_scale := 5.0
-const height_max := 10.0
-const visible_mesh_range := 120.0
+
 const ground_material := preload("res://scenes/world/world_material.tres")
+const water_material := preload("res://scenes/world/water_material.tres")
 
 var server: bool
 
 
 func start_gen() -> void:
 	server = true
-	world_seed = randi()
+	if G.gui.main_menu.world_seed.text:
+		world_seed = int(G.gui.main_menu.world_seed.text)
+	else:
+		world_seed = randi()
 	world_size = int(G.gui.main_menu.world_size.text)
 	
 	_init_noise()
@@ -116,7 +146,13 @@ func _generate_terrain() -> void:
 					var pos_x = x * spacing - offset
 					var pos_z = z * spacing - offset
 					
-					var height_y = noise.get_noise_2d(pos_x / noise_scale, pos_z / noise_scale) * height_max
+					var height_y = _get_height(pos_x, pos_z)
+					
+					if height_y < WATER_LEVEL:
+						st.set_color(Color(0.6, 0.4, 0.2))  # коричневый — глина
+					else:
+						st.set_color(Color.WHITE)
+					
 					
 					st.set_uv(Vector2(float(x) / float(world_size - 1), float(z) / float(world_size - 1)))
 					st.add_vertex(Vector3(pos_x, height_y, pos_z))
@@ -156,9 +192,77 @@ func _generate_terrain() -> void:
 			terrain.call_deferred("add_child", mesh_instance)
 			terrain.call_deferred("add_child", collider)
 
+func _generate_water() -> void:
+	var offset := (world_size - 1) * spacing / 2.0
+	var chunks_count = ceili(float(world_size) / float(CHUNK_SIZE))
+	
+	for chunk_z in range(chunks_count):
+		for chunk_x in range(chunks_count):
+			var has_water := false
+			var st := SurfaceTool.new()
+			st.begin(Mesh.PRIMITIVE_TRIANGLES)
+			
+			var start_x = chunk_x * CHUNK_SIZE
+			var start_z = chunk_z * CHUNK_SIZE
+			var end_x = mini(start_x + CHUNK_SIZE, world_size - 1)
+			var end_z = mini(start_z + CHUNK_SIZE, world_size - 1)
+			
+			var vertex_map := {}
+			var vertex_index := 0
+			
+			for z in range(start_z, end_z + 1):
+				for x in range(start_x, end_x + 1):
+					var pos_x = x * spacing - offset
+					var pos_z = z * spacing - offset
+					var terrain_h = _get_height(pos_x, pos_z)
+					
+					# Вершину воды добавляем только там где terrain ниже уровня воды
+					if terrain_h < WATER_LEVEL:
+						has_water = true
+					
+					st.set_uv(Vector2(float(x) / float(world_size - 1), float(z) / float(world_size - 1)))
+					st.add_vertex(Vector3(pos_x, WATER_LEVEL, pos_z))
+					vertex_map[Vector2i(x, z)] = vertex_index
+					vertex_index += 1
+			
+			if not has_water:
+				continue  # пропускаем чанки без воды
+			
+			for z in range(start_z, end_z):
+				for x in range(start_x, end_x):
+					# Проверяем что хотя бы одна вершина квада — над водой
+					var any_underwater := false
+					for check in [Vector2i(x,z), Vector2i(x+1,z), Vector2i(x,z+1), Vector2i(x+1,z+1)]:
+						var px = check.x * spacing - offset
+						var pz = check.y * spacing - offset
+						var h = _get_height(px, pz)
+						if h < WATER_LEVEL:
+							any_underwater = true
+							break
+					
+					if not any_underwater:
+						continue
+					
+					var i0 = vertex_map[Vector2i(x, z)]
+					var i1 = vertex_map[Vector2i(x + 1, z)]
+					var i2 = vertex_map[Vector2i(x, z + 1)]
+					var i3 = vertex_map[Vector2i(x + 1, z + 1)]
+					
+					st.add_index(i0); st.add_index(i1); st.add_index(i2)
+					st.add_index(i2); st.add_index(i1); st.add_index(i3)
+			
+			st.generate_normals()
+			var mesh_instance := MeshInstance3D.new()
+			mesh_instance.mesh = st.commit()
+			mesh_instance.material_override = water_material
+			mesh_instance.visibility_range_end = visible_mesh_range
+			terrain.call_deferred("add_child", mesh_instance)
+
+
 func _generate_world() -> void:
 	
 	_generate_terrain()
+	_generate_water()
 	
 	if !server: return
 	
@@ -177,11 +281,11 @@ func _generate_world() -> void:
 			
 			# Определяем биом в этой позиции
 			var biom_value = biome_noise.get_noise_2d(world_x / 20.0, world_z / 20.0)
-			var biome = _get_biome_from_value(biom_value)
+			var biome = _get_biome(biom_value, world_x, world_z)
 			var biome_config = BIOME_CONFIG[biome]
 			
 			# Шум для принятия решения о спавне и для выбора варианта
-			var noise_value = noise.get_noise_2d(world_x / noise_scale, world_z / noise_scale)
+			var noise_value = _get_height(world_x, world_z)
 			
 			var object_name = _select_object_for_biome(biome_config, noise_value, rng)
 			if object_name != "":
@@ -189,39 +293,77 @@ func _generate_world() -> void:
 				if obj_scene:
 					var instance = obj_scene.instantiate()
 					# Высота спавна — берем с того же шума, чтобы объект стоял на поверхности
-					var spawn_y = noise.get_noise_2d(world_x / noise_scale, world_z / noise_scale) * height_max
+					var spawn_y = _get_height(world_x, world_z)
 					instance.position = Vector3(world_x, spawn_y, world_z)
 					G.world.call_deferred("add_child", instance, true)
 		
 			gz += OBJ_SPAWN_STEP
 		gx += OBJ_SPAWN_STEP
 	
-	# Раскидываем предметы по карте
-	gx = 0
+	# В цикле раскидывания предметов, добавить проверку:
 	while gx < world_size:
 		gz = 0
 		while gz < world_size:
 			var world_x = gx * spacing - offset2
 			var world_z = gz * spacing - offset2
 			
-			var instance: RigidBody3D = R.item.instantiate() 
-			# Высота спавна — берем с того же шума, чтобы объект стоял на поверхности
-			var spawn_y = noise.get_noise_2d(world_x / noise_scale, world_z / noise_scale) * height_max
-			instance.position = Vector3(world_x, spawn_y, world_z)
-			instance.nname = "stone"
-			G.world.call_deferred("add_child", instance, true)
-		
+			var spawn_y = _get_height(world_x, world_z)
+			
+			# Не спавним предметы под водой
+			if spawn_y >= WATER_LEVEL:
+				var instance: RigidBody3D = R.item.instantiate()
+				instance.position = Vector3(world_x, spawn_y, world_z)
+				instance.nname = "stone"
+				G.world.call_deferred("add_child", instance, true)
+			
 			gz += DROP_SPAWN_STEP
 		gx += DROP_SPAWN_STEP
 
 
-func _get_biome_from_value(value: float) -> int:
-	if value < -0.15:
-		return Biome.MOUNTAINS
-	elif value < 0.05:
+func _get_biome(value: float, world_x: float = 0.0, world_z: float = 0.0) -> int:
+	# Сначала проверяем высоту — если под водой, это водный биом
+	var height = _get_height(world_x, world_z)
+	if height < WATER_LEVEL:
+		return Biome.UNDERWATER
+	
+	if value < BIOME_BORDER_MOUNTAIN:
+		return Biome.ORE_PLATEAU
+	elif value < BIOME_BORDER_FOREST:
+		return Biome.FOREST
+	elif value < BIOME_BORDER_PLAINS:
 		return Biome.PLAINS
 	else:
-		return Biome.FOREST
+		return Biome.MOUNTAINS
+
+func _get_height(world_x: float, world_z: float) -> float:
+	var biome_value = biome_noise.get_noise_2d(world_x / 20.0, world_z / 20.0)
+	var multiplier = _get_blended_height_multiplier(biome_value)
+	return noise.get_noise_2d(world_x / noise_scale, world_z / noise_scale) * height_max * multiplier
+
+
+func _get_blended_height_multiplier(biome_value: float) -> float:
+	var m_ore      = BIOME_CONFIG[Biome.ORE_PLATEAU]["height_multiplier"]
+	var m_forest   = BIOME_CONFIG[Biome.FOREST]["height_multiplier"]
+	var m_plains   = BIOME_CONFIG[Biome.PLAINS]["height_multiplier"]
+	var m_mountain = BIOME_CONFIG[Biome.MOUNTAINS]["height_multiplier"]
+
+	if biome_value < BIOME_BORDER_MOUNTAIN - BIOME_BLEND:
+		return m_ore
+	elif biome_value < BIOME_BORDER_MOUNTAIN + BIOME_BLEND:
+		var t = inverse_lerp(BIOME_BORDER_MOUNTAIN - BIOME_BLEND, BIOME_BORDER_MOUNTAIN + BIOME_BLEND, biome_value)
+		return lerp(m_ore, m_forest, t)
+	elif biome_value < BIOME_BORDER_FOREST - BIOME_BLEND:
+		return m_forest
+	elif biome_value < BIOME_BORDER_FOREST + BIOME_BLEND:
+		var t = inverse_lerp(BIOME_BORDER_FOREST - BIOME_BLEND, BIOME_BORDER_FOREST + BIOME_BLEND, biome_value)
+		return lerp(m_forest, m_plains, t)
+	elif biome_value < BIOME_BORDER_PLAINS - BIOME_BLEND:
+		return m_plains
+	elif biome_value < BIOME_BORDER_PLAINS + BIOME_BLEND:
+		var t = inverse_lerp(BIOME_BORDER_PLAINS - BIOME_BLEND, BIOME_BORDER_PLAINS + BIOME_BLEND, biome_value)
+		return lerp(m_plains, m_mountain, t)
+	else:
+		return m_mountain
 
 func _select_object_for_biome(biome_config: Dictionary, _noise_value: float, rng: RandomNumberGenerator) -> String:
 	# 1. Сначала считаем общий вес

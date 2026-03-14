@@ -52,6 +52,10 @@ drop_items = {
 wait_time = 3.0
 one_shot = true
 
+[node name="FuelTimer" type="Timer" parent="Timers" parent_id_path=PackedInt32Array(203408184) index="2" unique_id=232977177]
+wait_time = 18.0
+one_shot = true
+
 [node name="CookComponent" parent="." index="2" unique_id=837939887 instance=ExtResource("3_x1bif")]
 cook_category = "campfire"
 

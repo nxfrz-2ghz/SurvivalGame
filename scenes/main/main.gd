@@ -7,6 +7,9 @@ const PORT: int = 9999
 
 var enet_peer := ENetMultiplayerPeer.new()
 
+func _ready() -> void:
+	if OS.get_name() == "Web":
+		G.text_message.add("HINT: web version cant support volumetic fog and multiplayer, for better expirience recommended play full downlowdable version")
 
 func prepare_for_a_game(type: String) -> void:
 	if type == "server":
@@ -42,8 +45,11 @@ func add_player(peer_id: int) -> void:
 		player.get_node("%InteractRay").target_found.connect(G.gui.hud.target_label.update)
 		player.get_node("%InventoryController").update.connect(G.gui.hud.inventory.update)
 		player.get_node("%InventoryController").set_hotbar_slot.connect(G.gui.hud.inventory.set_hotbar_slot)
-		player.get_node("%HealthComponent").changed.connect(G.gui.hud.health_bar.update)
-		player.get_node("HungerController").changed.connect(G.gui.hud.eat_bar.update)
+		player.get_node("%Book").open_book.connect(G.gui.hud.inventory.hide)
+		player.get_node("%Book").close_book.connect(G.gui.hud.inventory.show)
+		player.get_node("%HealthComponent").changed.connect(G.gui.hud.health_vignette.on_health_changed)
+		player.get_node("%HealthComponent").on_damage.connect(G.gui.hud.damage_vignette.on_damage)
+		player.get_node("StaminaController").changed.connect(G.gui.hud.stamina_bar.on_stamina_changed)
 	
 	else:
 		var world_node = G.world.get_node("World")
@@ -95,5 +101,8 @@ func _on_player_spawner_spawned(node: Node) -> void:
 		node.get_node("%InteractRay").target_found.connect(G.gui.hud.target_label.update)
 		node.get_node("%InventoryController").update.connect(G.gui.hud.inventory.update)
 		node.get_node("%InventoryController").set_hotbar_slot.connect(G.gui.hud.inventory.set_hotbar_slot)
-		node.get_node("%HealthComponent").changed.connect(G.gui.hud.health_bar.update)
-		node.get_node("HungerController").changed.connect(G.gui.hud.eat_bar.update)
+		node.get_node("%Book").open_book.connect(G.gui.hud.inventory.hide)
+		node.get_node("%Book").close_book.connect(G.gui.hud.inventory.show)
+		node.get_node("%HealthComponent").changed.connect(G.gui.hud.health_vignette.on_health_changed)
+		node.get_node("%HealthComponent").on_damage.connect(G.gui.hud.damage_vignette.on_damage)
+		node.get_node("StaminaController").changed.connect(G.gui.hud.stamina_bar.on_stamina_changed)

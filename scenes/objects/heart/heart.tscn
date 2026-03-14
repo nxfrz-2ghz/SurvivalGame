@@ -142,7 +142,7 @@ properties/1/replication_mode = 2
 script = ExtResource("2_xfilk")
 nname = "Heart"
 drop_items = {
-"raw_meet": 4
+"raw_meat": 4
 }
 
 [node name="RegenerationTimer" type="Timer" parent="Timers" parent_id_path=PackedInt32Array(203408184) index="1" unique_id=1664654667]

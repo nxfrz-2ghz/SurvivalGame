@@ -1,0 +1,30 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://csyqewb25vt0o"]
+
+[ext_resource type="Texture2D" uid="uid://idouc35igjbs" path="res://res/sprites/mobs/pig/back/back0.png" id="1_cebnl"]
+[ext_resource type="Texture2D" uid="uid://b1b732w58f673" path="res://res/sprites/mobs/pig/back/back1.png" id="2_624wm"]
+[ext_resource type="Texture2D" uid="uid://d25qd7m4m3wct" path="res://res/sprites/mobs/pig/back/back2.png" id="3_6dvh7"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_cebnl")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_cebnl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_624wm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_6dvh7")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]

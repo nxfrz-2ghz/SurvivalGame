@@ -3,21 +3,22 @@
 [ext_resource type="Script" uid="uid://c8l40e2t7qf3r" path="res://scenes/main/main.gd" id="1_l3cfh"]
 [ext_resource type="PackedScene" uid="uid://bca3cjm2s2o6d" path="res://scenes/world/world.tscn" id="2_3s6yk"]
 [ext_resource type="PackedScene" uid="uid://ccuilgc2uer2y" path="res://components/fps_label/fps_label.tscn" id="3_a8run"]
-[ext_resource type="Texture2D" uid="uid://fmv6ac8qq7r7" path="res://res/sprites/aim.png" id="3_ab7mr"]
+[ext_resource type="Texture2D" uid="uid://fmv6ac8qq7r7" path="res://res/sprites/gui/aim.png" id="3_ab7mr"]
 [ext_resource type="Script" uid="uid://sfqqllsbirx2" path="res://scenes/main/multiplayer_spawner.gd" id="3_nvumn"]
-[ext_resource type="Texture2D" uid="uid://dwlrxn5cvf8ov" path="res://res/sprites/choose_slot.png" id="4_l3cfh"]
+[ext_resource type="Texture2D" uid="uid://dwlrxn5cvf8ov" path="res://res/sprites/gui/choose_slot.png" id="4_l3cfh"]
 [ext_resource type="Script" uid="uid://dhyid6cdqvklf" path="res://scenes/main/gui.gd" id="4_ou6is"]
-[ext_resource type="Texture2D" uid="uid://c15oyjyrjx8jo" path="res://res/sprites/gui/empty_heart.png" id="5_b1x3f"]
 [ext_resource type="Script" uid="uid://cijkd3xjdn8d1" path="res://scenes/main/gui/target_label.gd" id="5_raeie"]
-[ext_resource type="Texture2D" uid="uid://bobrqwkwa1aj1" path="res://res/sprites/gui/full_heart.png" id="6_a8run"]
 [ext_resource type="Script" uid="uid://ck12gpkko6xsi" path="res://scenes/main/gui/hud.gd" id="6_hxu8e"]
 [ext_resource type="Script" uid="uid://pub30evhjsta" path="res://scenes/main/gui/inventory.gd" id="7_hxu8e"]
-[ext_resource type="Script" uid="uid://8ts1kih1l0re" path="res://scenes/main/gui/progress_bar.gd" id="7_ouso4"]
-[ext_resource type="Texture2D" uid="uid://bxrsurap3nh60" path="res://res/sprites/gui/empty_burger.png" id="8_blune"]
-[ext_resource type="Texture2D" uid="uid://ce08md4b5l5ba" path="res://res/sprites/gui/full_burger.png" id="9_th5th"]
+[ext_resource type="Script" uid="uid://b3je3g1di6ift" path="res://scenes/main/gui/text_message.gd" id="11_7smn1"]
 [ext_resource type="Script" uid="uid://b4ylt05h1pkph" path="res://scenes/main/gui/leave_button.gd" id="11_blune"]
 [ext_resource type="Script" uid="uid://bbm1b30lyywvf" path="res://scenes/main/gui/game_menu.gd" id="11_ouso4"]
 [ext_resource type="Script" uid="uid://cwa53nrhb06on" path="res://scenes/main/gui/main_menu.gd" id="11_th5th"]
+[ext_resource type="Texture2D" uid="uid://bfvxox61x7pba" path="res://res/sprites/gui/vignette.png" id="12_raeie"]
+[ext_resource type="Script" uid="uid://b32rflbupbfwf" path="res://scenes/main/gui/health_vignette.gd" id="13_necax"]
+[ext_resource type="Script" uid="uid://bcvafvya4wcrc" path="res://scenes/main/gui/damage_vignette.gd" id="14_r4lks"]
+[ext_resource type="Script" uid="uid://d25jbatuakb3x" path="res://scenes/main/gui/stamina_bar.gd" id="15_necax"]
+[ext_resource type="Texture2D" uid="uid://kflc51gj346l" path="res://res/sprites/gui/Screenshot_20260306_182814.png" id="15_nvumn"]
 
 [sub_resource type="GDScript" id="GDScript_ou6is"]
 script/source = "extends Node3D
@@ -26,6 +27,99 @@ func _ready() -> void:
 	G.world = self
 "
 
+[sub_resource type="Animation" id="Animation_pg34l"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_m4h2d"]
+resource_name = "default"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.16666667, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 0, 0, 0), Color(1, 0, 0, 0.69803923), Color(1, 0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_p8abn"]
+_data = {
+&"RESET": SubResource("Animation_pg34l"),
+&"default": SubResource("Animation_m4h2d")
+}
+
+[sub_resource type="Animation" id="Animation_7smn1"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(620, 1000)]
+}
+
+[sub_resource type="Animation" id="Animation_raeie"]
+resource_name = "show"
+length = 3.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 2.4666667, 3),
+"transitions": PackedFloat32Array(-2, -2, -2, -2),
+"update": 0,
+"values": [Vector2(620, 1000), Vector2(620, 540), Vector2(620, 540), Vector2(620, 1000)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_hxu8e"]
+_data = {
+&"RESET": SubResource("Animation_7smn1"),
+&"show": SubResource("Animation_raeie")
+}
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r4lks"]
+bg_color = Color(0.6, 0.6, 0.6, 0.1764706)
+corner_radius_top_left = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pg34l"]
+bg_color = Color(0.70980394, 0.70980394, 0.70980394, 0.47058824)
+corner_radius_top_left = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_necax"]
+bg_color = Color(0.6, 0.6, 0.6, 0.1764706)
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m4h2d"]
+bg_color = Color(0.70980394, 0.70980394, 0.70980394, 0.47058824)
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+
 [node name="Main" type="Node" unique_id=885458657]
 script = ExtResource("1_l3cfh")
 
@@ -33,6 +127,9 @@ script = ExtResource("1_l3cfh")
 script = SubResource("GDScript_ou6is")
 
 [node name="World" parent="Environment" unique_id=1718531022 instance=ExtResource("2_3s6yk")]
+world_size = 500
+height_max = 10.0
+visible_mesh_range = 120.0
 
 [node name="PlayerSpawner" type="MultiplayerSpawner" parent="Environment" unique_id=1086422612]
 _spawnable_scenes = PackedStringArray("uid://dp83o7qw4ht4w")
@@ -48,6 +145,31 @@ script = ExtResource("4_ou6is")
 
 [node name="HUD" type="Node" parent="GUI" unique_id=340651958]
 script = ExtResource("6_hxu8e")
+
+[node name="HealthVignette" type="TextureRect" parent="GUI/HUD" unique_id=1049265694]
+modulate = Color(0, 0, 0, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("12_raeie")
+script = ExtResource("13_necax")
+
+[node name="DamageVignette" type="TextureRect" parent="GUI/HUD" unique_id=634869180]
+modulate = Color(1, 0, 0, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("12_raeie")
+script = ExtResource("14_r4lks")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="GUI/HUD/DamageVignette" unique_id=478140708]
+libraries/ = SubResource("AnimationLibrary_p8abn")
 
 [node name="FPSLabel" parent="GUI/HUD" unique_id=628286725 instance=ExtResource("3_a8run")]
 offset_right = 1.0
@@ -328,37 +450,76 @@ grow_horizontal = 0
 grow_vertical = 0
 theme_override_font_sizes/font_size = 72
 
-[node name="HPBar" type="TextureProgressBar" parent="GUI/HUD" unique_id=1920792230]
-anchors_preset = 2
+[node name="TextMessage" type="RichTextLabel" parent="GUI/HUD" unique_id=843260242]
+anchors_preset = 7
+anchor_left = 0.5
 anchor_top = 1.0
+anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = 40.0
-offset_top = -140.0
-offset_right = 400.0
-offset_bottom = 220.00037
+offset_left = -20.0
+offset_top = 280.0
+offset_right = 361.0
+offset_bottom = 351.0
+grow_horizontal = 2
 grow_vertical = 0
-scale = Vector2(0.3, 0.3)
-value = 100.0
-fill_mode = 4
-texture_under = ExtResource("5_b1x3f")
-texture_progress = ExtResource("6_a8run")
-script = ExtResource("7_ouso4")
+text = "TEXT"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("11_7smn1")
 
-[node name="EatBar" type="TextureProgressBar" parent="GUI/HUD" unique_id=46240617]
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 160.0
-offset_top = -140.0
-offset_right = 520.0
-offset_bottom = 220.00037
-grow_vertical = 0
-scale = Vector2(0.3, 0.3)
-value = 100.0
-fill_mode = 4
-texture_under = ExtResource("8_blune")
-texture_progress = ExtResource("9_th5th")
-script = ExtResource("7_ouso4")
+[node name="AnimationPlayer" type="AnimationPlayer" parent="GUI/HUD/TextMessage" unique_id=351934201]
+libraries/ = SubResource("AnimationLibrary_hxu8e")
+
+[node name="StaminaBar" type="Control" parent="GUI/HUD" unique_id=740405387]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -25.0
+offset_top = 201.0
+offset_right = 15.0
+offset_bottom = 241.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("15_necax")
+
+[node name="ProgressBar" type="ProgressBar" parent="GUI/HUD/StaminaBar" unique_id=1980328717]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -5.0
+offset_right = 18.0
+offset_bottom = 8.0
+grow_vertical = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_r4lks")
+theme_override_styles/fill = SubResource("StyleBoxFlat_pg34l")
+max_value = 1.0
+value = 1.0
+fill_mode = 1
+show_percentage = false
+
+[node name="ProgressBar2" type="ProgressBar" parent="GUI/HUD/StaminaBar" unique_id=1081701088]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -23.0
+offset_top = -5.0
+offset_right = 196.0
+offset_bottom = 8.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_necax")
+theme_override_styles/fill = SubResource("StyleBoxFlat_m4h2d")
+max_value = 1.0
+value = 1.0
+show_percentage = false
 
 [node name="MainMenu" type="PanelContainer" parent="GUI" unique_id=1400361060]
 anchors_preset = 15
@@ -367,6 +528,12 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("11_th5th")
+
+[node name="Background" type="TextureRect" parent="GUI/MainMenu" unique_id=141368914]
+layout_mode = 2
+texture = ExtResource("15_nvumn")
+expand_mode = 1
+stretch_mode = 3
 
 [node name="MarginContainer" type="MarginContainer" parent="GUI/MainMenu" unique_id=362533778]
 layout_mode = 2
@@ -450,6 +617,14 @@ layout_mode = 2
 text = "500"
 placeholder_text = "500"
 
+[node name="Label2" type="Label" parent="GUI/MainMenu/MarginContainer/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer" unique_id=583959888]
+layout_mode = 2
+text = "Ключ генерации мира"
+
+[node name="LineEdit2" type="LineEdit" parent="GUI/MainMenu/MarginContainer/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer" unique_id=515565385]
+layout_mode = 2
+placeholder_text = "Оставьте пустым для рандома"
+
 [node name="LeaveButton" type="Button" parent="GUI/MainMenu/MarginContainer" unique_id=1336085257]
 layout_mode = 2
 size_flags_horizontal = 8
@@ -465,9 +640,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -96.5
-offset_top = -48.0
+offset_top = -65.5
 offset_right = 96.5
-offset_bottom = 48.0
+offset_bottom = 65.5
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("11_ouso4")
@@ -495,6 +670,7 @@ layout_mode = 2
 text = "EXIT WORLD"
 
 [connection signal="spawned" from="Environment/PlayerSpawner" to="." method="_on_player_spawner_spawned"]
+[connection signal="animation_finished" from="GUI/HUD/TextMessage/AnimationPlayer" to="GUI/HUD/TextMessage" method="_on_animation_player_animation_finished"]
 [connection signal="pressed" from="GUI/MainMenu/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/CreateButton" to="." method="_on_create_button_pressed"]
 [connection signal="pressed" from="GUI/MainMenu/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/LoadButton" to="." method="_on_load_button_pressed"]
 [connection signal="pressed" from="GUI/MainMenu/MarginContainer/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]

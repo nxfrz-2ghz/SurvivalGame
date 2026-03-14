@@ -34,6 +34,10 @@ drop_items = {
 wait_time = 5.0
 one_shot = true
 
+[node name="FuelTimer" type="Timer" parent="Timers" parent_id_path=PackedInt32Array(203408184) index="2" unique_id=301717867]
+wait_time = 8.0
+one_shot = true
+
 [node name="HealthComponent" parent="." index="1" unique_id=1086116789]
 max_health = 5.0
 
@@ -73,5 +77,3 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.024490118, 0)
 
 [node name="MultiplayerSynchronizer2" type="MultiplayerSynchronizer" parent="." index="11" unique_id=1235628749]
 replication_config = SubResource("SceneReplicationConfig_mbkog")
-
-[connection signal="timeout" from="Timers/CraftTimer" to="." method="_on_craft_timer_timeout"]

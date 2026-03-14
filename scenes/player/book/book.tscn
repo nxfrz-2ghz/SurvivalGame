@@ -7,11 +7,11 @@ offset_right = 30.0
 offset_bottom = 30.0
 script = ExtResource("1_uah28")
 
-[node name="MainPage" type="GridContainer" parent="." unique_id=460235386]
+[node name="GridPage" type="GridContainer" parent="." unique_id=460235386]
 visible = false
 layout_mode = 2
 columns = 2
 
-[node name="CraftPage" type="VBoxContainer" parent="." unique_id=1642855231]
+[node name="BoxPage" type="VBoxContainer" parent="." unique_id=1642855231]
 visible = false
 layout_mode = 2

@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://cwt4j8yrp4a1x"]
+
+[ext_resource type="PackedScene" uid="uid://s322lfir2gd7" path="res://scenes/mobs/mob.tscn" id="1_uwxtu"]
+[ext_resource type="Script" uid="uid://cafsrpolgbtq7" path="res://scenes/mobs/pig/pig.gd" id="2_61krw"]
+[ext_resource type="SpriteFrames" uid="uid://trthjcfx5osv" path="res://scenes/mobs/pig/front_sprite_frames.tres" id="3_cc670"]
+[ext_resource type="Script" uid="uid://ckgg8ewi4npws" path="res://scenes/mobs/pig/animated_sprite_3d.gd" id="4_jcaj7"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_cc670"]
+radius = 0.8
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_cc670"]
+properties/0/path = NodePath(".:rotation")
+properties/0/spawn = true
+properties/0/replication_mode = 2
+
+[node name="Pig" unique_id=408161229 instance=ExtResource("1_uwxtu")]
+script = ExtResource("2_61krw")
+nname = "pig"
+drop_items = {
+"raw_meat": 1
+}
+
+[node name="Timer" type="Timer" parent="Timers" parent_id_path=PackedInt32Array(1401815993) index="2" unique_id=1126476396]
+wait_time = 3.0
+autostart = true
+
+[node name="HealthComponent" parent="." index="1" unique_id=1086839518]
+max_health = 5.0
+
+[node name="CollisionShape3D" parent="." index="2" unique_id=1649019193]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.79113007, 0)
+shape = SubResource("SphereShape3D_cc670")
+
+[node name="AnimatedSprite3D" parent="." index="3" unique_id=1249191248]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 1.1267123, 0)
+sprite_frames = ExtResource("3_cc670")
+animation = &"idle"
+autoplay = "idle"
+script = ExtResource("4_jcaj7")
+
+[node name="MultiplayerSynchronizer2" type="MultiplayerSynchronizer" parent="." index="7" unique_id=1161749930]
+replication_config = SubResource("SceneReplicationConfig_cc670")
+
+[connection signal="timeout" from="Timers/Timer" to="." method="_on_timer_timeout"]

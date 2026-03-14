@@ -51,10 +51,11 @@ func _on_spawn_timer_timeout() -> void:
 		if rand_spawn_value <= current_spawn_weight:
 			
 			# Проверка моба и требования как спавну
-			# Если требование моба не выполнимо, останавливаем
-			if R.mobs[mob_id]["requirements"].has("night"):
-				if not G.time_controller.night:
-					return
+			if R.mobs[mob_id].has("requirements"):
+				# Если требование моба не выполнимо, останавливаем
+				if R.mobs[mob_id]["requirements"].has("night"):
+					if not G.time_controller.night:
+						return
 			
 			# Спавн моба и остановка цикла поиска
 			selected_mob_scene = R.mobs[mob_id]["scene"]

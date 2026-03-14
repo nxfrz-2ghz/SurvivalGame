@@ -15,20 +15,32 @@ func eat(hng: int) -> void:
 	else:
 		heal.emit(float(hng)/50) # heal if overeating
 		current_hunger = MAX_HUNGER
-	changed.emit(current_hunger, MAX_HUNGER)
+	changed.emit(current_hunger)
+	G.text_message.add("hunger: +"+str(hng)+" ("+str(current_hunger)+"/"+str(MAX_HUNGER)+")")
 
 func take_hunger(hng: int) -> void:
 	if current_hunger > 0:
 		current_hunger -= hng
-		changed.emit(current_hunger, MAX_HUNGER)
+		changed.emit(current_hunger)
+		
+		@warning_ignore("integer_division")
+		if current_hunger == MAX_HUNGER/2:
+			G.text_message.add("I'm a little hungy")
+		@warning_ignore("integer_division")
+		if current_hunger == MAX_HUNGER/4:
+			G.text_message.add("I'm very hungy")
+		
 	else:
 		take_damage.emit(HUNGER_DAMAGE)
+		G.text_message.add("I'm dying of hunger")
 
 func _on_timer_timeout() -> void:
 	if G.state_machine != "game": return
 	take_hunger(HUNGER_SPEED)
 	
 	if Input.is_action_pressed("space"):
+		take_hunger(HUNGER_SPEED)
+	if Input.is_action_pressed("shift"):
 		take_hunger(HUNGER_SPEED)
 	if Input.is_action_pressed("up"):
 		take_hunger(HUNGER_SPEED)

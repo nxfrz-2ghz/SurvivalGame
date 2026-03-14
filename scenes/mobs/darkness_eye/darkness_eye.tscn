@@ -30,7 +30,6 @@ animations = [{
 [node name="DarknessEye" unique_id=408161229 instance=ExtResource("1_524pu")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8155488, 0)
 script = ExtResource("2_clm3c")
-add_damage = 0.0
 nname = "darkness_eye"
 
 [node name="AttackCooldown" type="Timer" parent="Timers" parent_id_path=PackedInt32Array(1401815993) index="1" unique_id=154619054]
@@ -54,9 +53,7 @@ sprite_frames = SubResource("SpriteFrames_0w0fy")
 autoplay = "default"
 frame_progress = 0.45816362
 
-[node name="Shadow" parent="." index="5" unique_id=1964977101]
+[node name="Shadow" parent="." index="5" unique_id=437352595]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, -2.5216517, 0)
-layers = 1
-cull_mask = 2
 
 [connection signal="timeout" from="Timers/AttackCooldown" to="." method="_on_attack_cooldown_timeout"]

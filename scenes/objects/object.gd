@@ -11,6 +11,7 @@ const item := preload("res://scenes/items/item.tscn")
 
 @export var nname: String
 @export var drop_items := {}
+@export var despawn_particles_size := 1.0
 
 var visual_sprites := []
 
@@ -57,6 +58,7 @@ func despawn() -> void:
 	
 	var died_particles := R.particles["explose"].instantiate()
 	died_particles.position = self.position
+	died_particles.size = despawn_particles_size
 	G.world.add_child(died_particles, true)
 	
 	queue_free()

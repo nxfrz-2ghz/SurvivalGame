@@ -4,24 +4,19 @@ const item := preload("res://scenes/items/item.tscn")
 
 const exchangeable_items := {
 	"campfire": {
-		"raw_berry": {
-			"amount": 1,
-			"output": "cooked_berry",
-		},
-		"raw_meet": {
-			"amount": 1,
-			"output": "cooked_meet",
-		},
+		"raw_berry": {"amount": 1, "output": "cooked_berry"},
+		"raw_meat":  {"amount": 1, "output": "cooked_meet"},
 	},
 	"furnace": {
-		"copper_ore": {
-			"amount": 2,
-			"output": "copper_bar",
-		},
-		"iron_ore": {
-			"amount": 2,
-			"output": "iron_bar",
-		},
+		"copper_ore": {"amount": 2, "output": "copper_bar"},
+		"clay":       {"amount": 2, "output": "brick"},
+	},
+	"furnace_t2": {
+		"iron_ore": {"amount": 2, "output": "iron_bar"},
+		"iron_bar": {"amount": 2, "output": "steel_bar"},
+	},
+	"alchemy_station": {
+		"log": {"amount": 3, "output": "coal"},
 	},
 }
 
@@ -31,7 +26,12 @@ const mobs := {
 		"scene": preload("res://scenes/mobs/darkness_eye/darkness_eye.tscn"),
 		"requirements": ["night", ],
 		"spawn_weight": 1,
-	}
+	},
+	"pig": {
+		"texture": "res://res/sprites/mobs/pig/front/front0.png",
+		"scene": preload("res://scenes/mobs/pig/pig.tscn"),
+		"spawn_weight": 1,
+	},
 }
 
 const objects := {
@@ -86,12 +86,20 @@ const items := {
 				"pickaxe": 0.1,
 			},
 	},
+	"wooden_torch": {
+		"texture": preload("res://res/sprites/items/torch.png"),
+		"light": {
+			"color": Color.GOLDENROD,
+			"energy": 1.0,
+		},
+	},
 	"stone_axe": {
 		"texture": preload("res://res/sprites/items/stone_axe.png"),
 		"recipe": {
 			"log":3,
 			"stone":2,
 		},
+		"durability": 20,
 		"attack_speed": 1.0,
 		"damage": 2.0,
 		"damage_types":
@@ -107,6 +115,7 @@ const items := {
 			"log":2,
 			"stone":3,
 		},
+		"durability": 20,
 		"attack_speed": 1.0,
 		"damage": 2.0,
 		"damage_types":
@@ -122,6 +131,7 @@ const items := {
 			"log":3,
 			"iron_bar":2,
 		},
+		"durability": 100,
 		"attack_speed": 1.1,
 		"damage": 3.5,
 		"damage_types":
@@ -137,6 +147,7 @@ const items := {
 			"log":2,
 			"iron_bar":3,
 		},
+		"durability": 100,
 		"attack_speed": 1.1,
 		"damage": 3.5,
 		"damage_types":
@@ -156,8 +167,8 @@ const items := {
 		"stack_size": 20,
 		"nutrition": 80,
 	},
-	"raw_meet": {
-		"texture": preload("res://res/sprites/items/meat/raw_meet.png"),
+	"raw_meat": {
+		"texture": preload("res://res/sprites/items/meat/raw_meat.png"),
 		"stack_size": 8,
 		"nutrition": 50,
 	},

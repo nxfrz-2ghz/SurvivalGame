@@ -7,6 +7,9 @@ extends CharacterBody3D
 @onready var arm_anim := %ArmAnim
 @onready var health := %HealthComponent
 @onready var hunger := $HungerController
+@onready var stamina := $StaminaController
+@onready var camera := $Head/Camera/Camera3D
+@onready var book := %Book
 
 const SPEED = 3.0
 const JUMP_VELOCITY = 4.0
@@ -36,7 +39,10 @@ func _ready() -> void:
 		inventory.set_item_in_arm.connect(weapon.set_item_in_arm)
 		inventory.update_signals()
 		
-		$Head/Weapon/Arms/AnimSprite/Book.close_book.connect(_on_close_book)
+		book.open_book.connect(_on_open_book)
+		book.close_book.connect(_on_close_book)
+		
+		health.on_damage.connect($Head/Camera/AnimationPlayer.play_on_damage)
 
 
 func _input(event: InputEvent) -> void:
@@ -54,6 +60,13 @@ func _input(event: InputEvent) -> void:
 		if weapon.actions.crafting_mode:
 			weapon.actions.craft()
 		else:
+			
+			if inventory.inventory[inventory.current_item] != null:
+				var item_name: String = inventory.inventory[inventory.current_item]["name"]
+				if R.items[item_name].has("durability"):
+					if randi_range(0, R.items[item_name]["durability"]) == 0:
+						inventory.drop_item(item_name)
+			
 			weapon.weapon_anim.speed_scale = weapon.attack_speed
 			weapon.weapon_anim.play("use")
 			weapon.actions.attack(weapon.damage, weapon.damage_types, weapon.push_velocity)
@@ -65,6 +78,7 @@ func _input(event: InputEvent) -> void:
 		if interact_ray.is_colliding():
 			var collider: Node = interact_ray.get_collider()
 			
+			# Если коллайдер перерабатывает предметы и слот в инвентаре не пустой
 			if collider.nname in R.exchangeable_items.keys() and inventory.inventory[inventory.current_item]:
 				var item_in_arm: String = inventory.inventory[inventory.current_item]["name"]
 				var amount: int = inventory.inventory[inventory.current_item]["amount"]
@@ -73,6 +87,11 @@ func _input(event: InputEvent) -> void:
 				if ex_items.get(item_in_arm) and amount >= ex_items.get(item_in_arm)["amount"]:
 					collider.cook.craft.rpc_id(1, item_in_arm)
 					inventory.drop_item(item_in_arm, ex_items.get(item_in_arm)["amount"])
+					return
+				# Если предмет это подходящее топливо и его достаточно
+				if item_in_arm == collider.cook.fuel_type and amount > 0:
+					collider.cook.add_fuel.rpc_id(1)
+					inventory.drop_item(item_in_arm, 1)
 					return
 			
 			elif collider.nname == "berry_bush":
@@ -103,9 +122,13 @@ func _input(event: InputEvent) -> void:
 		weapon.actions.crafting_mode = !weapon.actions.crafting_mode
 	
 	if Input.is_action_just_pressed("open_book") and !weapon.weapon_anim.is_playing():
-		G.state_machine = "book"
-		weapon.weapon_anim.play("book_open_page")
-		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		book.open_book.emit()
+
+
+func _on_open_book() -> void:
+	G.state_machine = "book"
+	weapon.weapon_anim.play("book_open_page")
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 
 func _on_close_book() -> void:
@@ -137,11 +160,20 @@ func moving(delta: float) -> void:
 	else:
 		arm_anim.play("idle", 0.2)
 	
+	var speed: float = SPEED
+	if Input.is_action_pressed("shift") and stamina.energy > 0:
+		speed *= 1.5
+		if camera.fov < 120.0:
+			camera.fov += 1.0
+	else:
+		if camera.fov > 90.0:
+			camera.fov -= 0.5
+	
 	# Moving
 	if is_on_floor():
 		if direction:
-			velocity.x += direction.x * SPEED
-			velocity.z += direction.z * SPEED
+			velocity.x += direction.x * speed
+			velocity.z += direction.z * speed
 			arm_anim.play("walk")
 		
 		if velocity:
@@ -151,8 +183,8 @@ func moving(delta: float) -> void:
 	else:
 		arm_anim.play("idle")
 		if direction:
-			velocity.x += direction.x * SPEED / 50
-			velocity.z += direction.z * SPEED / 50
+			velocity.x += direction.x * speed / 50
+			velocity.z += direction.z * speed / 50
 		
 		if velocity:
 			velocity.x /= 1.01

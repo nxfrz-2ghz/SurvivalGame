@@ -74,6 +74,21 @@ func get_target_player() -> CharacterBody3D:
 	return closest_player
 
 
+func braking() -> void:
+	if velocity:
+		if is_on_floor():
+			velocity.x /= 1.5
+			velocity.z /= 1.5
+		else:
+			velocity.x /= 1.01
+			velocity.z /= 1.01
+		
+		if abs(velocity.x) < 0.01:
+			velocity.x = 0
+		if abs(velocity.z) < 0.01:
+			velocity.z = 0
+
+
 func loop(_delta: float) -> void:
 	return
 
@@ -96,7 +111,7 @@ func apply_push(direction_vector: Vector3, velocity_power: float) -> void:
 
 
 func _on_update_timer_timeout() -> void:
-	if position.distance_to(get_target_player().position) > 100.0:
+	if position.distance_to(get_target_player().position) > 120.0:
 		despawn()
 	if position.y < -100:
 		despawn()

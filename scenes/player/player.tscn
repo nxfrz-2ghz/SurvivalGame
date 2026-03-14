@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://b52ief0l2f0vj" path="res://scripts/inventory_controller.gd" id="3_uf5tr"]
 [ext_resource type="Texture2D" uid="uid://djxkb4t6kfbt3" path="res://icon.svg" id="4_lgqa7"]
 [ext_resource type="PackedScene" uid="uid://dvoyamcy01saq" path="res://components/interact_ray/interact_ray.tscn" id="4_p47bc"]
+[ext_resource type="Script" uid="uid://detbfy8koc0e1" path="res://scenes/player/stamina_controller.gd" id="4_rw8a5"]
 [ext_resource type="Script" uid="uid://cw5xjlkj437o" path="res://scenes/player/weapon/weapon.gd" id="7_kvlxm"]
 [ext_resource type="Texture2D" uid="uid://dh5m1mos2v01r" path="res://res/sprites/attack_anim/attack1.png" id="8_lgqa7"]
 [ext_resource type="Script" uid="uid://dddal05iv80hr" path="res://scenes/player/weapon/actions.gd" id="8_uf5tr"]
@@ -19,7 +20,7 @@
 [ext_resource type="Texture2D" uid="uid://4l6ojpdrpbdq" path="res://res/sprites/attack_anim/attack5.png" id="12_ioxgp"]
 [ext_resource type="Texture2D" uid="uid://dsvrbtqjxwxas" path="res://res/sprites/attack_anim/attack6.png" id="13_cnsyf"]
 [ext_resource type="PackedScene" uid="uid://b0ubt0f8epxbi" path="res://components/sway_container/sway_container.tscn" id="14_007i1"]
-[ext_resource type="Texture2D" uid="uid://crbe50sl1agx4" path="res://res/sprites/arm.png" id="16_j4nxn"]
+[ext_resource type="Texture2D" uid="uid://crbe50sl1agx4" path="res://res/sprites/items/arm.png" id="16_j4nxn"]
 [ext_resource type="Texture2D" uid="uid://nuea13giuwk5" path="res://res/sprites/pickup_anim/1.png" id="17_6cv16"]
 [ext_resource type="Texture2D" uid="uid://bludxqo7346wv" path="res://res/sprites/pickup_anim/2.png" id="18_j4nxn"]
 [ext_resource type="Texture2D" uid="uid://dqs0evsgf44aa" path="res://res/sprites/open_book0/1.png" id="18_ttakn"]
@@ -46,6 +47,51 @@
 [ext_resource type="Texture2D" uid="uid://cybs8lovhfynj" path="res://res/sprites/open_book1/Без названия3_20260211182811.png" id="34_hdvrm"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qnmj6"]
+
+[sub_resource type="Animation" id="Animation_rw8a5"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Camera3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_iwuka"]
+resource_name = "on_damage"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Camera3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.099999994, 0.2, 0.4),
+"transitions": PackedFloat32Array(-0.5, -0.5, -0.5, 1),
+"update": 0,
+"values": [Vector3(0, 0.3, 0), Vector3(0, -0.2, 0), Vector3(0, 0.1, 0), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_hyqqp"]
+_data = {
+&"RESET": SubResource("Animation_rw8a5"),
+&"on_damage": SubResource("Animation_iwuka")
+}
+
+[sub_resource type="GDScript" id="GDScript_ttakn"]
+script/source = "extends AnimationPlayer
+
+
+func play_on_damage() -> void:
+	play(\"on_damage\")
+"
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ylpk0"]
 size = Vector3(2, 1.3305664, 2)
@@ -669,6 +715,9 @@ script = ExtResource("3_j4nxn")
 [node name="Timer" type="Timer" parent="HungerController" unique_id=292068303]
 autostart = true
 
+[node name="StaminaController" type="Node" parent="." unique_id=1216768285]
+script = ExtResource("4_rw8a5")
+
 [node name="InventoryController" type="Node" parent="." unique_id=781635327]
 unique_name_in_owner = true
 script = ExtResource("3_uf5tr")
@@ -692,6 +741,10 @@ script = ExtResource("3_244u8")
 [node name="Camera3D" type="Camera3D" parent="Head/Camera" unique_id=585511788]
 fov = 90.0
 
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Head/Camera" unique_id=854784158]
+libraries/ = SubResource("AnimationLibrary_hyqqp")
+script = SubResource("GDScript_ttakn")
+
 [node name="InteractRay" parent="Head" unique_id=1585375663 instance=ExtResource("4_p47bc")]
 unique_name_in_owner = true
 collision_mask = 30
@@ -700,6 +753,9 @@ collide_with_areas = false
 [node name="Weapon" type="Node3D" parent="Head" unique_id=753252549]
 unique_name_in_owner = true
 script = ExtResource("7_kvlxm")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Head/Weapon" unique_id=780601897]
+visible = false
 
 [node name="Actions" type="Area3D" parent="Head/Weapon" unique_id=928031166]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
@@ -745,6 +801,7 @@ sprite_frames = SubResource("SpriteFrames_byj34")
 animation = &"attack"
 
 [node name="Book" parent="Head/Weapon/Arms/AnimSprite" unique_id=2119037644 instance=ExtResource("2_rw8a5")]
+unique_name_in_owner = true
 visible = false
 anchors_preset = 5
 anchor_left = 0.5
