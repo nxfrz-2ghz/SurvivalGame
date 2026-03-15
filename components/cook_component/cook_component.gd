@@ -31,8 +31,7 @@ func toggle() -> void:
 @rpc("any_peer", "call_local")
 func craft(input: String):
 	queue.append(input)
-	if fuel and craft_timer.is_stopped():
-		craft_timer.start()
+	if fuel and craft_timer.is_stopped(): start_cook()
 
 @rpc("any_peer", "call_local")
 func add_fuel() -> void:
@@ -42,12 +41,15 @@ func add_fuel() -> void:
 	if !queue.is_empty() and craft_timer.is_stopped():
 		fuel_timer.start()
 
+func start_cook() -> void:
+	craft_timer.wait_time = R.exchangeable_items[cook_category][queue.max()]["speed"]
+	craft_timer.start()
+
 func _on_craft_timer_timeout() -> void:
 	parent.drop(R.exchangeable_items[parent.nname].get(queue.pop_front())["output"])
 	
 	# Продолжение плавки
-	if !queue.is_empty():
-		craft_timer.start()
+	if !queue.is_empty(): start_cook()
 
 func _on_fuel_timer_timeout() -> void:
 	fuel -= 1

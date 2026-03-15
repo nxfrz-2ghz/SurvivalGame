@@ -1,5 +1,6 @@
-extends PanelContainer
+extends Node
 
-@onready var host_button := $MarginContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/HostButton
-@onready var world_size := $MarginContainer/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer/LineEdit
-@onready var world_seed := $MarginContainer/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer/LineEdit2
+@onready var address_label := $VBoxContainer/AddresLabel
+@onready var host_button := $VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/HostButton
+@onready var world_size := $VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer/LineEdit
+@onready var world_seed := $VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer/LineEdit2

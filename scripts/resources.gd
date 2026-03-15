@@ -4,19 +4,19 @@ const item := preload("res://scenes/items/item.tscn")
 
 const exchangeable_items := {
 	"campfire": {
-		"raw_berry": {"amount": 1, "output": "cooked_berry"},
-		"raw_meat":  {"amount": 1, "output": "cooked_meet"},
+		"raw_berry": {"amount": 1, "output": "cooked_berry", "speed": 3},
+		"raw_meat":  {"amount": 1, "output": "cooked_meet", "speed": 5},
 	},
 	"furnace": {
-		"copper_ore": {"amount": 2, "output": "copper_bar"},
-		"clay":       {"amount": 2, "output": "brick"},
+		"copper_ore": {"amount": 2, "output": "copper_bar", "speed": 8},
+		"clay":       {"amount": 2, "output": "brick", "speed": 6},
 	},
 	"furnace_t2": {
-		"iron_ore": {"amount": 2, "output": "iron_bar"},
-		"iron_bar": {"amount": 2, "output": "steel_bar"},
+		"iron_ore": {"amount": 2, "output": "iron_bar", "speed": 8},
+		"iron_bar": {"amount": 2, "output": "steel_bar", "speed": 15},
 	},
 	"alchemy_station": {
-		"log": {"amount": 3, "output": "coal"},
+		"log": {"amount": 3, "output": "coal", "speed": 5},
 	},
 }
 

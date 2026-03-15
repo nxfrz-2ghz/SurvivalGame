@@ -300,7 +300,8 @@ func _generate_world() -> void:
 			gz += OBJ_SPAWN_STEP
 		gx += OBJ_SPAWN_STEP
 	
-	# В цикле раскидывания предметов, добавить проверку:
+	# Раскидываем предметы по миру
+	gx = 0
 	while gx < world_size:
 		gz = 0
 		while gz < world_size:

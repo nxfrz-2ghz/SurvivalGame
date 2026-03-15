@@ -5,3 +5,4 @@ extends Node
 @onready var health_vignette := $HealthVignette
 @onready var damage_vignette := $DamageVignette
 @onready var stamina_bar := $StaminaBar
+@onready var debug := $Debug

@@ -3,13 +3,17 @@ extends Node
 const PLAYER_SCENE := preload("res://scenes/player/player.tscn")
 const PORT: int = 9999
 
-@onready var address_label := $GUI/MainMenu/MarginContainer/VBoxContainer/AddresLabel
-
 var enet_peer := ENetMultiplayerPeer.new()
 
 func _ready() -> void:
 	if OS.get_name() == "Web":
 		G.text_message.add("HINT: web version cant support volumetic fog and multiplayer, for better expirience recommended play full downlowdable version")
+
+
+func _input(_event: InputEvent) -> void:
+	if Input.is_action_just_pressed("f1"):
+		G.gui.hud.debug.visible = !G.gui.hud.debug.visible
+
 
 func prepare_for_a_game(type: String) -> void:
 	if type == "server":
@@ -27,10 +31,23 @@ func prepare_for_a_game(type: String) -> void:
 	
 	elif type == "client":
 		var address = "localhost" # Или возьмите из UI: menu.adress_entry.text
-		if address_label.text: address = address_label.text
+		if G.gui.main_menu.address_label.text: address = G.gui.main_menu.address_label.text
 		var error = enet_peer.create_client(address, PORT)
 		if error != OK: return
 		multiplayer.multiplayer_peer = enet_peer
+
+
+func connect_signals_to_player(player: CharacterBody3D) -> void:
+	player.get_node("%InteractRay").target_found.connect(G.gui.hud.target_label.update)
+	player.get_node("%InventoryController").update.connect(G.gui.hud.inventory.update)
+	player.get_node("%InventoryController").set_hotbar_slot.connect(G.gui.hud.inventory.set_hotbar_slot)
+	player.get_node("%Book").open_book.connect(G.gui.hud.inventory.hide)
+	player.get_node("%Book").close_book.connect(G.gui.hud.inventory.show)
+	player.get_node("%HealthComponent").changed.connect(G.gui.hud.health_vignette.on_health_changed)
+	player.get_node("%HealthComponent").on_damage.connect(G.gui.hud.damage_vignette.on_damage)
+	player.get_node("StaminaController").changed.connect(G.gui.hud.stamina_bar.on_stamina_changed)
+	player.get_node("%HealthComponent").changed.connect(G.gui.hud.debug.on_health_changed)
+	player.get_node("HungerController").changed.connect(G.gui.hud.debug.on_hunger_changed)
 
 
 func add_player(peer_id: int) -> void:
@@ -42,15 +59,8 @@ func add_player(peer_id: int) -> void:
 	
 	# Если игрок это мы, отложенно подключаем сигналы
 	if peer_id == multiplayer.get_unique_id():
-		player.get_node("%InteractRay").target_found.connect(G.gui.hud.target_label.update)
-		player.get_node("%InventoryController").update.connect(G.gui.hud.inventory.update)
-		player.get_node("%InventoryController").set_hotbar_slot.connect(G.gui.hud.inventory.set_hotbar_slot)
-		player.get_node("%Book").open_book.connect(G.gui.hud.inventory.hide)
-		player.get_node("%Book").close_book.connect(G.gui.hud.inventory.show)
-		player.get_node("%HealthComponent").changed.connect(G.gui.hud.health_vignette.on_health_changed)
-		player.get_node("%HealthComponent").on_damage.connect(G.gui.hud.damage_vignette.on_damage)
-		player.get_node("StaminaController").changed.connect(G.gui.hud.stamina_bar.on_stamina_changed)
-	
+		connect_signals_to_player(player)
+		G.player = player
 	else:
 		var world_node = G.world.get_node("World")
 		world_node.rpc_id(peer_id, "join_world", world_node.world_seed, int(G.gui.main_menu.world_size.text))
@@ -63,6 +73,7 @@ func remove_player(peer_id: int) -> void:
 
 func start_game(is_load: bool = false) -> void:
 	G.gui.main_menu.hide()
+	G.gui.background.queue_free()
 	if multiplayer.get_unique_id() == 1:
 		if is_load:
 			G.world.get_node("World").load_world()
@@ -98,11 +109,5 @@ func _on_join_button_pressed():
 func _on_player_spawner_spawned(node: Node) -> void:
 	node.position.y = 50
 	if str(multiplayer.get_unique_id()) == node.name:
-		node.get_node("%InteractRay").target_found.connect(G.gui.hud.target_label.update)
-		node.get_node("%InventoryController").update.connect(G.gui.hud.inventory.update)
-		node.get_node("%InventoryController").set_hotbar_slot.connect(G.gui.hud.inventory.set_hotbar_slot)
-		node.get_node("%Book").open_book.connect(G.gui.hud.inventory.hide)
-		node.get_node("%Book").close_book.connect(G.gui.hud.inventory.show)
-		node.get_node("%HealthComponent").changed.connect(G.gui.hud.health_vignette.on_health_changed)
-		node.get_node("%HealthComponent").on_damage.connect(G.gui.hud.damage_vignette.on_damage)
-		node.get_node("StaminaController").changed.connect(G.gui.hud.stamina_bar.on_stamina_changed)
+		connect_signals_to_player(node)
+		G.player = node

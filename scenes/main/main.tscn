@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://c8l40e2t7qf3r" path="res://scenes/main/main.gd" id="1_l3cfh"]
 [ext_resource type="PackedScene" uid="uid://bca3cjm2s2o6d" path="res://scenes/world/world.tscn" id="2_3s6yk"]
-[ext_resource type="PackedScene" uid="uid://ccuilgc2uer2y" path="res://components/fps_label/fps_label.tscn" id="3_a8run"]
 [ext_resource type="Texture2D" uid="uid://fmv6ac8qq7r7" path="res://res/sprites/gui/aim.png" id="3_ab7mr"]
 [ext_resource type="Script" uid="uid://sfqqllsbirx2" path="res://scenes/main/multiplayer_spawner.gd" id="3_nvumn"]
 [ext_resource type="Texture2D" uid="uid://dwlrxn5cvf8ov" path="res://res/sprites/gui/choose_slot.png" id="4_l3cfh"]
@@ -19,6 +18,8 @@
 [ext_resource type="Script" uid="uid://bcvafvya4wcrc" path="res://scenes/main/gui/damage_vignette.gd" id="14_r4lks"]
 [ext_resource type="Script" uid="uid://d25jbatuakb3x" path="res://scenes/main/gui/stamina_bar.gd" id="15_necax"]
 [ext_resource type="Texture2D" uid="uid://kflc51gj346l" path="res://res/sprites/gui/Screenshot_20260306_182814.png" id="15_nvumn"]
+[ext_resource type="Script" uid="uid://bni0q2stunvev" path="res://scenes/main/gui/debug.gd" id="15_p8abn"]
+[ext_resource type="Script" uid="uid://cp54fimx3yc7i" path="res://scenes/main/gui/fullscreen_button.gd" id="18_r4lks"]
 
 [sub_resource type="GDScript" id="GDScript_ou6is"]
 script/source = "extends Node3D
@@ -120,6 +121,44 @@ bg_color = Color(0.70980394, 0.70980394, 0.70980394, 0.47058824)
 corner_radius_top_right = 12
 corner_radius_bottom_right = 12
 
+[sub_resource type="Animation" id="Animation_necax"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(640, 360)]
+}
+
+[sub_resource type="Animation" id="Animation_r4lks"]
+resource_name = "default"
+length = 16.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 4.0333333, 8.033334, 12.066667, 15.966666),
+"transitions": PackedFloat32Array(1, 2, 1, 2, 1),
+"update": 0,
+"values": [Vector2(640, 360), Vector2(740, 360), Vector2(640, 360), Vector2(540, 360), Vector2(640, 360)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_pg34l"]
+_data = {
+&"RESET": SubResource("Animation_necax"),
+&"default": SubResource("Animation_r4lks")
+}
+
 [node name="Main" type="Node" unique_id=885458657]
 script = ExtResource("1_l3cfh")
 
@@ -170,10 +209,6 @@ script = ExtResource("14_r4lks")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="GUI/HUD/DamageVignette" unique_id=478140708]
 libraries/ = SubResource("AnimationLibrary_p8abn")
-
-[node name="FPSLabel" parent="GUI/HUD" unique_id=628286725 instance=ExtResource("3_a8run")]
-offset_right = 1.0
-offset_bottom = 23.0
 
 [node name="Aim" type="TextureRect" parent="GUI/HUD" unique_id=1041307084]
 anchors_preset = 8
@@ -521,111 +556,129 @@ max_value = 1.0
 value = 1.0
 show_percentage = false
 
-[node name="MainMenu" type="PanelContainer" parent="GUI" unique_id=1400361060]
+[node name="Debug" type="Label" parent="GUI/HUD" unique_id=350619231]
+visible = false
+offset_right = 40.0
+offset_bottom = 77.0
+script = ExtResource("15_p8abn")
+
+[node name="Background" type="TextureRect" parent="GUI" unique_id=1984802104]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("15_nvumn")
+expand_mode = 1
+stretch_mode = 3
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="GUI/Background" unique_id=1531877782]
+libraries/ = SubResource("AnimationLibrary_pg34l")
+autoplay = &"default"
+
+[node name="MainMenu" type="MarginContainer" parent="GUI" unique_id=363169062]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("11_th5th")
-
-[node name="Background" type="TextureRect" parent="GUI/MainMenu" unique_id=141368914]
-layout_mode = 2
-texture = ExtResource("15_nvumn")
-expand_mode = 1
-stretch_mode = 3
-
-[node name="MarginContainer" type="MarginContainer" parent="GUI/MainMenu" unique_id=362533778]
-layout_mode = 2
 theme_override_constants/margin_left = 15
 theme_override_constants/margin_top = 15
 theme_override_constants/margin_right = 15
 theme_override_constants/margin_bottom = 15
+script = ExtResource("11_th5th")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="GUI/MainMenu/MarginContainer" unique_id=1738444659]
+[node name="VBoxContainer" type="VBoxContainer" parent="GUI/MainMenu" unique_id=1738444659]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
 
-[node name="Start" type="Label" parent="GUI/MainMenu/MarginContainer/VBoxContainer" unique_id=95926002]
+[node name="Start" type="Label" parent="GUI/MainMenu/VBoxContainer" unique_id=95926002]
 layout_mode = 2
 text = "START:"
 
-[node name="PanelContainer" type="PanelContainer" parent="GUI/MainMenu/MarginContainer/VBoxContainer" unique_id=1402470755]
+[node name="PanelContainer" type="PanelContainer" parent="GUI/MainMenu/VBoxContainer" unique_id=1402470755]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="GUI/MainMenu/MarginContainer/VBoxContainer/PanelContainer" unique_id=507088571]
+[node name="MarginContainer" type="MarginContainer" parent="GUI/MainMenu/VBoxContainer/PanelContainer" unique_id=507088571]
 layout_mode = 2
 theme_override_constants/margin_left = 15
 theme_override_constants/margin_top = 15
 theme_override_constants/margin_right = 15
 theme_override_constants/margin_bottom = 15
 
-[node name="VBoxContainer" type="VBoxContainer" parent="GUI/MainMenu/MarginContainer/VBoxContainer/PanelContainer/MarginContainer" unique_id=1794613856]
+[node name="VBoxContainer" type="VBoxContainer" parent="GUI/MainMenu/VBoxContainer/PanelContainer/MarginContainer" unique_id=1794613856]
 layout_mode = 2
 
-[node name="CreateButton" type="Button" parent="GUI/MainMenu/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1630802734]
+[node name="CreateButton" type="Button" parent="GUI/MainMenu/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1630802734]
 layout_mode = 2
 text = "CREATE"
 
-[node name="LoadButton" type="Button" parent="GUI/MainMenu/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=347587006]
+[node name="LoadButton" type="Button" parent="GUI/MainMenu/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=347587006]
 layout_mode = 2
 text = "LOAD"
 
-[node name="HostButton" type="CheckButton" parent="GUI/MainMenu/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=353856057]
+[node name="HostButton" type="CheckButton" parent="GUI/MainMenu/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=353856057]
 layout_mode = 2
 text = "HOST"
 
-[node name="Join" type="Label" parent="GUI/MainMenu/MarginContainer/VBoxContainer" unique_id=183064634]
+[node name="Join" type="Label" parent="GUI/MainMenu/VBoxContainer" unique_id=183064634]
 layout_mode = 2
 text = "JOIN:"
 
-[node name="JoinButton" type="Button" parent="GUI/MainMenu/MarginContainer/VBoxContainer" unique_id=495309861]
+[node name="JoinButton" type="Button" parent="GUI/MainMenu/VBoxContainer" unique_id=495309861]
 layout_mode = 2
 text = "JOIN"
 
-[node name="AddresLabel" type="LineEdit" parent="GUI/MainMenu/MarginContainer/VBoxContainer" unique_id=2053772195]
+[node name="AddresLabel" type="LineEdit" parent="GUI/MainMenu/VBoxContainer" unique_id=2053772195]
 layout_mode = 2
 placeholder_text = "IP"
 alignment = 1
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="GUI/MainMenu/MarginContainer" unique_id=516588149]
+[node name="VBoxContainer2" type="VBoxContainer" parent="GUI/MainMenu" unique_id=516588149]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 4
 
-[node name="PanelContainer" type="PanelContainer" parent="GUI/MainMenu/MarginContainer/VBoxContainer2" unique_id=213670114]
+[node name="PanelContainer" type="PanelContainer" parent="GUI/MainMenu/VBoxContainer2" unique_id=213670114]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="GUI/MainMenu/MarginContainer/VBoxContainer2/PanelContainer" unique_id=106033644]
+[node name="MarginContainer" type="MarginContainer" parent="GUI/MainMenu/VBoxContainer2/PanelContainer" unique_id=106033644]
 layout_mode = 2
 theme_override_constants/margin_left = 15
 theme_override_constants/margin_top = 15
 theme_override_constants/margin_right = 15
 theme_override_constants/margin_bottom = 15
 
-[node name="VBoxContainer" type="VBoxContainer" parent="GUI/MainMenu/MarginContainer/VBoxContainer2/PanelContainer/MarginContainer" unique_id=889330797]
+[node name="VBoxContainer" type="VBoxContainer" parent="GUI/MainMenu/VBoxContainer2/PanelContainer/MarginContainer" unique_id=889330797]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="GUI/MainMenu/MarginContainer/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer" unique_id=648998576]
+[node name="Label" type="Label" parent="GUI/MainMenu/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer" unique_id=648998576]
 layout_mode = 2
-text = "Размер мира
-(влияет на производительность)"
+text = "World size
+(impacts performance)"
 
-[node name="LineEdit" type="LineEdit" parent="GUI/MainMenu/MarginContainer/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer" unique_id=814682778]
+[node name="LineEdit" type="LineEdit" parent="GUI/MainMenu/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer" unique_id=814682778]
 layout_mode = 2
 text = "500"
 placeholder_text = "500"
 
-[node name="Label2" type="Label" parent="GUI/MainMenu/MarginContainer/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer" unique_id=583959888]
+[node name="Label2" type="Label" parent="GUI/MainMenu/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer" unique_id=583959888]
 layout_mode = 2
-text = "Ключ генерации мира"
+text = "World Generation Key"
 
-[node name="LineEdit2" type="LineEdit" parent="GUI/MainMenu/MarginContainer/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer" unique_id=515565385]
+[node name="LineEdit2" type="LineEdit" parent="GUI/MainMenu/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer" unique_id=515565385]
 layout_mode = 2
-placeholder_text = "Оставьте пустым для рандома"
+placeholder_text = "Skip for randomness"
 
-[node name="LeaveButton" type="Button" parent="GUI/MainMenu/MarginContainer" unique_id=1336085257]
+[node name="FullscreenButton" type="CheckButton" parent="GUI/MainMenu/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer" unique_id=1870858388]
+layout_mode = 2
+text = "Fullscreen"
+script = ExtResource("18_r4lks")
+
+[node name="LeaveButton" type="Button" parent="GUI/MainMenu" unique_id=1336085257]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
@@ -671,10 +724,11 @@ text = "EXIT WORLD"
 
 [connection signal="spawned" from="Environment/PlayerSpawner" to="." method="_on_player_spawner_spawned"]
 [connection signal="animation_finished" from="GUI/HUD/TextMessage/AnimationPlayer" to="GUI/HUD/TextMessage" method="_on_animation_player_animation_finished"]
-[connection signal="pressed" from="GUI/MainMenu/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/CreateButton" to="." method="_on_create_button_pressed"]
-[connection signal="pressed" from="GUI/MainMenu/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/LoadButton" to="." method="_on_load_button_pressed"]
-[connection signal="pressed" from="GUI/MainMenu/MarginContainer/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
-[connection signal="pressed" from="GUI/MainMenu/MarginContainer/LeaveButton" to="GUI/MainMenu/MarginContainer/LeaveButton" method="_on_pressed"]
+[connection signal="pressed" from="GUI/MainMenu/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/CreateButton" to="." method="_on_create_button_pressed"]
+[connection signal="pressed" from="GUI/MainMenu/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/LoadButton" to="." method="_on_load_button_pressed"]
+[connection signal="pressed" from="GUI/MainMenu/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
+[connection signal="toggled" from="GUI/MainMenu/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer/FullscreenButton" to="GUI/MainMenu/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer/FullscreenButton" method="_on_toggled"]
+[connection signal="pressed" from="GUI/MainMenu/LeaveButton" to="GUI/MainMenu/LeaveButton" method="_on_pressed"]
 [connection signal="pressed" from="GUI/GameMenu/MarginContainer/VBoxContainer/Save" to="GUI/GameMenu" method="_on_save_pressed"]
 [connection signal="pressed" from="GUI/GameMenu/MarginContainer/VBoxContainer/ExitWithoutSave" to="GUI/GameMenu" method="_on_exit_without_save_pressed"]
 [connection signal="pressed" from="GUI/GameMenu/MarginContainer/VBoxContainer/Exit" to="GUI/GameMenu" method="_on_exit_pressed"]
