@@ -1,20 +1,17 @@
 extends "res://scenes/mobs/mob.gd"
 
-var speed := 2.0
-var walk := false
+var is_walk := false
 
 func loop(_delta: float) -> void:
-	if walk:
-		var direction = -global_transform.basis.z
-		velocity.x += direction.x * speed
-		velocity.z += direction.z * speed
+	if is_walk: walk(-global_transform.basis.z, speed)
 	braking()
 
 
 func _on_timer_timeout() -> void:
-	walk = !walk
+	if G.state_machine != "game": return
+	is_walk = !is_walk
 	
-	if walk:
+	if is_walk:
 		self.rotation.y += randi_range(-200, 200)
 		sprite.play("walk")
 	else:

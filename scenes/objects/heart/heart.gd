@@ -4,7 +4,7 @@ extends "res://scenes/objects/object.gd"
 @onready var summon_timer := $Timers/SummonTimer
 @onready var corruption_decal := $Corruption
 
-const spawn_mob := R.mobs["darkness_eye"]["scene"]
+const spawn_mob := R.mobs["krab"]["scene"]
 
 @rpc("authority", "call_local")
 func on_damage() -> void:

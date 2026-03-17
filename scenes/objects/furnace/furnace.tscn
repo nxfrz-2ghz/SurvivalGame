@@ -39,6 +39,11 @@ wait_time = 8.0
 one_shot = true
 
 [node name="HealthComponent" parent="." index="1" unique_id=1086116789]
+resists = {
+"axe": 0.0,
+"melee": 0.5,
+"pickaxe": 1.2
+}
 max_health = 5.0
 
 [node name="CookComponent" parent="." index="2" unique_id=837939887 instance=ExtResource("2_ijwyf")]
@@ -53,7 +58,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.039, 1.541, -0.036)
 visible = false
 
 [node name="Sprite3D" type="Sprite3D" parent="ToggleOn" index="0" unique_id=163627065]
-visibility_range_end = 500.0
+visibility_range_end = 100.0
 billboard = 2
 shaded = true
 double_sided = false
@@ -63,6 +68,7 @@ texture = ExtResource("3_ijwyf")
 [node name="OmniLight3D" type="OmniLight3D" parent="ToggleOn" index="1" unique_id=1579709312]
 light_color = Color(1, 0.6862745, 0.39215687, 1)
 light_energy = 6.172
+distance_fade_enabled = true
 
 [node name="SmokeParticle" parent="." index="5" unique_id=2097639369 instance=ExtResource("4_ijwyf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.0835304, 0)

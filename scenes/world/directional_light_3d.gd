@@ -7,10 +7,10 @@ signal day_come
 
 var night := false
 
-const min_energy := 0.0
+const min_energy := 0.05
 var max_energy := 1.0
 
-var time_speed = 0.5 # Скорость смены дня
+var time_speed = 0.6 # Скорость смены дня
 
 func _ready() -> void:
 	G.time_controller = self
@@ -50,3 +50,4 @@ func _physics_process(delta: float) -> void:
 	var color: float = clamp(multiplier * 1.0, 0.1, 1.0)
 	$CanvasModulate.color = Color(color, color, color)
 	$"../WorldEnvironment".environment.background_energy_multiplier = clamp(multiplier * max_energy/2, min_energy, max_energy/2)
+	$"../WorldEnvironment".environment.fog_light_energy = clamp(multiplier * max_energy/2, 0, max_energy/2)

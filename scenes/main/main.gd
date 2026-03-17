@@ -37,7 +37,7 @@ func prepare_for_a_game(type: String) -> void:
 		multiplayer.multiplayer_peer = enet_peer
 
 
-func connect_signals_to_player(player: CharacterBody3D) -> void:
+func set_up_player(player: CharacterBody3D) -> void:
 	player.get_node("%InteractRay").target_found.connect(G.gui.hud.target_label.update)
 	player.get_node("%InventoryController").update.connect(G.gui.hud.inventory.update)
 	player.get_node("%InventoryController").set_hotbar_slot.connect(G.gui.hud.inventory.set_hotbar_slot)
@@ -48,6 +48,7 @@ func connect_signals_to_player(player: CharacterBody3D) -> void:
 	player.get_node("StaminaController").changed.connect(G.gui.hud.stamina_bar.on_stamina_changed)
 	player.get_node("%HealthComponent").changed.connect(G.gui.hud.debug.on_health_changed)
 	player.get_node("HungerController").changed.connect(G.gui.hud.debug.on_hunger_changed)
+	G.player = player
 
 
 func add_player(peer_id: int) -> void:
@@ -59,8 +60,7 @@ func add_player(peer_id: int) -> void:
 	
 	# Если игрок это мы, отложенно подключаем сигналы
 	if peer_id == multiplayer.get_unique_id():
-		connect_signals_to_player(player)
-		G.player = player
+		set_up_player(player)
 	else:
 		var world_node = G.world.get_node("World")
 		world_node.rpc_id(peer_id, "join_world", world_node.world_seed, int(G.gui.main_menu.world_size.text))
@@ -109,5 +109,4 @@ func _on_join_button_pressed():
 func _on_player_spawner_spawned(node: Node) -> void:
 	node.position.y = 50
 	if str(multiplayer.get_unique_id()) == node.name:
-		connect_signals_to_player(node)
-		G.player = node
+		set_up_player(node)

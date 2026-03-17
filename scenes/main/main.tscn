@@ -166,9 +166,6 @@ script = ExtResource("1_l3cfh")
 script = SubResource("GDScript_ou6is")
 
 [node name="World" parent="Environment" unique_id=1718531022 instance=ExtResource("2_3s6yk")]
-world_size = 500
-height_max = 10.0
-visible_mesh_range = 120.0
 
 [node name="PlayerSpawner" type="MultiplayerSpawner" parent="Environment" unique_id=1086422612]
 _spawnable_scenes = PackedStringArray("uid://dp83o7qw4ht4w")
@@ -662,8 +659,8 @@ text = "World size
 
 [node name="LineEdit" type="LineEdit" parent="GUI/MainMenu/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer" unique_id=814682778]
 layout_mode = 2
-text = "500"
-placeholder_text = "500"
+text = "800"
+placeholder_text = "800"
 
 [node name="Label2" type="Label" parent="GUI/MainMenu/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer" unique_id=583959888]
 layout_mode = 2

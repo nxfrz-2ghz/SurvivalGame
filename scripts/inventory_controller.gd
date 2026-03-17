@@ -12,6 +12,8 @@ var current_item := 1
 
 
 func _ready():
+	G.inv = self
+	
 	# Инициализируем пустые слоты
 	for i in range(1, MAX_SLOTS + 1):
 		inventory[i] = null
@@ -106,21 +108,14 @@ func add_item(item_name: String, amount: int = 1):
 	
 	update_signals()
 
-func drop_item(item_name: String, amount: int = 1):
-	var remaining_to_remove = amount
+func drop_item(slot_index: int, amount: int = 1):
+	if slot_index < 0 or slot_index >= MAX_SLOTS: return
 	
-	# Идем с конца (или начала), чтобы забирать предметы
-	for i in range(MAX_SLOTS, 0, -1):
-		var slot = inventory[i]
-		if slot and slot["name"] == item_name:
-			if slot["amount"] > remaining_to_remove:
-				slot["amount"] -= remaining_to_remove
-				remaining_to_remove = 0
-			else:
-				remaining_to_remove -= slot["amount"]
-				inventory[i] = null # Очищаем слот
-			
-			if remaining_to_remove <= 0:
-				break
-				
-	update_signals()
+	var slot = inventory[slot_index]
+	if slot:
+		if slot["amount"] > amount:
+			slot["amount"] -= amount
+		else:
+			inventory[slot_index] = null # Удаляем предмет полностью
+		
+		update_signals()

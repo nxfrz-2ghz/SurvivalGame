@@ -1,6 +1,7 @@
 extends Node3D
 
 @onready var terrain := $Terrain
+@onready var fall_defense_area := $FallDefenseArea
 
 # Биомы и их параметры
 enum Biome { FOREST, ORE_PLATEAU, MOUNTAINS, PLAINS, UNDERWATER }
@@ -56,10 +57,10 @@ const BIOME_CONFIG = {
 	},
 }
 
-const BIOME_BLEND := 0.01
-const BIOME_BORDER_MOUNTAIN := -0.13  # горы / лес
+const BIOME_BLEND := 0.03
+const BIOME_BORDER_PLATEU := -0.3  # плато / лес
 const BIOME_BORDER_FOREST   := -0.1   # лес / равнина
-const BIOME_BORDER_PLAINS   := 0.08   # равнина / горы (MOUNTAINS)
+const BIOME_BORDER_PLAINS   := 0.1   # равнина / горы
 
 var world_seed: int
 var noise: FastNoiseLite
@@ -73,7 +74,7 @@ const spacing := 1.0     # Расстояние между вершинами
 # object gen
 const OBJ_SPAWN_STEP := 1.5  # Генерируем объекты с шагом (экономит спавны)
 # drop gen
-const DROP_SPAWN_STEP := 15.0  # Генерируем объекты с шагом (экономит спавны)
+const DROP_SPAWN_STEP := 25.0  # Генерируем предметы с шагом (экономит спавны)
 # mesh gen
 const CHUNK_SIZE := 64  # Размер одного чанка в вершинах
 const CHUNK_VERTEX_COUNT := CHUNK_SIZE + 1
@@ -118,7 +119,7 @@ func _init_noise() -> void:
 	biome_noise = FastNoiseLite.new()
 	biome_noise.seed = world_seed + 1
 	biome_noise.noise_type = FastNoiseLite.TYPE_PERLIN
-	biome_noise.frequency = 0.02
+	biome_noise.frequency = 0.05
 
 func _generate_terrain() -> void:
 	# Генерируем меш террейна разбитый на чанки
@@ -261,6 +262,8 @@ func _generate_water() -> void:
 
 func _generate_world() -> void:
 	
+	fall_defense_area.set_size(world_size)
+	
 	_generate_terrain()
 	_generate_water()
 	
@@ -308,7 +311,7 @@ func _generate_world() -> void:
 			var world_x = gx * spacing - offset2
 			var world_z = gz * spacing - offset2
 			
-			var spawn_y = _get_height(world_x, world_z)
+			var spawn_y = +_get_raw_noise_height(world_x, world_z)
 			
 			# Не спавним предметы под водой
 			if spawn_y >= WATER_LEVEL:
@@ -321,13 +324,23 @@ func _generate_world() -> void:
 		gx += DROP_SPAWN_STEP
 
 
+func _get_height(world_x: float, world_z: float) -> float:
+	var biome_value = biome_noise.get_noise_2d(world_x / 20.0, world_z / 20.0)
+	var multiplier = _get_blended_height_multiplier(biome_value)
+	return noise.get_noise_2d(world_x / noise_scale, world_z / noise_scale) * height_max * multiplier
+
+
+func _get_raw_noise_height(world_x: float, world_z: float) -> float:
+	return noise.get_noise_2d(world_x / noise_scale, world_z / noise_scale)
+
+
 func _get_biome(value: float, world_x: float = 0.0, world_z: float = 0.0) -> int:
 	# Сначала проверяем высоту — если под водой, это водный биом
 	var height = _get_height(world_x, world_z)
 	if height < WATER_LEVEL:
 		return Biome.UNDERWATER
 	
-	if value < BIOME_BORDER_MOUNTAIN:
+	if value < BIOME_BORDER_PLATEU:
 		return Biome.ORE_PLATEAU
 	elif value < BIOME_BORDER_FOREST:
 		return Biome.FOREST
@@ -336,11 +349,6 @@ func _get_biome(value: float, world_x: float = 0.0, world_z: float = 0.0) -> int
 	else:
 		return Biome.MOUNTAINS
 
-func _get_height(world_x: float, world_z: float) -> float:
-	var biome_value = biome_noise.get_noise_2d(world_x / 20.0, world_z / 20.0)
-	var multiplier = _get_blended_height_multiplier(biome_value)
-	return noise.get_noise_2d(world_x / noise_scale, world_z / noise_scale) * height_max * multiplier
-
 
 func _get_blended_height_multiplier(biome_value: float) -> float:
 	var m_ore      = BIOME_CONFIG[Biome.ORE_PLATEAU]["height_multiplier"]
@@ -348,10 +356,10 @@ func _get_blended_height_multiplier(biome_value: float) -> float:
 	var m_plains   = BIOME_CONFIG[Biome.PLAINS]["height_multiplier"]
 	var m_mountain = BIOME_CONFIG[Biome.MOUNTAINS]["height_multiplier"]
 
-	if biome_value < BIOME_BORDER_MOUNTAIN - BIOME_BLEND:
+	if biome_value < BIOME_BORDER_PLATEU - BIOME_BLEND:
 		return m_ore
-	elif biome_value < BIOME_BORDER_MOUNTAIN + BIOME_BLEND:
-		var t = inverse_lerp(BIOME_BORDER_MOUNTAIN - BIOME_BLEND, BIOME_BORDER_MOUNTAIN + BIOME_BLEND, biome_value)
+	elif biome_value < BIOME_BORDER_PLATEU + BIOME_BLEND:
+		var t = inverse_lerp(BIOME_BORDER_PLATEU - BIOME_BLEND, BIOME_BORDER_PLATEU + BIOME_BLEND, biome_value)
 		return lerp(m_ore, m_forest, t)
 	elif biome_value < BIOME_BORDER_FOREST - BIOME_BLEND:
 		return m_forest
@@ -435,7 +443,7 @@ func save_world(path: String = "user://world.save") -> void:
 		"rot": [player.rotation.y, player.head.rotation.x],
 		"health": player.health.current_health,
 		"hunger": player.hunger.current_hunger,
-		"inventory": player.inventory.inventory,
+		"inventory": G.inv.inventory,
 	}
 	save_data["player"] = entry
 	
@@ -515,4 +523,4 @@ func load_world(path: String = "user://world.save") -> void:
 	
 	for item in player_data["inventory"].values():
 		if item:
-			player.inventory.add_item(item["name"], item["amount"])
+			G.inv.add_item(item["name"], item["amount"])

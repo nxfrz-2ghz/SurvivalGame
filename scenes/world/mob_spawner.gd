@@ -41,13 +41,22 @@ func _on_spawn_timer_timeout() -> void:
 	var total_spawn_weight := 0
 	
 	for mob_id in R.mobs:
-		total_spawn_weight += R.mobs[mob_id]["spawn_weight"]
+		total_spawn_weight += R.mobs[mob_id].get("spawn_weight", 0)
 	
-	var rand_spawn_value := randi_range(0, total_spawn_weight)
+	if total_spawn_weight <= 0:
+		return
+	
+	
+	var rand_spawn_value := randi_range(1, total_spawn_weight)
 	var current_spawn_weight := 0
 	
 	for mob_id in R.mobs:
-		current_spawn_weight += R.mobs[mob_id]["spawn_weight"]
+		# Игнорируем мобов без веса
+		var weight = R.mobs[mob_id].get("spawn_weight", 0)
+		if weight <= 0:
+			continue
+		
+		current_spawn_weight += weight
 		if rand_spawn_value <= current_spawn_weight:
 			
 			# Проверка моба и требования как спавну

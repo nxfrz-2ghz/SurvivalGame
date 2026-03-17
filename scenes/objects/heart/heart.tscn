@@ -172,7 +172,7 @@ texture = ExtResource("3_0a7st")
 [node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="." index="5" unique_id=1127619502]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.485882, 0)
 cast_shadow = 0
-visibility_range_end = 120.0
+visibility_range_end = 100.0
 billboard = 2
 shaded = true
 double_sided = false

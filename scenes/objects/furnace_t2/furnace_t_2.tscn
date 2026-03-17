@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://nhccqaxh7rby"]
+
+[ext_resource type="PackedScene" uid="uid://bqbsfxetmgd68" path="res://scenes/objects/furnace/furnace.tscn" id="1_etrvu"]
+[ext_resource type="Texture2D" uid="uid://dg3cbqcpg6hbc" path="res://res/sprites/objects/furnace_t2/furnace_t2_on.png" id="2_x58lu"]
+[ext_resource type="Texture2D" uid="uid://daawgtlduayq8" path="res://res/sprites/objects/furnace_t2/furnace_t2_off.png" id="3_dvqo8"]
+
+[node name="FurnaceT2" unique_id=1921849884 instance=ExtResource("1_etrvu")]
+nname = "furnace_t2"
+drop_items = {
+"brick": 3
+}
+
+[node name="FuelTimer" parent="Timers" parent_id_path=PackedInt32Array(203408184) index="2" unique_id=301717867]
+wait_time = 20.0
+
+[node name="HealthComponent" parent="." index="1" unique_id=1086116789]
+resists = {
+"axe": 0.0,
+"melee": 0.5,
+"pickaxe": 1.0
+}
+max_health = 8.0
+
+[node name="CookComponent" parent="." index="2" unique_id=837939887]
+cook_category = "furnace_t2"
+fuel_type = "coal"
+
+[node name="Sprite3D" parent="ToggleOn" parent_id_path=PackedInt32Array(1471818564) index="0" unique_id=163627065]
+texture = ExtResource("2_x58lu")
+
+[node name="Sprite3D" parent="." index="7" unique_id=57594410]
+visibility_range_end = 120.0
+texture = ExtResource("3_dvqo8")

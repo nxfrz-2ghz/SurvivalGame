@@ -10,6 +10,7 @@ extends CharacterBody3D
 const item := preload("res://scenes/items/item.tscn")
 
 @export var nname: String
+@export var speed := 0.0
 @export var drop_items := {}
 
 
@@ -74,6 +75,12 @@ func get_target_player() -> CharacterBody3D:
 	return closest_player
 
 
+func walk(direction: Vector3, speed: float) -> void:
+	if !is_on_floor(): speed /= 50.0
+	velocity.x += direction.x * speed
+	velocity.z += direction.z * speed
+
+
 func braking() -> void:
 	if velocity:
 		if is_on_floor():
@@ -112,6 +119,4 @@ func apply_push(direction_vector: Vector3, velocity_power: float) -> void:
 
 func _on_update_timer_timeout() -> void:
 	if position.distance_to(get_target_player().position) > 120.0:
-		despawn()
-	if position.y < -100:
 		despawn()

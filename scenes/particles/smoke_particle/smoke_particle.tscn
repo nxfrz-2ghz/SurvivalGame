@@ -36,6 +36,7 @@ properties/0/spawn = true
 properties/0/replication_mode = 2
 
 [node name="SmokeParticle" type="GPUParticles3D" unique_id=2097639369]
+visibility_range_end = 60.0
 amount = 15
 lifetime = 3.0
 randomness = 0.4

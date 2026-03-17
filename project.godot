@@ -40,6 +40,10 @@ objects=""
 players=""
 mobs=""
 
+[gui]
+
+theme/custom_font="uid://bvkp2jirhmp5i"
+
 [input]
 
 x={

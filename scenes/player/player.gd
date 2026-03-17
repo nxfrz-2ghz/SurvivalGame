@@ -2,7 +2,7 @@ extends CharacterBody3D
 
 @onready var head := $Head
 @onready var interact_ray := %InteractRay
-@onready var inventory := %InventoryController
+@onready var ground_ray := $Head/GroundRay
 @onready var weapon := %Weapon
 @onready var arm_anim := %ArmAnim
 @onready var health := %HealthComponent
@@ -30,14 +30,11 @@ func _ready() -> void:
 		weapon.attack.connect(interact_ray.update)
 		weapon.attack.connect(hunger.on_attack)
 		
-		weapon.actions.add_item.connect(inventory.add_item)
-		weapon.actions.drop_item.connect(inventory.drop_item)
-		
 		hunger.take_damage.connect(health.take_damage)
 		hunger.heal.connect(health.heal)
 		
-		inventory.set_item_in_arm.connect(weapon.set_item_in_arm)
-		inventory.update_signals()
+		G.inv.set_item_in_arm.connect(weapon.set_item_in_arm)
+		G.inv.update_signals()
 		
 		book.open_book.connect(_on_open_book)
 		book.close_book.connect(_on_close_book)
@@ -50,22 +47,36 @@ func _input(event: InputEvent) -> void:
 	if G.state_machine != "game": return
 	
 	if event is InputEventMouseMotion:
-		
 		rotation.y += (-event.relative.x * 0.005)
 		head.rotation.x += (-event.relative.y * 0.005)
-		
 		head._apply_camera_limits()
+	
+	# Получаем данные о текущем слоте для удобства
+	var current_slot_idx = G.inv.current_item
+	var current_slot_data = G.inv.inventory[current_slot_idx]
 	
 	if Input.is_action_just_pressed("lmb") and !weapon.weapon_anim.is_playing():
 		if weapon.actions.crafting_mode:
 			weapon.actions.craft()
 		else:
+			weapon.use_item()
 			
-			if inventory.inventory[inventory.current_item] != null:
-				var item_name: String = inventory.inventory[inventory.current_item]["name"]
-				if R.items[item_name].has("durability"):
-					if randi_range(0, R.items[item_name]["durability"]) == 0:
-						inventory.drop_item(item_name)
+			# Если слот не пуст (используем данные из массива)
+			if current_slot_data != null:
+				var item_name = current_slot_data["name"]
+				
+				if R.items[item_name].get("shovel_power") and ground_ray.is_colliding():
+					var shovel_power: float = R.items[item_name].get("shovel_power")
+					var get_dig_drop: String = weapon.get_dig_drop(ground_ray.get_collision_point())
+					
+					if get_dig_drop == "clay":
+						if randi_range(0, clamp(5 - shovel_power, 0, 5)) == 0:
+							G.inv.add_item("clay")
+					elif get_dig_drop == "dirt":
+						if randi_range(0, int(clamp(100 - shovel_power, 0, 100))) == 0:
+							G.inv.add_item("copper_ore")
+						if randi_range(0, int(clamp(100 - shovel_power, 0, 100))) == 0:
+							G.inv.add_item("iron_ore")
 			
 			weapon.weapon_anim.speed_scale = weapon.attack_speed
 			weapon.weapon_anim.play("use")
@@ -74,49 +85,45 @@ func _input(event: InputEvent) -> void:
 		interact_ray.update()
 	
 	if Input.is_action_just_pressed("rmb"):
-		
 		if interact_ray.is_colliding():
 			var collider: Node = interact_ray.get_collider()
 			
-			# Если коллайдер перерабатывает предметы и слот в инвентаре не пустой
-			if collider.nname in R.exchangeable_items.keys() and inventory.inventory[inventory.current_item]:
-				var item_in_arm: String = inventory.inventory[inventory.current_item]["name"]
-				var amount: int = inventory.inventory[inventory.current_item]["amount"]
-				# Если предмет есть в словаре крафтов печи и его количество достаточно
-				var ex_items: Dictionary = R.exchangeable_items[collider.nname]
+			if current_slot_data != null and collider.nname in R.exchangeable_items.keys():
+				var item_in_arm = current_slot_data["name"]
+				var amount = current_slot_data["amount"]
+				var ex_items = R.exchangeable_items[collider.nname]
+				
 				if ex_items.get(item_in_arm) and amount >= ex_items.get(item_in_arm)["amount"]:
-					collider.cook.craft.rpc_id(1, item_in_arm)
-					inventory.drop_item(item_in_arm, ex_items.get(item_in_arm)["amount"])
+					if collider.has_node("CookComponent"): collider.cook.craft.rpc_id(1, item_in_arm)
+					elif collider.has_node("CraftComponent"): collider.craft.craft.rpc_id(1, item_in_arm)
+					# Выбрасываем (удаляем) из текущего слота
+					G.inv.drop_item(current_slot_idx, ex_items.get(item_in_arm)["amount"])
 					return
-				# Если предмет это подходящее топливо и его достаточно
-				if item_in_arm == collider.cook.fuel_type and amount > 0:
+					
+				if collider.has_node("CookComponent") and item_in_arm == collider.cook.fuel_type:
 					collider.cook.add_fuel.rpc_id(1)
-					inventory.drop_item(item_in_arm, 1)
+					G.inv.drop_item(current_slot_idx, 1)
 					return
 			
 			elif collider.nname == "berry_bush":
 				if collider.full:
-					inventory.add_item("raw_berry")
-					if randf() > 0:
-						inventory.add_item("raw_berry")
-						if randf() > 0:
-							inventory.add_item("raw_berry")
+					for i in range(3): # Пример упрощения сбора ягод
+						if randf() > 0.3: G.inv.add_item("raw_berry")
 				collider.pick.rpc_id(1)
 				return
 		
-		if inventory.inventory[inventory.current_item]:
-			var item_name: String = inventory.inventory[inventory.current_item]["name"]
+		# Еда
+		if current_slot_data != null:
+			var item_name = current_slot_data["name"]
 			if R.items[item_name].get("nutrition"):
-				inventory.drop_item(item_name)
 				hunger.eat(R.items[item_name]["nutrition"])
+				G.inv.drop_item(current_slot_idx, 1)
 	
 	if Input.is_action_just_pressed("pickup") and !weapon.weapon_anim.is_playing():
 		weapon.weapon_anim.play("pickup")
-		interact_ray.update()
 	
 	if Input.is_action_just_pressed("drop"):
-		if weapon.current_name == "": return
-		weapon.actions.drop(weapon.current_name)
+		if current_slot_data != null: weapon.actions.drop(current_slot_idx)
 	
 	if Input.is_action_just_pressed("craft"):
 		weapon.actions.crafting_mode = !weapon.actions.crafting_mode
@@ -201,8 +208,5 @@ func _physics_process(delta: float) -> void:
 	if G.state_machine != "game": return
 	
 	moving(delta)
-	
-	if position.y < -50:
-		position.y = 50
 	
 	move_and_slide()

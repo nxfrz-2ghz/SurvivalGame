@@ -16,6 +16,7 @@ properties/0/replication_mode = 2
 [node name="Pig" unique_id=408161229 instance=ExtResource("1_uwxtu")]
 script = ExtResource("2_61krw")
 nname = "pig"
+speed = 2.0
 drop_items = {
 "raw_meat": 1
 }

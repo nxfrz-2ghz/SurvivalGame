@@ -30,7 +30,7 @@ one_shot = true
 bus = &"Sounds"
 
 [node name="Sprite3D" type="Sprite3D" parent="." unique_id=57594410]
-visibility_range_end = 120.0
+visibility_range_end = 100.0
 billboard = 2
 shaded = true
 double_sided = false

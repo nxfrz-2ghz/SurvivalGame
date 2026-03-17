@@ -42,7 +42,7 @@ shape = SubResource("CylinderShape3D_5tb2u")
 [node name="FullSprite3D" type="Sprite3D" parent="." index="3" unique_id=1269310682]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8481705, 0)
 visible = false
-visibility_range_end = 120.0
+visibility_range_end = 100.0
 billboard = 2
 shaded = true
 double_sided = false

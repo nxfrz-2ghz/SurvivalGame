@@ -17,11 +17,12 @@ var visual_sprites := []
 
 
 func _ready() -> void:
-	# Получение всех спрайтов для эффектов при уроне
-	var nodes = get_children()
-	for child in nodes:
-		if child is Sprite3D or child is AnimatedSprite3D:
-			visual_sprites.append(child)
+	# Ищем все спрайты рекурсивно во всех дочерних узлах
+	var sprites = find_children("*", "Sprite3D", true, false)
+	var animated_sprites = find_children("*", "AnimatedSprite3D", true, false)
+	
+	visual_sprites.append_array(sprites)
+	visual_sprites.append_array(animated_sprites)
 	
 	if not is_multiplayer_authority(): return
 	

@@ -750,6 +750,9 @@ unique_name_in_owner = true
 collision_mask = 30
 collide_with_areas = false
 
+[node name="GroundRay" type="RayCast3D" parent="Head" unique_id=1377862579]
+target_position = Vector3(0, 0, -3)
+
 [node name="Weapon" type="Node3D" parent="Head" unique_id=753252549]
 unique_name_in_owner = true
 script = ExtResource("7_kvlxm")
@@ -867,6 +870,10 @@ scale = Vector2(1.4, 1.4)
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1021319399]
 replication_config = SubResource("SceneReplicationConfig_mf2ua")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=1618732350]
+light_energy = 0.5
+omni_range = 50.0
 
 [connection signal="timeout" from="HungerController/Timer" to="HungerController" method="_on_timer_timeout"]
 [connection signal="animation_finished" from="Head/Weapon/Arms/WeaponAnim" to="Head/Weapon/Arms/WeaponAnim" method="_on_animation_finished"]

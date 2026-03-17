@@ -28,6 +28,10 @@ func toggle() -> void:
 	parent.shadow.visible = !parent.shadow.visible
 	$"../SmokeParticle".emitting = !$"../SmokeParticle".emitting
 
+func start_cook() -> void:
+	craft_timer.wait_time = R.exchangeable_items[cook_category][queue.max()]["speed"]
+	craft_timer.start()
+
 @rpc("any_peer", "call_local")
 func craft(input: String):
 	queue.append(input)
@@ -40,10 +44,6 @@ func add_fuel() -> void:
 	fuel += 1
 	if !queue.is_empty() and craft_timer.is_stopped():
 		fuel_timer.start()
-
-func start_cook() -> void:
-	craft_timer.wait_time = R.exchangeable_items[cook_category][queue.max()]["speed"]
-	craft_timer.start()
 
 func _on_craft_timer_timeout() -> void:
 	parent.drop(R.exchangeable_items[parent.nname].get(queue.pop_front())["output"])

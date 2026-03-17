@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dxycxforyxthl"]
+
+[ext_resource type="Script" uid="uid://dfqkkk5ptk6v5" path="res://components/craft_component/craft_component.gd" id="1_mdflb"]
+
+[node name="CraftComponent" type="Node" unique_id=713178560]
+script = ExtResource("1_mdflb")

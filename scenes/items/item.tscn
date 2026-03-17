@@ -6,7 +6,7 @@
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_xhhhv"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_xhhhv"]
-radius = 0.3
+radius = 0.25
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_xhhhv"]
 properties/0/path = NodePath(".:position")
@@ -28,7 +28,7 @@ shape = SubResource("SphereShape3D_xhhhv")
 
 [node name="Sprite3D" type="Sprite3D" parent="." unique_id=785246918 groups=["items"]]
 transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
-visibility_range_end = 120.0
+visibility_range_end = 100.0
 billboard = 1
 shaded = true
 double_sided = false
