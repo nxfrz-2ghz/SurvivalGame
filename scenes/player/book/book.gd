@@ -56,8 +56,12 @@ func show_page(node_page: Node) -> void:
 func set_page(page: String) -> void:
 	if page == "MAIN":
 		show_page(box_page)
-
+		
 		spawn_button("CLOSE")
+		
+		if G.player and !G.player.progress_controller.unlocked_notes.empty():
+			for note in G.player.progress_controller.unlocked_notes:
+				spawn_button(note)
 		
 		spawn_label("")
 		spawn_button("BESTIARY")

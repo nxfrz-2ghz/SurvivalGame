@@ -1,8 +1,8 @@
 extends "res://scenes/mobs/mob.gd"
 
-const damage := 0.6
-const DETECTION_RADIUS := 20.0
-const ATTACK_RADIUS := 5.0
+const damage := 0.4
+const DETECTION_RADIUS := 16.0
+const ATTACK_RADIUS := 4.0
 
 enum State {IDLE, WANDER, STALK}
 var state: State = State.IDLE
@@ -11,6 +11,7 @@ var target_player: CharacterBody3D
 
 
 func loop(_delta: float) -> void:
+	if not is_multiplayer_authority(): return
 	if state == State.STALK:
 		var look_pos = target_player.global_position
 		look_pos.y = global_position.y
@@ -23,6 +24,7 @@ func loop(_delta: float) -> void:
 
 
 func _on_timer_timeout() -> void:
+	if not is_multiplayer_authority(): return
 	if G.state_machine != "game": return
 	if state == State.IDLE:
 		state = State.WANDER
@@ -31,20 +33,22 @@ func _on_timer_timeout() -> void:
 	
 	if state == State.WANDER:
 		self.rotation.y += randi_range(-200, 200)
-		sprite.play("walk")
+		sprite.anim_play.rpc("walk")
 	else:
-		sprite.play("idle")
+		sprite.anim_play.rpc("idle")
 
 
 func _on_scan_players_timeout() -> void:
+	if not is_multiplayer_authority(): return
 	if G.state_machine != "game": return
 	target_player = get_target_player()
 	var dist := global_position.distance_to(target_player.global_position)
 	
 	if dist < ATTACK_RADIUS:
 		target_player.health.take_damage(damage)
-		sprite.play("attack")
-	if dist < DETECTION_RADIUS:
+		sprite.anim_play.rpc("attack")
+	elif dist < DETECTION_RADIUS:
 		state = State.STALK
+		sprite.anim_play.rpc("walk")
 	else:
 		if state == State.STALK: state = State.IDLE

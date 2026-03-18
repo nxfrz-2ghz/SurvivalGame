@@ -1,6 +1,7 @@
 extends Area3D
 
 @onready var craft_zone_label := $CraftZone/Label3D
+@onready var inv := %InventoryController
 
 var crafting_mode := false:
 	set(value):
@@ -17,7 +18,7 @@ func pickup() -> void:
 
 
 func drop(slot_index: int) -> void:
-	server_drop.rpc(slot_index, multiplayer.get_unique_id())
+	server_drop.rpc(slot_index, inv.inventory[slot_index]["name"], multiplayer.get_unique_id())
 
 
 func craft() -> void:
@@ -27,12 +28,12 @@ func craft() -> void:
 
 @rpc("any_peer", "call_local")
 func client_receive_item(item_name: String) -> void:
-	G.inv.add_item(item_name)
+	inv.add_item(item_name)
 
 
 @rpc("any_peer", "call_local")
 func client_drop_item(slot_index: int) -> void:
-	G.inv.drop_item(slot_index)
+	inv.drop_item(slot_index)
 
 
 @rpc("authority", "call_local")
@@ -79,7 +80,7 @@ func server_pickup(peer_id: int) -> void:
 
 
 @rpc("authority", "call_local")
-func server_drop(slot_index: int, peer_id: int) -> void:
+func server_drop(slot_index: int, item_name: String, peer_id: int) -> void:
 	
 	if not multiplayer.is_server():
 		return
@@ -88,8 +89,6 @@ func server_drop(slot_index: int, peer_id: int) -> void:
 	if not player: return
 	var actions_node = player.weapon.actions
 	
-	var item_name: String = G.inv.inventory[slot_index]["name"]
-
 	var node: RigidBody3D = R.item.instantiate()
 	node.nname = item_name
 	node.position = actions_node.global_position

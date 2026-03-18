@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://s322lfir2gd7" path="res://scenes/mobs/mob.tscn" id="1_uwxtu"]
 [ext_resource type="Script" uid="uid://cafsrpolgbtq7" path="res://scenes/mobs/pig/pig.gd" id="2_61krw"]
 [ext_resource type="SpriteFrames" uid="uid://trthjcfx5osv" path="res://scenes/mobs/pig/front_sprite_frames.tres" id="3_cc670"]
-[ext_resource type="Script" uid="uid://ckgg8ewi4npws" path="res://scenes/mobs/pig/animated_sprite_3d.gd" id="4_jcaj7"]
+[ext_resource type="Script" uid="uid://xoj57qkfrhp4" path="res://components/anim_sprite_side_frames/anim_sprite_side_frames.gd" id="4_cc670"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_cc670"]
 radius = 0.8
@@ -37,7 +37,7 @@ transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 1.1267123, 0)
 sprite_frames = ExtResource("3_cc670")
 animation = &"idle"
 autoplay = "idle"
-script = ExtResource("4_jcaj7")
+script = ExtResource("4_cc670")
 
 [node name="MultiplayerSynchronizer2" type="MultiplayerSynchronizer" parent="." index="7" unique_id=1161749930]
 replication_config = SubResource("SceneReplicationConfig_cc670")

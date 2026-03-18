@@ -10,6 +10,8 @@ extends CharacterBody3D
 @onready var stamina := $StaminaController
 @onready var camera := $Head/Camera/Camera3D
 @onready var book := %Book
+@onready var inv := %InventoryController
+@onready var progress_controller := $ProgressController
 
 const SPEED = 3.0
 const JUMP_VELOCITY = 4.0
@@ -33,8 +35,8 @@ func _ready() -> void:
 		hunger.take_damage.connect(health.take_damage)
 		hunger.heal.connect(health.heal)
 		
-		G.inv.set_item_in_arm.connect(weapon.set_item_in_arm)
-		G.inv.update_signals()
+		inv.set_item_in_arm.connect(weapon.set_item_in_arm)
+		inv.update_signals()
 		
 		book.open_book.connect(_on_open_book)
 		book.close_book.connect(_on_close_book)
@@ -52,8 +54,8 @@ func _input(event: InputEvent) -> void:
 		head._apply_camera_limits()
 	
 	# Получаем данные о текущем слоте для удобства
-	var current_slot_idx = G.inv.current_item
-	var current_slot_data = G.inv.inventory[current_slot_idx]
+	var current_slot_idx = inv.current_item
+	var current_slot_data = inv.inventory[current_slot_idx]
 	
 	if Input.is_action_just_pressed("lmb") and !weapon.weapon_anim.is_playing():
 		if weapon.actions.crafting_mode:
@@ -71,12 +73,12 @@ func _input(event: InputEvent) -> void:
 					
 					if get_dig_drop == "clay":
 						if randi_range(0, clamp(5 - shovel_power, 0, 5)) == 0:
-							G.inv.add_item("clay")
+							inv.add_item("clay")
 					elif get_dig_drop == "dirt":
 						if randi_range(0, int(clamp(100 - shovel_power, 0, 100))) == 0:
-							G.inv.add_item("copper_ore")
+							inv.add_item("copper_ore")
 						if randi_range(0, int(clamp(100 - shovel_power, 0, 100))) == 0:
-							G.inv.add_item("iron_ore")
+							inv.add_item("iron_ore")
 			
 			weapon.weapon_anim.speed_scale = weapon.attack_speed
 			weapon.weapon_anim.play("use")
@@ -97,18 +99,18 @@ func _input(event: InputEvent) -> void:
 					if collider.has_node("CookComponent"): collider.cook.craft.rpc_id(1, item_in_arm)
 					elif collider.has_node("CraftComponent"): collider.craft.craft.rpc_id(1, item_in_arm)
 					# Выбрасываем (удаляем) из текущего слота
-					G.inv.drop_item(current_slot_idx, ex_items.get(item_in_arm)["amount"])
+					inv.drop_item(current_slot_idx, ex_items.get(item_in_arm)["amount"])
 					return
 					
 				if collider.has_node("CookComponent") and item_in_arm == collider.cook.fuel_type:
 					collider.cook.add_fuel.rpc_id(1)
-					G.inv.drop_item(current_slot_idx, 1)
+					inv.drop_item(current_slot_idx, 1)
 					return
 			
 			elif collider.nname == "berry_bush":
 				if collider.full:
 					for i in range(3): # Пример упрощения сбора ягод
-						if randf() > 0.3: G.inv.add_item("raw_berry")
+						if randf() > 0.3: inv.add_item("raw_berry")
 				collider.pick.rpc_id(1)
 				return
 		
@@ -117,7 +119,7 @@ func _input(event: InputEvent) -> void:
 			var item_name = current_slot_data["name"]
 			if R.items[item_name].get("nutrition"):
 				hunger.eat(R.items[item_name]["nutrition"])
-				G.inv.drop_item(current_slot_idx, 1)
+				inv.drop_item(current_slot_idx, 1)
 	
 	if Input.is_action_just_pressed("pickup") and !weapon.weapon_anim.is_playing():
 		weapon.weapon_anim.play("pickup")

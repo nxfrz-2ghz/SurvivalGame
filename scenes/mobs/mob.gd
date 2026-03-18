@@ -119,4 +119,4 @@ func apply_push(direction_vector: Vector3, velocity_power: float) -> void:
 
 func _on_update_timer_timeout() -> void:
 	if position.distance_to(get_target_player().position) > 120.0:
-		despawn()
+		queue_free()

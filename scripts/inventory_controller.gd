@@ -12,8 +12,6 @@ var current_item := 1
 
 
 func _ready():
-	G.inv = self
-	
 	# Инициализируем пустые слоты
 	for i in range(1, MAX_SLOTS + 1):
 		inventory[i] = null

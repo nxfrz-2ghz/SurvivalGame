@@ -1,13 +1,18 @@
 [gd_scene format=3 uid="uid://d1iy4kegvxjfp"]
 
 [ext_resource type="PackedScene" uid="uid://s322lfir2gd7" path="res://scenes/mobs/mob.tscn" id="1_wgeeo"]
-[ext_resource type="Script" uid="uid://b0forqh5dq8yx" path="res://scenes/mobs/krab/animated_sprite_3d.gd" id="2_f0vnu"]
 [ext_resource type="Script" uid="uid://cmtrn4scvo1g1" path="res://scenes/mobs/krab/krab.gd" id="2_malmu"]
+[ext_resource type="Script" uid="uid://xoj57qkfrhp4" path="res://components/anim_sprite_side_frames/anim_sprite_side_frames.gd" id="4_3p2n3"]
 [ext_resource type="SpriteFrames" uid="uid://cmeff6fgx34ct" path="res://scenes/mobs/krab/front.tres" id="4_a0y2q"]
-[ext_resource type="SpriteFrames" uid="uid://cuvu0anadkbhr" path="res://scenes/mobs/krab/back.tres" id="5_1h7ba"]
-[ext_resource type="SpriteFrames" uid="uid://dllq3n7ey8ob7" path="res://scenes/mobs/krab/right.tres" id="6_j180u"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_malmu"]
+radius = 0.28222656
+height = 1.421875
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_malmu"]
+properties/0/path = NodePath(".:rotation")
+properties/0/spawn = true
+properties/0/replication_mode = 2
 
 [node name="Krab" unique_id=408161229 instance=ExtResource("1_wgeeo")]
 script = ExtResource("2_malmu")
@@ -22,24 +27,25 @@ wait_time = 3.0
 autostart = true
 
 [node name="ScanPlayers" type="Timer" parent="Timers" parent_id_path=PackedInt32Array(1401815993) index="3" unique_id=868304464]
+wait_time = 2.0
 autostart = true
 
 [node name="HealthComponent" parent="." index="1" unique_id=1086839518]
 max_health = 4.0
 
 [node name="CollisionShape3D" parent="." index="2" unique_id=1649019193]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9826255, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.693563, 0)
 shape = SubResource("CapsuleShape3D_malmu")
 
 [node name="AnimatedSprite3D" parent="." index="3" unique_id=1249191248]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6131625, 0)
-sprite_frames = ExtResource("6_j180u")
-animation = &"walk"
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 1.3930286, 0)
+sprite_frames = ExtResource("4_a0y2q")
+animation = &"idle"
 autoplay = "idle"
-script = ExtResource("2_f0vnu")
-frames_forward = ExtResource("4_a0y2q")
-frames_back = ExtResource("5_1h7ba")
-frames_side = ExtResource("6_j180u")
+script = ExtResource("4_3p2n3")
+
+[node name="MultiplayerSynchronizer2" type="MultiplayerSynchronizer" parent="." index="7" unique_id=1758408287]
+replication_config = SubResource("SceneReplicationConfig_malmu")
 
 [connection signal="timeout" from="Timers/ChangeState" to="." method="_on_timer_timeout"]
 [connection signal="timeout" from="Timers/ScanPlayers" to="." method="_on_scan_players_timeout"]

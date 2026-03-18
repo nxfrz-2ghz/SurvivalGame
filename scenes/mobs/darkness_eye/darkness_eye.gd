@@ -11,6 +11,7 @@ func _ready() -> void:
 
 
 func _on_attack_cooldown_timeout() -> void:
+	if not is_multiplayer_authority(): return
 	if G.state_machine != "game": return
 	target_player = get_target_player()
 	
@@ -21,5 +22,6 @@ func _on_attack_cooldown_timeout() -> void:
 
 
 func loop(_delta: float) -> void:
+	if not is_multiplayer_authority(): return
 	if is_instance_valid(target_player): walk((target_player.global_position - global_position).normalized(), speed)
 	braking()

@@ -443,7 +443,10 @@ func save_world(path: String = "user://world.save") -> void:
 		"rot": [player.rotation.y, player.head.rotation.x],
 		"health": player.health.current_health,
 		"hunger": player.hunger.current_hunger,
-		"inventory": G.inv.inventory,
+		"inventory": player.inv.inventory,
+		"unlocked_notes": player.progress_controller.unlocked_notes,
+		"current exp": player.progress_controller.cur_exp,
+		"current lvl":  player.progress_controller.lvl,
 	}
 	save_data["player"] = entry
 	
@@ -523,4 +526,8 @@ func load_world(path: String = "user://world.save") -> void:
 	
 	for item in player_data["inventory"].values():
 		if item:
-			G.inv.add_item(item["name"], item["amount"])
+			player.inv.add_item(item["name"], item["amount"])
+	
+	player.progress_controller.unlocked_notes = player_data["unlocked_notes"]
+	player.progress_controller.cur_exp = player_data["current exp"]
+	player.progress_controller.lvl = player_data["current lvl"]
