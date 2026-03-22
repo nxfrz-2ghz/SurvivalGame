@@ -192,6 +192,10 @@ func _generate_terrain() -> void:
 			mesh_instance.set_layer_mask_value(3, true) # Enable corruption decal support
 			terrain.call_deferred("add_child", mesh_instance)
 			terrain.call_deferred("add_child", collider)
+		
+		G.screen_text.text("Generating terrain... %d%%" % [roundi(float(chunk_z + 1) / chunks_count * 100)])
+		await get_tree().process_frame
+	G.screen_text.text("")
 
 func _generate_water() -> void:
 	var offset := (world_size - 1) * spacing / 2.0
@@ -262,12 +266,19 @@ func _generate_water() -> void:
 
 func _generate_world() -> void:
 	
+	G.screen_text.text("Generating Terrain...")
+	await get_tree().process_frame
 	fall_defense_area.set_size(world_size)
-	
 	_generate_terrain()
+	
+	G.screen_text.text("Generating Water...")
+	await get_tree().process_frame
 	_generate_water()
 	
 	if !server: return
+	
+	G.screen_text.text("Spawning objects...")
+	await get_tree().process_frame
 	
 	# Генерируем все объекты одновременно
 	var offset2 := (world_size - 1) * spacing / 2.0
@@ -303,6 +314,9 @@ func _generate_world() -> void:
 			gz += OBJ_SPAWN_STEP
 		gx += OBJ_SPAWN_STEP
 	
+	G.screen_text.text("Spawning items...")
+	await get_tree().process_frame
+	
 	# Раскидываем предметы по миру
 	gx = 0
 	while gx < world_size:
@@ -322,6 +336,8 @@ func _generate_world() -> void:
 			
 			gz += DROP_SPAWN_STEP
 		gx += DROP_SPAWN_STEP
+	
+	G.screen_text.text("")
 
 
 func _get_height(world_x: float, world_z: float) -> float:

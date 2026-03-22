@@ -45,6 +45,8 @@ func set_up_player(player: CharacterBody3D) -> void:
 	player.get_node("%Book").close_book.connect(G.gui.hud.inventory.show)
 	player.get_node("%HealthComponent").changed.connect(G.gui.hud.health_vignette.on_health_changed)
 	player.get_node("%HealthComponent").on_damage.connect(G.gui.hud.damage_vignette.on_damage)
+	player.get_node("HungerController").changed.connect(G.gui.hud.bar_box.hunger_changed)
+	player.get_node("ProgressController").changed.connect(G.gui.hud.bar_box.exp_changed)
 	player.get_node("StaminaController").changed.connect(G.gui.hud.stamina_bar.on_stamina_changed)
 	player.get_node("%HealthComponent").changed.connect(G.gui.hud.debug.on_health_changed)
 	player.get_node("HungerController").changed.connect(G.gui.hud.debug.on_hunger_changed)

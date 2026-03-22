@@ -59,7 +59,7 @@ func set_page(page: String) -> void:
 		
 		spawn_button("CLOSE")
 		
-		if G.player and !G.player.progress_controller.unlocked_notes.empty():
+		if G.player and !G.player.progress_controller.unlocked_notes.is_empty():
 			for note in G.player.progress_controller.unlocked_notes:
 				spawn_button(note)
 		

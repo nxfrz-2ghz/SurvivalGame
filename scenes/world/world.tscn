@@ -4,15 +4,11 @@
 [ext_resource type="Script" uid="uid://d2ptcu2co03fy" path="res://scenes/world/directional_light_3d.gd" id="2_sl2e5"]
 [ext_resource type="Script" uid="uid://h5tkleehf2q1" path="res://scenes/world/mob_spawner.gd" id="3_1fp7r"]
 [ext_resource type="Script" uid="uid://1hlogfjs7k37" path="res://scenes/world/fall_defense_area.gd" id="3_6m72w"]
-
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_6fy3g"]
-sky_top_color = Color(1, 1, 1, 1)
-sky_horizon_color = Color(0.67058825, 0.6784314, 0.69411767, 1)
-ground_bottom_color = Color(0, 0, 0, 1)
-ground_horizon_color = Color(0.6716995, 0.67943144, 0.6948941, 1)
+[ext_resource type="Material" uid="uid://deyuxdxpaa6f5" path="res://scenes/world/procedural_sky_material.tres" id="3_t5ptc"]
+[ext_resource type="Script" uid="uid://d0pejyu1trq8j" path="res://scenes/world/weather_controller.gd" id="5_v5dby"]
 
 [sub_resource type="Sky" id="Sky_3s6yk"]
-sky_material = SubResource("ProceduralSkyMaterial_6fy3g")
+sky_material = ExtResource("3_t5ptc")
 
 [sub_resource type="Environment" id="Environment_jte2u"]
 background_mode = 2
@@ -23,7 +19,8 @@ fog_mode = 1
 fog_light_energy = 0.5
 fog_sun_scatter = 1.0
 fog_density = 1.0
-volumetric_fog_density = 0.01
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_v5dby"]
 size = Vector3(1, 10, 1)
@@ -64,7 +61,14 @@ transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0, 0, 0)
 script = ExtResource("3_1fp7r")
 
 [node name="SpawnTimer" type="Timer" parent="MobSpawner" unique_id=2105636915]
-wait_time = 5.0
+wait_time = 30.0
+autostart = true
+
+[node name="WeatherController" type="Node" parent="." unique_id=1080800198]
+script = ExtResource("5_v5dby")
+
+[node name="Timer" type="Timer" parent="WeatherController" unique_id=798927080]
+wait_time = 30.0
 autostart = true
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1935736741]
@@ -73,3 +77,4 @@ replication_config = SubResource("SceneReplicationConfig_1fp7r")
 [connection signal="night_come" from="DirectionalLight3D" to="MobSpawner" method="_on_directional_light_3d_night_come"]
 [connection signal="body_entered" from="FallDefenseArea" to="FallDefenseArea" method="_on_body_entered"]
 [connection signal="timeout" from="MobSpawner/SpawnTimer" to="MobSpawner" method="_on_spawn_timer_timeout"]
+[connection signal="timeout" from="WeatherController/Timer" to="WeatherController" method="_on_timer_timeout"]

@@ -706,6 +706,11 @@ collision_layer = 2
 collision_mask = 5
 script = ExtResource("1_4anbu")
 
+[node name="StartEmitTimer" type="Timer" parent="." unique_id=648591859]
+wait_time = 5.0
+one_shot = true
+autostart = true
+
 [node name="HealthComponent" parent="." unique_id=603427587 instance=ExtResource("2_75vfm")]
 unique_name_in_owner = true
 max_health = 10.0
@@ -879,5 +884,7 @@ scale = Vector2(1.4, 1.4)
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1021319399]
 replication_config = SubResource("SceneReplicationConfig_mf2ua")
 
+[connection signal="timeout" from="StartEmitTimer" to="." method="_on_start_emit_timer_timeout"]
+[connection signal="died" from="HealthComponent" to="." method="_on_health_component_died"]
 [connection signal="timeout" from="HungerController/Timer" to="HungerController" method="_on_timer_timeout"]
 [connection signal="animation_finished" from="Head/Weapon/Arms/WeaponAnim" to="Head/Weapon/Arms/WeaponAnim" method="_on_animation_finished"]

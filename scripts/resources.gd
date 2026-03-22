@@ -1,6 +1,7 @@
 extends Node
 
 const item := preload("res://scenes/items/item.tscn")
+const exp_sphere := preload("res://scenes/exp_sphere/exp_sphere.tscn")
 
 const exchangeable_items := {
 	"campfire": {

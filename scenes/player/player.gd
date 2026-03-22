@@ -16,6 +16,8 @@ extends CharacterBody3D
 const SPEED = 3.0
 const JUMP_VELOCITY = 4.0
 
+const RIGID_CAM := preload("res://scenes/player/rigid_cam/rigid_cam.tscn")
+
 @export var nname := "Player"
 
 
@@ -54,7 +56,7 @@ func _input(event: InputEvent) -> void:
 		head._apply_camera_limits()
 	
 	# Получаем данные о текущем слоте для удобства
-	var current_slot_idx = inv.current_item
+	var current_slot_idx: int = inv.current_item
 	var current_slot_data = inv.inventory[current_slot_idx]
 	
 	if Input.is_action_just_pressed("lmb") and !weapon.weapon_anim.is_playing():
@@ -146,6 +148,27 @@ func _on_close_book() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 
+func _on_health_component_died() -> void:
+	
+	var died_particles := R.particles["explose"].instantiate()
+	died_particles.position = self.position
+	G.world.add_child(died_particles, true)
+	
+	var rigid_cam := RIGID_CAM.instantiate()
+	G.world.add_child(rigid_cam)
+	rigid_cam.global_position = self.global_position
+	rigid_cam.apply_central_impulse(velocity)
+	
+	for i in range(inv.MAX_SLOTS - 1):
+		var current_slot_idx: int = i + 1
+		while inv.inventory[current_slot_idx] != null:
+			weapon.actions.drop(current_slot_idx)
+	
+	self.position = Vector3(0, 100, 0)
+	health.heal(99999999.9)
+	hunger.eat(99999999)
+
+
 @rpc("any_peer", "call_local")
 func apply_push(direction_vector: Vector3, velocity_power: float) -> void:
 	velocity += direction_vector * velocity_power
@@ -212,3 +235,10 @@ func _physics_process(delta: float) -> void:
 	moving(delta)
 	
 	move_and_slide()
+
+
+func _on_start_emit_timer_timeout() -> void:
+	health.heal(0)
+	hunger.eat(0)
+	inv.update_signals()
+	progress_controller.add_exp(0)

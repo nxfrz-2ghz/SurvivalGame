@@ -13,6 +13,7 @@ nname = "tree"
 drop_items = {
 "log": 4
 }
+exp_drop = 1.0
 
 [node name="HealthComponent" parent="." index="1" unique_id=1086116789]
 resists = {

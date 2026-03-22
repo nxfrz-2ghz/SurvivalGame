@@ -1,4 +1,4 @@
-extends StaticBody3D
+extends Node3D
 
 @onready var collider := $CollisionShape3D
 @onready var sprite := $Sprite3D
@@ -7,11 +7,10 @@ extends StaticBody3D
 @onready var damage_frame_timer := $Timers/DamageFrameRemove
 @onready var shadow := $Shadow
 
-const item := preload("res://scenes/items/item.tscn")
-
 @export var nname: String
 @export var drop_items := {}
 @export var despawn_particles_size := 1.0
+@export var exp_drop: float = 0.0
 
 var visual_sprites := []
 
@@ -31,7 +30,7 @@ func _ready() -> void:
 
 
 func drop(item_name: String) -> void:
-	var drop_item: RigidBody3D = item.instantiate()
+	var drop_item: RigidBody3D = R.item.instantiate()
 	drop_item.nname = item_name
 	drop_item.position = self.position + Vector3(randi_range(-1,1), 2, randi_range(-1,1))
 	G.world.add_child(drop_item, true)
@@ -42,6 +41,18 @@ func drop_loot() -> void:
 	for item_name in drop_items:
 		for i in range(drop_items[item_name] + randi_range(0, 1)):
 			drop(item_name)
+
+
+func drop_exp_sphere(value: float) -> void:
+	var exp_sphere: RigidBody3D = R.exp_sphere.instantiate()
+	exp_sphere.value = value
+	var random_offset = Vector3(
+		randf_range(-0.5, 0.5),
+		randf_range(0.5, 1.5), # Подбрасываем немного вверх
+		randf_range(-0.5, 0.5)
+	)
+	exp_sphere.position = self.position + random_offset
+	G.world.add_child(exp_sphere, true)
 
 
 @rpc("authority", "call_local")
@@ -61,6 +72,25 @@ func despawn() -> void:
 	died_particles.position = self.position
 	died_particles.size = despawn_particles_size
 	G.world.add_child(died_particles, true)
+	
+	if exp_drop > 0:
+		var count: int
+		
+		# Логика распределения:
+		if exp_drop <= 5:
+			# Если опыта мало, каждая единица — это сфера (минимум 1 опыт в сфере)
+			count = int(max(1, exp_drop))
+		else:
+			# Если опыта > 5, ограничиваем быстрый рост сфер
+			# Например: 5 сфер + по одной за каждые 10 единиц сверх лимита
+			count = 5 + int((exp_drop - 5) / 10)
+			# Ограничим разумным пределом, чтобы не спавнить сотни объектов
+			count = clamp(count, 5, 20) 
+		
+		var value_per_sphere = exp_drop / count
+		
+		for i in range(count):
+			drop_exp_sphere(value_per_sphere)
 	
 	queue_free()
 

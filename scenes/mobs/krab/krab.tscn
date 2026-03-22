@@ -4,6 +4,8 @@
 [ext_resource type="Script" uid="uid://cmtrn4scvo1g1" path="res://scenes/mobs/krab/krab.gd" id="2_malmu"]
 [ext_resource type="Script" uid="uid://xoj57qkfrhp4" path="res://components/anim_sprite_side_frames/anim_sprite_side_frames.gd" id="4_3p2n3"]
 [ext_resource type="SpriteFrames" uid="uid://cmeff6fgx34ct" path="res://scenes/mobs/krab/front.tres" id="4_a0y2q"]
+[ext_resource type="SpriteFrames" uid="uid://cuvu0anadkbhr" path="res://scenes/mobs/krab/back.tres" id="5_malmu"]
+[ext_resource type="SpriteFrames" uid="uid://dllq3n7ey8ob7" path="res://scenes/mobs/krab/right.tres" id="6_a0y2q"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_malmu"]
 radius = 0.28222656
@@ -21,6 +23,8 @@ speed = 2.0
 drop_items = {
 "raw_meat": 1
 }
+despawn_particles_size = 0.5
+exp_drop = 2.0
 
 [node name="ChangeState" type="Timer" parent="Timers" parent_id_path=PackedInt32Array(1401815993) index="2" unique_id=1075478674]
 wait_time = 3.0
@@ -43,6 +47,9 @@ sprite_frames = ExtResource("4_a0y2q")
 animation = &"idle"
 autoplay = "idle"
 script = ExtResource("4_3p2n3")
+frames_forward = ExtResource("4_a0y2q")
+frames_back = ExtResource("5_malmu")
+frames_side = ExtResource("6_a0y2q")
 
 [node name="MultiplayerSynchronizer2" type="MultiplayerSynchronizer" parent="." index="7" unique_id=1758408287]
 replication_config = SubResource("SceneReplicationConfig_malmu")

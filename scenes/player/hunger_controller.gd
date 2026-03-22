@@ -16,8 +16,7 @@ func eat(hng: int) -> void:
 		heal.emit(float(hng)/50) # heal if overeating
 		current_hunger = MAX_HUNGER
 	changed.emit(current_hunger)
-	G.text_message.add("hunger: +"+str(hng)+" ("+str(current_hunger)+"/"+str(MAX_HUNGER)+")")
-
+	
 func take_hunger(hng: int) -> void:
 	if current_hunger > 0:
 		current_hunger -= hng

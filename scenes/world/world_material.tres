@@ -3,6 +3,8 @@
 [ext_resource type="Texture2D" uid="uid://cq03tj2hg3bm6" path="res://res/sprites/terrain/dirt.jpg" id="1_6krkj"]
 
 [resource]
+shading_mode = 2
+disable_ambient_light = true
 vertex_color_use_as_albedo = true
 albedo_color = Color(0.49747366, 0.49747366, 0.49747366, 1)
 albedo_texture = ExtResource("1_6krkj")

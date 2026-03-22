@@ -19,5 +19,6 @@ target_position = Vector3(0, -0.12, 0)
 script = SubResource("GDScript_mbkog")
 
 [node name="Timer" type="Timer" parent="." unique_id=1416286650]
+wait_time = 0.3
 one_shot = true
 autostart = true

@@ -19,7 +19,12 @@
 [ext_resource type="Script" uid="uid://d25jbatuakb3x" path="res://scenes/main/gui/stamina_bar.gd" id="15_necax"]
 [ext_resource type="Texture2D" uid="uid://kflc51gj346l" path="res://res/sprites/gui/Screenshot_20260306_182814.png" id="15_nvumn"]
 [ext_resource type="Script" uid="uid://bni0q2stunvev" path="res://scenes/main/gui/debug.gd" id="15_p8abn"]
+[ext_resource type="Script" uid="uid://du8hko50uql36" path="res://scenes/main/gui/bar_box.gd" id="16_37hlw"]
+[ext_resource type="Texture2D" uid="uid://dcrq1x4627cg7" path="res://res/sprites/items/star.png" id="17_6llfj"]
+[ext_resource type="Script" uid="uid://bryy4ri3hhmgs" path="res://scenes/main/gui/screen_text.gd" id="17_m4h2d"]
+[ext_resource type="Texture2D" uid="uid://dcyjc6tphl14d" path="res://res/sprites/items/meat/raw_meat.png" id="18_0bhws"]
 [ext_resource type="Script" uid="uid://cp54fimx3yc7i" path="res://scenes/main/gui/fullscreen_button.gd" id="18_r4lks"]
+[ext_resource type="Script" uid="uid://c6xy35qgi20bn" path="res://scenes/main/gui/vsync_button.gd" id="19_pg34l"]
 
 [sub_resource type="GDScript" id="GDScript_ou6is"]
 script/source = "extends Node3D
@@ -172,7 +177,7 @@ _spawnable_scenes = PackedStringArray("uid://dp83o7qw4ht4w")
 spawn_path = NodePath("..")
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="Environment" unique_id=2101221164]
-_spawnable_scenes = PackedStringArray("uid://darxc13rlkwt7", "uid://cddn37g14j7yf", "uid://s322lfir2gd7")
+_spawnable_scenes = PackedStringArray("uid://darxc13rlkwt7", "uid://cddn37g14j7yf", "uid://s322lfir2gd7", "uid://bsqtn0fmjrxph")
 spawn_path = NodePath("..")
 script = ExtResource("3_nvumn")
 
@@ -559,6 +564,58 @@ offset_right = 40.0
 offset_bottom = 77.0
 script = ExtResource("15_p8abn")
 
+[node name="BarBox" type="VBoxContainer" parent="GUI/HUD" unique_id=79276170]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 34.0
+offset_top = -112.0
+offset_right = 200.0
+offset_bottom = -35.0
+grow_vertical = 0
+theme_override_constants/separation = 15
+script = ExtResource("16_37hlw")
+
+[node name="ExpBar" type="ProgressBar" parent="GUI/HUD/BarBox" unique_id=1678378783]
+layout_mode = 2
+max_value = 1.0
+
+[node name="TextureRect" type="TextureRect" parent="GUI/HUD/BarBox/ExpBar" unique_id=947489880]
+layout_mode = 0
+offset_right = 1155.0
+offset_bottom = 1145.0
+scale = Vector2(0.02, 0.02)
+texture = ExtResource("17_6llfj")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/HUD/BarBox/ExpBar" unique_id=6318066]
+layout_mode = 0
+offset_top = -17.0
+offset_right = 80.0
+offset_bottom = -3.0
+bbcode_enabled = true
+text = "[fade] Lvl:"
+scroll_active = false
+
+[node name="HungerBar" type="ProgressBar" parent="GUI/HUD/BarBox" unique_id=137079756]
+layout_mode = 2
+max_value = 1000.0
+
+[node name="TextureRect" type="TextureRect" parent="GUI/HUD/BarBox/HungerBar" unique_id=1630351205]
+layout_mode = 0
+offset_right = 1155.0
+offset_bottom = 1145.0
+scale = Vector2(0.02, 0.02)
+texture = ExtResource("18_0bhws")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/HUD/BarBox/HungerBar" unique_id=1352016988]
+layout_mode = 0
+offset_top = -17.0
+offset_right = 80.0
+offset_bottom = -3.0
+bbcode_enabled = true
+text = "[pulse] Hunger:"
+scroll_active = false
+
 [node name="Background" type="TextureRect" parent="GUI" unique_id=1984802104]
 anchors_preset = 8
 anchor_left = 0.5
@@ -574,6 +631,29 @@ stretch_mode = 3
 [node name="AnimationPlayer" type="AnimationPlayer" parent="GUI/Background" unique_id=1531877782]
 libraries/ = SubResource("AnimationLibrary_pg34l")
 autoplay = &"default"
+
+[node name="ScreenText" type="Panel" parent="GUI" unique_id=1424051134]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("17_m4h2d")
+
+[node name="ScreenTextLabel" type="Label" parent="GUI/ScreenText" unique_id=1144767572]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -8.0
+offset_right = 20.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="MainMenu" type="MarginContainer" parent="GUI" unique_id=363169062]
 anchors_preset = 15
@@ -675,6 +755,12 @@ layout_mode = 2
 text = "Fullscreen"
 script = ExtResource("18_r4lks")
 
+[node name="VsyncButton" type="CheckButton" parent="GUI/MainMenu/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer" unique_id=1211535873]
+layout_mode = 2
+button_pressed = true
+text = "Vsync"
+script = ExtResource("19_pg34l")
+
 [node name="LeaveButton" type="Button" parent="GUI/MainMenu" unique_id=1336085257]
 layout_mode = 2
 size_flags_horizontal = 8
@@ -725,6 +811,7 @@ text = "EXIT WORLD"
 [connection signal="pressed" from="GUI/MainMenu/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/LoadButton" to="." method="_on_load_button_pressed"]
 [connection signal="pressed" from="GUI/MainMenu/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
 [connection signal="toggled" from="GUI/MainMenu/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer/FullscreenButton" to="GUI/MainMenu/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer/FullscreenButton" method="_on_toggled"]
+[connection signal="toggled" from="GUI/MainMenu/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer/VsyncButton" to="GUI/MainMenu/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer/VsyncButton" method="_on_toggled"]
 [connection signal="pressed" from="GUI/MainMenu/LeaveButton" to="GUI/MainMenu/LeaveButton" method="_on_pressed"]
 [connection signal="pressed" from="GUI/GameMenu/MarginContainer/VBoxContainer/Save" to="GUI/GameMenu" method="_on_save_pressed"]
 [connection signal="pressed" from="GUI/GameMenu/MarginContainer/VBoxContainer/ExitWithoutSave" to="GUI/GameMenu" method="_on_exit_without_save_pressed"]

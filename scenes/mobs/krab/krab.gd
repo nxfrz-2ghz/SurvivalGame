@@ -1,6 +1,6 @@
 extends "res://scenes/mobs/mob.gd"
 
-const damage := 0.4
+const damage := 2.0
 const DETECTION_RADIUS := 16.0
 const ATTACK_RADIUS := 4.0
 

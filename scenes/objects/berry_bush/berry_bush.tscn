@@ -23,6 +23,7 @@ drop_items = {
 "log": 1,
 "raw_berry": 3
 }
+exp_drop = 0.5
 
 [node name="GrowUp" type="Timer" parent="Timers" parent_id_path=PackedInt32Array(203408184) index="1" unique_id=1477719022]
 wait_time = 100.0

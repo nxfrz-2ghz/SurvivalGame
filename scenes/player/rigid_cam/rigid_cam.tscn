@@ -1,0 +1,97 @@
+[gd_scene format=3 uid="uid://dcaqbvplui02"]
+
+[ext_resource type="Script" uid="uid://df1kj5c1s6x3h" path="res://scenes/player/rigid_cam/rigid_cam.gd" id="1_arojp"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_mfngw"]
+friction = 0.2
+bounce = 0.2
+
+[sub_resource type="Environment" id="Environment_arojp"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_arojp"]
+radius = 2.0
+
+[sub_resource type="Animation" id="Animation_arojp"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_mgn0u"]
+resource_name = "despawn"
+length = 5.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(18.892157, 18.892157, 18.892157, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_t0nw3"]
+_data = {
+&"RESET": SubResource("Animation_arojp"),
+&"despawn": SubResource("Animation_mgn0u")
+}
+
+[node name="RigidCam" type="RigidBody3D" unique_id=728645459]
+top_level = true
+collision_layer = 0
+collision_mask = 13
+physics_material_override = SubResource("PhysicsMaterial_mfngw")
+script = ExtResource("1_arojp")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=321738127]
+environment = SubResource("Environment_arojp")
+current = true
+fov = 100.0
+far = 500.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1514363087]
+shape = SubResource("SphereShape3D_arojp")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=972543568]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="RichTextLabel" type="RichTextLabel" parent="ColorRect" unique_id=762924865]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/default_color = Color(1, 0, 0, 1)
+theme_override_font_sizes/normal_font_size = 48
+bbcode_enabled = true
+text = "YOU ARE DED
+
+досадно..."
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=109675513]
+libraries/ = SubResource("AnimationLibrary_t0nw3")
+autoplay = &"despawn"
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

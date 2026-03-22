@@ -12,6 +12,7 @@ nname = "copper_ore"
 drop_items = {
 "copper_ore": 2
 }
+exp_drop = 7.0
 
 [node name="HealthComponent" parent="." index="1" unique_id=1086116789]
 resists = {

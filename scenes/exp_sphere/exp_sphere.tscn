@@ -1,0 +1,45 @@
+[gd_scene format=3 uid="uid://bsqtn0fmjrxph"]
+
+[ext_resource type="Script" uid="uid://cwc4jbhorc3k3" path="res://scenes/exp_sphere/exp_sphere.gd" id="1_4wyng"]
+[ext_resource type="Texture2D" uid="uid://dcrq1x4627cg7" path="res://res/sprites/items/star.png" id="1_b4lq5"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_oy0wd"]
+radius = 0.20191595
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_4wyng"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_5qpsm"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
+[node name="ExpSphere" type="RigidBody3D" unique_id=1516573809]
+collision_layer = 0
+script = ExtResource("1_4wyng")
+
+[node name="Sprite3D" type="Sprite3D" parent="." unique_id=842845786]
+transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0, 0, 0)
+visibility_range_end = 60.0
+billboard = 1
+double_sided = false
+texture = ExtResource("1_b4lq5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1570406380]
+shape = SubResource("SphereShape3D_oy0wd")
+
+[node name="Area3D" type="Area3D" parent="." unique_id=1252115312]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=2083692441]
+shape = SubResource("SphereShape3D_4wyng")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=2003405112]
+replication_config = SubResource("SceneReplicationConfig_5qpsm")
+
+[node name="GetClosestPlayerUpdate" type="Timer" parent="." unique_id=1675939253]
+wait_time = 0.5
+autostart = true
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
+[connection signal="timeout" from="GetClosestPlayerUpdate" to="." method="get_target_player"]

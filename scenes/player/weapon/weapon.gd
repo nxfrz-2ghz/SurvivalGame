@@ -26,7 +26,7 @@ func get_dig_drop(hit_position: Vector3) -> String:
 func use_item() -> void:
 	if current_name != null and R.items[current_name].has("durability"):
 		if randi_range(0, R.items[current_name]["durability"]) == 0:
-			actions.inv.drop_item(current_name)
+			actions.inv.drop_item(actions.inv.current_item)
 
 
 func choose_item(item: String = "") -> void:

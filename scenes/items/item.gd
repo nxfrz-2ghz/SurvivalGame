@@ -1,4 +1,4 @@
-extends RigidBody3D
+extends Node3D
 
 @onready var sprite := $Sprite3D
 

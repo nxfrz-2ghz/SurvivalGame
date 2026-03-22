@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://ctabmibvqd5dl"]
+[gd_scene format=3 uid="uid://ctabmibvqd5dl"]
 
 [ext_resource type="PackedScene" uid="uid://darxc13rlkwt7" path="res://scenes/objects/object.tscn" id="1_bfce7"]
 [ext_resource type="Texture2D" uid="uid://dtve7grlocjnn" path="res://res/sprites/objects/stone.png" id="2_bfce7"]
@@ -7,13 +7,14 @@
 height = 2.1967773
 radius = 1.2216797
 
-[node name="Stone" instance=ExtResource("1_bfce7")]
+[node name="Stone" unique_id=1810351797 instance=ExtResource("1_bfce7")]
 nname = "stone"
 drop_items = {
 "stone": 3
 }
+exp_drop = 1.5
 
-[node name="HealthComponent" parent="." index="0"]
+[node name="HealthComponent" parent="." index="1" unique_id=1086116789]
 resists = {
 "axe": 0.0,
 "melee": 0.0,
@@ -21,10 +22,10 @@ resists = {
 }
 max_health = 8.0
 
-[node name="CollisionShape3D" parent="." index="1"]
+[node name="CollisionShape3D" parent="." index="2" unique_id=1161658582]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4564807, 0)
 shape = SubResource("CylinderShape3D_u3fxr")
 
-[node name="Sprite3D" parent="." index="2"]
+[node name="Sprite3D" parent="." index="4" unique_id=57594410]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8067877, 0)
 texture = ExtResource("2_bfce7")

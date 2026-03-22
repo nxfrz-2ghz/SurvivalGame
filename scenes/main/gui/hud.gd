@@ -6,3 +6,4 @@ extends Node
 @onready var damage_vignette := $DamageVignette
 @onready var stamina_bar := $StaminaBar
 @onready var debug := $Debug
+@onready var bar_box := $BarBox
