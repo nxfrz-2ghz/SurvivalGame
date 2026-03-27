@@ -24,6 +24,7 @@ config/icon="res://icon.svg"
 G="*res://scripts/service_locator.gd"
 R="*res://scripts/resources.gd"
 E="*uid://dqmiwo5v5st18"
+DiskControl="*uid://cdnannsrse4u4"
 
 [display]
 

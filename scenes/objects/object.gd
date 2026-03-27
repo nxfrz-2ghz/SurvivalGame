@@ -10,6 +10,7 @@ extends Node3D
 @export var nname: String
 @export var drop_items := {}
 @export var despawn_particles_size := 1.0
+@export var despawn_sound_name: String
 @export var exp_drop: float = 0.0
 
 var visual_sprites := []
@@ -33,7 +34,7 @@ func drop(item_name: String) -> void:
 	var drop_item: RigidBody3D = R.item.instantiate()
 	drop_item.nname = item_name
 	drop_item.position = self.position + Vector3(randi_range(-1,1), 2, randi_range(-1,1))
-	G.world.add_child(drop_item, true)
+	G.environment.add_child(drop_item, true)
 
 
 func drop_loot() -> void:
@@ -52,12 +53,12 @@ func drop_exp_sphere(value: float) -> void:
 		randf_range(-0.5, 0.5)
 	)
 	exp_sphere.position = self.position + random_offset
-	G.world.add_child(exp_sphere, true)
+	G.environment.add_child(exp_sphere, true)
 
 
 @rpc("authority", "call_local")
 func on_damage() -> void:
-	take_damage_audio.play()
+	take_damage_audio.play_sound()
 	
 	for spr in visual_sprites:
 		spr.modulate = Color(1, 0 ,0)
@@ -69,9 +70,17 @@ func despawn() -> void:
 	drop_loot()
 	
 	var died_particles := R.particles["explose"].instantiate()
+	
+	if despawn_sound_name:
+		var sound_data = R.sounds["destroy"][despawn_sound_name]
+		if sound_data is Array:
+			died_particles.audio = sound_data.pick_random().resource_path
+		else:
+			died_particles.audio = sound_data.resource_path
+	
 	died_particles.position = self.position
 	died_particles.size = despawn_particles_size
-	G.world.add_child(died_particles, true)
+	G.environment.add_child(died_particles, true)
 	
 	if exp_drop > 0:
 		var count: int

@@ -1,8 +1,8 @@
 extends Node
 
-const MAX_MOBS := 8
-const MAX_SPAWN_RADIUS := 90.0
-const MIN_SPAWN_RADIUS := 60.0
+const MAX_MOBS := 15
+const MAX_SPAWN_RADIUS := 80.0
+const MIN_SPAWN_RADIUS := 50.0
 
 
 func _ready() -> void:
@@ -12,7 +12,7 @@ func _ready() -> void:
 func spawn_mob(mob_scene: PackedScene, position: Vector3) -> void:
 	var mob_instance := mob_scene.instantiate()
 	mob_instance.position = position
-	G.world.add_child(mob_instance, true)
+	G.environment.add_child(mob_instance, true)
 
 
 func _on_directional_light_3d_night_come() -> void:

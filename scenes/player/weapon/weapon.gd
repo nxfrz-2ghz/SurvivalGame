@@ -17,8 +17,7 @@ var push_velocity: float
 
 
 func get_dig_drop(hit_position: Vector3) -> String:
-	var world_gen = G.world.get_node("World")  # или как у тебя называется
-	if hit_position.y < world_gen.WATER_LEVEL:
+	if hit_position.y < G.world.WATER_LEVEL:
 		return "clay"
 	return "dirt"
 
@@ -27,6 +26,7 @@ func use_item() -> void:
 	if current_name != null and R.items[current_name].has("durability"):
 		if randi_range(0, R.items[current_name]["durability"]) == 0:
 			actions.inv.drop_item(actions.inv.current_item)
+			G.player.actions_audio_player.audio_play(R.sounds["destroy"]["instrument"].resource_path)
 
 
 func choose_item(item: String = "") -> void:

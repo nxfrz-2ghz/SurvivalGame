@@ -1,6 +1,7 @@
 extends Node
 
 var gui: CanvasLayer
+var environment: Node3D
 var world: Node3D
 var time_controller: DirectionalLight3D
 var mob_spawner: Node

@@ -53,7 +53,12 @@ cook_category = "furnace"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03913629, 1.1595132, -0.03717804)
 shape = SubResource("CylinderShape3D_fyjhv")
 
-[node name="ToggleOn" type="Node3D" parent="." index="4" unique_id=1471818564]
+[node name="Label3D" type="Label3D" parent="." index="4" unique_id=388106055]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2575567, 0)
+billboard = 1
+double_sided = false
+
+[node name="ToggleOn" type="Node3D" parent="." index="5" unique_id=1471818564]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.039, 1.541, -0.036)
 visible = false
 
@@ -70,16 +75,16 @@ light_color = Color(1, 0.6862745, 0.39215687, 1)
 light_energy = 6.172
 distance_fade_enabled = true
 
-[node name="SmokeParticle" parent="." index="5" unique_id=2097639369 instance=ExtResource("4_ijwyf")]
+[node name="SmokeParticle" parent="." index="6" unique_id=2097639369 instance=ExtResource("4_ijwyf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.0835304, 0)
 emitting = false
 
-[node name="Sprite3D" parent="." index="7" unique_id=57594410]
+[node name="Sprite3D" parent="." index="8" unique_id=57594410]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.039, 1.541, -0.036)
 texture = ExtResource("4_fn88o")
 
-[node name="FallRay" parent="." index="8" unique_id=2065431078 instance=ExtResource("5_qnkj5")]
+[node name="FallRay" parent="." index="9" unique_id=2065431078 instance=ExtResource("5_qnkj5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.024490118, 0)
 
-[node name="MultiplayerSynchronizer2" type="MultiplayerSynchronizer" parent="." index="11" unique_id=1235628749]
+[node name="MultiplayerSynchronizer2" type="MultiplayerSynchronizer" parent="." index="12" unique_id=1235628749]
 replication_config = SubResource("SceneReplicationConfig_mbkog")

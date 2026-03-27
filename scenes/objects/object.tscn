@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://6bgqu77v2mwy" path="res://scenes/objects/object.gd" id="1_toi83"]
 [ext_resource type="PackedScene" uid="uid://c8q18w2yckeeh" path="res://components/health_component/health_component.tscn" id="2_3fnx3"]
+[ext_resource type="Script" uid="uid://dmflvkjv8xuns" path="res://scenes/objects/take_damage_audio.gd" id="3_iq0kv"]
 [ext_resource type="PackedScene" uid="uid://4ffu5apey8sh" path="res://components/shadow/shadow.tscn" id="3_kmtsb"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_3fnx3"]
@@ -25,10 +26,11 @@ one_shot = true
 
 [node name="HealthComponent" parent="." unique_id=1086116789 instance=ExtResource("2_3fnx3")]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1161658582]
-
-[node name="TakeDamageAudio" type="AudioStreamPlayer3D" parent="." unique_id=1506876739]
+[node name="TakeDamageAudio" type="AudioStreamPlayer3D" parent="." unique_id=737666881]
 bus = &"Sounds"
+script = ExtResource("3_iq0kv")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1161658582]
 
 [node name="Sprite3D" type="Sprite3D" parent="." unique_id=57594410]
 visibility_range_end = 100.0

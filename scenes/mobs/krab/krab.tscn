@@ -24,6 +24,7 @@ drop_items = {
 "raw_meat": 1
 }
 despawn_particles_size = 0.5
+despawn_sound_name = "meat"
 exp_drop = 2.0
 
 [node name="ChangeState" type="Timer" parent="Timers" parent_id_path=PackedInt32Array(1401815993) index="2" unique_id=1075478674]
@@ -34,14 +35,18 @@ autostart = true
 wait_time = 2.0
 autostart = true
 
-[node name="HealthComponent" parent="." index="1" unique_id=1086839518]
+[node name="AttackCooldown" type="Timer" parent="Timers" parent_id_path=PackedInt32Array(1401815993) index="4" unique_id=863888070]
+wait_time = 3.0
+one_shot = true
+
+[node name="HealthComponent" parent="." index="2" unique_id=1086839518]
 max_health = 4.0
 
-[node name="CollisionShape3D" parent="." index="2" unique_id=1649019193]
+[node name="CollisionShape3D" parent="." index="3" unique_id=1649019193]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.693563, 0)
 shape = SubResource("CapsuleShape3D_malmu")
 
-[node name="AnimatedSprite3D" parent="." index="3" unique_id=1249191248]
+[node name="AnimatedSprite3D" parent="." index="4" unique_id=1249191248]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 1.3930286, 0)
 sprite_frames = ExtResource("4_a0y2q")
 animation = &"idle"
@@ -56,3 +61,4 @@ replication_config = SubResource("SceneReplicationConfig_malmu")
 
 [connection signal="timeout" from="Timers/ChangeState" to="." method="_on_timer_timeout"]
 [connection signal="timeout" from="Timers/ScanPlayers" to="." method="_on_scan_players_timeout"]
+[connection signal="animation_finished" from="AnimatedSprite3D" to="." method="_on_animated_sprite_3d_animation_finished"]

@@ -2,15 +2,18 @@ extends CharacterBody3D
 
 @onready var collider := $CollisionShape3D
 @onready var sprite := $AnimatedSprite3D
-@onready var take_damage_audio := $TakeDamageAudio
+@onready var take_damage_audio := $Audio/TakeDamageAudio
 @onready var health := $HealthComponent
 @onready var damage_frame_timer := $Timers/DamageFrameRemove
 @onready var shadow := $Shadow
+@onready var walk_audio_player := $Audio/WalkAudioPlayer3D
+@onready var walk_sound_timer := $Timers/WalkSoundPlay
 
 @export var nname: String
 @export var speed := 0.0
 @export var drop_items := {}
 @export var despawn_particles_size := 1.0
+@export var despawn_sound_name: String
 @export var exp_drop: float = 0.0
 
 
@@ -28,7 +31,7 @@ func drop(item_name: String) -> void:
 	var drop_item: RigidBody3D = R.item.instantiate()
 	drop_item.nname = item_name
 	drop_item.position = self.position + Vector3(randi_range(-1,1), 2, randi_range(-1,1))
-	G.world.add_child(drop_item, true)
+	G.environment.add_child(drop_item, true)
 
 
 func drop_loot() -> void:
@@ -47,12 +50,13 @@ func drop_exp_sphere(value: float) -> void:
 		randf_range(-0.5, 0.5)
 	)
 	exp_sphere.position = self.position + random_offset
-	G.world.add_child(exp_sphere, true)
+	G.environment.add_child(exp_sphere, true)
 
 
 @rpc("authority", "call_local")
 func on_damage() -> void:
-	take_damage_audio.play()
+	if R.sounds["hit"].has(nname):
+		take_damage_audio.audio_play(R.sounds["hit"][nname].pick_random().resource_path)
 	sprite.modulate = Color(1, 0 ,0)
 	damage_frame_timer.start()
 
@@ -61,9 +65,17 @@ func despawn() -> void:
 	drop_loot()
 	
 	var died_particles := R.particles["explose"].instantiate()
+	
+	if despawn_sound_name:
+		var sound_data = R.sounds["destroy"][despawn_sound_name]
+		if sound_data is Array:
+			died_particles.audio = sound_data.pick_random().resource_path
+		else:
+			died_particles.audio = sound_data.resource_path
+	
 	died_particles.position = self.position
 	died_particles.size = despawn_particles_size
-	G.world.add_child(died_particles, true)
+	G.environment.add_child(died_particles, true)
 	
 	if exp_drop > 0:
 		var count: int
@@ -108,7 +120,12 @@ func get_target_player() -> CharacterBody3D:
 
 
 func walk(direction: Vector3, spd: float) -> void:
-	if !is_on_floor(): spd /= 50.0
+	if !is_on_floor():
+		spd /= 50.0
+	else:
+		if walk_sound_timer.is_stopped():
+			walk_audio_player.audio_play.rpc(R.sounds["walk"]["grass"].pick_random().resource_path)
+			walk_sound_timer.start()
 	velocity.x += direction.x * spd
 	velocity.z += direction.z * spd
 

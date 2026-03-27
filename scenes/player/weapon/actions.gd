@@ -42,7 +42,7 @@ func server_attack(dmg: float, damage_types: Dictionary, push_velocity: float, p
 	if not multiplayer.is_server():
 		return
 	
-	var player = G.world.get_node(str(peer_id))
+	var player = G.environment.get_node(str(peer_id))
 	var actions_node = player.weapon.actions
 	for body in actions_node.get_overlapping_bodies():
 		
@@ -70,7 +70,7 @@ func server_pickup(peer_id: int) -> void:
 	if not multiplayer.is_server():
 		return
 	
-	var player = G.world.get_node_or_null(str(peer_id))
+	var player = G.environment.get_node_or_null(str(peer_id))
 	if not player: return
 	var actions_node = player.weapon.actions
 	for body in actions_node.get_overlapping_bodies():
@@ -85,14 +85,14 @@ func server_drop(slot_index: int, item_name: String, peer_id: int) -> void:
 	if not multiplayer.is_server():
 		return
 	
-	var player = G.world.get_node_or_null(str(peer_id))
+	var player = G.environment.get_node_or_null(str(peer_id))
 	if not player: return
 	var actions_node = player.weapon.actions
 	
 	var node: RigidBody3D = R.item.instantiate()
 	node.nname = item_name
 	node.position = actions_node.global_position
-	G.world.add_child(node, true)
+	G.environment.add_child(node, true)
 	client_drop_item.rpc_id(peer_id, slot_index)
 
 
@@ -100,7 +100,7 @@ func server_drop(slot_index: int, item_name: String, peer_id: int) -> void:
 func server_craft(peer_id: int) -> void:
 	if not multiplayer.is_server(): return
 	
-	var player = G.world.get_node_or_null(str(peer_id))
+	var player = G.environment.get_node_or_null(str(peer_id))
 	if not player: return
 	
 	var actions_node = player.weapon.actions
@@ -161,10 +161,10 @@ func execute_craft_object(peer_id: int, result_object: String, recipe: Dictionar
 	
 	var spawned_object = R.objects[result_object]["scene"].instantiate()
 	
-	var player = G.world.get_node_or_null(str(peer_id))
+	var player = G.environment.get_node_or_null(str(peer_id))
 	spawned_object.position = player.weapon.actions.global_position
 	
-	G.world.add_child(spawned_object, true)
+	G.environment.add_child(spawned_object, true)
 
 
 func _physics_process(_delta: float) -> void:

@@ -39,6 +39,9 @@ properties/0/replication_mode = 0
 properties/1/path = NodePath(".:size")
 properties/1/spawn = true
 properties/1/replication_mode = 0
+properties/2/path = NodePath(".:audio")
+properties/2/spawn = true
+properties/2/replication_mode = 0
 
 [node name="ExploseParticle" type="GPUParticles3D" unique_id=2097639369]
 visibility_range_end = 100.0
@@ -54,6 +57,7 @@ script = ExtResource("1_pm4yx")
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=455069812]
 autoplay = true
+bus = &"Sounds"
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=721578669]
 replication_config = SubResource("SceneReplicationConfig_oag05")

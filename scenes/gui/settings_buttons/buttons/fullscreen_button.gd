@@ -1,7 +1,6 @@
-extends CheckButton
+extends "res://scenes/gui/settings_buttons/base_button.gd"
 
-
-func _on_toggled(toggled_on: bool) -> void:
+func apply(toggled_on: bool) -> void:
 	if toggled_on:
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 	else:

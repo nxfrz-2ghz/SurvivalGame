@@ -12,6 +12,7 @@ nname = "copper_ore"
 drop_items = {
 "copper_ore": 2
 }
+despawn_sound_name = "stone"
 exp_drop = 7.0
 
 [node name="HealthComponent" parent="." index="1" unique_id=1086116789]
@@ -26,6 +27,6 @@ max_health = 12.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3725088, 0)
 shape = SubResource("CylinderShape3D_u3fxr")
 
-[node name="Sprite3D" parent="." index="4" unique_id=57594410]
+[node name="Sprite3D" parent="." index="3" unique_id=57594410]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7228159, 0)
 texture = ExtResource("2_cu152")

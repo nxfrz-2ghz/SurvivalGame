@@ -6,6 +6,15 @@ extends "res://scenes/objects/object.gd"
 
 const spawn_mob := R.mobs["krab"]["scene"]
 
+@export var corruption_size: Vector3 = Vector3(2.0, 2.0, 2.0):
+	set(value):
+		corruption_size = value
+		if corruption_decal:
+			corruption_decal.size = value
+
+func _ready() -> void:
+	corruption_decal.size = corruption_size
+
 @rpc("authority", "call_local")
 func on_damage() -> void:
 	take_damage_audio.play()
@@ -19,7 +28,7 @@ func summon(scene: PackedScene) -> void:
 	var corrupted_territory_size := 0.0
 	node.position = G.mob_spawner.get_random_spawn_position(self.position, corrupted_territory_size/3, corrupted_territory_size)
 	node.position.y = 50
-	G.world.call_deferred("add_child", node, true)
+	G.environment.call_deferred("add_child", node, true)
 
 
 func _on_regeneration_timer_timeout() -> void:
@@ -33,7 +42,17 @@ func _on_grow_timer_timeout() -> void:
 	if G.state_machine != "game": return
 	if health.max_health < 40.0:
 		health.max_health += health.max_health / 100
-		corruption_decal.size += (Vector3.ONE * 3) / (corruption_decal.size / 2)
+		
+		# Целевой размер расширения
+		var target_size = corruption_size + (Vector3.ONE * 3) / (corruption_size / 2)
+		
+		# Создаем анимацию
+		var tween = create_tween()
+		tween.set_trans(Tween.TRANS_SINE) # Плавное начало и конец
+		tween.set_ease(Tween.EASE_OUT)
+		
+		# Анимируем свойство size (или scale, в зависимости от узла)
+		tween.tween_property(self, "corruption_size", target_size, 0.5) 
 	else:
 		if randf() > 0.1:
 			summon(R.objects["heart"]["scene"])

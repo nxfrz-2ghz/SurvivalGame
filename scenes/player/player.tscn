@@ -2,9 +2,11 @@
 
 [ext_resource type="Script" uid="uid://dfihb6cfu6jk3" path="res://scenes/player/player.gd" id="1_4anbu"]
 [ext_resource type="PackedScene" uid="uid://c8q18w2yckeeh" path="res://components/health_component/health_component.tscn" id="2_75vfm"]
+[ext_resource type="Script" uid="uid://dknrk65skptje" path="res://scripts/base_audio_player_rpc.gd" id="2_hyqqp"]
 [ext_resource type="PackedScene" uid="uid://7a46ke42vayn" path="res://scenes/player/book/book.tscn" id="2_rw8a5"]
 [ext_resource type="Script" uid="uid://o5ox0n51dvy3" path="res://scenes/player/head.gd" id="2_rxibo"]
 [ext_resource type="Script" uid="uid://d15gnbwci6yhk" path="res://scenes/player/camera.gd" id="3_244u8"]
+[ext_resource type="Script" uid="uid://bft4xupj4n3bk" path="res://scenes/player/take_damage_audio.gd" id="3_ds1xl"]
 [ext_resource type="Script" uid="uid://dhu0i8rhtp7a3" path="res://scenes/player/hunger_controller.gd" id="3_j4nxn"]
 [ext_resource type="Script" uid="uid://b52ief0l2f0vj" path="res://scripts/inventory_controller.gd" id="3_uf5tr"]
 [ext_resource type="Texture2D" uid="uid://djxkb4t6kfbt3" path="res://icon.svg" id="4_lgqa7"]
@@ -46,6 +48,27 @@
 [ext_resource type="Texture2D" uid="uid://cn4bayrp5gmmd" path="res://res/sprites/open_book1/Без названия3_20260211182804.png" id="32_t1aof"]
 [ext_resource type="Texture2D" uid="uid://jlkflkyyl0b8" path="res://res/sprites/open_book1/Без названия3_20260211182808.png" id="33_w8qe1"]
 [ext_resource type="Texture2D" uid="uid://cybs8lovhfynj" path="res://res/sprites/open_book1/Без названия3_20260211182811.png" id="34_hdvrm"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ds1xl"]
+emission_shape_offset = Vector3(0, 20, 0)
+emission_shape_scale = Vector3(30, 1, 30)
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+direction = Vector3(0, -1, 0)
+spread = 0.0
+initial_velocity_min = 30.55
+initial_velocity_max = 30.55
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1u1sw"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.22745098, 0.57254905, 1, 0.36078432)
+billboard_mode = 2
+
+[sub_resource type="QuadMesh" id="QuadMesh_2t3bg"]
+material = SubResource("StandardMaterial3D_1u1sw")
+size = Vector2(0.1, 0.5)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qnmj6"]
 
@@ -706,10 +729,30 @@ collision_layer = 2
 collision_mask = 5
 script = ExtResource("1_4anbu")
 
-[node name="StartEmitTimer" type="Timer" parent="." unique_id=648591859]
+[node name="Timers" type="Node" parent="." unique_id=1961006219]
+
+[node name="StartEmitTimer" type="Timer" parent="Timers" unique_id=648591859]
 wait_time = 5.0
 one_shot = true
 autostart = true
+
+[node name="WalkSoundPlay" type="Timer" parent="Timers" unique_id=2141240638]
+wait_time = 0.2
+one_shot = true
+
+[node name="Audio" type="Node3D" parent="." unique_id=380747070]
+
+[node name="ActionsAudioPlayer3D" type="AudioStreamPlayer3D" parent="Audio" unique_id=1411296627]
+bus = &"Sounds"
+script = ExtResource("2_hyqqp")
+
+[node name="WalkAudioPlayer3D" type="AudioStreamPlayer3D" parent="Audio" unique_id=785199207]
+bus = &"Sounds"
+script = ExtResource("2_hyqqp")
+
+[node name="TakeDamageAudio" type="AudioStreamPlayer3D" parent="Audio" unique_id=1646936174]
+bus = &"Sounds"
+script = ExtResource("3_ds1xl")
 
 [node name="HealthComponent" parent="." unique_id=603427587 instance=ExtResource("2_75vfm")]
 unique_name_in_owner = true
@@ -730,6 +773,12 @@ script = ExtResource("3_uf5tr")
 
 [node name="ProgressController" type="Node" parent="." unique_id=812764221]
 script = ExtResource("6_iwuka")
+
+[node name="RainParticles3D" type="GPUParticles3D" parent="." unique_id=1526489172]
+emitting = false
+amount = 2048
+process_material = SubResource("ParticleProcessMaterial_ds1xl")
+draw_pass_1 = SubResource("QuadMesh_2t3bg")
 
 [node name="Sprite3D" type="Sprite3D" parent="." unique_id=1367966238]
 billboard = 2
@@ -884,7 +933,7 @@ scale = Vector2(1.4, 1.4)
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1021319399]
 replication_config = SubResource("SceneReplicationConfig_mf2ua")
 
-[connection signal="timeout" from="StartEmitTimer" to="." method="_on_start_emit_timer_timeout"]
+[connection signal="timeout" from="Timers/StartEmitTimer" to="." method="_on_start_emit_timer_timeout"]
 [connection signal="died" from="HealthComponent" to="." method="_on_health_component_died"]
 [connection signal="timeout" from="HungerController/Timer" to="HungerController" method="_on_timer_timeout"]
 [connection signal="animation_finished" from="Head/Weapon/Arms/WeaponAnim" to="Head/Weapon/Arms/WeaponAnim" method="_on_animation_finished"]

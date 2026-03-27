@@ -1,9 +1,9 @@
 extends AnimatedSprite3D
 
 # Предварительно загрузите ваши ресурсы SpriteFrames в инспекторе или через load
-@export var frames_forward : SpriteFrames = preload("res://scenes/mobs/pig/front_sprite_frames.tres")
-@export var frames_back : SpriteFrames = preload("res://scenes/mobs/pig/back_sprite_frames.tres")
-@export var frames_side : SpriteFrames = preload("res://scenes/mobs/pig/right_sprite_frames.tres")
+@export var frames_forward : SpriteFrames
+@export var frames_back : SpriteFrames
+@export var frames_side : SpriteFrames
 
 func _physics_process(_delta: float) -> void:
 	update_sprite_logic()

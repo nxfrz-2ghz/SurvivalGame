@@ -3,6 +3,71 @@ extends Node
 const item := preload("res://scenes/items/item.tscn")
 const exp_sphere := preload("res://scenes/exp_sphere/exp_sphere.tscn")
 
+const sounds := {
+	"walk": {
+		"grass": [
+			preload("res://res/sounds/walk/Grass_hit1.mp3"),
+			preload("res://res/sounds/walk/Grass_hit2.mp3"),
+			preload("res://res/sounds/walk/Grass_hit3.mp3"),
+			preload("res://res/sounds/walk/Grass_hit4.mp3"),
+			preload("res://res/sounds/walk/Grass_hit5.mp3"),
+			preload("res://res/sounds/walk/Grass_hit6.mp3"),
+		],
+	},
+	"hit": {
+		"player": [
+			preload("res://res/sounds/hit/hit1.mp3"),
+			preload("res://res/sounds/hit/hit2.mp3"),
+			preload("res://res/sounds/hit/hit3.mp3"),
+		],
+		"objects": [
+			preload("res://res/sounds/crack/1.mp3"),
+			preload("res://res/sounds/crack/2.mp3"),
+			preload("res://res/sounds/crack/3.mp3"),
+			preload("res://res/sounds/crack/4.mp3"),
+			preload("res://res/sounds/crack/5.mp3"),
+			preload("res://res/sounds/crack/6.mp3"),
+			preload("res://res/sounds/crack/7.mp3"),
+			preload("res://res/sounds/crack/8.mp3"),
+		],
+		"pig": [
+			preload("res://res/sounds/idle/pig/1.mp3"),
+			preload("res://res/sounds/idle/pig/2.mp3"),
+			preload("res://res/sounds/idle/pig/3.mp3"),
+			preload("res://res/sounds/destroy/pig_destroy_1.mp3"),
+			preload("res://res/sounds/destroy/pig_destroy_2.mp3"),
+		]
+	},
+	"destroy": {
+		"tree": preload("res://res/sounds/destroy/tree_destroy.mp3"),
+		"stone": preload("res://res/sounds/destroy/stone_destroy.mp3"),
+		"meat": preload("res://res/sounds/destroy/meat_destroy.mp3"),
+		"pig": [
+			preload("res://res/sounds/destroy/pig_destroy_1.mp3"),
+			preload("res://res/sounds/destroy/pig_destroy_2.mp3"),
+		],
+		"instrument": preload("res://res/sounds/destroy/instrument_destroy.mp3"),
+	},
+	"idle": {
+		"pig": [
+			preload("res://res/sounds/idle/pig/1.mp3"),
+			preload("res://res/sounds/idle/pig/2.mp3"),
+			preload("res://res/sounds/idle/pig/3.mp3"),
+		],
+	},
+	"actions": {
+		"eating": preload("res://res/sounds/actions/eating.mp3"),
+		"pickup": preload("res://res/sounds/actions/pickup.mp3"),
+	},
+	"ambient": {
+		"rain": preload("res://res/sounds/ambient/rain.mp3"),
+	}
+}
+
+const music := [
+	preload("res://res/music/wtf2.mp3"),
+]
+
 const exchangeable_items := {
 	"campfire": {
 		"raw_berry": {"amount": 1, "output": "cooked_berry", "speed": 3},

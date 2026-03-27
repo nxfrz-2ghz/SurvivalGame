@@ -4,6 +4,8 @@
 [ext_resource type="Script" uid="uid://cafsrpolgbtq7" path="res://scenes/mobs/pig/pig.gd" id="2_61krw"]
 [ext_resource type="SpriteFrames" uid="uid://trthjcfx5osv" path="res://scenes/mobs/pig/front_sprite_frames.tres" id="3_cc670"]
 [ext_resource type="Script" uid="uid://xoj57qkfrhp4" path="res://components/anim_sprite_side_frames/anim_sprite_side_frames.gd" id="4_cc670"]
+[ext_resource type="SpriteFrames" uid="uid://csyqewb25vt0o" path="res://scenes/mobs/pig/back_sprite_frames.tres" id="5_py3an"]
+[ext_resource type="SpriteFrames" uid="uid://dqntykn6a5lby" path="res://scenes/mobs/pig/right_sprite_frames.tres" id="6_itldd"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_cc670"]
 radius = 0.8
@@ -21,27 +23,37 @@ drop_items = {
 "raw_meat": 1
 }
 despawn_particles_size = 0.8
+despawn_sound_name = "pig"
 exp_drop = 3.0
 
 [node name="Timer" type="Timer" parent="Timers" parent_id_path=PackedInt32Array(1401815993) index="2" unique_id=1126476396]
 wait_time = 3.0
 autostart = true
 
-[node name="HealthComponent" parent="." index="1" unique_id=1086839518]
+[node name="IdleSoundTimer" type="Timer" parent="Timers" parent_id_path=PackedInt32Array(1401815993) index="4" unique_id=900396259]
+wait_time = 5.0
+one_shot = true
+autostart = true
+
+[node name="HealthComponent" parent="." index="2" unique_id=1086839518]
 max_health = 5.0
 
-[node name="CollisionShape3D" parent="." index="2" unique_id=1649019193]
+[node name="CollisionShape3D" parent="." index="3" unique_id=1649019193]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.79113007, 0)
 shape = SubResource("SphereShape3D_cc670")
 
-[node name="AnimatedSprite3D" parent="." index="3" unique_id=1249191248]
+[node name="AnimatedSprite3D" parent="." index="4" unique_id=1249191248]
 transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 1.1267123, 0)
 sprite_frames = ExtResource("3_cc670")
 animation = &"idle"
 autoplay = "idle"
 script = ExtResource("4_cc670")
+frames_forward = ExtResource("3_cc670")
+frames_back = ExtResource("5_py3an")
+frames_side = ExtResource("6_itldd")
 
 [node name="MultiplayerSynchronizer2" type="MultiplayerSynchronizer" parent="." index="7" unique_id=1161749930]
 replication_config = SubResource("SceneReplicationConfig_cc670")
 
 [connection signal="timeout" from="Timers/Timer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="Timers/IdleSoundTimer" to="." method="_on_idle_sound_timer_timeout"]

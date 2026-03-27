@@ -5,15 +5,21 @@ extends Node
 @onready var parent := get_parent()
 @onready var toogle_on := $"../ToggleOn"
 @onready var craft_timer := $"../Timers/CraftTimer"
+@onready var label := $"../Label3D"
 
-var queue: Array = []
+# Синхронизируется на всякий случай, щас пока надо, чтобы у клиента была возможность забирать правильный complete
+@export var queue: Array = []
+@export var complete: Array = []
 
 func _ready() -> void:
 	craft_timer.timeout.connect(_on_craft_timer_timeout)
 
 func drop_queue() -> void:
-	while !queue.is_empty():
-		parent.drop(queue.pop_front())
+	for item in queue: parent.drop(item)
+	for item in complete: parent.drop(item)
+	queue.clear()
+	complete.clear()
+	update_label.rpc(queue, complete)
 
 func toggle() -> void:
 	toogle_on.visible = !toogle_on.visible
@@ -29,11 +35,37 @@ func start_craft() -> void:
 @rpc("any_peer", "call_local")
 func craft(input: String):
 	queue.append(input)
+	update_label.rpc(queue, complete)
 	if craft_timer.is_stopped(): start_craft()
+
+@rpc("any_peer", "call_local")
+func pick() -> void:
+	complete = []
+	update_label.rpc(queue, complete)
+
+@rpc("authority", "call_local")
+func update_label(_queue: Array, _complete: Array) -> void:
+	var q_text := ""
+	var c_text := ""
+	
+	var q_list := {}
+	var c_list := {}
+	
+	for i in _queue: q_list[i] = q_list.get(i, 0) + 1
+	for i in _complete: c_list[i] = c_list.get(i, 0) + 1
+	
+	for i in q_list.keys():
+		q_text += "\n" + i + ((": x" + str(q_list[i])) if q_list[i] > 1 else "")
+	
+	for i in c_list.keys():
+		c_text += "\n" + i + ((": x" + str(c_list[i])) if c_list[i] > 1 else "")
+	
+	label.text = "Queue: %s\nComplete: %s" % [q_text, c_text]
 
 func _on_craft_timer_timeout() -> void:
 	toggle()
-	parent.drop(R.exchangeable_items[craft_category].get(queue.pop_front())["output"])
+	complete.append(R.exchangeable_items[parent.nname].get(queue.pop_front())["output"])
+	update_label.rpc(queue, complete)
 	
 	# Продолжение плавки
 	if !queue.is_empty(): start_craft()

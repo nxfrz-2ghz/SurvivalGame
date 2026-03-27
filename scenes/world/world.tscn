@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://1hlogfjs7k37" path="res://scenes/world/fall_defense_area.gd" id="3_6m72w"]
 [ext_resource type="Material" uid="uid://deyuxdxpaa6f5" path="res://scenes/world/procedural_sky_material.tres" id="3_t5ptc"]
 [ext_resource type="Script" uid="uid://d0pejyu1trq8j" path="res://scenes/world/weather_controller.gd" id="5_v5dby"]
+[ext_resource type="Script" uid="uid://dqpoba67lh28c" path="res://scenes/world/background_audio_controller.gd" id="7_bq33v"]
 
 [sub_resource type="Sky" id="Sky_3s6yk"]
 sky_material = ExtResource("3_t5ptc")
@@ -61,14 +62,26 @@ transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0, 0, 0)
 script = ExtResource("3_1fp7r")
 
 [node name="SpawnTimer" type="Timer" parent="MobSpawner" unique_id=2105636915]
-wait_time = 30.0
+wait_time = 15.0
 autostart = true
 
 [node name="WeatherController" type="Node" parent="." unique_id=1080800198]
 script = ExtResource("5_v5dby")
 
 [node name="Timer" type="Timer" parent="WeatherController" unique_id=798927080]
-wait_time = 30.0
+wait_time = 50.0
+autostart = true
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer" parent="WeatherController" unique_id=1241214212]
+bus = &"Sounds"
+
+[node name="BackgroundAudioController" type="AudioStreamPlayer" parent="." unique_id=1243793751]
+bus = &"Music"
+script = ExtResource("7_bq33v")
+
+[node name="Timer" type="Timer" parent="BackgroundAudioController" unique_id=1413305716]
+wait_time = 50.0
+one_shot = true
 autostart = true
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1935736741]
@@ -78,3 +91,5 @@ replication_config = SubResource("SceneReplicationConfig_1fp7r")
 [connection signal="body_entered" from="FallDefenseArea" to="FallDefenseArea" method="_on_body_entered"]
 [connection signal="timeout" from="MobSpawner/SpawnTimer" to="MobSpawner" method="_on_spawn_timer_timeout"]
 [connection signal="timeout" from="WeatherController/Timer" to="WeatherController" method="_on_timer_timeout"]
+[connection signal="finished" from="BackgroundAudioController" to="BackgroundAudioController" method="_on_finished"]
+[connection signal="timeout" from="BackgroundAudioController/Timer" to="BackgroundAudioController" method="_on_timer_timeout"]

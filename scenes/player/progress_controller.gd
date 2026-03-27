@@ -24,3 +24,7 @@ func add_exp(added_exp: float) -> void:
 		G.text_message.add("NEW LEVEL REACHED!")
 	
 	changed.emit(cur_exp, cur_lvlup_cost, lvl)
+
+func add_note(note_name: String) -> void:
+	unlocked_notes.append(notes[note_name])
+	G.screen_text.add("NEW NOTE UNLOCKED! VIEW IT IN BOOK [press E]")

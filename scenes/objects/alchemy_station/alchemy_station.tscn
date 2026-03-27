@@ -53,7 +53,12 @@ shape = SubResource("CylinderShape3D_inm7f")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.014470577, 0.8757807, 0.03006506)
 texture = ExtResource("4_dip5l")
 
-[node name="ToggleOn" type="Node3D" parent="." index="6" unique_id=1165280781]
+[node name="Label3D" type="Label3D" parent="." index="6" unique_id=1984679164]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.377518, 0)
+billboard = 1
+double_sided = false
+
+[node name="ToggleOn" type="Node3D" parent="." index="7" unique_id=1165280781]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.024529424, 2.4167807, -0.005934939)
 visible = false
 
@@ -71,11 +76,11 @@ light_color = Color(1, 0.6862745, 0.39215687, 1)
 light_energy = 6.172
 distance_fade_enabled = true
 
-[node name="SmokeParticle" parent="." index="7" unique_id=2097639369 instance=ExtResource("5_inm7f")]
+[node name="SmokeParticle" parent="." index="8" unique_id=2097639369 instance=ExtResource("5_inm7f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.0835304, 0)
 emitting = false
 
-[node name="FallRay" parent="." index="8" unique_id=2065431078 instance=ExtResource("6_tosh2")]
+[node name="FallRay" parent="." index="9" unique_id=2065431078 instance=ExtResource("6_tosh2")]
 
-[node name="MultiplayerSynchronizer2" type="MultiplayerSynchronizer" parent="." index="11" unique_id=1332294568]
+[node name="MultiplayerSynchronizer2" type="MultiplayerSynchronizer" parent="." index="12" unique_id=1332294568]
 replication_config = SubResource("SceneReplicationConfig_nhymd")

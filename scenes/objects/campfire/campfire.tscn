@@ -63,14 +63,19 @@ cook_category = "campfire"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.48779297, 0)
 shape = SubResource("CylinderShape3D_x1bif")
 
-[node name="Sprite3D" parent="." index="5" unique_id=57594410]
+[node name="Label3D" type="Label3D" parent="." index="5" unique_id=1697573655]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8202734, 0)
+billboard = 1
+double_sided = false
+
+[node name="Sprite3D" parent="." index="6" unique_id=57594410]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7948087, 0)
 texture = ExtResource("2_fyjhv")
 
-[node name="Shadow" parent="." index="6" unique_id=437352595]
+[node name="Shadow" parent="." index="7" unique_id=437352595]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, -0.7917417, 0)
 
-[node name="ToggleOn" type="Node3D" parent="." index="7" unique_id=440124899]
+[node name="ToggleOn" type="Node3D" parent="." index="8" unique_id=440124899]
 visible = false
 
 [node name="OmniLight3D" type="OmniLight3D" parent="ToggleOn" index="0" unique_id=1416207734]
@@ -91,11 +96,11 @@ sprite_frames = SubResource("SpriteFrames_ncuph")
 autoplay = "default"
 frame_progress = 0.0647054
 
-[node name="SmokeParticle" parent="." index="8" unique_id=2097639369 instance=ExtResource("4_wkwmc")]
+[node name="SmokeParticle" parent="." index="9" unique_id=2097639369 instance=ExtResource("4_wkwmc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5075673, 0)
 emitting = false
 
-[node name="MultiplayerSynchronizer2" type="MultiplayerSynchronizer" parent="." index="10" unique_id=333321540]
+[node name="MultiplayerSynchronizer2" type="MultiplayerSynchronizer" parent="." index="11" unique_id=333321540]
 replication_config = SubResource("SceneReplicationConfig_irh8k")
 
-[node name="FallRay" parent="." index="11" unique_id=2065431078 instance=ExtResource("8_x1bif")]
+[node name="FallRay" parent="." index="12" unique_id=2065431078 instance=ExtResource("8_x1bif")]

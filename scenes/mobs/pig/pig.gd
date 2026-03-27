@@ -1,5 +1,7 @@
 extends "res://scenes/mobs/mob.gd"
 
+@onready var idle_sound_timer := $Timers/IdleSoundTimer
+
 var is_walk := false
 
 func loop(_delta: float) -> void:
@@ -18,3 +20,9 @@ func _on_timer_timeout() -> void:
 		sprite.anim_play.rpc("walk")
 	else:
 		sprite.anim_play.rpc("idle")
+
+
+func _on_idle_sound_timer_timeout() -> void:
+	idle_sound_timer.wait_time = randi_range(8, 15	)
+	idle_sound_timer.start()
+	take_damage_audio.audio_play(R.sounds["idle"]["pig"].pick_random().resource_path)

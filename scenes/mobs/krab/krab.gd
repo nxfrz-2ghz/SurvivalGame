@@ -1,5 +1,7 @@
 extends "res://scenes/mobs/mob.gd"
 
+@onready var attack_cooldown := $Timers/AttackCooldown
+
 const damage := 2.0
 const DETECTION_RADIUS := 16.0
 const ATTACK_RADIUS := 4.0
@@ -39,14 +41,24 @@ func _on_timer_timeout() -> void:
 
 
 func _on_scan_players_timeout() -> void:
+	update()
+
+
+func _on_animated_sprite_3d_animation_finished() -> void:
+	if sprite.animation == "attack":
+		update()
+
+
+func update() -> void:
 	if not is_multiplayer_authority(): return
 	if G.state_machine != "game": return
 	target_player = get_target_player()
 	var dist := global_position.distance_to(target_player.global_position)
 	
-	if dist < ATTACK_RADIUS:
+	if dist < ATTACK_RADIUS and attack_cooldown.is_stopped():
 		target_player.health.take_damage(damage)
 		sprite.anim_play.rpc("attack")
+		attack_cooldown.start()
 	elif dist < DETECTION_RADIUS:
 		state = State.STALK
 		sprite.anim_play.rpc("walk")

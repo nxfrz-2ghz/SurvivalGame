@@ -28,6 +28,6 @@ fuel_type = "coal"
 [node name="Sprite3D" parent="ToggleOn" parent_id_path=PackedInt32Array(1471818564) index="0" unique_id=163627065]
 texture = ExtResource("2_x58lu")
 
-[node name="Sprite3D" parent="." index="7" unique_id=57594410]
+[node name="Sprite3D" parent="." index="8" unique_id=57594410]
 visibility_range_end = 120.0
 texture = ExtResource("3_dvqo8")

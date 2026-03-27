@@ -23,6 +23,7 @@ drop_items = {
 "log": 1,
 "raw_berry": 3
 }
+despawn_sound_name = "tree"
 exp_drop = 0.5
 
 [node name="GrowUp" type="Timer" parent="Timers" parent_id_path=PackedInt32Array(203408184) index="1" unique_id=1477719022]
@@ -50,13 +51,14 @@ double_sided = false
 alpha_cut = 1
 texture = ExtResource("3_8hlsa")
 
-[node name="Sprite3D" parent="." index="5" unique_id=57594410]
+[node name="Sprite3D" parent="." index="4" unique_id=57594410]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8481705, 0)
 texture = ExtResource("2_ikb77")
 
-[node name="FallRay" parent="." index="8" unique_id=2065431078 instance=ExtResource("5_8hlsa")]
+[node name="FallRay" parent="." index="7" unique_id=2065431078 instance=ExtResource("5_8hlsa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.046573907, 0)
 
-[node name="MultiplayerSynchronizer2" type="MultiplayerSynchronizer" parent="." index="9" unique_id=2102612397]
+[node name="MultiplayerSynchronizer2" type="MultiplayerSynchronizer" parent="." index="8" unique_id=2102612397]
 replication_config = SubResource("SceneReplicationConfig_8hlsa")
 
 [connection signal="timeout" from="Timers/GrowUp" to="." method="_on_grow_up_timeout"]

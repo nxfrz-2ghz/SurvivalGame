@@ -12,6 +12,7 @@ nname = "stone"
 drop_items = {
 "stone": 3
 }
+despawn_sound_name = "stone"
 exp_drop = 1.5
 
 [node name="HealthComponent" parent="." index="1" unique_id=1086116789]
@@ -26,6 +27,6 @@ max_health = 8.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4564807, 0)
 shape = SubResource("CylinderShape3D_u3fxr")
 
-[node name="Sprite3D" parent="." index="4" unique_id=57594410]
+[node name="Sprite3D" parent="." index="3" unique_id=57594410]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8067877, 0)
 texture = ExtResource("2_bfce7")

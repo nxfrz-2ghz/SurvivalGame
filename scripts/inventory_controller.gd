@@ -16,7 +16,6 @@ func _ready():
 	for i in range(1, MAX_SLOTS + 1):
 		inventory[i] = null
 
-
 func update_signals() -> void:
 	set_hotbar_slot.emit(current_item)
 	update.emit(inventory)
@@ -74,6 +73,7 @@ func _input(_event: InputEvent) -> void:
 ### --- ОСНОВНЫЕ ФУНКЦИИ ---
 
 func add_item(item_name: String, amount: int = 1):
+	$"../Audio/ActionsAudioPlayer3D".audio_play(R.sounds["actions"]["pickup"].resource_path)
 	var remaining_amount = amount
 	var max_s = R.items[item_name].get("stack_size", 1) # По умолчанию стак 1
 
@@ -107,6 +107,7 @@ func add_item(item_name: String, amount: int = 1):
 	update_signals()
 
 func drop_item(slot_index: int, amount: int = 1):
+	$"../Audio/ActionsAudioPlayer3D".audio_play(R.sounds["actions"]["pickup"].resource_path)
 	if slot_index < 0 or slot_index >= MAX_SLOTS: return
 	
 	var slot = inventory[slot_index]

@@ -12,6 +12,11 @@ extends CharacterBody3D
 @onready var book := %Book
 @onready var inv := %InventoryController
 @onready var progress_controller := $ProgressController
+@onready var actions_audio_player := $Audio/ActionsAudioPlayer3D
+@onready var damage_audio_player := $Audio/TakeDamageAudio
+@onready var walk_audio_player := $Audio/WalkAudioPlayer3D
+@onready var walk_sound_timer := $Timers/WalkSoundPlay
+@onready var rain := $RainParticles3D
 
 const SPEED = 3.0
 const JUMP_VELOCITY = 4.0
@@ -30,6 +35,7 @@ func _ready() -> void:
 	if not is_multiplayer_authority():
 		interact_ray.queue_free()
 		$Head/Weapon/Arms.queue_free()
+		rain.queue_free()
 	else:
 		weapon.attack.connect(interact_ray.update)
 		weapon.attack.connect(hunger.on_attack)
@@ -44,11 +50,16 @@ func _ready() -> void:
 		book.close_book.connect(_on_close_book)
 		
 		health.on_damage.connect($Head/Camera/AnimationPlayer.play_on_damage)
+		health.on_damage.connect(damage_audio_player.play_sound)
 
 
 func _input(event: InputEvent) -> void:
 	if not is_multiplayer_authority(): return
 	if G.state_machine != "game": return
+	
+	if event.is_action_pressed("lmb"): # или любая кнопка действия
+		if Input.get_mouse_mode() == Input.MOUSE_MODE_VISIBLE:
+			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	
 	if event is InputEventMouseMotion:
 		rotation.y += (-event.relative.x * 0.005)
@@ -109,10 +120,23 @@ func _input(event: InputEvent) -> void:
 					inv.drop_item(current_slot_idx, 1)
 					return
 			
+			# Достать готовые прдеметы
+			elif collider.nname in R.exchangeable_items.keys():
+				if collider.has_node("CookComponent"):
+					for i in collider.cook.complete:
+						inv.add_item(i)
+					collider.cook.pick.rpc_id(1)
+				elif collider.has_node("CraftComponent"):
+					for i in collider.craft.complete:
+						inv.add_item(i)
+					collider.craft.pick.rpc_id(1)
+				return
+			
 			elif collider.nname == "berry_bush":
 				if collider.full:
-					for i in range(3): # Пример упрощения сбора ягод
-						if randf() > 0.3: inv.add_item("raw_berry")
+					for i in range(3):
+						if randf() > 0.3:
+							inv.add_item("raw_berry")
 				collider.pick.rpc_id(1)
 				return
 		
@@ -122,6 +146,7 @@ func _input(event: InputEvent) -> void:
 			if R.items[item_name].get("nutrition"):
 				hunger.eat(R.items[item_name]["nutrition"])
 				inv.drop_item(current_slot_idx, 1)
+				actions_audio_player.audio_play(R.sounds["actions"]["eating"].resource_path)
 	
 	if Input.is_action_just_pressed("pickup") and !weapon.weapon_anim.is_playing():
 		weapon.weapon_anim.play("pickup")
@@ -152,14 +177,14 @@ func _on_health_component_died() -> void:
 	
 	var died_particles := R.particles["explose"].instantiate()
 	died_particles.position = self.position
-	G.world.add_child(died_particles, true)
+	G.environment.add_child(died_particles, true)
 	
 	var rigid_cam := RIGID_CAM.instantiate()
-	G.world.add_child(rigid_cam)
+	G.environment.add_child(rigid_cam)
 	rigid_cam.global_position = self.global_position
 	rigid_cam.apply_central_impulse(velocity)
 	
-	for i in range(inv.MAX_SLOTS - 1):
+	for i in range(inv.MAX_SLOTS):
 		var current_slot_idx: int = i + 1
 		while inv.inventory[current_slot_idx] != null:
 			weapon.actions.drop(current_slot_idx)
@@ -174,13 +199,17 @@ func apply_push(direction_vector: Vector3, velocity_power: float) -> void:
 	velocity += direction_vector * velocity_power
 
 
+func is_underwater() -> bool:
+	return position.y < G.world.WATER_LEVEL
+
+
 func moving(delta: float) -> void:
 	
 	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 	
-	if Input.is_action_pressed("space") and is_on_floor():
+	if Input.is_action_pressed("space") and (is_on_floor() or is_underwater()):
 		velocity.y = JUMP_VELOCITY
 	
 	var input_dir := Input.get_vector("left", "right", "up", "down")
@@ -195,11 +224,15 @@ func moving(delta: float) -> void:
 	var speed: float = SPEED
 	if Input.is_action_pressed("shift") and stamina.energy > 0:
 		speed *= 1.5
+		walk_sound_timer.wait_time = 0.3
 		if camera.fov < 120.0:
 			camera.fov += 1.0
 	else:
+		walk_sound_timer.wait_time = 0.4
 		if camera.fov > 90.0:
 			camera.fov -= 0.5
+	if is_underwater():
+		speed *= 0.5
 	
 	# Moving
 	if is_on_floor():
@@ -207,6 +240,10 @@ func moving(delta: float) -> void:
 			velocity.x += direction.x * speed
 			velocity.z += direction.z * speed
 			arm_anim.play("walk")
+			
+			if walk_sound_timer.is_stopped():
+				walk_audio_player.audio_play.rpc(R.sounds["walk"]["grass"].pick_random().resource_path)
+				walk_sound_timer.start()
 		
 		if velocity:
 			velocity.x /= 1.5

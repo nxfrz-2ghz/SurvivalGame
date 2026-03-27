@@ -9,7 +9,7 @@ bounce = 0.2
 [sub_resource type="Environment" id="Environment_arojp"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_arojp"]
-radius = 2.0
+radius = 1.0
 
 [sub_resource type="Animation" id="Animation_arojp"]
 length = 0.001

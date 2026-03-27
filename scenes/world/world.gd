@@ -12,8 +12,8 @@ const BIOME_CONFIG = {
 		"height_multiplier": 2.0,
 		"noise_threshold": 0.4,
 		"objects": {
-			"grass": {"weight": 25, "density": 0.08},
-			"tree": {"weight": 60, "density": 0.05},
+			"grass": {"weight": 25, "density": 0.07},
+			"tree": {"weight": 60, "density": 0.04},
 			"stone": {"weight": 5, "density": 0.02},
 			"berry_bush" : {"weight": 10, "density": 0.05},
 		}
@@ -83,7 +83,16 @@ const noise_scale := 5.0
 const ground_material := preload("res://scenes/world/world_material.tres")
 const water_material := preload("res://scenes/world/water_material.tres")
 
+const VARS_WHITELIST := [
+	"full", # berry_bush
+	"corruption_size", # heart
+]
+
 var server: bool
+
+
+func _ready() -> void:
+	G.world = self
 
 
 func start_gen() -> void:
@@ -126,6 +135,7 @@ func _generate_terrain() -> void:
 	var offset := (world_size - 1) * spacing / 2.0
 	# Вычисляем количество чанков
 	var chunks_count = ceili(float(world_size) / float(CHUNK_SIZE))
+	var last_status_gen: int
 	
 	# Создаем чанки
 	for chunk_z in range(chunks_count):
@@ -192,10 +202,6 @@ func _generate_terrain() -> void:
 			mesh_instance.set_layer_mask_value(3, true) # Enable corruption decal support
 			terrain.call_deferred("add_child", mesh_instance)
 			terrain.call_deferred("add_child", collider)
-		
-		G.screen_text.text("Generating terrain... %d%%" % [roundi(float(chunk_z + 1) / chunks_count * 100)])
-		await get_tree().process_frame
-	G.screen_text.text("")
 
 func _generate_water() -> void:
 	var offset := (world_size - 1) * spacing / 2.0
@@ -264,19 +270,7 @@ func _generate_water() -> void:
 			terrain.call_deferred("add_child", mesh_instance)
 
 
-func _generate_world() -> void:
-	
-	G.screen_text.text("Generating Terrain...")
-	await get_tree().process_frame
-	fall_defense_area.set_size(world_size)
-	_generate_terrain()
-	
-	G.screen_text.text("Generating Water...")
-	await get_tree().process_frame
-	_generate_water()
-	
-	if !server: return
-	
+func _generate_objects() -> void:
 	G.screen_text.text("Spawning objects...")
 	await get_tree().process_frame
 	
@@ -309,8 +303,8 @@ func _generate_world() -> void:
 					# Высота спавна — берем с того же шума, чтобы объект стоял на поверхности
 					var spawn_y = _get_height(world_x, world_z)
 					instance.position = Vector3(world_x, spawn_y, world_z)
-					G.world.call_deferred("add_child", instance, true)
-		
+					G.environment.call_deferred("add_child", instance, true)
+			
 			gz += OBJ_SPAWN_STEP
 		gx += OBJ_SPAWN_STEP
 	
@@ -332,12 +326,28 @@ func _generate_world() -> void:
 				var instance: RigidBody3D = R.item.instantiate()
 				instance.position = Vector3(world_x, spawn_y, world_z)
 				instance.nname = "stone"
-				G.world.call_deferred("add_child", instance, true)
+				G.environment.call_deferred("add_child", instance, true)
 			
 			gz += DROP_SPAWN_STEP
 		gx += DROP_SPAWN_STEP
 	
 	G.screen_text.text("")
+
+
+func _generate_world() -> void:
+	
+	G.screen_text.text("Generating Terrain...")
+	await get_tree().process_frame
+	fall_defense_area.set_size(world_size)
+	_generate_terrain()
+	
+	G.screen_text.text("Generating Water...")
+	await get_tree().process_frame
+	_generate_water()
+	
+	G.screen_text.text("")
+	if !server: return
+	_generate_objects()
 
 
 func _get_height(world_x: float, world_z: float) -> float:
@@ -426,13 +436,20 @@ func save_world(path: String = "user://world.save") -> void:
 
 	# Перебираем все объекты, которые мы заспавнили
 	var entry := {}
-	for child in G.world.get_children():
+	for child in G.environment.get_children():
 		if child.is_in_group("objects"):
 			entry = {
 				"name": child.nname,
 				"pos": [child.position.x, child.position.y, child.position.z],
 				"hp": child.health.current_health,
+				"vars": {},
 			}
+			for var_name in VARS_WHITELIST:
+				if var_name in child:
+					# Если у объекта есть такая 
+					var val = child.get(var_name)
+					# Если это вектор (или любой другой сложный тип), упаковываем его в спец-строку
+					entry["vars"][var_name] = var_to_str(val) 
 			save_data["objects"].append(entry)
 		
 		elif child.is_in_group("items"):
@@ -452,7 +469,7 @@ func save_world(path: String = "user://world.save") -> void:
 			save_data["mobs"].append(entry)
 	
 	# Сохранение игрока
-	var player: CharacterBody3D = G.world.get_node(str(multiplayer.get_unique_id()))
+	var player: CharacterBody3D = G.environment.get_node(str(multiplayer.get_unique_id()))
 	entry = {
 		"name": player.nname,
 		"pos": [player.position.x, player.position.y, player.position.z],
@@ -493,9 +510,16 @@ func load_world(path: String = "user://world.save") -> void:
 	server = true # Обычно загрузку делает только сервер
 	
 	# Пересоздаем террейн
+	G.screen_text.text("Generating Terrain...")
+	await get_tree().process_frame
 	_init_noise()
 	_generate_terrain()
+	G.screen_text.text("Generating Water...")
+	await get_tree().process_frame
+	_generate_water()
 	
+	G.screen_text.text("Loading Data...")
+	await get_tree().process_frame
 	# Спавним сохраненные объекты
 	for obj_data in data["objects"]:
 		var pos = Vector3(obj_data["pos"][0], obj_data["pos"][1], obj_data["pos"][2])
@@ -506,7 +530,7 @@ func load_world(path: String = "user://world.save") -> void:
 			var item_instance = R.item.instantiate()
 			item_instance.position = pos
 			item_instance.nname = obj_name
-			G.world.add_child(item_instance, true)
+			G.environment.add_child(item_instance, true)
 		else:
 			# Загрузка статичных объектов (деревья, руда)
 			var obj_scene = R.objects.get(obj_name)["scene"]
@@ -514,7 +538,14 @@ func load_world(path: String = "user://world.save") -> void:
 				var instance = obj_scene.instantiate()
 				instance.position = pos
 				instance.nname = obj_name
-				G.world.add_child(instance, true)
+				if obj_data.has("vars"):
+					for var_name in obj_data["vars"]:
+						var raw_value = obj_data["vars"][var_name]
+						var final_value = raw_value
+						if typeof(raw_value) == TYPE_STRING:
+							final_value = str_to_var(raw_value)
+						instance.set(var_name, final_value)
+				G.environment.add_child(instance, true)
 				instance.get_node("HealthComponent").current_health = obj_data["hp"]
 	
 	# Спавним мобов
@@ -524,11 +555,11 @@ func load_world(path: String = "user://world.save") -> void:
 		if mob_scene:
 			var instance = mob_scene.instantiate()
 			instance.position = pos
-			G.world.add_child(instance, true)
+			G.environment.add_child(instance, true)
 			instance.get_node("HealthComponent").current_health = mob_data["hp"]
 	
 	# Загружаем данные игрока
-	var player: CharacterBody3D = G.world.get_node(str(multiplayer.get_unique_id()))
+	var player: CharacterBody3D = G.environment.get_node(str(multiplayer.get_unique_id()))
 	var player_data: Dictionary = data["player"]
 	
 	player.nname = player_data["name"]
@@ -547,3 +578,5 @@ func load_world(path: String = "user://world.save") -> void:
 	player.progress_controller.unlocked_notes = player_data["unlocked_notes"]
 	player.progress_controller.cur_exp = player_data["current exp"]
 	player.progress_controller.lvl = player_data["current lvl"]
+	
+	G.screen_text.text("")

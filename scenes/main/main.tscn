@@ -5,33 +5,42 @@
 [ext_resource type="Texture2D" uid="uid://fmv6ac8qq7r7" path="res://res/sprites/gui/aim.png" id="3_ab7mr"]
 [ext_resource type="Script" uid="uid://sfqqllsbirx2" path="res://scenes/main/multiplayer_spawner.gd" id="3_nvumn"]
 [ext_resource type="Texture2D" uid="uid://dwlrxn5cvf8ov" path="res://res/sprites/gui/choose_slot.png" id="4_l3cfh"]
-[ext_resource type="Script" uid="uid://dhyid6cdqvklf" path="res://scenes/main/gui.gd" id="4_ou6is"]
-[ext_resource type="Script" uid="uid://cijkd3xjdn8d1" path="res://scenes/main/gui/target_label.gd" id="5_raeie"]
-[ext_resource type="Script" uid="uid://ck12gpkko6xsi" path="res://scenes/main/gui/hud.gd" id="6_hxu8e"]
-[ext_resource type="Script" uid="uid://pub30evhjsta" path="res://scenes/main/gui/inventory.gd" id="7_hxu8e"]
-[ext_resource type="Script" uid="uid://b3je3g1di6ift" path="res://scenes/main/gui/text_message.gd" id="11_7smn1"]
-[ext_resource type="Script" uid="uid://b4ylt05h1pkph" path="res://scenes/main/gui/leave_button.gd" id="11_blune"]
-[ext_resource type="Script" uid="uid://bbm1b30lyywvf" path="res://scenes/main/gui/game_menu.gd" id="11_ouso4"]
-[ext_resource type="Script" uid="uid://cwa53nrhb06on" path="res://scenes/main/gui/main_menu.gd" id="11_th5th"]
+[ext_resource type="Script" uid="uid://dhyid6cdqvklf" path="res://scenes/gui/gui.gd" id="4_ou6is"]
+[ext_resource type="Script" uid="uid://cijkd3xjdn8d1" path="res://scenes/gui/target_label.gd" id="5_raeie"]
+[ext_resource type="Shader" uid="uid://bilygrt6ilnut" path="res://scenes/gui/water_effect.gdshader" id="6_6llfj"]
+[ext_resource type="Script" uid="uid://ck12gpkko6xsi" path="res://scenes/gui/hud.gd" id="6_hxu8e"]
+[ext_resource type="Script" uid="uid://44id3kyeok6r" path="res://scenes/gui/water_effect.gd" id="7_0bhws"]
+[ext_resource type="Script" uid="uid://pub30evhjsta" path="res://scenes/gui/inventory.gd" id="7_hxu8e"]
+[ext_resource type="Script" uid="uid://b3je3g1di6ift" path="res://scenes/gui/text_message.gd" id="11_7smn1"]
+[ext_resource type="Script" uid="uid://b4ylt05h1pkph" path="res://scenes/gui/leave_button.gd" id="11_blune"]
+[ext_resource type="Script" uid="uid://bbm1b30lyywvf" path="res://scenes/gui/game_menu.gd" id="11_ouso4"]
+[ext_resource type="Script" uid="uid://cwa53nrhb06on" path="res://scenes/gui/main_menu.gd" id="11_th5th"]
 [ext_resource type="Texture2D" uid="uid://bfvxox61x7pba" path="res://res/sprites/gui/vignette.png" id="12_raeie"]
-[ext_resource type="Script" uid="uid://b32rflbupbfwf" path="res://scenes/main/gui/health_vignette.gd" id="13_necax"]
-[ext_resource type="Script" uid="uid://bcvafvya4wcrc" path="res://scenes/main/gui/damage_vignette.gd" id="14_r4lks"]
-[ext_resource type="Script" uid="uid://d25jbatuakb3x" path="res://scenes/main/gui/stamina_bar.gd" id="15_necax"]
+[ext_resource type="Script" uid="uid://b32rflbupbfwf" path="res://scenes/gui/health_vignette.gd" id="13_necax"]
+[ext_resource type="Script" uid="uid://bcvafvya4wcrc" path="res://scenes/gui/damage_vignette.gd" id="14_r4lks"]
+[ext_resource type="Script" uid="uid://d25jbatuakb3x" path="res://scenes/gui/stamina_bar.gd" id="15_necax"]
 [ext_resource type="Texture2D" uid="uid://kflc51gj346l" path="res://res/sprites/gui/Screenshot_20260306_182814.png" id="15_nvumn"]
-[ext_resource type="Script" uid="uid://bni0q2stunvev" path="res://scenes/main/gui/debug.gd" id="15_p8abn"]
-[ext_resource type="Script" uid="uid://du8hko50uql36" path="res://scenes/main/gui/bar_box.gd" id="16_37hlw"]
+[ext_resource type="Script" uid="uid://bni0q2stunvev" path="res://scenes/gui/debug.gd" id="15_p8abn"]
+[ext_resource type="Script" uid="uid://du8hko50uql36" path="res://scenes/gui/bar_box.gd" id="16_37hlw"]
 [ext_resource type="Texture2D" uid="uid://dcrq1x4627cg7" path="res://res/sprites/items/star.png" id="17_6llfj"]
-[ext_resource type="Script" uid="uid://bryy4ri3hhmgs" path="res://scenes/main/gui/screen_text.gd" id="17_m4h2d"]
+[ext_resource type="Script" uid="uid://bryy4ri3hhmgs" path="res://scenes/gui/screen_text.gd" id="17_m4h2d"]
 [ext_resource type="Texture2D" uid="uid://dcyjc6tphl14d" path="res://res/sprites/items/meat/raw_meat.png" id="18_0bhws"]
-[ext_resource type="Script" uid="uid://cp54fimx3yc7i" path="res://scenes/main/gui/fullscreen_button.gd" id="18_r4lks"]
-[ext_resource type="Script" uid="uid://c6xy35qgi20bn" path="res://scenes/main/gui/vsync_button.gd" id="19_pg34l"]
+[ext_resource type="Script" uid="uid://dytq3mhb6tscq" path="res://scenes/gui/settings_buttons/buttons/fullscreen_button.gd" id="22_37hlw"]
+[ext_resource type="Script" uid="uid://deo4mus5ovkdy" path="res://scenes/gui/settings_buttons/buttons/vsync_button.gd" id="23_6llfj"]
 
 [sub_resource type="GDScript" id="GDScript_ou6is"]
 script/source = "extends Node3D
 
 func _ready() -> void:
-	G.world = self
+	G.environment = self
 "
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0bhws"]
+shader = ExtResource("6_6llfj")
+shader_parameter/water_color = Color(0.1, 0.4, 0.6, 0.3)
+shader_parameter/speed = 1.5
+shader_parameter/distortion = 0.02
+shader_parameter/wave_count = 10.0
 
 [sub_resource type="Animation" id="Animation_pg34l"]
 length = 0.001
@@ -67,43 +76,6 @@ tracks/0/keys = {
 _data = {
 &"RESET": SubResource("Animation_pg34l"),
 &"default": SubResource("Animation_m4h2d")
-}
-
-[sub_resource type="Animation" id="Animation_7smn1"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(620, 1000)]
-}
-
-[sub_resource type="Animation" id="Animation_raeie"]
-resource_name = "show"
-length = 3.0
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5, 2.4666667, 3),
-"transitions": PackedFloat32Array(-2, -2, -2, -2),
-"update": 0,
-"values": [Vector2(620, 1000), Vector2(620, 540), Vector2(620, 540), Vector2(620, 1000)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_hxu8e"]
-_data = {
-&"RESET": SubResource("Animation_7smn1"),
-&"show": SubResource("Animation_raeie")
 }
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r4lks"]
@@ -164,6 +136,43 @@ _data = {
 &"default": SubResource("Animation_r4lks")
 }
 
+[sub_resource type="Animation" id="Animation_7smn1"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(620, 1000)]
+}
+
+[sub_resource type="Animation" id="Animation_raeie"]
+resource_name = "show"
+length = 3.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 2.4666667, 3),
+"transitions": PackedFloat32Array(-2, -2, -2, -2),
+"update": 0,
+"values": [Vector2(620, 1000), Vector2(620, 540), Vector2(620, 540), Vector2(620, 1000)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_hxu8e"]
+_data = {
+&"RESET": SubResource("Animation_7smn1"),
+&"show": SubResource("Animation_raeie")
+}
+
 [node name="Main" type="Node" unique_id=885458657]
 script = ExtResource("1_l3cfh")
 
@@ -186,6 +195,16 @@ script = ExtResource("4_ou6is")
 
 [node name="HUD" type="Node" parent="GUI" unique_id=340651958]
 script = ExtResource("6_hxu8e")
+
+[node name="WaterEffect" type="ColorRect" parent="GUI/HUD" unique_id=1250025688]
+visible = false
+material = SubResource("ShaderMaterial_0bhws")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("7_0bhws")
 
 [node name="HealthVignette" type="TextureRect" parent="GUI/HUD" unique_id=1049265694]
 modulate = Color(0, 0, 0, 0)
@@ -235,6 +254,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme_override_constants/margin_left = 15
 theme_override_constants/margin_top = 15
 theme_override_constants/margin_right = 15
@@ -487,26 +507,6 @@ grow_horizontal = 0
 grow_vertical = 0
 theme_override_font_sizes/font_size = 72
 
-[node name="TextMessage" type="RichTextLabel" parent="GUI/HUD" unique_id=843260242]
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -20.0
-offset_top = 280.0
-offset_right = 361.0
-offset_bottom = 351.0
-grow_horizontal = 2
-grow_vertical = 0
-text = "TEXT"
-horizontal_alignment = 1
-vertical_alignment = 1
-script = ExtResource("11_7smn1")
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="GUI/HUD/TextMessage" unique_id=351934201]
-libraries/ = SubResource("AnimationLibrary_hxu8e")
-
 [node name="StaminaBar" type="Control" parent="GUI/HUD" unique_id=740405387]
 layout_mode = 3
 anchors_preset = 8
@@ -573,7 +573,7 @@ offset_top = -112.0
 offset_right = 200.0
 offset_bottom = -35.0
 grow_vertical = 0
-theme_override_constants/separation = 15
+theme_override_constants/separation = 20
 script = ExtResource("16_37hlw")
 
 [node name="ExpBar" type="ProgressBar" parent="GUI/HUD/BarBox" unique_id=1678378783]
@@ -655,6 +655,26 @@ offset_bottom = 8.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="TextMessage" type="RichTextLabel" parent="GUI" unique_id=843260242]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = 280.0
+offset_right = 361.0
+offset_bottom = 351.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "TEXT"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("11_7smn1")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="GUI/TextMessage" unique_id=351934201]
+libraries/ = SubResource("AnimationLibrary_hxu8e")
+
 [node name="MainMenu" type="MarginContainer" parent="GUI" unique_id=363169062]
 anchors_preset = 15
 anchor_right = 1.0
@@ -714,52 +734,120 @@ layout_mode = 2
 placeholder_text = "IP"
 alignment = 1
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="GUI/MainMenu" unique_id=516588149]
+[node name="HBoxContainer" type="HBoxContainer" parent="GUI/MainMenu" unique_id=1182752835]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GUI/MainMenu/HBoxContainer" unique_id=555953634]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 4
 
-[node name="PanelContainer" type="PanelContainer" parent="GUI/MainMenu/VBoxContainer2" unique_id=213670114]
+[node name="PanelContainer" type="PanelContainer" parent="GUI/MainMenu/HBoxContainer/VBoxContainer" unique_id=1039894030]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="GUI/MainMenu/VBoxContainer2/PanelContainer" unique_id=106033644]
+[node name="MarginContainer" type="MarginContainer" parent="GUI/MainMenu/HBoxContainer/VBoxContainer/PanelContainer" unique_id=1487132769]
 layout_mode = 2
 theme_override_constants/margin_left = 15
 theme_override_constants/margin_top = 15
 theme_override_constants/margin_right = 15
 theme_override_constants/margin_bottom = 15
 
-[node name="VBoxContainer" type="VBoxContainer" parent="GUI/MainMenu/VBoxContainer2/PanelContainer/MarginContainer" unique_id=889330797]
+[node name="VBoxContainer" type="VBoxContainer" parent="GUI/MainMenu/HBoxContainer/VBoxContainer/PanelContainer/MarginContainer" unique_id=1927489743]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="GUI/MainMenu/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer" unique_id=648998576]
+[node name="Label" type="Label" parent="GUI/MainMenu/HBoxContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1424579074]
+layout_mode = 2
+text = "CONTROLS:"
+
+[node name="Label2" type="Label" parent="GUI/MainMenu/HBoxContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=954743068]
+layout_mode = 2
+text = "WASD - MOVING"
+
+[node name="Label3" type="Label" parent="GUI/MainMenu/HBoxContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1766563254]
+layout_mode = 2
+text = "Q - DROP ITEM"
+
+[node name="Label4" type="Label" parent="GUI/MainMenu/HBoxContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1411631991]
+layout_mode = 2
+text = "F - PICKUP ITEM"
+
+[node name="Label5" type="Label" parent="GUI/MainMenu/HBoxContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1878797453]
+layout_mode = 2
+text = "C - CRAFT"
+
+[node name="Label6" type="Label" parent="GUI/MainMenu/HBoxContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=356072162]
+layout_mode = 2
+text = "ESC - MENU"
+
+[node name="Label7" type="Label" parent="GUI/MainMenu/HBoxContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=567522971]
+layout_mode = 2
+text = "LMB - ATTACK"
+
+[node name="Label8" type="Label" parent="GUI/MainMenu/HBoxContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1688724808]
+layout_mode = 2
+text = "RMB - INTERACT"
+
+[node name="Label9" type="Label" parent="GUI/MainMenu/HBoxContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1244439945]
+layout_mode = 2
+text = "B - OPEN BOOK"
+
+[node name="Label10" type="Label" parent="GUI/MainMenu/HBoxContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1301779430]
+layout_mode = 2
+text = "SHIFT - RUN"
+
+[node name="Label11" type="Label" parent="GUI/MainMenu/HBoxContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=451971129]
+layout_mode = 2
+text = "F1 - DEBUG INFO"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="GUI/MainMenu/HBoxContainer" unique_id=516588149]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+
+[node name="PanelContainer" type="PanelContainer" parent="GUI/MainMenu/HBoxContainer/VBoxContainer2" unique_id=213670114]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="GUI/MainMenu/HBoxContainer/VBoxContainer2/PanelContainer" unique_id=106033644]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GUI/MainMenu/HBoxContainer/VBoxContainer2/PanelContainer/MarginContainer" unique_id=889330797]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="GUI/MainMenu/HBoxContainer/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer" unique_id=648998576]
 layout_mode = 2
 text = "World size
 (impacts performance)"
 
-[node name="LineEdit" type="LineEdit" parent="GUI/MainMenu/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer" unique_id=814682778]
+[node name="LineEdit" type="LineEdit" parent="GUI/MainMenu/HBoxContainer/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer" unique_id=814682778]
 layout_mode = 2
 text = "800"
 placeholder_text = "800"
 
-[node name="Label2" type="Label" parent="GUI/MainMenu/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer" unique_id=583959888]
+[node name="Label2" type="Label" parent="GUI/MainMenu/HBoxContainer/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer" unique_id=583959888]
 layout_mode = 2
 text = "World Generation Key"
 
-[node name="LineEdit2" type="LineEdit" parent="GUI/MainMenu/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer" unique_id=515565385]
+[node name="LineEdit2" type="LineEdit" parent="GUI/MainMenu/HBoxContainer/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer" unique_id=515565385]
 layout_mode = 2
 placeholder_text = "Skip for randomness"
 
-[node name="FullscreenButton" type="CheckButton" parent="GUI/MainMenu/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer" unique_id=1870858388]
+[node name="FullscreenButton" type="CheckButton" parent="GUI/MainMenu/HBoxContainer/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer" unique_id=1870858388]
 layout_mode = 2
 text = "Fullscreen"
-script = ExtResource("18_r4lks")
+script = ExtResource("22_37hlw")
+key = "fullscreen"
 
-[node name="VsyncButton" type="CheckButton" parent="GUI/MainMenu/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer" unique_id=1211535873]
+[node name="VsyncButton" type="CheckButton" parent="GUI/MainMenu/HBoxContainer/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer" unique_id=1211535873]
 layout_mode = 2
 button_pressed = true
 text = "Vsync"
-script = ExtResource("19_pg34l")
+script = ExtResource("23_6llfj")
+key = "vsync"
 
 [node name="LeaveButton" type="Button" parent="GUI/MainMenu" unique_id=1336085257]
 layout_mode = 2
@@ -806,12 +894,10 @@ layout_mode = 2
 text = "EXIT WORLD"
 
 [connection signal="spawned" from="Environment/PlayerSpawner" to="." method="_on_player_spawner_spawned"]
-[connection signal="animation_finished" from="GUI/HUD/TextMessage/AnimationPlayer" to="GUI/HUD/TextMessage" method="_on_animation_player_animation_finished"]
+[connection signal="animation_finished" from="GUI/TextMessage/AnimationPlayer" to="GUI/TextMessage" method="_on_animation_player_animation_finished"]
 [connection signal="pressed" from="GUI/MainMenu/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/CreateButton" to="." method="_on_create_button_pressed"]
 [connection signal="pressed" from="GUI/MainMenu/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/LoadButton" to="." method="_on_load_button_pressed"]
 [connection signal="pressed" from="GUI/MainMenu/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
-[connection signal="toggled" from="GUI/MainMenu/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer/FullscreenButton" to="GUI/MainMenu/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer/FullscreenButton" method="_on_toggled"]
-[connection signal="toggled" from="GUI/MainMenu/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer/VsyncButton" to="GUI/MainMenu/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer/VsyncButton" method="_on_toggled"]
 [connection signal="pressed" from="GUI/MainMenu/LeaveButton" to="GUI/MainMenu/LeaveButton" method="_on_pressed"]
 [connection signal="pressed" from="GUI/GameMenu/MarginContainer/VBoxContainer/Save" to="GUI/GameMenu" method="_on_save_pressed"]
 [connection signal="pressed" from="GUI/GameMenu/MarginContainer/VBoxContainer/ExitWithoutSave" to="GUI/GameMenu" method="_on_exit_without_save_pressed"]

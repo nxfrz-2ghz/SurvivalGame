@@ -15,8 +15,7 @@ func _physics_process(_delta: float) -> void:
 
 
 func _on_save_pressed() -> void:
-	var world := G.world.get_node("World")
-	world.save_world()
+	G.world.save_world()
 
 
 func _on_exit_without_save_pressed() -> void:
@@ -24,6 +23,5 @@ func _on_exit_without_save_pressed() -> void:
 
 
 func _on_exit_pressed() -> void:
-	var world := G.world.get_node("World")
-	world.save_world()
+	G.world.save_world()
 	get_tree().reload_current_scene()

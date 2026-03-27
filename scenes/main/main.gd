@@ -58,18 +58,17 @@ func add_player(peer_id: int) -> void:
 	player.name = str(peer_id)
 	player.position.y = 50
 	# Используем call_deferred для безопасности физики
-	G.world.add_child(player, true)
+	G.environment.add_child(player, true)
 	
 	# Если игрок это мы, отложенно подключаем сигналы
 	if peer_id == multiplayer.get_unique_id():
 		set_up_player(player)
 	else:
-		var world_node = G.world.get_node("World")
-		world_node.rpc_id(peer_id, "join_world", world_node.world_seed, int(G.gui.main_menu.world_size.text))
+		G.world.rpc_id(peer_id, "join_world", G.world.world_seed, int(G.gui.main_menu.world_size.text))
 
 
 func remove_player(peer_id: int) -> void:
-	var player = G.world.get_node_or_null(str(peer_id))
+	var player = G.environment.get_node_or_null(str(peer_id))
 	player.queue_free()
 
 
@@ -78,9 +77,9 @@ func start_game(is_load: bool = false) -> void:
 	G.gui.background.queue_free()
 	if multiplayer.get_unique_id() == 1:
 		if is_load:
-			G.world.get_node("World").load_world()
+			G.world.load_world()
 		else:
-			G.world.get_node("World").start_gen()
+			G.world.start_gen()
 	G.state_machine = "game"
 	G.gui.game_menu.game = true
 
