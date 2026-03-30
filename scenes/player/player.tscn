@@ -16,6 +16,7 @@
 [ext_resource type="Script" uid="uid://cw5xjlkj437o" path="res://scenes/player/weapon/weapon.gd" id="7_kvlxm"]
 [ext_resource type="Texture2D" uid="uid://dh5m1mos2v01r" path="res://res/sprites/attack_anim/attack1.png" id="8_lgqa7"]
 [ext_resource type="Script" uid="uid://dddal05iv80hr" path="res://scenes/player/weapon/actions.gd" id="8_uf5tr"]
+[ext_resource type="AudioStream" uid="uid://d0m7xlcuijtaq" path="res://res/sounds/actions/new_note.mp3" id="9_1u1sw"]
 [ext_resource type="Texture2D" uid="uid://bm5qrehnvp7bt" path="res://res/sprites/attack_anim/attack2.png" id="9_8ydkj"]
 [ext_resource type="Texture2D" uid="uid://4btr3xv0nwap" path="res://res/sprites/attack_anim/attack3.png" id="10_3j4b4"]
 [ext_resource type="Texture2D" uid="uid://ycutifsjus3w" path="res://res/sprites/attack_anim/attack4.png" id="11_yj68g"]
@@ -768,6 +769,10 @@ script = ExtResource("3_uf5tr")
 [node name="ProgressController" type="Node" parent="." unique_id=812764221]
 script = ExtResource("6_iwuka")
 
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="ProgressController" unique_id=1360550978]
+stream = ExtResource("9_1u1sw")
+bus = &"Sounds"
+
 [node name="RainParticles3D" type="GPUParticles3D" parent="." unique_id=1526489172]
 emitting = false
 amount = 2048
@@ -808,7 +813,7 @@ script = SubResource("GDScript_ttakn")
 
 [node name="InteractRay" parent="Head" unique_id=1585375663 instance=ExtResource("4_p47bc")]
 unique_name_in_owner = true
-collision_mask = 30
+collision_mask = 62
 collide_with_areas = false
 
 [node name="GroundRay" type="RayCast3D" parent="Head" unique_id=1377862579]
@@ -821,7 +826,7 @@ script = ExtResource("7_kvlxm")
 [node name="Actions" type="Area3D" parent="Head/Weapon" unique_id=928031166]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
 collision_layer = 0
-collision_mask = 30
+collision_mask = 62
 input_ray_pickable = false
 script = ExtResource("8_uf5tr")
 

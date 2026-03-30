@@ -7,9 +7,8 @@
 size = Vector3(2.5444336, 1.5430908, 2.673584)
 
 [node name="Grass" unique_id=233065811 instance=ExtResource("1_p18ys")]
-collision_layer = 8
+collision_layer = 32
 nname = "grass"
-despawn_particles_size = 0.5
 
 [node name="EntityComponent" parent="." index="2" unique_id=1330161778]
 despawn_particles_size = 0.5

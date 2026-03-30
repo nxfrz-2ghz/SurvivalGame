@@ -24,6 +24,7 @@ func drop(slot_index: int) -> void:
 func craft() -> void:
 	crafting_mode = false
 	server_craft.rpc(multiplayer.get_unique_id())
+	
 
 
 @rpc("any_peer", "call_local")
@@ -145,7 +146,7 @@ func _get_available_nodes(actions_node) -> Dictionary:
 	return nodes
 
 # Общий метод удаления ресурсов
-func _consume_ingredients(recipe: Dictionary, available_nodes: Dictionary):
+func _consume_ingredients(recipe: Dictionary, available_nodes: Dictionary) -> void:
 	for ingredient in recipe:
 		if ingredient == "craft-station": continue
 		for i in range(recipe[ingredient]):

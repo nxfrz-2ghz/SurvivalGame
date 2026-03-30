@@ -193,9 +193,9 @@ func _on_health_component_died() -> void:
 	rigid_cam.global_position = self.global_position
 	rigid_cam.apply_central_impulse(velocity)
 	
-	for i in range(inv.MAX_SLOTS):
+	for i in range(inv.MAX_SLOTS + 1):
 		var current_slot_idx: int = i + 1
-		while inv.inventory[current_slot_idx] != null:
+		for k in range(inv.inventory[current_slot_idx]["amount"]):
 			weapon.actions.drop(current_slot_idx)
 	
 	self.position = Vector3(0, 100, 0)
@@ -316,8 +316,8 @@ func _on_start_emit_timer_timeout() -> void:
 	
 	# First Note
 	await get_tree().create_timer(15.0).timeout
-	if !progress_controller.unlocked_notes.has(progress_controller.notes["stone"]):
-		progress_controller.add_note("stone")
+	if !progress_controller.unlocked_notes.has(progress_controller.notes["Новый мир"]):
+		progress_controller.add_note("Новый мир")
 
 
 func save_character() -> void:

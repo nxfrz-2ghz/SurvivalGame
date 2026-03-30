@@ -184,13 +184,6 @@ const items := {
 				"pickaxe": 0.1,
 			},
 	},
-	"wooden_torch": {
-		"texture": preload("res://res/sprites/items/torch.png"),
-		"light": {
-			"color": Color.GOLDENROD,
-			"energy": 1.0,
-		},
-	},
 	"copper_shovel": {
 		"texture": preload("res://res/sprites/items/copper_shovel.png"),
 		"recipe": {

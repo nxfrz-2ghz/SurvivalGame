@@ -4,19 +4,21 @@ const MAX_MOBS := 15
 const MAX_SPAWN_RADIUS := 80.0
 const MIN_SPAWN_RADIUS := 50.0
 
+@onready var parent := get_parent()
 
 func _ready() -> void:
 	G.mob_spawner = self
 
 
 func spawn_mob(mob_scene: PackedScene, position: Vector3) -> void:
+	if !parent.server: return
 	var mob_instance := mob_scene.instantiate()
 	mob_instance.position = position
 	G.environment.add_child(mob_instance, true)
 
 
 func _on_directional_light_3d_night_come() -> void:
-	if !get_parent().server: return
+	if !parent.server: return
 	# Выбор случайного игрока
 	var players := get_tree().get_nodes_in_group("players")
 	if players.is_empty(): return
@@ -30,7 +32,7 @@ func _on_directional_light_3d_night_come() -> void:
 
 func _on_spawn_timer_timeout() -> void:
 	if G.state_machine != "game": return
-	if !get_parent().server: return
+	if !parent.server: return
 	
 	# Проверка лимита мобов
 	var current_mobs_count := get_tree().get_nodes_in_group("mobs").size()

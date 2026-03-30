@@ -32,10 +32,18 @@ func _physics_process(delta: float) -> void:
 		night = false
 		rotation_degrees.x = -rotation_degrees.x
 		max_energy = randf_range(0.8, 1.5)
+		
+		if !G.player.progress_controller.unlocked_notes.has(G.player.progress_controller.notes["Первая ночь"]):
+			G.player.progress_controller.add_note("Первая ночь")
+		
 		if parent.server: day_come.emit()
 	
 	if rotation_degrees.x > 0 and !night:
 		night = true
+		
+		if !G.player.progress_controller.unlocked_notes.has(G.player.progress_controller.notes["Начинает темнеть"]):
+			G.player.progress_controller.add_note("Начинает темнеть")
+		
 		if parent.server: night_come.emit()
 	
 	# Контроль яркости солнца

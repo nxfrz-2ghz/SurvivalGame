@@ -838,6 +838,7 @@ layout_mode = 2
 layout_mode = 2
 text = "HOST"
 script = ExtResource("25_7nlll")
+key = "host"
 
 [node name="FullscreenButton" type="CheckButton" parent="GUI/MainMenu/HBoxContainer/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer" unique_id=1870858388]
 layout_mode = 2
@@ -993,6 +994,7 @@ text = "EXIT WORLD"
 [connection signal="pressed" from="GUI/MainMenu/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/CreateButton" to="." method="_on_create_button_pressed"]
 [connection signal="pressed" from="GUI/MainMenu/VBoxContainer/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer/DeleteWorldButton" to="GUI/MainMenu/VBoxContainer/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer/DeleteWorldButton" method="_on_pressed"]
 [connection signal="pressed" from="GUI/MainMenu/VBoxContainer/PanelContainer2/MarginContainer/VBoxContainer/LoadButton" to="." method="_on_load_button_pressed"]
+[connection signal="pressed" from="GUI/MainMenu/VBoxContainer/PanelContainer3/MarginContainer/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
 [connection signal="pressed" from="GUI/MainMenu/LeaveButton" to="GUI/MainMenu/LeaveButton" method="_on_pressed"]
 [connection signal="pressed" from="GUI/GameMenu/MarginContainer/VBoxContainer/Continue" to="GUI/GameMenu" method="_on_continue_pressed"]
 [connection signal="pressed" from="GUI/GameMenu/MarginContainer/VBoxContainer/Save" to="GUI/GameMenu" method="_on_save_pressed"]

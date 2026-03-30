@@ -20,9 +20,9 @@ func _ready() -> void:
 	fuel_timer.timeout.connect(_on_fuel_timer_timeout)
 
 func drop_queue() -> void:
-	for item in queue: parent.enity.drop(item)
-	for item in complete: parent.enity.drop(item)
-	for i in range(fuel): parent.enity.drop(fuel_type)
+	for item in queue: parent.entity.drop(item)
+	for item in complete: parent.entity.drop(item)
+	for i in range(fuel): parent.entity.drop(fuel_type)
 	queue.clear()
 	complete.clear()
 	fuel = 0

@@ -16,6 +16,8 @@ func _on_toggled(toggled_on: bool) -> void:
 	if DiskControl.has(key):
 		if DiskControl.take(key) != toggled_on:
 			DiskControl.save(key, toggled_on)
+	else:
+		DiskControl.save(key, toggled_on)
 
 
 func apply(_toggled_on: bool) -> void: pass

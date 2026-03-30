@@ -68,6 +68,8 @@ func set_page(page: String) -> void:
 		
 		spawn_label("")
 		spawn_button("BESTIARY")
+		for i in range(5):
+			spawn_label("")
 	
 	elif page in G.player.progress_controller.notes:
 		show_page(box_page)

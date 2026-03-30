@@ -23,6 +23,7 @@ func _on_timer_timeout() -> void:
 
 
 func _on_idle_sound_timer_timeout() -> void:
+	if not is_multiplayer_authority(): return
 	idle_sound_timer.wait_time = randi_range(8, 15	)
 	idle_sound_timer.start()
 	take_damage_audio.audio_play(R.sounds["idle"]["pig"].pick_random().resource_path)

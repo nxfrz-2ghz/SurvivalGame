@@ -75,10 +75,30 @@ func check_progress(item_name) -> void:
 	if !G.player: return
 	var prg: Node = G.player.progress_controller
 	
-	if item_name in prg.notes.keys():
-		if !prg.unlocked_notes.has(prg.notes[item_name]):
-			prg.add_note(item_name)
-	
+	if item_name == "stone":
+		if !prg.unlocked_notes.has(prg.notes["Новый мир"]):
+			prg.add_note("Новый мир")
+	elif item_name == "log":
+		if !prg.unlocked_notes.has(prg.notes["Первая древесина"]):
+			prg.add_note("Первая древесина")
+	elif item_name == "copper_ore":
+		if !prg.unlocked_notes.has(prg.notes["Первая медь"]):
+			prg.add_note("Первая медь")
+	elif item_name == "iron_ore":
+		if !prg.unlocked_notes.has(prg.notes["Первое железо"]):
+			prg.add_note("Первое железо")
+	elif item_name == "copper_bar":
+		if !prg.unlocked_notes.has(prg.notes["Медный слиток"]):
+			prg.add_note("Медный слиток")
+	elif item_name == "copper_shovel":
+		if !prg.unlocked_notes.has(prg.notes["Медная лопата"]):
+			prg.add_note("Медная лопата")
+	elif item_name == "clay":
+		if !prg.unlocked_notes.has(prg.notes["Глина"]):
+			prg.add_note("Глина")
+	elif item_name == "iron_bar":
+		if !prg.unlocked_notes.has(prg.notes["Железный слиток"]):
+			prg.add_note("Железный слиток")
 
 ### --- ОСНОВНЫЕ ФУНКЦИИ ---
 
