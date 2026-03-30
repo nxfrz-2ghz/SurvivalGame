@@ -7,3 +7,4 @@ extends Node
 @onready var stamina_bar := $StaminaBar
 @onready var debug := $Debug
 @onready var bar_box := $BarBox
+@onready var aim := $Aim

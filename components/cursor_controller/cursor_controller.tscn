@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bylhfkt27b0hb"]
+
+[ext_resource type="Script" uid="uid://nhc3fo21kv5x" path="res://components/cursor_controller/cursor_controller.gd" id="1_p8dem"]
+
+[node name="CursorController" type="Node" unique_id=1229743695]
+script = ExtResource("1_p8dem")

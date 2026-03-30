@@ -45,13 +45,14 @@ max_health = 6.0
 [node name="CraftComponent" parent="." index="2" unique_id=713178560 instance=ExtResource("3_dip5l")]
 craft_category = "alchemy_station"
 
-[node name="CollisionShape3D" parent="." index="3" unique_id=1161658582]
+[node name="EntityComponent" parent="." index="3" unique_id=1330161778]
+drop_items = {
+"copper_bar": 3
+}
+
+[node name="CollisionShape3D" parent="." index="5" unique_id=1161658582]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8094492, 0)
 shape = SubResource("CylinderShape3D_inm7f")
-
-[node name="Sprite3D" parent="." index="5" unique_id=57594410]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.014470577, 0.8757807, 0.03006506)
-texture = ExtResource("4_dip5l")
 
 [node name="Label3D" type="Label3D" parent="." index="6" unique_id=1984679164]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.377518, 0)
@@ -81,6 +82,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.0835304, 0)
 emitting = false
 
 [node name="FallRay" parent="." index="9" unique_id=2065431078 instance=ExtResource("6_tosh2")]
+
+[node name="Sprite3D" parent="." index="10" unique_id=57594410]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.014470577, 0.8757807, 0.03006506)
+texture = ExtResource("4_dip5l")
 
 [node name="MultiplayerSynchronizer2" type="MultiplayerSynchronizer" parent="." index="12" unique_id=1332294568]
 replication_config = SubResource("SceneReplicationConfig_nhymd")

@@ -44,36 +44,35 @@ properties/2/replication_mode = 2
 [node name="Campfire" unique_id=1331540241 instance=ExtResource("1_yqtuu")]
 script = ExtResource("2_gdl1i")
 nname = "campfire"
-drop_items = {
-"log": 1
-}
 
 [node name="CraftTimer" type="Timer" parent="Timers" parent_id_path=PackedInt32Array(203408184) index="1" unique_id=1484711805]
 wait_time = 3.0
 one_shot = true
 
 [node name="FuelTimer" type="Timer" parent="Timers" parent_id_path=PackedInt32Array(203408184) index="2" unique_id=232977177]
-wait_time = 18.0
+wait_time = 20.0
 one_shot = true
 
 [node name="CookComponent" parent="." index="2" unique_id=837939887 instance=ExtResource("3_x1bif")]
 cook_category = "campfire"
 
-[node name="CollisionShape3D" parent="." index="3" unique_id=1161658582]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.48779297, 0)
-shape = SubResource("CylinderShape3D_x1bif")
+[node name="EntityComponent" parent="." index="3" unique_id=1330161778]
+drop_items = {
+"log": 1
+}
 
 [node name="Label3D" type="Label3D" parent="." index="5" unique_id=1697573655]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8202734, 0)
 billboard = 1
 double_sided = false
 
-[node name="Sprite3D" parent="." index="6" unique_id=57594410]
+[node name="CollisionShape3D" parent="." index="6" unique_id=1161658582]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.48779297, 0)
+shape = SubResource("CylinderShape3D_x1bif")
+
+[node name="Sprite3D" parent="." index="7" unique_id=57594410]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7948087, 0)
 texture = ExtResource("2_fyjhv")
-
-[node name="Shadow" parent="." index="7" unique_id=437352595]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, -0.7917417, 0)
 
 [node name="ToggleOn" type="Node3D" parent="." index="8" unique_id=440124899]
 visible = false
@@ -99,6 +98,9 @@ frame_progress = 0.0647054
 [node name="SmokeParticle" parent="." index="9" unique_id=2097639369 instance=ExtResource("4_wkwmc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5075673, 0)
 emitting = false
+
+[node name="Shadow" parent="." index="10" unique_id=437352595]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, -0.7917417, 0)
 
 [node name="MultiplayerSynchronizer2" type="MultiplayerSynchronizer" parent="." index="11" unique_id=333321540]
 replication_config = SubResource("SceneReplicationConfig_irh8k")

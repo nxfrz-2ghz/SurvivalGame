@@ -49,9 +49,10 @@ max_health = 5.0
 [node name="CookComponent" parent="." index="2" unique_id=837939887 instance=ExtResource("2_ijwyf")]
 cook_category = "furnace"
 
-[node name="CollisionShape3D" parent="." index="3" unique_id=1161658582]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03913629, 1.1595132, -0.03717804)
-shape = SubResource("CylinderShape3D_fyjhv")
+[node name="EntityComponent" parent="." index="3" unique_id=1330161778]
+drop_items = {
+"stone": 4
+}
 
 [node name="Label3D" type="Label3D" parent="." index="4" unique_id=388106055]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2575567, 0)
@@ -79,12 +80,16 @@ distance_fade_enabled = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.0835304, 0)
 emitting = false
 
-[node name="Sprite3D" parent="." index="8" unique_id=57594410]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.039, 1.541, -0.036)
-texture = ExtResource("4_fn88o")
+[node name="CollisionShape3D" parent="." index="8" unique_id=1161658582]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03913629, 1.1595132, -0.03717804)
+shape = SubResource("CylinderShape3D_fyjhv")
 
 [node name="FallRay" parent="." index="9" unique_id=2065431078 instance=ExtResource("5_qnkj5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.024490118, 0)
+
+[node name="Sprite3D" parent="." index="10" unique_id=57594410]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.039, 1.541, -0.036)
+texture = ExtResource("4_fn88o")
 
 [node name="MultiplayerSynchronizer2" type="MultiplayerSynchronizer" parent="." index="12" unique_id=1235628749]
 replication_config = SubResource("SceneReplicationConfig_mbkog")

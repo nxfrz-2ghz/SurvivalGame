@@ -17,11 +17,12 @@ extends Node
 
 func _ready() -> void:
 	craft_timer.timeout.connect(_on_craft_timer_timeout)
+	fuel_timer.timeout.connect(_on_fuel_timer_timeout)
 
 func drop_queue() -> void:
-	for item in queue: parent.drop(item)
-	for item in complete: parent.drop(item)
-	for i in range(fuel): parent.drop(fuel_type)
+	for item in queue: parent.enity.drop(item)
+	for item in complete: parent.enity.drop(item)
+	for i in range(fuel): parent.enity.drop(fuel_type)
 	queue.clear()
 	complete.clear()
 	fuel = 0
@@ -52,8 +53,10 @@ func add_fuel() -> void:
 		toggle()
 	fuel += 1
 	update_label.rpc(queue, complete, fuel)
-	if !queue.is_empty() and craft_timer.is_stopped():
-		fuel_timer.start()
+	fuel_timer.start()
+	
+	# Продолжение плавки
+	if !queue.is_empty(): start_cook()
 
 @rpc("any_peer", "call_local")
 func pick() -> void:
@@ -88,9 +91,9 @@ func _on_craft_timer_timeout() -> void:
 
 func _on_fuel_timer_timeout() -> void:
 	fuel -= 1
+	update_label.rpc(queue, complete, fuel)
 	if fuel > 0:
 		fuel_timer.start()
 	else:
 		toggle()
 		craft_timer.stop()
-	update_label.rpc(queue, complete, fuel)

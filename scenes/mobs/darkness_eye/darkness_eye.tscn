@@ -38,24 +38,27 @@ exp_drop = 4.0
 wait_time = 0.3
 autostart = true
 
-[node name="HealthComponent" parent="." index="1" unique_id=1086839518]
+[node name="HealthComponent" parent="." index="2" unique_id=1086839518]
 resists = {
 "axe": 1.6,
 "melee": 0.9
 }
 max_health = 5.0
 
-[node name="CollisionShape3D" parent="." index="2" unique_id=1649019193]
+[node name="EntityComponent" parent="." index="3" unique_id=1330161778]
+exp_drop = 4.0
+
+[node name="CollisionShape3D" parent="." index="4" unique_id=1649019193]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3959961, 0)
 shape = SubResource("CapsuleShape3D_clm3c")
 
-[node name="AnimatedSprite3D" parent="." index="3" unique_id=1249191248]
+[node name="AnimatedSprite3D" parent="." index="5" unique_id=1249191248]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.36554074, 0)
 sprite_frames = SubResource("SpriteFrames_0w0fy")
 autoplay = "default"
 frame_progress = 0.45816362
 
-[node name="Shadow" parent="." index="5" unique_id=437352595]
+[node name="Shadow" parent="." index="6" unique_id=437352595]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, -2.5216517, 0)
 
 [connection signal="timeout" from="Timers/AttackCooldown" to="." method="_on_attack_cooldown_timeout"]

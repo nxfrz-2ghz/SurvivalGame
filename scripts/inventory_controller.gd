@@ -11,7 +11,7 @@ var inventory: Dictionary = {}
 var current_item := 1
 
 
-func _ready():
+func _ready() -> void:
 	# Инициализируем пустые слоты
 	for i in range(1, MAX_SLOTS + 1):
 		inventory[i] = null
@@ -70,12 +70,23 @@ func _input(_event: InputEvent) -> void:
 			current_item -= 10
 		update_signals()
 
+
+func check_progress(item_name) -> void:
+	if !G.player: return
+	var prg: Node = G.player.progress_controller
+	
+	if item_name in prg.notes.keys():
+		if !prg.unlocked_notes.has(prg.notes[item_name]):
+			prg.add_note(item_name)
+	
+
 ### --- ОСНОВНЫЕ ФУНКЦИИ ---
 
-func add_item(item_name: String, amount: int = 1):
+func add_item(item_name: String, amount: int = 1) -> void:
 	$"../Audio/ActionsAudioPlayer3D".audio_play(R.sounds["actions"]["pickup"].resource_path)
 	var remaining_amount = amount
 	var max_s = R.items[item_name].get("stack_size", 1) # По умолчанию стак 1
+	check_progress(item_name)
 
 	# 1. Сначала пытаемся добавить в существующие стаки того же типа
 	for i in range(1, MAX_SLOTS + 1):
@@ -106,7 +117,7 @@ func add_item(item_name: String, amount: int = 1):
 	
 	update_signals()
 
-func drop_item(slot_index: int, amount: int = 1):
+func drop_item(slot_index: int, amount: int = 1) -> void:
 	$"../Audio/ActionsAudioPlayer3D".audio_play(R.sounds["actions"]["pickup"].resource_path)
 	if slot_index < 0 or slot_index >= MAX_SLOTS: return
 	

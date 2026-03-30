@@ -164,13 +164,16 @@ autostart = true
 [node name="HealthComponent" parent="." index="1" unique_id=1086116789]
 max_health = 18.0
 
-[node name="CollisionShape3D" parent="." index="3" unique_id=1161658582]
+[node name="EntityComponent" parent="." index="2" unique_id=1330161778]
+drop_items = {
+"raw_meat": 4
+}
+despawn_sound_name = "meat"
+exp_drop = 5.0
+
+[node name="CollisionShape3D" parent="." index="4" unique_id=1161658582]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5682256, 0)
 shape = SubResource("CapsuleShape3D_0sola")
-
-[node name="Sprite3D" parent="." index="4" unique_id=57594410]
-visible = false
-texture = ExtResource("3_0a7st")
 
 [node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="." index="5" unique_id=1127619502]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.485882, 0)
@@ -185,6 +188,10 @@ autoplay = "100"
 frame = 5
 frame_progress = 1.0
 script = ExtResource("26_1cmcs")
+
+[node name="Sprite3D" parent="." index="6" unique_id=57594410]
+visible = false
+texture = ExtResource("3_0a7st")
 
 [node name="Corruption" type="Decal" parent="." index="7" unique_id=734265432]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, -0.6811723, 0)

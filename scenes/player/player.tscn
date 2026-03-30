@@ -120,15 +120,6 @@ func play_on_damage() -> void:
 [sub_resource type="BoxShape3D" id="BoxShape3D_ylpk0"]
 size = Vector3(2, 1.3305664, 2)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6cv16"]
-transparency = 1
-albedo_color = Color(0.29803923, 1, 0.29803923, 0.16078432)
-
-[sub_resource type="BoxMesh" id="BoxMesh_j4nxn"]
-lightmap_size_hint = Vector2i(24, 29)
-material = SubResource("StandardMaterial3D_6cv16")
-size = Vector3(2, 1.331, 1.5)
-
 [sub_resource type="Animation" id="Animation_iyg5g"]
 length = 0.001
 tracks/0/type = "value"
@@ -723,6 +714,9 @@ properties/2/replication_mode = 2
 properties/3/path = NodePath(".:rotation")
 properties/3/spawn = true
 properties/3/replication_mode = 2
+properties/4/path = NodePath("Label3D:text")
+properties/4/spawn = true
+properties/4/replication_mode = 2
 
 [node name="Player" type="CharacterBody3D" unique_id=2118560617 groups=["players"]]
 collision_layer = 2
@@ -789,6 +783,11 @@ texture = ExtResource("4_lgqa7")
 transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 0, 0, 0)
 shape = SubResource("CapsuleShape3D_qnmj6")
 
+[node name="Label3D" type="Label3D" parent="." unique_id=1750692344]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0821313, 0)
+billboard = 2
+double_sided = false
+
 [node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=1618732350]
 light_energy = 0.5
 omni_range = 50.0
@@ -819,9 +818,6 @@ target_position = Vector3(0, 0, -3)
 unique_name_in_owner = true
 script = ExtResource("7_kvlxm")
 
-[node name="OmniLight3D" type="OmniLight3D" parent="Head/Weapon" unique_id=780601897]
-visible = false
-
 [node name="Actions" type="Area3D" parent="Head/Weapon" unique_id=928031166]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
 collision_layer = 0
@@ -833,13 +829,9 @@ script = ExtResource("8_uf5tr")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1652832, 0)
 shape = SubResource("BoxShape3D_ylpk0")
 
-[node name="CraftZone" type="MeshInstance3D" parent="Head/Weapon/Actions" unique_id=404098417]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.16500002, -0.22790742)
-visible = false
-mesh = SubResource("BoxMesh_j4nxn")
-
-[node name="Label3D" type="Label3D" parent="Head/Weapon/Actions/CraftZone" unique_id=691792025]
+[node name="CraftZone" type="Label3D" parent="Head/Weapon/Actions" unique_id=1601957492]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5304802, 0.6547494)
+visible = false
 font_size = 24
 
 [node name="Arms" type="Container" parent="Head/Weapon" unique_id=1422421011]

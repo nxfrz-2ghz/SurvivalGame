@@ -25,7 +25,7 @@ var hunger: float
 
 var output: String
 
-func on_health_changed(cur: float, _maxx: float) -> void:
+func on_health_changed(cur: float, _maxx: float, _last: float) -> void:
 	health = cur
 	update()
 

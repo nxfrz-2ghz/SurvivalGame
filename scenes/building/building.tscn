@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://uwmukk060f86"]
+
+[ext_resource type="Script" uid="uid://6nxtleiwrsst" path="res://scenes/building/building.gd" id="1_nedpk"]
+[ext_resource type="PackedScene" uid="uid://c8q18w2yckeeh" path="res://components/health_component/health_component.tscn" id="1_qg5jt"]
+[ext_resource type="PackedScene" uid="uid://cm8dp3hd0yxoq" path="res://components/entity_component/entity_component.tscn" id="2_nedpk"]
+[ext_resource type="Script" uid="uid://dmflvkjv8xuns" path="res://scenes/objects/take_damage_audio.gd" id="3_p8amu"]
+[ext_resource type="PackedScene" uid="uid://kqqogxrnnqyf" path="res://components/fall_ray/fall_ray.tscn" id="5_p8amu"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_nedpk"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 0
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 0
+properties/2/path = NodePath("HealthComponent:current_health")
+properties/2/spawn = true
+properties/2/replication_mode = 2
+
+[node name="Building" type="StaticBody3D" unique_id=1331540241 groups=["objects"]]
+collision_layer = 4
+script = ExtResource("1_nedpk")
+
+[node name="HealthComponent" parent="." unique_id=1086116789 instance=ExtResource("1_qg5jt")]
+resists = {
+"melee": 0.0
+}
+
+[node name="EntityComponent" parent="." unique_id=1330161778 instance=ExtResource("2_nedpk")]
+
+[node name="TakeDamageAudio" type="AudioStreamPlayer3D" parent="." unique_id=737666881]
+bus = &"Sounds"
+script = ExtResource("3_p8amu")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1161658582]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=2006591672]
+visibility_range_end = 100.0
+
+[node name="FallRay" parent="." unique_id=2065431078 instance=ExtResource("5_p8amu")]
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1679314553]
+replication_config = SubResource("SceneReplicationConfig_nedpk")

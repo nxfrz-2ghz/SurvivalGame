@@ -51,10 +51,18 @@ func _ready() -> void:
 		
 		health.on_damage.connect($Head/Camera/AnimationPlayer.play_on_damage)
 		health.on_damage.connect(damage_audio_player.play_sound)
+		health.changed.connect(spawn_damage_perticle)
+		
+		self.nname = G.gui.main_menu.player_name.text
+		$Label3D.text = self.nname
 
 
 func _input(event: InputEvent) -> void:
 	if not is_multiplayer_authority(): return
+	
+	if Input.is_action_just_pressed("esc") and G.state_machine == "book":
+		book.close_book.emit()
+	
 	if G.state_machine != "game": return
 	
 	if event.is_action_pressed("lmb"): # или любая кнопка действия
@@ -74,7 +82,7 @@ func _input(event: InputEvent) -> void:
 		if weapon.actions.crafting_mode:
 			weapon.actions.craft()
 		else:
-			weapon.use_item()
+			weapon.use_item_durability()
 			
 			# Если слот не пуст (используем данные из массива)
 			if current_slot_data != null:
@@ -95,7 +103,7 @@ func _input(event: InputEvent) -> void:
 			
 			weapon.weapon_anim.speed_scale = weapon.attack_speed
 			weapon.weapon_anim.play("use")
-			weapon.actions.attack(weapon.damage, weapon.damage_types, weapon.push_velocity)
+			weapon.actions.attack(weapon.damage + get_float_velocity()/10, weapon.damage_types, weapon.push_velocity)
 			weapon.attack.emit()
 		interact_ray.update()
 	
@@ -165,6 +173,7 @@ func _on_open_book() -> void:
 	G.state_machine = "book"
 	weapon.weapon_anim.play("book_open_page")
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	book.set_page("MAIN")
 
 
 func _on_close_book() -> void:
@@ -199,15 +208,40 @@ func apply_push(direction_vector: Vector3, velocity_power: float) -> void:
 	velocity += direction_vector * velocity_power
 
 
+func spawn_damage_perticle(cur: float, _maxx: float, last: float) -> void:
+	var change_hp := cur - last
+	change_hp = snapped(change_hp, 3.4)
+	if change_hp == 0.0: return
+	
+	var particle := R.particles["damage_counter"].instantiate()
+	particle.text = str(change_hp)
+	if change_hp > 0:
+		particle.modulate = Color.GREEN
+	else:
+		particle.modulate = Color.RED
+	particle.position = global_position + Vector3.UP
+	G.environment.add_child(particle, true)
+
+
+func get_float_velocity() -> float:
+	return abs(velocity.x) + abs(velocity.y) + abs(velocity.z)
+
+
 func is_underwater() -> bool:
 	return position.y < G.world.WATER_LEVEL
 
 
 func moving(delta: float) -> void:
 	
+	var gravity := get_gravity()
+	
 	# Add the gravity.
 	if not is_on_floor():
-		velocity += get_gravity() * delta
+		
+		if is_underwater():
+			gravity /= 3
+		
+		velocity += gravity * delta
 	
 	if Input.is_action_pressed("space") and (is_on_floor() or is_underwater()):
 		velocity.y = JUMP_VELOCITY
@@ -279,3 +313,67 @@ func _on_start_emit_timer_timeout() -> void:
 	hunger.eat(0)
 	inv.update_signals()
 	progress_controller.add_exp(0)
+	
+	# First Note
+	await get_tree().create_timer(15.0).timeout
+	if !progress_controller.unlocked_notes.has(progress_controller.notes["stone"]):
+		progress_controller.add_note("stone")
+
+
+func save_character() -> void:
+	
+	var path: String = "user://worlds/" + G.world.world_name + "/" + nname + ".chr"
+	if not DirAccess.make_dir_recursive_absolute("user://worlds/" + G.world.world_name):
+		DirAccess.make_dir_absolute("user://worlds/" + G.world.world_name)
+	
+	# Сохранение игрока
+	var data := {
+		"pos": [position.x, position.y, position.z],
+		"rot": [rotation.y, head.rotation.x],
+		"health": health.current_health,
+		"hunger": hunger.current_hunger,
+		"inventory": inv.inventory,
+		"unlocked_notes": progress_controller.unlocked_notes,
+		"current exp": progress_controller.cur_exp,
+		"current lvl":  progress_controller.lvl,
+	}
+	
+	var file := FileAccess.open(path, FileAccess.WRITE)
+	if file:
+		file.store_string(JSON.stringify(data))
+		file.close()
+		print("Character saved to: ", path)
+
+
+func load_character() -> void:
+	var path: String = "user://worlds/" + G.world.world_name + "/" + nname + ".chr"
+	
+	if not FileAccess.file_exists(path):
+		print("Character save file not found:", path)
+		return
+	
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file:
+		var json_string = file.get_as_text()
+		file.close()
+		
+		var data = JSON.parse_string(json_string)
+		
+		var pos = data.get("pos", [0, 0, 0])
+		position = Vector3(pos[0], pos[1], pos[2])
+		
+		var rot = data.get("rot", [0, 0])
+		rotation.y = rot[0]
+		head.rotation.x = rot[1]
+		
+		health.current_health = data.get("health", health.current_health)
+		hunger.current_hunger = data.get("hunger", hunger.current_hunger)
+		progress_controller.unlocked_notes = data.get("unlocked_notes", [])
+		progress_controller.cur_exp = data.get("current exp", 0)
+		progress_controller.lvl = data.get("current lvl", 0)
+		
+		for item in data["inventory"].values():
+			if item:
+				inv.add_item(item["name"], item["amount"])
+		
+		print("Character loaded from:", path)

@@ -13,7 +13,9 @@ const spawn_mob := R.mobs["krab"]["scene"]
 			corruption_decal.size = value
 
 func _ready() -> void:
+	super()
 	corruption_decal.size = corruption_size
+
 
 @rpc("authority", "call_local")
 func on_damage() -> void:

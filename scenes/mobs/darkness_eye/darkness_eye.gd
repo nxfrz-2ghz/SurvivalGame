@@ -7,7 +7,7 @@ var target_player: CharacterBody3D
 func _ready() -> void:
 	if not is_multiplayer_authority(): return
 	super()
-	G.time_controller.day_come.connect(despawn)
+	G.time_controller.day_come.connect(entity.despawn)
 
 
 func _on_attack_cooldown_timeout() -> void:

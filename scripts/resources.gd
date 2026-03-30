@@ -151,7 +151,27 @@ const objects := {
 	},
 	"heart": {
 		"scene": preload("res://scenes/objects/heart/heart.tscn"),
-	}
+	},
+	"wall_wood": {
+		"scene": preload("res://scenes/building/wall_wood/wall_wood.tscn"),
+		"recipe": {"log": 2},
+		"is_building": true,
+	},
+#	"wall_stone": {
+#		"scene": preload("res://scenes/building/wall_stone/wall_stone.tscn"),
+#		"recipe": {"stone": 4},
+#		"is_building": true,
+#	},
+#	"door_wood": {
+#		"scene": preload("res://scenes/building/door_wood/door_wood.tscn"),
+#		"recipe": {"log": 3},
+#		"is_building": true,
+#	},
+#	"chest": {
+#		"scene": preload("res://scenes/building/chest/chest.tscn"),
+#		"recipe": {"log": 6},
+#		"is_building": true,
+#	},
 }
 
 const items := {
@@ -329,4 +349,5 @@ const items := {
 const particles := {
 	"smoke": preload("res://scenes/particles/smoke_particle/smoke_particle.tscn"),
 	"explose": preload("res://scenes/particles/explose_particle/explose_particle.tscn"),
+	"damage_counter": preload("res://scenes/particles/damage_counter/damage_counter.tscn"),
 }

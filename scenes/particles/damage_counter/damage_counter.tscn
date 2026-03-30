@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://c4kqmr3p1fvhq"]
+
+[ext_resource type="Script" uid="uid://bke6uihuu2v8c" path="res://scenes/particles/damage_counter/damage_counter.gd" id="1_u4lsg"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_qluyl"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 0
+properties/1/path = NodePath(".:text")
+properties/1/spawn = true
+properties/1/replication_mode = 0
+properties/2/path = NodePath(".:modulate")
+properties/2/spawn = true
+properties/2/replication_mode = 0
+
+[node name="DamageCounter" type="Label3D" unique_id=1060633606]
+billboard = 1
+double_sided = false
+no_depth_test = true
+font_size = 64
+script = ExtResource("1_u4lsg")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=699394973]
+replication_config = SubResource("SceneReplicationConfig_qluyl")

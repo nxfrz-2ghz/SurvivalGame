@@ -1,6 +1,6 @@
 extends Area3D
 
-@onready var craft_zone_label := $CraftZone/Label3D
+@onready var craft_zone_label := $CraftZone
 @onready var inv := %InventoryController
 
 var crafting_mode := false:
@@ -163,6 +163,14 @@ func execute_craft_object(peer_id: int, result_object: String, recipe: Dictionar
 	
 	var player = G.environment.get_node_or_null(str(peer_id))
 	spawned_object.position = player.weapon.actions.global_position
+	
+	if R.objects[result_object].has("is_building"):
+		# Добавление вращения и привязка к сетке
+		spawned_object.position.x = snappedf(player.weapon.actions.global_position.x, 3.0)
+		spawned_object.position.y = snappedf(player.weapon.actions.global_position.y, 3.0)
+		spawned_object.position.z = snappedf(player.weapon.actions.global_position.z, 3.0)
+		spawned_object.rotation_degrees.y = snappedf(player.rotation_degrees.y, 45.0)
+		spawned_object.rotation_degrees.x = snappedf(player.head.rotation_degrees.x, 90.0)
 	
 	G.environment.add_child(spawned_object, true)
 

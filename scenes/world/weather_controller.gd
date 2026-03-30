@@ -3,7 +3,6 @@ extends Node
 @onready var env := $"../WorldEnvironment"
 @onready var audio_player := $AudioStreamPlayer3D
 
-var fog := false
 var fog_tween: Tween
 var rain_tween: Tween
 

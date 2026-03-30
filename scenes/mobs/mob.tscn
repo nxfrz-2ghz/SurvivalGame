@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://c8q18w2yckeeh" path="res://components/health_component/health_component.tscn" id="1_s2wnx"]
 [ext_resource type="Script" uid="uid://dknrk65skptje" path="res://scripts/base_audio_player_rpc.gd" id="2_62b1e"]
 [ext_resource type="PackedScene" uid="uid://4ffu5apey8sh" path="res://components/shadow/shadow.tscn" id="3_q44lt"]
+[ext_resource type="PackedScene" uid="uid://cm8dp3hd0yxoq" path="res://components/entity_component/entity_component.tscn" id="4_2sf44"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_2sf44"]
 properties/0/path = NodePath(".:position")
@@ -43,6 +44,8 @@ bus = &"Sounds"
 script = ExtResource("2_62b1e")
 
 [node name="HealthComponent" parent="." unique_id=1086839518 instance=ExtResource("1_s2wnx")]
+
+[node name="EntityComponent" parent="." unique_id=1330161778 instance=ExtResource("4_2sf44")]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1649019193]
 

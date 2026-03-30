@@ -43,6 +43,8 @@ func set_up_player(player: CharacterBody3D) -> void:
 	player.get_node("%InventoryController").set_hotbar_slot.connect(G.gui.hud.inventory.set_hotbar_slot)
 	player.get_node("%Book").open_book.connect(G.gui.hud.inventory.hide)
 	player.get_node("%Book").close_book.connect(G.gui.hud.inventory.show)
+	player.get_node("%Book").open_book.connect(G.gui.hud.aim.hide)
+	player.get_node("%Book").close_book.connect(G.gui.hud.aim.show)
 	player.get_node("%HealthComponent").changed.connect(G.gui.hud.health_vignette.on_health_changed)
 	player.get_node("%HealthComponent").on_damage.connect(G.gui.hud.damage_vignette.on_damage)
 	player.get_node("HungerController").changed.connect(G.gui.hud.bar_box.hunger_changed)
@@ -64,7 +66,7 @@ func add_player(peer_id: int) -> void:
 	if peer_id == multiplayer.get_unique_id():
 		set_up_player(player)
 	else:
-		G.world.rpc_id(peer_id, "join_world", G.world.world_seed, int(G.gui.main_menu.world_size.text))
+		G.world.rpc_id(peer_id, "join_world", G.world.world_name, G.world.world_seed, int(G.gui.main_menu.world_size.text))
 
 
 func remove_player(peer_id: int) -> void:
@@ -77,14 +79,18 @@ func start_game(is_load: bool = false) -> void:
 	G.gui.background.queue_free()
 	if multiplayer.get_unique_id() == 1:
 		if is_load:
+			G.world.world_name = G.gui.main_menu.world_chooser.text
 			G.world.load_world()
+			G.player.load_character() # Клиент же при входе грузится в world
 		else:
+			G.world.world_name = G.gui.main_menu.world_name.text
 			G.world.start_gen()
 	G.state_machine = "game"
 	G.gui.game_menu.game = true
 
 
 func _on_create_button_pressed() -> void:
+	if G.gui.main_menu.world_name.text == "": return
 	if G.gui.main_menu.host_button.button_pressed:
 		prepare_for_a_game("server")
 		start_game()
@@ -93,6 +99,7 @@ func _on_create_button_pressed() -> void:
 		start_game()
 
 func _on_load_button_pressed() -> void:
+	if G.gui.main_menu.world_chooser.text == "": return
 	if G.gui.main_menu.host_button.button_pressed:
 		prepare_for_a_game("server")
 		start_game(true)

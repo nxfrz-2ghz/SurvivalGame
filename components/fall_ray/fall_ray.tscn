@@ -6,6 +6,10 @@ script/source = "extends RayCast3D
 @onready var parent := get_parent()
 
 
+func _ready() -> void:
+	self.global_rotation = self.rotation # Избавляемся от вращения родителя
+
+
 func _physics_process(_delta: float) -> void:
 	if !$Timer.is_stopped(): return
 	if not is_colliding():

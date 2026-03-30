@@ -22,7 +22,7 @@ func get_dig_drop(hit_position: Vector3) -> String:
 	return "dirt"
 
 
-func use_item() -> void:
+func use_item_durability() -> void:
 	if current_name != null and R.items[current_name].has("durability"):
 		if randi_range(0, R.items[current_name]["durability"]) == 0:
 			actions.inv.drop_item(actions.inv.current_item)

@@ -1,6 +1,7 @@
 extends Node3D
 
 @onready var terrain := $Terrain
+@onready var weather := $WeatherController
 @onready var fall_defense_area := $FallDefenseArea
 
 # Биомы и их параметры
@@ -62,6 +63,7 @@ const BIOME_BORDER_PLATEU := -0.3  # плато / лес
 const BIOME_BORDER_FOREST   := -0.1   # лес / равнина
 const BIOME_BORDER_PLAINS   := 0.1   # равнина / горы
 
+var world_name: String
 var world_seed: int
 var noise: FastNoiseLite
 var biome_noise: FastNoiseLite
@@ -108,13 +110,15 @@ func start_gen() -> void:
 
 
 @rpc("call_local")
-func join_world(sseed: int, wworld_size: int) -> void:
+func join_world(nname: String, sseed: int, wworld_size: int) -> void:
 	server = false
+	world_name = nname
 	world_seed = sseed
 	world_size = wworld_size
 	
 	_init_noise()
 	_generate_world()
+	G.player.load_character()
 
 
 func _init_noise() -> void:
@@ -135,7 +139,6 @@ func _generate_terrain() -> void:
 	var offset := (world_size - 1) * spacing / 2.0
 	# Вычисляем количество чанков
 	var chunks_count = ceili(float(world_size) / float(CHUNK_SIZE))
-	var last_status_gen: int
 	
 	# Создаем чанки
 	for chunk_z in range(chunks_count):
@@ -319,7 +322,7 @@ func _generate_objects() -> void:
 			var world_x = gx * spacing - offset2
 			var world_z = gz * spacing - offset2
 			
-			var spawn_y = +_get_raw_noise_height(world_x, world_z)
+			var spawn_y = +_get_height(world_x, world_z)
 			
 			# Не спавним предметы под водой
 			if spawn_y >= WATER_LEVEL:
@@ -354,10 +357,6 @@ func _get_height(world_x: float, world_z: float) -> float:
 	var biome_value = biome_noise.get_noise_2d(world_x / 20.0, world_z / 20.0)
 	var multiplier = _get_blended_height_multiplier(biome_value)
 	return noise.get_noise_2d(world_x / noise_scale, world_z / noise_scale) * height_max * multiplier
-
-
-func _get_raw_noise_height(world_x: float, world_z: float) -> float:
-	return noise.get_noise_2d(world_x / noise_scale, world_z / noise_scale)
 
 
 func _get_biome(value: float, world_x: float = 0.0, world_z: float = 0.0) -> int:
@@ -423,8 +422,13 @@ func _select_object_for_biome(biome_config: Dictionary, _noise_value: float, rng
 	return ""
 
 
-
-func save_world(path: String = "user://world.save") -> void:
+func save_world() -> void:
+	if !server: return
+	
+	var path: String = "user://worlds/" + world_name + "/world.wld"
+	if not DirAccess.dir_exists_absolute("user://worlds/" + world_name):
+		DirAccess.make_dir_recursive_absolute("user://worlds/" + world_name)
+	
 	var save_data := {
 		"seed": world_seed,
 		"world_size": world_size,
@@ -468,21 +472,6 @@ func save_world(path: String = "user://world.save") -> void:
 			}
 			save_data["mobs"].append(entry)
 	
-	# Сохранение игрока
-	var player: CharacterBody3D = G.environment.get_node(str(multiplayer.get_unique_id()))
-	entry = {
-		"name": player.nname,
-		"pos": [player.position.x, player.position.y, player.position.z],
-		"rot": [player.rotation.y, player.head.rotation.x],
-		"health": player.health.current_health,
-		"hunger": player.hunger.current_hunger,
-		"inventory": player.inv.inventory,
-		"unlocked_notes": player.progress_controller.unlocked_notes,
-		"current exp": player.progress_controller.cur_exp,
-		"current lvl":  player.progress_controller.lvl,
-	}
-	save_data["player"] = entry
-	
 	# Запись файла
 	var file = FileAccess.open(path, FileAccess.WRITE)
 	if file:
@@ -491,18 +480,20 @@ func save_world(path: String = "user://world.save") -> void:
 		print("World saved to: ", path)
 
 
-func load_world(path: String = "user://world.save") -> void:
+func load_world() -> void:
+	
+	var path: String = "user://worlds/" + world_name + "/world.wld"
 	if not FileAccess.file_exists(path):
 		print("Save file not found!")
 		return
-
+	
 	var file = FileAccess.open(path, FileAccess.READ)
 	var json_str = file.get_as_text()
 	file.close()
-
+	
 	var data = JSON.parse_string(json_str)
 	if data == null: return
-
+	
 	# Восстанавливаем параметры мира
 	world_seed = data["seed"]
 	world_size = data["world_size"]
@@ -557,26 +548,5 @@ func load_world(path: String = "user://world.save") -> void:
 			instance.position = pos
 			G.environment.add_child(instance, true)
 			instance.get_node("HealthComponent").current_health = mob_data["hp"]
-	
-	# Загружаем данные игрока
-	var player: CharacterBody3D = G.environment.get_node(str(multiplayer.get_unique_id()))
-	var player_data: Dictionary = data["player"]
-	
-	player.nname = player_data["name"]
-	
-	player.position = Vector3(player_data["pos"][0], player_data["pos"][1], player_data["pos"][2])
-	player.rotation.y = player_data["rot"][0]
-	player.head.rotation.x = player_data["rot"][1]
-	
-	player.health.current_health = player_data["health"]
-	player.hunger.current_hunger = player_data["hunger"]
-	
-	for item in player_data["inventory"].values():
-		if item:
-			player.inv.add_item(item["name"], item["amount"])
-	
-	player.progress_controller.unlocked_notes = player_data["unlocked_notes"]
-	player.progress_controller.cur_exp = player_data["current exp"]
-	player.progress_controller.lvl = player_data["current lvl"]
 	
 	G.screen_text.text("")

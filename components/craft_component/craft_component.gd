@@ -15,8 +15,8 @@ func _ready() -> void:
 	craft_timer.timeout.connect(_on_craft_timer_timeout)
 
 func drop_queue() -> void:
-	for item in queue: parent.drop(item)
-	for item in complete: parent.drop(item)
+	for item in queue: parent.enity.drop(item)
+	for item in complete: parent.enity.drop(item)
 	queue.clear()
 	complete.clear()
 	update_label.rpc(queue, complete)

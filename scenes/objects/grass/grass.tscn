@@ -11,13 +11,16 @@ collision_layer = 8
 nname = "grass"
 despawn_particles_size = 0.5
 
-[node name="CollisionShape3D" parent="." index="2" unique_id=1161658582]
+[node name="EntityComponent" parent="." index="2" unique_id=1330161778]
+despawn_particles_size = 0.5
+
+[node name="CollisionShape3D" parent="." index="4" unique_id=1161658582]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.11743164, 0.8657026, 0.18322754)
 shape = SubResource("BoxShape3D_ujv02")
 
-[node name="Sprite3D" parent="." index="4" unique_id=57594410]
+[node name="Sprite3D" parent="." index="5" unique_id=57594410]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7450361, 0)
 texture = ExtResource("2_uh5ru")
 
-[node name="Shadow" parent="." index="5" unique_id=437352595]
+[node name="Shadow" parent="." index="6" unique_id=437352595]
 visible = false

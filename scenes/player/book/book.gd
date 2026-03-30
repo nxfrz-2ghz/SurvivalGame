@@ -10,9 +10,6 @@ const button := preload("res://scenes/player/book/button/button.tscn")
 
 var current_page: Node
 
-func _ready() -> void:
-	set_page("MAIN")
-
 
 func spawn_button(text: String) -> void:
 	var btn := button.instantiate()
@@ -26,6 +23,9 @@ func spawn_label(text: String) -> void:
 	lbl.text = text
 	lbl.modulate = Color.BLACK
 	current_page.add_child(lbl)
+	if lbl.size.x > 200.0:
+		lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		lbl.custom_minimum_size.x = 200.0
 
 
 func add_back_button() -> void:
@@ -58,17 +58,34 @@ func set_page(page: String) -> void:
 		show_page(box_page)
 		
 		spawn_button("CLOSE")
+		spawn_label("")
 		
-		if G.player and !G.player.progress_controller.unlocked_notes.is_empty():
-			for note in G.player.progress_controller.unlocked_notes:
-				spawn_button(note)
+		if !G.player.progress_controller.unlocked_notes.is_empty():
+			var reversed_notes = G.player.progress_controller.unlocked_notes.duplicate()
+			reversed_notes.reverse() 
+			for note in reversed_notes:
+				spawn_button(G.player.progress_controller.notes.find_key(note))
 		
 		spawn_label("")
 		spawn_button("BESTIARY")
 	
+	elif page in G.player.progress_controller.notes:
+		show_page(box_page)
+		
+		spawn_label(page)
+		spawn_label("")
+		
+		spawn_label(G.player.progress_controller.notes[page])
+		
+		spawn_label("")
+		spawn_label("Back to...")
+		spawn_button("MAIN")
+		for i in range(5):
+			spawn_label("")
+	
 	elif page == "BESTIARY":
 		show_page(grid_page)
-
+		
 		spawn_label("To return:")
 		spawn_button("MAIN")
 		

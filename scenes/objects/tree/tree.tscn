@@ -24,10 +24,17 @@ resists = {
 }
 max_health = 5.0
 
-[node name="CollisionShape3D" parent="." index="2" unique_id=1161658582 groups=["objects"]]
+[node name="EntityComponent" parent="." index="2" unique_id=1330161778]
+drop_items = {
+"log": 4
+}
+despawn_sound_name = "tree"
+exp_drop = 1.0
+
+[node name="CollisionShape3D" parent="." index="4" unique_id=1161658582 groups=["objects"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.046256, 0)
 shape = SubResource("CapsuleShape3D_83v3r")
 
-[node name="Sprite3D" parent="." index="3" unique_id=57594410]
+[node name="Sprite3D" parent="." index="5" unique_id=57594410]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.046256, 0)
 texture = ExtResource("2_83v3r")

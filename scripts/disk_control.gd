@@ -56,7 +56,19 @@ func _load_config() -> void:
 		_config = ConfigFile.new()
 
 
-func rm_dir(dir_path):
+func rm_file(file_path: String) -> void:
+	if FileAccess.file_exists(file_path):
+		var error = DirAccess.remove_absolute(file_path)
+		if error == OK:
+			print("Файл успешно удален")
+		else:
+			print("Ошибка при удалении файла: ", error)
+	else:
+		print("Файл не найден")
+
+
+
+func rm_dir(dir_path: String) -> void:
 	var dir = DirAccess.open(dir_path)
 	if dir:
 		dir.list_dir_begin()
