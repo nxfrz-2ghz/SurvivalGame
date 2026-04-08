@@ -1,0 +1,97 @@
+id;en;ru
+
+LBL_CREATE;CREATE:;СОЗДАТЬ:
+LBL_LOAD;LOAD:;ЗАГРУЗИТЬ:
+LBL_JOIN;JOIN:;ВОЙТИ:
+LBL_WORLD_NAME;World NAME;НАЗВАНИЕ Мира
+LBL_WORLD_SIZE;World size\n(impacts performance);Размер Мира\n(влияет на производительность)
+LBL_WORLD_GENERATION_KEY;World Generation Key;Ключ Генерации Мира
+PLC_SKIP_FOR_RAND;Skip for randomness;Оставьте на волю случая
+BTN_CREATE;CREATE;СОЗДАТЬ
+BTN_LOAD;LOAD;ЗАГРУЗИТЬ
+BTN_DEL;DEL;УДЛ
+BTN_JOIN;JOIN;ВОЙТИ
+PLC_IP;ENTER IP;ВВЕДИТЕ АДРЕС IP
+LBL_PLR_NAME;[PLAYER NAME]:;[ИМЯ ИГРОКА]:
+LBL_CONTROLS;CONTROLS:;УПРАВЛЕНИЕ:
+LBL_H1;WASD - MOVING;WASD - ДВИЖЕНИЕ
+LBL_H2;Q - DROP ITEM;Q - ВЫКИНУТЬ ПРЕДМЕТ
+LBL_H3;F - PICKUP ITEM;F - ПОДОБРАТЬ ПРЕДМЕТ
+LBL_H4;C - CRAFT;C - КРАФТ
+LBL_H5;ESC - MENU;ESC - МЕНЮ
+LBL_H6;LMB - ATTACK;ЛКМ - АТКАК
+LBL_H7;RMB - INTERACT;ПКМ - ВЗАИМОДЕЙСТВИЕ
+LBL_H8;B - OPEN BOOK;B - ОТКРЫТЬ ДНЕВНИК
+LBL_H9;SHIFT - RUN; SHIFT - БЕГ
+LBL_H10;F1 - DEBUG INFO;F1 - ОТЛАДКА
+TGL_HOST;HOST;ХОСТ
+TGL_FULSCRN;Fullscreen;Во весь экран
+TGL_LANG_SWITCH;"[EN]/ru";"en/[RU]"
+TGL_AUTOSAVE;Autosave;Автосохранение
+BTN_LEAVE_GAME;LEAVE GAME...;ПОКИНУТЬ ИГРУ...
+
+LBL_CONTINUE;CONTINUE;ПРОДОЛЖИТЬ
+LBL_SAVE_WORLD;SAVE WORLD;СОХРАНИТЬ МИР
+LBL_EXIT_WITHOUT_SAVE;EXIT WITHOUT SAVE;выйти БЕЗ СОХРАНЕНИЯ
+LBL_SAVE_EXIT;EXIT WORLD;ПОКИНУТЬ МИР
+
+BK_BACK;Back to...;Вернуться в...
+BK_MAIN;MAIN;ОГЛАВЛЕНИЕ
+BK_BESTIARY;BESTIARY;БЕСТИАРИЙ
+BK_ACHIVIEMENTS;ACHIVIEMENTS;ДОСТИЖЕНИЯ
+BK_CLOSE;CLOSE;ЗАКРЫТЬ
+BK_NOTES;=======NOTES=======;=====ЗАМЕТКИ======
+BK_ITEMS;ITEMS;ПРЕДМЕТЫ
+BK_OBJECTS;OBJECTS;ОБЪЕКТЫ
+BK_BUILDINGS;BUILDINGS;ПОСТРОЙКИ
+BK_MOBS;MOBS;ОБИТАТЕЛИ
+
+NTK_1;New world;Новый мир
+NTK_2;First tree;Первая древесина
+NTK_3;Night falls;Начинает темнеть
+NTK_4;First night;Первая ночь
+NTK_5;First copper;Первая медь
+NTK_6;First iron;Первое железо
+NTK_7;Copper ingot;Медный слиток
+NTK_8:Copper shovel;Медная лопата
+NTK_9;Clay;Глина
+NTK_10;Iron ingot;Железный слиток
+NTK_11;Building;Строительство
+NTK_12;STEEL!;СТАЛЬ!
+
+NTV_1;"It's unlikely you'll survive empty-handed! First, you need to somehow get some wood; any nearby stone will do for that [pick up a stone - F]";"С пустыми руками вряд-ли получится выжить! Для начало нужно как-нибудь добыть древесину, для этого подойдет любой близлежащий камень [подобрать камень - F]"
+NTV_2;"I managed to get some wood! But I don't want to use stone any more; I need to make some primitive tools from what I have. I can make stone tools: an axe requires stone[x2] and wood[x3], and a pickaxe requires stone[x3] and wood[x2]. To make anything, you need to place [Q] materials on the ground and start crafting [C].";"У меня получилось добыть древесину! Но дальше орудовать камнем желания нет, нужно сделать примитивные инструменты из того что есть. Я могу сделать каменные инструменты: для топора нужен камень[x2] и дерево[x3], а для кирки камень[x3] и дерево[x2]. Чтобы что-то сделать нужно сложить [Q] материалы на землю и начать крафт [C]."
+NTV_3;"It's getting dark... It's important to prepare for the night. I won't spend the night in the dark and on an empty stomach! To start a fire, you need to stack logs [x3]. [Place the wood, open the crafting area, create a fire, and add firewood [RIGHT CLICK] for combustion.] And you can refresh yourself with the berries growing on the bushes nearby; cooking food probably makes it more nutritious.";"Уже темнеет... Важно подготовиться к ночи. Я не буду ночевать в темноте и на голодный желудок! Чтобы развести костер, нужно сложить бревна[x3] в кучу. [Положите древесину, откройте зону крафта, создайте костер и добавьте дров [RIGHT CLICK] для горения]. А подкрепиться можно с ягод которые растут на кустах неподалёку, наверное термическая обработка пищи сделает ее более питательной."
+NTV_4;"I survived the first night! It was already restless, but in the morning I heard a heartbeat, and the ground shook. At first I thought I was imagining it, but it's been happening for hours... I'm restless! I need to check my surroundings.";"Я смог пережить первую ночь! Она была и так не спокойной, но на утро я услышал сердцебиение, аж земля тряслась. Сначала я подумал что мне это кажется, но это уже который час происходит...  Мне не спокойно! Нужно проверить обстановку вокруг."
+NTV_5;"It looks like I've found an ore that can be smelted in a stone furnace [stone x5] using wood. But copper makes rather fragile tools, which will break after two swings. But I have an idea! If I make a copper shovel and mine clay from a nearby body of water, then bake it in a furnace, I'll get bricks.";"Похоже я нашел руду, которую можно переплавить в каменной печи[stone x5] на древесине. Но из меди получаются довольно хрупкие инструменты, которые сломаются после двух взмахов. Но у есть идея!: если сделать медную лопату и в ближайшем водоёме добыть глину, а потом в печи обжарить то получатся кирпичи."
+NTV_6;"Iron this hard can't be melted in a regular stone furnace, and the temperature required is higher than would produce a burning flame, but if I build a brick furnace and find more powerful fuel, I can achieve the necessary melting temperature.";"Такое твердое железо не расплавишь в обычной каменной печи, а температура нужна выше той, которая может дать горящее палено, но если сделать печь из кирпичей и найти более мощное топливо, я смогу достичь необходимой температуры для плавления."
+NTV_7;"These ingots are heat-resistant enough to create a cauldron for producing a more powerful fuel: charcoal. To do this, you'll need to gather a fair amount of wood[x4] and place them in the cauldron of an alchemical machine, the recipe for which I'm sure I can find in this strange journal.";"Эти слитки довольно теплостойкие для создания котла, в котором можно получить более мощное топливо: древесный уголь. Для этого необходимо добыть немало древесины[x4] и положить их в котел алхимической машины, рецепт которой я наверняка смогу найти в этом странном дневнике"
+NTV_8;"With a shovel like this, if I try hard enough, I can dig up some clay after a while, I just need to find it.";"С такой лопатой если постараться, через время я смогу накопать немного глины, нужно лишь найти ее"
+NTV_9;"It looks like I've managed to dig up the clay, and if I put a few lumps in a stone oven, I can get strong, heat-resistant bricks.";"Похоже я смог выкопать глину, если положить несколько комков в каменную печь, то я смогу получить прочные жаростойкие кирпичи"
+NTV_10;"After all, I was able to smelt this damn iron, now I can make cool, durable tools and even try to get steel!";"Все таки я смог переплавить это гребанное железо, теперь я могу делать крутые прочные инструменты и даже, попробовать получить сталь!"
+NTV_11;"Now I can build structures like houses from walls, floors, and ceilings (just look in the right direction to change the wall's direction), and with [R] I can rotate the structure 45 degrees to create slopes or roof tiles. Similar walls can be created from other materials as well.";"Теперь я могу строить постройки, например дома из стен, полов и потолка (достаточно посмотреть в нужную сторону, чтобы сменить направление стены), а на [R] могу повернуть постройку на 45 градусов для создания подъемов или черепицы крыш. Подобные стены можно создать и из других материалов"
+NTV_12;;
+
+ACH_1;To leave this world is to go beyond the edge of the map;Покинуть этот мир - выйти за край карты
+ACH_3;Homecoming - Complete the game;Возвращение домой - пройти игру
+ACH_4;Sniper - hit the target from a long distance;Снайпер - попасть с большого расстояния в цель
+ACH_5;Builder - to build something;Строитель - построить что нибудь
+ACH_6;Even an axe rusts without use - make an uber-powerful iron axe;И топор без дела ржавеет - сделать убер мощный железный топор
+ACH_7;ULTRAKILL - Kill a high HP target with one hit;ULTRAKILL - убить цель с большим хп с одного удара
+ACH_8;Damn Weeds - Destroy multiple hearts;Чертовы сорняки - уничтожить несколько сердец
+ACH_9;An interesting game - to return to your world once again;Интересная игра - вернуться в свой мир который раз
+
+UNL_ACH_1;🔓;🔓
+UNL_ACH_2;🔓;🔓
+UNL_ACH_3;🔓;🔓
+UNL_ACH_4;🔓;🔓
+UNL_ACH_5;🔓;🔓
+UNL_ACH_6;🔓;🔓
+UNL_ACH_7;🔓;🔓
+UNL_ACH_8;🔓;🔓
+UNL_ACH_9;🔓;🔓
+
+ACH_UNL;     [🏆]\nCOMPLETE;        [🏆]\nВЫПОЛНЕНО
+ACH_SHW;   [❌]\nNOT YET;     [❌]\nПОКА НЕТ
+
+UNLK_ACH_TIP;TO UNLOCK\nACHIEVEMENTS\nYOU NEED: ;ЧТОБЫ\nРАЗБЛО-\nКИРОВАТЬ\nДОСТИЖЕНИЯ\nВАМ НУЖНО: 

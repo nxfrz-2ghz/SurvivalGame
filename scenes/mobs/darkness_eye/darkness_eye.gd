@@ -1,6 +1,7 @@
 extends "res://scenes/mobs/mob.gd"
 
 const damage := 0.1
+const jump_velocity := 4.0
 var target_player: CharacterBody3D
 
 
@@ -17,7 +18,7 @@ func _on_attack_cooldown_timeout() -> void:
 	
 	var dist := global_position.distance_to(target_player.global_position)
 	
-	if dist < 4.0:
+	if dist < 3.0:
 		target_player.health.take_damage(damage)
 
 

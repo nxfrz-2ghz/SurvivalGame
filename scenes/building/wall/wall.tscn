@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://q8syis2q1qup"]
+
+[ext_resource type="PackedScene" uid="uid://uwmukk060f86" path="res://scenes/building/building.tscn" id="1_wrdkq"]
+[ext_resource type="Script" uid="uid://ccqh7ekxywgkf" path="res://scenes/building/wall/wall.gd" id="2_wrdkq"]
+[ext_resource type="Shape3D" uid="uid://c2jcrbimfbtfc" path="res://scenes/building/wall/_shapes/wall_shape.tres" id="3_4htj5"]
+[ext_resource type="BoxMesh" uid="uid://cfj1jdk1jg164" path="res://scenes/building/wall/_meshes/wall_mesh.tres" id="3_cld43"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_wrdkq"]
+properties/0/path = NodePath(".:state")
+properties/0/spawn = true
+properties/0/replication_mode = 2
+
+[node name="Wall" unique_id=1331540241 instance=ExtResource("1_wrdkq")]
+script = ExtResource("2_wrdkq")
+state = 0
+nname = "wall_wood"
+
+[node name="EntityComponent" parent="." index="1" unique_id=1330161778]
+drop_items = {
+"log": 1
+}
+
+[node name="CollisionShape3D" parent="." index="3" unique_id=1161658582]
+shape = ExtResource("3_4htj5")
+
+[node name="MeshInstance3D" parent="." index="4" unique_id=2006591672]
+mesh = ExtResource("3_cld43")
+
+[node name="MultiplayerSynchronizer2" type="MultiplayerSynchronizer" parent="." index="6" unique_id=1690060147]
+replication_config = SubResource("SceneReplicationConfig_wrdkq")

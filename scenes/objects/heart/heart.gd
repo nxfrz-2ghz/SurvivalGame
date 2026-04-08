@@ -26,11 +26,10 @@ func on_damage() -> void:
 
 func summon(scene: PackedScene) -> void:
 	anim_sprite.anim_play.rpc("on_summon")
-	var node := scene.instantiate()
 	var corrupted_territory_size := 0.0
-	node.position = G.mob_spawner.get_random_spawn_position(self.position, corrupted_territory_size/3, corrupted_territory_size)
-	node.position.y = 50
-	G.environment.call_deferred("add_child", node, true)
+	var pos: Vector3 = G.mob_spawner.get_random_spawn_position(self.position, corrupted_territory_size/3, corrupted_territory_size)
+	pos.y = 50
+	G.mob_spawner.spawn_mob(scene, pos)
 
 
 func _on_regeneration_timer_timeout() -> void:

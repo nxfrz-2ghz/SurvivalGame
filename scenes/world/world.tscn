@@ -20,6 +20,7 @@ fog_mode = 1
 fog_light_energy = 0.5
 fog_sun_scatter = 1.0
 fog_density = 1.0
+fog_depth_begin = 20.0
 volumetric_fog_enabled = true
 volumetric_fog_density = 0.0
 
@@ -33,6 +34,10 @@ properties/0/replication_mode = 2
 
 [node name="World" type="Node3D" unique_id=1630779934]
 script = ExtResource("1_bq33v")
+
+[node name="AutosaveTimer" type="Timer" parent="." unique_id=1865596919]
+wait_time = 120.0
+autostart = true
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=703759097]
 transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
@@ -63,7 +68,7 @@ transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0, 0, 0)
 script = ExtResource("3_1fp7r")
 
 [node name="SpawnTimer" type="Timer" parent="MobSpawner" unique_id=2105636915]
-wait_time = 15.0
+wait_time = 5.0
 autostart = true
 
 [node name="WeatherController" type="Node" parent="." unique_id=1080800198]
@@ -88,6 +93,7 @@ autostart = true
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1935736741]
 replication_config = SubResource("SceneReplicationConfig_1fp7r")
 
+[connection signal="timeout" from="AutosaveTimer" to="." method="_on_autosave_timer_timeout"]
 [connection signal="night_come" from="DirectionalLight3D" to="MobSpawner" method="_on_directional_light_3d_night_come"]
 [connection signal="body_entered" from="FallDefenseArea" to="FallDefenseArea" method="_on_body_entered"]
 [connection signal="timeout" from="MobSpawner/SpawnTimer" to="MobSpawner" method="_on_spawn_timer_timeout"]

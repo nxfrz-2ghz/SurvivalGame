@@ -26,9 +26,6 @@ properties/2/replication_mode = 2
 [node name="AlchemyStation" unique_id=1331540241 instance=ExtResource("1_cypjr")]
 script = ExtResource("2_4quqq")
 nname = "alchemy_station"
-drop_items = {
-"copper_bar": 3
-}
 
 [node name="CraftTimer" type="Timer" parent="Timers" parent_id_path=PackedInt32Array(203408184) index="1" unique_id=359850959]
 wait_time = 5.0
@@ -47,7 +44,7 @@ craft_category = "alchemy_station"
 
 [node name="EntityComponent" parent="." index="3" unique_id=1330161778]
 drop_items = {
-"copper_bar": 3
+"copper_ingot": 3
 }
 
 [node name="CollisionShape3D" parent="." index="5" unique_id=1161658582]

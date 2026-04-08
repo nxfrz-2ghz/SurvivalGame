@@ -15,3 +15,7 @@ columns = 2
 [node name="BoxPage" type="VBoxContainer" parent="." unique_id=1642855231]
 visible = false
 layout_mode = 2
+
+[node name="Label" type="Label" parent="." unique_id=187419553]
+layout_mode = 2
+size_flags_vertical = 8

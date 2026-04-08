@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://qg4g44ocaejc"]
+
+[ext_resource type="Script" uid="uid://7lwiffupq65q" path="res://scenes/items/throwable_item.gd" id="1_moyqu"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ywex6"]
+radius = 0.15
+height = 1.5
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_ywex6"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 0
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 0
+properties/2/path = NodePath(".:damage")
+properties/2/spawn = true
+properties/2/replication_mode = 0
+properties/3/path = NodePath(".:texture_path")
+properties/3/spawn = true
+properties/3/replication_mode = 0
+properties/4/path = NodePath(".:despawn_chance")
+properties/4/spawn = true
+properties/4/replication_mode = 0
+properties/5/path = NodePath(".:push_velocity")
+properties/5/spawn = true
+properties/5/replication_mode = 0
+properties/6/path = NodePath(".:throw_power")
+properties/6/spawn = true
+properties/6/replication_mode = 0
+
+[node name="ThrowableItem" type="RigidBody3D" unique_id=1974506791]
+collision_layer = 64
+collision_mask = 31
+can_sleep = false
+contact_monitor = true
+max_contacts_reported = 3
+script = ExtResource("1_moyqu")
+
+[node name="Sprite3D" type="Sprite3D" parent="." unique_id=1619062091]
+transform = Transform3D(-3.5365304e-06, -0.00013257872, 0.39999992, -0.3998577, 0.010666183, 0, -0.010666183, -0.3998577, -0.0001326259, 0, 0, 0)
+
+[node name="Sprite3D2" type="Sprite3D" parent="." unique_id=1543300144]
+transform = Transform3D(-0.39999998, -0.00013256406, -3.5523346e-06, 1.6110137e-08, 0.0106664235, -0.39985776, 0.00013261166, -0.39985773, -0.010666423, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1909050770]
+transform = Transform3D(-8.841328e-06, -0.00033144688, 1, -0.9996445, 0.026665466, 0, -0.02666546, -0.99964434, -0.00033156475, 0, 0, 0)
+shape = SubResource("CapsuleShape3D_ywex6")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1419085847]
+replication_config = SubResource("SceneReplicationConfig_ywex6")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

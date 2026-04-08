@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://djuihq8cjljsm"]
+
+[ext_resource type="ArrayMesh" uid="uid://duj6747nq4qsk" path="res://res/models/grass/grass.res" id="1_xo6fg"]
+
+[node name="GrassMesh" type="MeshInstance3D" unique_id=2040670717]
+layers = 5
+visibility_range_end = 100.0
+mesh = ExtResource("1_xo6fg")

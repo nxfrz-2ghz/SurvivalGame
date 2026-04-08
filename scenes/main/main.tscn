@@ -32,6 +32,7 @@
 [ext_resource type="Script" uid="uid://2tjf6mas0khi" path="res://scenes/gui/settings_buttons/base_button.gd" id="25_7nlll"]
 [ext_resource type="Script" uid="uid://dddkx60gqd0pf" path="res://scenes/gui/load_chooser.gd" id="25_ii537"]
 [ext_resource type="Script" uid="uid://c4hd2l8yalwss" path="res://scenes/gui/delete_world_button.gd" id="26_rofvo"]
+[ext_resource type="Script" uid="uid://coxg27urrssnb" path="res://scenes/gui/settings_buttons/buttons/lang_button.gd" id="27_tbnf8"]
 [ext_resource type="PackedScene" uid="uid://bylhfkt27b0hb" path="res://components/cursor_controller/cursor_controller.tscn" id="30_gkmcc"]
 
 [sub_resource type="GDScript" id="GDScript_ou6is"]
@@ -192,7 +193,7 @@ _spawnable_scenes = PackedStringArray("uid://dp83o7qw4ht4w")
 spawn_path = NodePath("..")
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="Environment" unique_id=2101221164]
-_spawnable_scenes = PackedStringArray("uid://darxc13rlkwt7", "uid://cddn37g14j7yf", "uid://s322lfir2gd7", "uid://bsqtn0fmjrxph")
+_spawnable_scenes = PackedStringArray("uid://darxc13rlkwt7", "uid://cddn37g14j7yf", "uid://s322lfir2gd7", "uid://bsqtn0fmjrxph", "uid://uwmukk060f86", "uid://qg4g44ocaejc")
 spawn_path = NodePath("..")
 script = ExtResource("3_nvumn")
 
@@ -700,7 +701,7 @@ size_flags_vertical = 4
 
 [node name="Create" type="Label" parent="GUI/MainMenu/VBoxContainer" unique_id=95926002]
 layout_mode = 2
-text = "CREATE:"
+text = "LBL_CREATE"
 
 [node name="PanelContainer" type="PanelContainer" parent="GUI/MainMenu/VBoxContainer" unique_id=1402470755]
 layout_mode = 2
@@ -717,7 +718,7 @@ layout_mode = 2
 
 [node name="Label3" type="Label" parent="GUI/MainMenu/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=148859376]
 layout_mode = 2
-text = "World NAME"
+text = "LBL_WORLD_NAME"
 
 [node name="WorldName" type="LineEdit" parent="GUI/MainMenu/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1232112311]
 layout_mode = 2
@@ -728,8 +729,7 @@ key = "world_name"
 
 [node name="Label" type="Label" parent="GUI/MainMenu/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=901888273]
 layout_mode = 2
-text = "World size
-(impacts performance)"
+text = "LBL_WORLD_SIZE"
 
 [node name="WorldSize" type="LineEdit" parent="GUI/MainMenu/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=137349936]
 layout_mode = 2
@@ -740,19 +740,19 @@ key = "world_size"
 
 [node name="Label2" type="Label" parent="GUI/MainMenu/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1000464392]
 layout_mode = 2
-text = "World Generation Key"
+text = "LBL_WORLD_GENERATION_KEY"
 
 [node name="WorldSeed" type="LineEdit" parent="GUI/MainMenu/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=794497992]
 layout_mode = 2
-placeholder_text = "Skip for randomness"
+placeholder_text = "PLC_SKIP_FOR_RAND"
 
 [node name="CreateButton" type="Button" parent="GUI/MainMenu/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1630802734]
 layout_mode = 2
-text = "CREATE"
+text = "BTN_CREATE"
 
 [node name="Load" type="Label" parent="GUI/MainMenu/VBoxContainer" unique_id=1056547938]
 layout_mode = 2
-text = "LOAD:"
+text = "LBL_LOAD"
 
 [node name="PanelContainer2" type="PanelContainer" parent="GUI/MainMenu/VBoxContainer" unique_id=429641493]
 layout_mode = 2
@@ -778,16 +778,16 @@ script = ExtResource("25_ii537")
 
 [node name="DeleteWorldButton" type="Button" parent="GUI/MainMenu/VBoxContainer/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer" unique_id=938935548]
 layout_mode = 2
-text = "DEL"
+text = "BTN_DEL"
 script = ExtResource("26_rofvo")
 
 [node name="LoadButton" type="Button" parent="GUI/MainMenu/VBoxContainer/PanelContainer2/MarginContainer/VBoxContainer" unique_id=665671850]
 layout_mode = 2
-text = "LOAD"
+text = "BTN_LOAD"
 
 [node name="Join" type="Label" parent="GUI/MainMenu/VBoxContainer" unique_id=183064634]
 layout_mode = 2
-text = "JOIN:"
+text = "LBL_JOIN"
 
 [node name="PanelContainer3" type="PanelContainer" parent="GUI/MainMenu/VBoxContainer" unique_id=1187331292]
 layout_mode = 2
@@ -804,12 +804,12 @@ layout_mode = 2
 
 [node name="AddresLabel" type="LineEdit" parent="GUI/MainMenu/VBoxContainer/PanelContainer3/MarginContainer/VBoxContainer" unique_id=437935290]
 layout_mode = 2
-placeholder_text = "ENTER IP"
+placeholder_text = "PLC_IP"
 alignment = 1
 
 [node name="JoinButton" type="Button" parent="GUI/MainMenu/VBoxContainer/PanelContainer3/MarginContainer/VBoxContainer" unique_id=776928020]
 layout_mode = 2
-text = "JOIN"
+text = "BTN_JOIN"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="GUI/MainMenu" unique_id=1182752835]
 layout_mode = 2
@@ -834,15 +834,21 @@ theme_override_constants/margin_bottom = 15
 [node name="VBoxContainer" type="VBoxContainer" parent="GUI/MainMenu/HBoxContainer/VBoxContainer2/PanelContainer/MarginContainer" unique_id=889330797]
 layout_mode = 2
 
+[node name="LangButton" type="CheckButton" parent="GUI/MainMenu/HBoxContainer/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer" unique_id=2047347558]
+layout_mode = 2
+text = "TGL_LANG_SWITCH"
+script = ExtResource("27_tbnf8")
+key = "lang_switch"
+
 [node name="HostButton" type="CheckButton" parent="GUI/MainMenu/HBoxContainer/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer" unique_id=1044451294]
 layout_mode = 2
-text = "HOST"
+text = "TGL_HOST"
 script = ExtResource("25_7nlll")
 key = "host"
 
 [node name="FullscreenButton" type="CheckButton" parent="GUI/MainMenu/HBoxContainer/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer" unique_id=1870858388]
 layout_mode = 2
-text = "Fullscreen"
+text = "TGL_FULSCRN"
 script = ExtResource("22_37hlw")
 key = "fullscreen"
 
@@ -852,6 +858,13 @@ button_pressed = true
 text = "Vsync"
 script = ExtResource("23_6llfj")
 key = "vsync"
+
+[node name="AutoSaveButton" type="CheckButton" parent="GUI/MainMenu/HBoxContainer/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer" unique_id=582361117]
+layout_mode = 2
+button_pressed = true
+text = "TGL_AUTOSAVE"
+script = ExtResource("23_6llfj")
+key = "autosave"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="GUI/MainMenu/HBoxContainer" unique_id=1822817579]
 layout_mode = 2
@@ -873,47 +886,47 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="GUI/MainMenu/HBoxContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=520014802]
 layout_mode = 2
-text = "CONTROLS:"
+text = "LBL_CONTROLS"
 
 [node name="Label2" type="Label" parent="GUI/MainMenu/HBoxContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1475773643]
 layout_mode = 2
-text = "WASD - MOVING"
+text = "LBL_H1"
 
 [node name="Label3" type="Label" parent="GUI/MainMenu/HBoxContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=849894211]
 layout_mode = 2
-text = "Q - DROP ITEM"
+text = "LBL_H2"
 
 [node name="Label4" type="Label" parent="GUI/MainMenu/HBoxContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1806643473]
 layout_mode = 2
-text = "F - PICKUP ITEM"
+text = "LBL_H3"
 
 [node name="Label5" type="Label" parent="GUI/MainMenu/HBoxContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=490108314]
 layout_mode = 2
-text = "C - CRAFT"
+text = "LBL_H4"
 
 [node name="Label6" type="Label" parent="GUI/MainMenu/HBoxContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=441840926]
 layout_mode = 2
-text = "ESC - MENU"
+text = "LBL_H5"
 
 [node name="Label7" type="Label" parent="GUI/MainMenu/HBoxContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1665435354]
 layout_mode = 2
-text = "LMB - ATTACK"
+text = "LBL_H6"
 
 [node name="Label8" type="Label" parent="GUI/MainMenu/HBoxContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1378450499]
 layout_mode = 2
-text = "RMB - INTERACT"
+text = "LBL_H7"
 
 [node name="Label9" type="Label" parent="GUI/MainMenu/HBoxContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1847213441]
 layout_mode = 2
-text = "B - OPEN BOOK"
+text = "LBL_H8"
 
 [node name="Label10" type="Label" parent="GUI/MainMenu/HBoxContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1085595211]
 layout_mode = 2
-text = "SHIFT - RUN"
+text = "LBL_H9"
 
 [node name="Label11" type="Label" parent="GUI/MainMenu/HBoxContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=294154767]
 layout_mode = 2
-text = "F1 - DEBUG INFO"
+text = "LBL_H10"
 
 [node name="PlayerContainer" type="PanelContainer" parent="GUI/MainMenu" unique_id=1879437193]
 layout_mode = 2
@@ -932,7 +945,7 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="GUI/MainMenu/PlayerContainer/MarginContainer/VBoxContainer" unique_id=2116535852]
 layout_mode = 2
-text = "[PLAYER NAME]:"
+text = "LBL_PLR_NAME"
 
 [node name="PlayerLineEdit" type="LineEdit" parent="GUI/MainMenu/PlayerContainer/MarginContainer/VBoxContainer" unique_id=1597258650]
 layout_mode = 2
@@ -943,7 +956,7 @@ key = "player_name"
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
-text = "LEAVE GAME..."
+text = "BTN_LEAVE_GAME"
 script = ExtResource("11_blune")
 
 [node name="GameMenu" type="PanelContainer" parent="GUI" unique_id=742273661]
@@ -973,19 +986,19 @@ layout_mode = 2
 
 [node name="Continue" type="Button" parent="GUI/GameMenu/MarginContainer/VBoxContainer" unique_id=1708194090]
 layout_mode = 2
-text = "CONTINUE"
+text = "LBL_CONTINUE"
 
 [node name="Save" type="Button" parent="GUI/GameMenu/MarginContainer/VBoxContainer" unique_id=34751071]
 layout_mode = 2
-text = "SAVE WORLD"
+text = "LBL_SAVE_WORLD"
 
 [node name="ExitWithoutSave" type="Button" parent="GUI/GameMenu/MarginContainer/VBoxContainer" unique_id=2076947994]
 layout_mode = 2
-text = "EXIT WITHOUT SAVE"
+text = "LBL_EXIT_WITHOUT_SAVE"
 
 [node name="Exit" type="Button" parent="GUI/GameMenu/MarginContainer/VBoxContainer" unique_id=1729223167]
 layout_mode = 2
-text = "EXIT WORLD"
+text = "LBL_SAVE_EXIT"
 
 [node name="CursorController" parent="." unique_id=1229743695 instance=ExtResource("30_gkmcc")]
 

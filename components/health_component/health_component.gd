@@ -6,8 +6,12 @@ signal died
 
 @export var resists := {}
 
-@export var max_health: float = 1.0
-@export var current_health: float
+@export var max_health: float = 1.0:
+	set(value):
+		max_health = round(value * 100) / 100.0
+@export var current_health: float:
+	set(value):
+		current_health = round(value * 100) / 100.0
 
 var last_health: float
 
@@ -42,6 +46,10 @@ func take_damage(base_damage: float, incoming_types: Dictionary = {"melee": 1.0}
 			current_health = 0
 		changed.emit(current_health, max_health, last_health)
 		on_damage.emit()
+	
+	# Ачивка ваншота, если хп >= 10
+	if last_health == max_health and last_health >= R.dmg_to_get_ach_ultrakill and current_health <= 0.0:
+		G.player.progress_controller.add_achievement("ACH_7")
 	
 	if current_health <= 0:
 		died.emit()

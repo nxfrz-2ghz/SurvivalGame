@@ -1,9 +1,10 @@
 extends CharacterBody3D
 
 @onready var entity := $EntityComponent
-@onready var collider := $CollisionShape3D
+@onready var collision := $CollisionShape3D
 @onready var sprite := $AnimatedSprite3D
 @onready var take_damage_audio := $Audio/TakeDamageAudio
+@onready var damage_particle := $DamageParticle
 @onready var health := $HealthComponent
 @onready var damage_frame_timer := $Timers/DamageFrameRemove
 @onready var shadow := $Shadow
@@ -25,6 +26,7 @@ func _ready() -> void:
 
 @rpc("authority", "call_local")
 func on_damage() -> void:
+	damage_particle.emitting = true
 	if R.sounds["hit"].has(nname):
 		take_damage_audio.audio_play(R.sounds["hit"][nname].pick_random().resource_path)
 	sprite.modulate = Color(1, 0 ,0)
@@ -76,10 +78,9 @@ func loop(_delta: float) -> void:
 	return
 
 func _physics_process(delta: float) -> void:
-	if not is_multiplayer_authority(): return
 	if G.state_machine != "game": return
-	
 	loop(delta)
+	if not is_multiplayer_authority(): return
 	
 	if not is_on_floor():
 		velocity += get_gravity() * delta
@@ -93,3 +94,5 @@ func apply_push(direction_vector: Vector3, velocity_power: float) -> void:
 func _on_update_timer_timeout() -> void:
 	if position.distance_to(get_target_player().position) > 120.0:
 		queue_free()
+	if position.y < G.world.WATER_LEVEL:
+		health.take_damage(1.0)

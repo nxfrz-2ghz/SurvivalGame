@@ -1,9 +1,10 @@
 extends Node3D
 
 @onready var entity := $EntityComponent
-@onready var collider := $CollisionShape3D
+@onready var collision := $CollisionShape3D
 @onready var sprite := $Sprite3D
 @onready var take_damage_audio := $TakeDamageAudio
+@onready var damage_particle := $DamageParticle
 @onready var health := $HealthComponent
 @onready var damage_frame_timer := $Timers/DamageFrameRemove
 @onready var shadow := $Shadow
@@ -25,10 +26,14 @@ func _ready() -> void:
 	health.died.connect(entity.despawn)
 	health.on_damage.connect(on_damage.rpc)
 	health.changed.connect(entity.spawn_damage_perticle)
+	
+	G.time_controller.night_come.connect(shadow.hide)
+	G.time_controller.day_come.connect(shadow.show)
 
 @rpc("authority", "call_local")
 func on_damage() -> void:
 	take_damage_audio.play_sound()
+	damage_particle.emitting = true
 	
 	for spr in visual_sprites:
 		spr.modulate = Color(1, 0 ,0)

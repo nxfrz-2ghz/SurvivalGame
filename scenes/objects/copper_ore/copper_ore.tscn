@@ -9,11 +9,6 @@ radius = 1.2216797
 
 [node name="CopperOre" unique_id=344271823 instance=ExtResource("1_cu152")]
 nname = "copper_ore"
-drop_items = {
-"copper_ore": 2
-}
-despawn_sound_name = "stone"
-exp_drop = 7.0
 
 [node name="HealthComponent" parent="." index="1" unique_id=1086116789]
 resists = {
@@ -21,7 +16,7 @@ resists = {
 "melee": 0.0,
 "pickaxe": 0.8
 }
-max_health = 12.0
+max_health = 13.0
 
 [node name="EntityComponent" parent="." index="2" unique_id=1330161778]
 drop_items = {

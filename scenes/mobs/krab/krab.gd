@@ -1,10 +1,13 @@
 extends "res://scenes/mobs/mob.gd"
 
 @onready var attack_cooldown := $Timers/AttackCooldown
+@onready var dash_cooldown := $Timers/DashCooldown
 
 const damage := 2.0
+const dash_power := 100.0
+const jump_velocity := 3.5
 const DETECTION_RADIUS := 16.0
-const ATTACK_RADIUS := 4.0
+const ATTACK_RADIUS := 2.0
 
 enum State {IDLE, WANDER, STALK}
 var state: State = State.IDLE
@@ -62,5 +65,15 @@ func update() -> void:
 	elif dist < DETECTION_RADIUS:
 		state = State.STALK
 		sprite.anim_play.rpc("walk")
+		if dash_cooldown.is_stopped():
+			dash()
+			dash_cooldown.start()
 	else:
 		if state == State.STALK: state = State.IDLE
+
+
+func dash() -> void:
+	if is_on_floor():
+		velocity += -self.global_transform.basis.z.normalized() * dash_power
+	else:
+		velocity += -self.global_transform.basis.z.normalized() * dash_power / 20

@@ -25,6 +25,9 @@ const RIGID_CAM := preload("res://scenes/player/rigid_cam/rigid_cam.tscn")
 
 @export var nname := "Player"
 
+enum STATE { IDLE, RUN, AIM }
+var state := STATE.IDLE
+
 
 func _enter_tree() -> void:
 	set_multiplayer_authority(str(name).to_int())
@@ -64,6 +67,7 @@ func _input(event: InputEvent) -> void:
 		book.close_book.emit()
 	
 	if G.state_machine != "game": return
+	if !camera.current: return
 	
 	if event.is_action_pressed("lmb"): # или любая кнопка действия
 		if Input.get_mouse_mode() == Input.MOUSE_MODE_VISIBLE:
@@ -103,7 +107,9 @@ func _input(event: InputEvent) -> void:
 			
 			weapon.weapon_anim.speed_scale = weapon.attack_speed
 			weapon.weapon_anim.play("use")
-			weapon.actions.attack(weapon.damage + get_float_velocity()/10, weapon.damage_types, weapon.push_velocity)
+			var vel: float = get_float_velocity()/10
+			var cur_dmg: float = weapon.damage + weapon.damage * vel
+			weapon.actions.attack(cur_dmg, weapon.damage_types, weapon.push_velocity + weapon.push_velocity * vel)
 			weapon.attack.emit()
 		interact_ray.update()
 	
@@ -128,7 +134,13 @@ func _input(event: InputEvent) -> void:
 					inv.drop_item(current_slot_idx, 1)
 					return
 			
-			# Достать готовые прдеметы
+			# Поменять состояние стены
+			elif collider.is_in_group("buildings") and current_slot_data and R.items[current_slot_data["name"]].has("can_change_state_buildings") and !weapon.weapon_anim.is_playing():
+				collider.change_state.rpc_id(1)
+				weapon.use_item_durability()
+				weapon.weapon_anim.play("cd")
+			
+			# Достать готовые предметы
 			elif collider.nname in R.exchangeable_items.keys():
 				if collider.has_node("CookComponent"):
 					for i in collider.cook.complete:
@@ -148,13 +160,28 @@ func _input(event: InputEvent) -> void:
 				collider.pick.rpc_id(1)
 				return
 		
-		# Еда
+		# Использование предметов (items)
 		if current_slot_data != null:
 			var item_name = current_slot_data["name"]
+			
+			# Еда
 			if R.items[item_name].get("nutrition"):
 				hunger.eat(R.items[item_name]["nutrition"])
 				inv.drop_item(current_slot_idx, 1)
 				actions_audio_player.audio_play(R.sounds["actions"]["eating"].resource_path)
+			
+			# Строительство
+			elif R.items[item_name].get("is_building"):
+				weapon.actions.build(item_name)
+				inv.drop_item(current_slot_idx, 1)
+			
+			# Стрельба
+			elif R.items[item_name].get("throw_power") and !weapon.weapon_anim.is_playing():
+				weapon.weapon_anim.speed_scale = weapon.attack_speed
+				weapon.weapon_anim.play("throw")
+	
+	if Input.is_action_just_released("rmb") and weapon.weapon_anim.is_playing() and weapon.weapon_anim.current_animation == "throw":
+		weapon.weapon_anim.speed_scale = -1.5
 	
 	if Input.is_action_just_pressed("pickup") and !weapon.weapon_anim.is_playing():
 		weapon.weapon_anim.play("pickup")
@@ -173,7 +200,7 @@ func _on_open_book() -> void:
 	G.state_machine = "book"
 	weapon.weapon_anim.play("book_open_page")
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-	book.set_page("MAIN")
+	book.set_page("BK_MAIN")
 
 
 func _on_close_book() -> void:
@@ -193,10 +220,15 @@ func _on_health_component_died() -> void:
 	rigid_cam.global_position = self.global_position
 	rigid_cam.apply_central_impulse(velocity)
 	
-	for i in range(inv.MAX_SLOTS + 1):
-		var current_slot_idx: int = i + 1
-		for k in range(inv.inventory[current_slot_idx]["amount"]):
-			weapon.actions.drop(current_slot_idx)
+	# Перебираем все существующие ключи в инвентаре
+	for slot_idx in inv.inventory.keys():
+		var item = inv.inventory[slot_idx]
+		
+		# Проверяем, что в слоте что-то есть
+		if item != null and item.has("amount"):
+			# Выбрасываем предмет столько раз, сколько указано в amount
+			for k in range(item["amount"]):
+					weapon.actions.drop(slot_idx)
 	
 	self.position = Vector3(0, 100, 0)
 	health.heal(99999999.9)
@@ -256,15 +288,13 @@ func moving(delta: float) -> void:
 		arm_anim.play("idle", 0.2)
 	
 	var speed: float = SPEED
-	if Input.is_action_pressed("shift") and stamina.energy > 0:
+	if Input.is_action_pressed("shift") and stamina.energy > 0 and state != STATE.AIM:
 		speed *= 1.5
 		walk_sound_timer.wait_time = 0.3
-		if camera.fov < 120.0:
-			camera.fov += 1.0
+		state = STATE.RUN
 	else:
 		walk_sound_timer.wait_time = 0.4
-		if camera.fov > 90.0:
-			camera.fov -= 0.5
+		state = STATE.IDLE
 	if is_underwater():
 		speed *= 0.5
 	
@@ -299,11 +329,30 @@ func moving(delta: float) -> void:
 		velocity.z = 0
 
 
+func camera_control() -> void:
+	var needed_fov: float
+	if state == STATE.AIM:
+		needed_fov = 70.0
+	elif state == STATE.IDLE:
+		needed_fov = 90.0
+	elif state == STATE.RUN:
+		needed_fov = 110.0
+	
+	if camera.fov < needed_fov:
+		camera.fov += 1.0
+	elif camera.fov > needed_fov:
+		if state == STATE.AIM:
+			camera.fov -= 1.0
+		camera.fov -= 0.5
+
+
 func _physics_process(delta: float) -> void:
 	if not is_multiplayer_authority(): return
 	if G.state_machine != "game": return
 	
 	moving(delta)
+	if Input.is_action_pressed("rmb") and R.items[weapon.current_name].get("throw_power"): state = STATE.AIM
+	camera_control()
 	
 	move_and_slide()
 
@@ -316,8 +365,8 @@ func _on_start_emit_timer_timeout() -> void:
 	
 	# First Note
 	await get_tree().create_timer(15.0).timeout
-	if !progress_controller.unlocked_notes.has(progress_controller.notes["Новый мир"]):
-		progress_controller.add_note("Новый мир")
+	if !progress_controller.unlocked_notes.has(progress_controller.notes["NTK_1"]):
+		progress_controller.add_note("NTK_1")
 
 
 func save_character() -> void:
@@ -334,6 +383,8 @@ func save_character() -> void:
 		"hunger": hunger.current_hunger,
 		"inventory": inv.inventory,
 		"unlocked_notes": progress_controller.unlocked_notes,
+		"unlocked_achievements": progress_controller.unlocked_achievements,
+		"completed_achievements": progress_controller.completed_achievements,
 		"current exp": progress_controller.cur_exp,
 		"current lvl":  progress_controller.lvl,
 	}
@@ -349,7 +400,7 @@ func load_character() -> void:
 	var path: String = "user://worlds/" + G.world.world_name + "/" + nname + ".chr"
 	
 	if not FileAccess.file_exists(path):
-		print("Character save file not found:", path)
+		print("Character save file not found: ", path)
 		return
 	
 	var file := FileAccess.open(path, FileAccess.READ)
@@ -371,9 +422,14 @@ func load_character() -> void:
 		progress_controller.unlocked_notes = data.get("unlocked_notes", [])
 		progress_controller.cur_exp = data.get("current exp", 0)
 		progress_controller.lvl = data.get("current lvl", 0)
+		progress_controller.unlocked_achievements = data.get("unlocked_achievements", [])
+		progress_controller.completed_achievements = data.get("completed_achievements", [])
 		
 		for item in data["inventory"].values():
 			if item:
 				inv.add_item(item["name"], item["amount"])
 		
-		print("Character loaded from:", path)
+		if randf() < 0.1:
+			G.player.progress_controller.add_achievement("ACH_9")
+		
+		print("Character loaded from: ", path)

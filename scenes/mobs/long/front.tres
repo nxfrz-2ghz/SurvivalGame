@@ -1,0 +1,14 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://rj4pg82p2y5e"]
+
+[ext_resource type="Texture2D" uid="uid://ng6x6k2s4e2o" path="res://res/sprites/mobs/pegur/front.png" id="1_eo3gg"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_eo3gg")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]

@@ -1,9 +1,10 @@
 extends Node3D
 
 @onready var entity := $EntityComponent
-@onready var collider := $CollisionShape3D
+@onready var collision := $CollisionShape3D
 @onready var take_damage_audio := $TakeDamageAudio
 @onready var health := $HealthComponent
+@onready var mesh := $MeshInstance3D
 
 @export var nname: String
 

@@ -1,6 +1,7 @@
 extends Area3D
 
 @onready var craft_zone_label := $CraftZone
+@onready var build_zone_mesh := $BuildZone
 @onready var inv := %InventoryController
 
 var crafting_mode := false:
@@ -11,6 +12,10 @@ var crafting_mode := false:
 
 func attack(dmg: float, damage_types: Dictionary, push_velocity: float) -> void:
 	server_attack.rpc(dmg, damage_types, push_velocity, multiplayer.get_unique_id())
+
+
+func shoot(dmg: float, damage_types: Dictionary, push_velocity: float, item_name: String, texture_path: String, despawn_chance: float, throw_power: float, billboard: bool) -> void:
+	server_shoot.rpc(dmg, damage_types, push_velocity, item_name, texture_path, despawn_chance, throw_power, billboard, multiplayer.get_unique_id())
 
 
 func pickup() -> void:
@@ -24,7 +29,11 @@ func drop(slot_index: int) -> void:
 func craft() -> void:
 	crafting_mode = false
 	server_craft.rpc(multiplayer.get_unique_id())
-	
+
+
+func build(item_name: String) -> void:
+	server_build.rpc(multiplayer.get_unique_id(), item_name, build_zone_mesh.global_position, build_zone_mesh.global_rotation)
+	G.player.progress_controller.add_achievement("ACH_5")
 
 
 @rpc("any_peer", "call_local")
@@ -39,9 +48,7 @@ func client_drop_item(slot_index: int) -> void:
 
 @rpc("authority", "call_local")
 func server_attack(dmg: float, damage_types: Dictionary, push_velocity: float, peer_id: int) -> void:
-	
-	if not multiplayer.is_server():
-		return
+	if not multiplayer.is_server(): return
 	
 	var player = G.environment.get_node(str(peer_id))
 	var actions_node = player.weapon.actions
@@ -56,7 +63,7 @@ func server_attack(dmg: float, damage_types: Dictionary, push_velocity: float, p
 			body.apply_push.rpc_id(int(body.name), -actions_node.global_transform.basis.z.normalized() + Vector3.UP/2, push_velocity)
 		
 		# Урон по объектам
-		if body.is_in_group("objects"):
+		if body.is_in_group("objects") or body.is_in_group("buildings"):
 			body.health.take_damage(dmg, damage_types)
 		
 		# Урон по мобам
@@ -66,10 +73,31 @@ func server_attack(dmg: float, damage_types: Dictionary, push_velocity: float, p
 
 
 @rpc("authority", "call_local")
-func server_pickup(peer_id: int) -> void:
+func server_shoot(dmg: float, damage_types: Dictionary, push_velocity: float, item_name: String, texture_path: String, despawn_chance: float, throw_power: float, billboard: bool, peer_id: int) -> void:
+	if not multiplayer.is_server(): return
 	
-	if not multiplayer.is_server():
-		return
+	var player = G.environment.get_node(str(peer_id))
+	var actions_node = player.weapon.actions
+	
+	var throwable_item := R.throwable_item.instantiate()
+	throwable_item.position = actions_node.global_position
+	throwable_item.rotation = actions_node.global_rotation
+	throwable_item.item_name = item_name
+	throwable_item.texture_path = texture_path
+	throwable_item.despawn_chance = despawn_chance
+	throwable_item.damage = dmg
+	throwable_item.damage_types = damage_types
+	throwable_item.push_velocity = push_velocity
+	throwable_item.throw_power = throw_power
+	throwable_item.billboard = billboard
+	
+	G.environment.add_child(throwable_item, true)
+	throwable_item.apply_central_impulse(player.velocity)
+
+
+@rpc("authority", "call_local")
+func server_pickup(peer_id: int) -> void:
+	if not multiplayer.is_server(): return
 	
 	var player = G.environment.get_node_or_null(str(peer_id))
 	if not player: return
@@ -82,9 +110,7 @@ func server_pickup(peer_id: int) -> void:
 
 @rpc("authority", "call_local")
 func server_drop(slot_index: int, item_name: String, peer_id: int) -> void:
-	
-	if not multiplayer.is_server():
-		return
+	if not multiplayer.is_server(): return
 	
 	var player = G.environment.get_node_or_null(str(peer_id))
 	if not player: return
@@ -95,6 +121,19 @@ func server_drop(slot_index: int, item_name: String, peer_id: int) -> void:
 	node.position = actions_node.global_position
 	G.environment.add_child(node, true)
 	client_drop_item.rpc_id(peer_id, slot_index)
+
+
+@rpc("authority", "call_local")
+func server_build(peer_id: int, item_name: String, pos: Vector3, rot: Vector3) -> void:
+	if not multiplayer.is_server(): return
+	
+	var player = G.environment.get_node_or_null(str(peer_id))
+	if not player: return
+	
+	var building: StaticBody3D = R.buildings[item_name]["scene"].instantiate()
+	building.position = pos
+	building.rotation = rot
+	G.environment.add_child(building, true)
 
 
 @rpc("authority", "call_local")
@@ -119,15 +158,43 @@ func server_craft(peer_id: int) -> void:
 		else:
 			actions_node.execute_craft(peer_id, result_id, recipe, available_nodes)
 
-# Возвращает словарь с данными рецепта или null
+# Возвращает словарь с данными самого дорогого рецепта (по кол-ву ингредиентов) или null
 func get_available_recipe(available_nodes: Dictionary) -> Variant:
-	# Сначала проверяем предметы, потом объекты
+	var best_recipe = null
+	var max_cost = -1
+
+	# Проходим по предметам и объектам
 	for collection in [{"data": R.items, "type": "item"}, {"data": R.objects, "type": "object"}]:
 		for id in collection.data:
 			var item_data = collection.data[id]
+			
 			if item_data.has("recipe") and can_craft(item_data["recipe"], available_nodes):
-				return {"id": id, "recipe": item_data["recipe"], "type": collection.type}
-	return null
+				# Считаем "цену" как количество узлов в рецепте
+				var current_cost = _calculate_recipe_cost(item_data["recipe"])
+				
+				# Если этот рецепт дороже текущего лучшего, запоминаем его
+				if current_cost > max_cost:
+					max_cost = current_cost
+					best_recipe = {
+						"id": id, 
+						"recipe": item_data["recipe"], 
+						"type": collection.type,
+						"cost": current_cost
+					}
+					
+	return best_recipe
+
+# Вспомогательная функция для подсчета стоимости
+func _calculate_recipe_cost(recipe: Variant) -> int:
+	if recipe is Array:
+		return recipe.size()
+	if recipe is Dictionary:
+		var total = 0
+		for count in recipe.values():
+			total += int(count) # Суммируем количество каждого ресурса
+		return total
+	return 0
+
 
 func can_craft(recipe: Dictionary, available_nodes: Dictionary) -> bool:
 	for ingredient in recipe:
@@ -155,7 +222,11 @@ func _consume_ingredients(recipe: Dictionary, available_nodes: Dictionary) -> vo
 
 func execute_craft(peer_id: int, result_name: String, recipe: Dictionary, available_nodes: Dictionary):
 	_consume_ingredients(recipe, available_nodes)
-	client_receive_item.rpc_id(peer_id, result_name)
+	if R.items[result_name].has("amount_craft"):
+		for i in range(R.items[result_name]["amount_craft"]):
+			client_receive_item.rpc_id(peer_id, result_name)
+	else:
+		client_receive_item.rpc_id(peer_id, result_name)
 
 func execute_craft_object(peer_id: int, result_object: String, recipe: Dictionary, available_nodes: Dictionary):
 	_consume_ingredients(recipe, available_nodes)
@@ -168,7 +239,7 @@ func execute_craft_object(peer_id: int, result_object: String, recipe: Dictionar
 	if R.objects[result_object].has("is_building"):
 		# Добавление вращения и привязка к сетке
 		spawned_object.position.x = snappedf(player.weapon.actions.global_position.x, 3.0)
-		spawned_object.position.y = snappedf(player.weapon.actions.global_position.y, 3.0)
+		spawned_object.position.y = player.weapon.actions.global_position.y + 1.0
 		spawned_object.position.z = snappedf(player.weapon.actions.global_position.z, 3.0)
 		spawned_object.rotation_degrees.y = snappedf(player.rotation_degrees.y, 45.0)
 		spawned_object.rotation_degrees.x = snappedf(player.head.rotation_degrees.x, 90.0)
@@ -190,4 +261,23 @@ func _physics_process(_delta: float) -> void:
 			# Если в R.items/objects есть поле "name", лучше взять его, иначе берем ID
 			craft_zone_label.text = "Ready to craft: " + result_id
 		else:
-			craft_zone_label.text = "Drop ingridients in green box"
+			craft_zone_label.text = "Drop ingridients here"
+	
+	if build_zone_mesh.visible:
+		build_zone_mesh.global_position.x = snappedf(G.player.weapon.actions.global_position.x, 1.5)
+		build_zone_mesh.global_position.z = snappedf(G.player.weapon.actions.global_position.z, 1.5)
+		build_zone_mesh.global_rotation_degrees.x = snappedf(G.player.head.rotation_degrees.x, 90.0)
+		
+		# Изменение поворота и позиции в зависимости от того, горизонтальная стена или вертикальная (пол)
+		if build_zone_mesh.global_rotation_degrees.x == 0.0:
+			build_zone_mesh.global_rotation_degrees.y = snappedf(G.player.rotation_degrees.y, 90.0)
+			build_zone_mesh.global_rotation_degrees.z = 0.0
+			build_zone_mesh.global_position.y = snappedf(G.player.weapon.actions.global_position.y, 0.5) + 1.0
+		else:
+			build_zone_mesh.global_rotation_degrees.y = 0.0
+			build_zone_mesh.global_rotation_degrees.z = snappedf(G.player.rotation_degrees.y, 90.0)
+			build_zone_mesh.global_position.y = snappedf(G.player.weapon.actions.global_position.y, 0.5)
+		
+		# Диагональный наклон на R
+		if Input.is_action_pressed("R"):
+			build_zone_mesh.global_rotation_degrees.x = -45.0

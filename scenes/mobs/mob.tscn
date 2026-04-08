@@ -6,13 +6,41 @@
 [ext_resource type="PackedScene" uid="uid://4ffu5apey8sh" path="res://components/shadow/shadow.tscn" id="3_q44lt"]
 [ext_resource type="PackedScene" uid="uid://cm8dp3hd0yxoq" path="res://components/entity_component/entity_component.tscn" id="4_2sf44"]
 
+[sub_resource type="Gradient" id="Gradient_2sf44"]
+colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_7ytub"]
+gradient = SubResource("Gradient_2sf44")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_rqkdu"]
+emission_shape_offset = Vector3(0, 1, 0)
+emission_shape = 1
+emission_sphere_radius = 1.0
+direction = Vector3(0, 5, 0)
+spread = 180.0
+initial_velocity_min = 3.0
+initial_velocity_max = 3.0
+gravity = Vector3(0, -10, 0)
+color_ramp = SubResource("GradientTexture1D_7ytub")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_j0isv"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_sg8ih"]
+material = SubResource("StandardMaterial3D_j0isv")
+size = Vector2(0.2, 0.2)
+orientation = 2
+
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_2sf44"]
-properties/0/path = NodePath(".:position")
+properties/0/path = NodePath(".:rotation")
 properties/0/spawn = true
 properties/0/replication_mode = 2
-properties/1/path = NodePath("HealthComponent:current_health")
-properties/1/spawn = true
-properties/1/replication_mode = 0
 
 [node name="Mob" type="CharacterBody3D" unique_id=408161229 groups=["mobs"]]
 collision_layer = 16
@@ -56,6 +84,17 @@ shaded = true
 double_sided = false
 
 [node name="Shadow" parent="." unique_id=437352595 instance=ExtResource("3_q44lt")]
+
+[node name="DamageParticle" type="GPUParticles3D" parent="." unique_id=72867474]
+visibility_range_end = 100.0
+emitting = false
+amount = 4
+lifetime = 0.3
+one_shot = true
+explosiveness = 1.0
+randomness = 0.4
+process_material = SubResource("ParticleProcessMaterial_rqkdu")
+draw_pass_1 = SubResource("PlaneMesh_sg8ih")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=100035993]
 replication_config = SubResource("SceneReplicationConfig_2sf44")

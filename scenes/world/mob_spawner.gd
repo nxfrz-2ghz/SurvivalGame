@@ -1,6 +1,6 @@
 extends Node
 
-const MAX_MOBS := 15
+const MAX_MOBS := 25
 const MAX_SPAWN_RADIUS := 80.0
 const MIN_SPAWN_RADIUS := 50.0
 
@@ -15,6 +15,19 @@ func spawn_mob(mob_scene: PackedScene, position: Vector3) -> void:
 	var mob_instance := mob_scene.instantiate()
 	mob_instance.position = position
 	G.environment.add_child(mob_instance, true)
+	
+	# Scale mob stats with player progress
+	var mob_health: Node = mob_instance.get_node_or_null("HealthComponent")
+	if mob_health:
+		if G.player.progress_controller.unlocked_notes.has("NTV_7"):
+			mob_health.max_health *= 1.2
+			mob_health.current_health *= 1.2
+		if G.player.progress_controller.unlocked_notes.has("NTV_10"):
+			mob_health.max_health *= 1.35
+			mob_health.current_health *= 1.35
+		if G.player.progress_controller.unlocked_notes.has("NTV_12"):
+			mob_health.max_health *= 1.5
+			mob_health.current_health *= 1.5
 
 
 func _on_directional_light_3d_night_come() -> void:
@@ -25,7 +38,7 @@ func _on_directional_light_3d_night_come() -> void:
 	var target_player: CharacterBody3D = players.pick_random()
 	# Вычисляем случайную точку в кольце вокруг игрока
 	var spawn_pos := get_random_spawn_position(target_player.global_position)
-	spawn_pos.y = 50
+	spawn_pos.y = 20
 	# Создание экземпляра
 	spawn_mob(R.objects["heart"]["scene"], spawn_pos)
 

@@ -24,7 +24,7 @@ func _physics_process(delta: float) -> void:
 	if night:
 		rotation_degrees.x += time_speed * delta # X2 SPEED
 	
-	if Input.is_action_pressed("x"):
+	if Input.is_action_pressed("X"):
 		for i in range(100):
 			rotation_degrees.x += time_speed * delta
 	
@@ -33,16 +33,16 @@ func _physics_process(delta: float) -> void:
 		rotation_degrees.x = -rotation_degrees.x
 		max_energy = randf_range(0.8, 1.5)
 		
-		if !G.player.progress_controller.unlocked_notes.has(G.player.progress_controller.notes["Первая ночь"]):
-			G.player.progress_controller.add_note("Первая ночь")
+		if !G.player.progress_controller.unlocked_notes.has(G.player.progress_controller.notes["NTK_4"]):
+			G.player.progress_controller.add_note("NTK_4")
 		
 		if parent.server: day_come.emit()
 	
 	if rotation_degrees.x > 0 and !night:
 		night = true
 		
-		if !G.player.progress_controller.unlocked_notes.has(G.player.progress_controller.notes["Начинает темнеть"]):
-			G.player.progress_controller.add_note("Начинает темнеть")
+		if !G.player.progress_controller.unlocked_notes.has(G.player.progress_controller.notes["NTK_3"]):
+			G.player.progress_controller.add_note("NTK_3")
 		
 		if parent.server: night_come.emit()
 	

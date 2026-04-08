@@ -2,38 +2,67 @@ extends Node
 
 signal changed(cur_exp: float, max_exp: float, cur_lvl: int)
 
+@onready var audio_player := $AudioStreamPlayer
+
+const new_note := preload("res://res/sounds/actions/new_note.mp3")
+const new_achievement := preload("res://res/sounds/actions/new_achievement.mp3")
+
 # NOTES
 const notes := {
-	"Новый мир": "С пустыми руками вряд-ли получится выжить! Для начало нужно как-нибудь добыть древесину, для этого подойдет любой близлежащий камень [подобрать камень - F]",
-	
-	"Первая древесина": "У меня получилось добыть древесину! Но дальше орудовать камнем желания нет, нужно сделать примитивные инструменты из того что есть. \
-	Я могу сделать каменные инструменты: для топора нужен камень[x2] и дерево[x3], а для кирки камень[x3] и дерево[x2]. \
-	Чтобы что-то сделать нужно сложить [Q] материалы на землю и начать крафт [C].",
-	
-	"Начинает темнеть": "Уже темнеет... Важно подготовиться к ночи. Я не буду ночевать в темноте и на голодный желудок! \
-	Чтобы развести костер, нужно сложить бревна[x3] в кучу. [Положите древесину, откройте зону крафта, создайте костер и добавьте дров [RIGHT CLICK] для горения]. \
-	А подкрепиться можно с ягод которые растут неподалёку, наверное термическая обработка пищи сделает ее более питательной.",
-	
-	"Первая ночь": "Я смог пережить первую ночь! Она была и так не спокойной, но на утро я услышал сердцебиение, аж земля тряслась. \
-	Сначала я подумал что мне это кажется, но это уже который час происходит...  Мне не спокойно! Нужно проверить обстановку вокруг.",
-	
-	"Первая медь": "Похоже я нашел руду, которую можно переплавить в каменной печи[stone x5] на древесине. Но из меди получаются довольно хрупкие инструменты, \
-	которые сломаются после двух взмахов. Но у есть идея!: если сделать медную лопату и в ближайшем водоёме добыть глину, а потом в печи обжарить то получатся кирпичи.",
-	
-	"Первое железо": "Такое твердое железо не расплавишь в обычной каменной печи, а температура нужна выше той, которая может дать горящее палено, но если сделать печь из кирпичей и найти более мощное топливо, \
-	я смогу достичь необходимой температуры для плавления.",
-	
-	"Медный слиток": "Эти слитки довольно теплостойкие для создания котла, в котором можно получить более мощное топливо: древесный уголь. Для этого необходимо добыть немало древесины[x4]\
-	 и положить их в котел алхимической машины, рецепт которой я наверняка смогу найти в этом странном дневнике",
-	
-	"Медная лопата": "С такой лопатой если постараться, через время я смогу накопать немного глины, нужно лишь найти ее",
-	
-	"Глина": "Похоже я смог выкопать глину, если положить несколько комков в каменную печь, то я смогу получить прочные жаростойкие кирпичи",
-	
-	"Железный слиток": "Все таки я смог переплавить это гребанное железо, теперь я могу делать крутые прочные инструменты и даже, попробовать получить сталь!",
+	"NTK_1": "NTV_1",
+	"NTK_2": "NTV_2",
+	"NTK_3": "NTV_3",
+	"NTK_4": "NTV_4",
+	"NTK_5": "NTV_5",
+	"NTK_6": "NTV_6",
+	"NTK_7": "NTV_7",
+	"NTK_8": "NTV_8",
+	"NTK_9": "NTV_9",
+	"NTK_10": "NTV_10",
+	"NTK_11": "NTV_11",
 }
 
 var unlocked_notes := []
+
+func add_note(note_name: String) -> void:
+	unlocked_notes.append(notes[note_name])
+	G.text_message.add("NEW NOTE UNLOCKED! VIEW IT IN BOOK [press B]")
+	audio_player.stream = new_note
+	audio_player.play()
+
+# ACHIEVEMENTS
+const achievements := [
+	"ACH_1",
+	"ACH_2",
+	"ACH_3",
+	"ACH_4",
+	"ACH_5",
+	"ACH_6",
+	"ACH_7",
+	"ACH_8",
+	"ACH_9",
+]
+
+const show_achievement_cost := 1
+
+var unlocked_achievements := []
+var completed_achievements := []
+
+func show_achievement(ach_name: String) -> bool:
+	if spend_exp_by_lvl(show_achievement_cost + unlocked_achievements.size()):
+		unlocked_achievements.append(ach_name)
+		return true
+	else:
+		return false
+
+func add_achievement(ach_name: String) -> void:
+	if completed_achievements.has(ach_name): return
+	unlocked_achievements.append(ach_name)
+	completed_achievements.append(ach_name)
+	G.text_message.add("NEW NOTE ACHIEVEMENT! VIEW IT IN BOOK [press B]")
+	audio_player.stream = new_achievement
+	audio_player.play()
+
 
 # EXPERIENCE
 const lvlup_cost := 6.0
@@ -43,15 +72,28 @@ var cur_exp: float = 0.0
 func add_exp(added_exp: float) -> void:
 	cur_exp += added_exp
 	
-	var cur_lvlup_cost: float = lvlup_cost + lvlup_cost * lvl/2
-	if cur_exp > cur_lvlup_cost:
-		cur_exp -= cur_lvlup_cost
+	if cur_exp > get_lvlup_cost():
+		cur_exp -= get_lvlup_cost()
 		lvl += 1
 		G.text_message.add("NEW LEVEL REACHED!")
 	
-	changed.emit(cur_exp, cur_lvlup_cost, lvl)
+	changed.emit(cur_exp, get_lvlup_cost(), lvl)
 
-func add_note(note_name: String) -> void:
-	unlocked_notes.append(notes[note_name])
-	G.text_message.add("NEW NOTE UNLOCKED! VIEW IT IN BOOK [press B]")
-	$AudioStreamPlayer.play()
+func spend_exp_by_lvl(levels_to_spend: int) -> bool:
+	if lvl >= levels_to_spend:
+		# Вычитаем уровни
+		lvl -= levels_to_spend
+		
+		# Конвертируем избытки опыта в уровни
+		if cur_exp > get_lvlup_cost():
+			cur_exp -= get_lvlup_cost()
+			lvl += 1
+		
+		changed.emit(cur_exp, get_lvlup_cost(), lvl)
+		
+		return true # Успешно потрачено
+	
+	return false # Недостаточно ресурсов
+
+func get_lvlup_cost() -> float:
+	return lvlup_cost + (lvlup_cost * lvl / 2.0)

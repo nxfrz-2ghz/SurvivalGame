@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://darxc13rlkwt7" path="res://scenes/objects/object.tscn" id="1_3awjx"]
 [ext_resource type="Script" uid="uid://dgnp5qym0tan7" path="res://scenes/objects/heart/heart.gd" id="2_xfilk"]
 [ext_resource type="Texture2D" uid="uid://bvwsqdju62i5r" path="res://res/sprites/objects/heart/heart100/Без названия16_20260228111525.png" id="3_0a7st"]
+[ext_resource type="Script" uid="uid://bwpi6vkjpk0tm" path="res://scenes/objects/heart/entity_component.gd" id="3_221hr"]
 [ext_resource type="Texture2D" uid="uid://ptj3is54ak44" path="res://res/sprites/objects/heart/heart100/Без названия16_20260228111523.png" id="4_quc8c"]
 [ext_resource type="Texture2D" uid="uid://b4e4x7jt7jeic" path="res://res/sprites/objects/heart/heart100/Без названия16_20260228111528.png" id="5_ybadl"]
 [ext_resource type="Texture2D" uid="uid://bknadut1bo1xr" path="res://res/sprites/objects/heart/heart100/Без названия16_20260228111530.png" id="6_gbr1q"]
@@ -142,11 +143,6 @@ properties/1/replication_mode = 2
 script = ExtResource("2_xfilk")
 corruption_size = Vector3(2, 2, 2)
 nname = "heart"
-drop_items = {
-"raw_meat": 4
-}
-despawn_sound_name = "meat"
-exp_drop = 5.0
 
 [node name="RegenerationTimer" type="Timer" parent="Timers" parent_id_path=PackedInt32Array(203408184) index="1" unique_id=1664654667]
 wait_time = 10.0
@@ -165,6 +161,7 @@ autostart = true
 max_health = 18.0
 
 [node name="EntityComponent" parent="." index="2" unique_id=1330161778]
+script = ExtResource("3_221hr")
 drop_items = {
 "raw_meat": 4
 }

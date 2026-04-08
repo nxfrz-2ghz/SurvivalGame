@@ -45,10 +45,10 @@ const BIOME_CONFIG = {
 		"height_multiplier": 1.0,
 		"noise_threshold": 0.0,
 		"objects": {
-			"grass": {"weight": 93, "density": 0.06},
+			"grass": {"weight": 93, "density": 0.1},
 			"stone": {"weight": 3, "density": 0.01},
 			"tree": {"weight": 2, "density": 0.01},
-			"berry_bush" : {"weight": 2, "density": 0.05},
+			"berry_bush" : {"weight": 2, "density": 0.04},
 		}
 	},
 	Biome.UNDERWATER: {
@@ -88,6 +88,7 @@ const water_material := preload("res://scenes/world/water_material.tres")
 const VARS_WHITELIST := [
 	"full", # berry_bush
 	"corruption_size", # heart
+	"state", # walls
 ]
 
 var server: bool
@@ -133,6 +134,8 @@ func _init_noise() -> void:
 	biome_noise.seed = world_seed + 1
 	biome_noise.noise_type = FastNoiseLite.TYPE_PERLIN
 	biome_noise.frequency = 0.05
+	
+	fall_defense_area.set_size(world_size)
 
 func _generate_terrain() -> void:
 	# Генерируем меш террейна разбитый на чанки
@@ -196,15 +199,15 @@ func _generate_terrain() -> void:
 			
 			# Создаем геометрия для визуализации чанка
 			var mesh_instance = MeshInstance3D.new()
-			var collider = CollisionShape3D.new()
+			var collision = CollisionShape3D.new()
 			mesh_instance.mesh = mesh
-			collider.shape = mesh_instance.mesh.create_trimesh_shape()
+			collision.shape = mesh_instance.mesh.create_trimesh_shape()
 			mesh_instance.visibility_range_end = visible_mesh_range
 			mesh_instance.material_overlay = ground_material
 			mesh_instance.set_layer_mask_value(2, true) # Enable shadow decal support
 			mesh_instance.set_layer_mask_value(3, true) # Enable corruption decal support
 			terrain.call_deferred("add_child", mesh_instance)
-			terrain.call_deferred("add_child", collider)
+			terrain.call_deferred("add_child", collision)
 
 func _generate_water() -> void:
 	var offset := (world_size - 1) * spacing / 2.0
@@ -278,7 +281,7 @@ func _generate_objects() -> void:
 	await get_tree().process_frame
 	
 	# Генерируем все объекты одновременно
-	var offset2 := (world_size - 1) * spacing / 2.0
+	var offset := (world_size - 1) * spacing / 2.0
 	var rng = RandomNumberGenerator.new()
 	rng.seed = int(world_seed)
 	
@@ -287,8 +290,8 @@ func _generate_objects() -> void:
 	while gx < world_size:
 		gz = 0
 		while gz < world_size:
-			var world_x = gx * spacing - offset2
-			var world_z = gz * spacing - offset2
+			var world_x = gx * spacing - offset
+			var world_z = gz * spacing - offset
 			
 			# Определяем биом в этой позиции
 			var biom_value = biome_noise.get_noise_2d(world_x / 20.0, world_z / 20.0)
@@ -319,8 +322,8 @@ func _generate_objects() -> void:
 	while gx < world_size:
 		gz = 0
 		while gz < world_size:
-			var world_x = gx * spacing - offset2
-			var world_z = gz * spacing - offset2
+			var world_x = gx * spacing - offset
+			var world_z = gz * spacing - offset
 			
 			var spawn_y = +_get_height(world_x, world_z)
 			
@@ -341,12 +344,14 @@ func _generate_world() -> void:
 	
 	G.screen_text.text("Generating Terrain...")
 	await get_tree().process_frame
-	fall_defense_area.set_size(world_size)
 	_generate_terrain()
 	
 	G.screen_text.text("Generating Water...")
 	await get_tree().process_frame
 	_generate_water()
+	
+	G.screen_text.text("Spawning Grass...")
+	await get_tree().process_frame
 	
 	G.screen_text.text("")
 	if !server: return
@@ -434,6 +439,7 @@ func save_world() -> void:
 		"world_size": world_size,
 		"sun_rotation": G.time_controller.rotation_degrees.x,
 		"objects": [],
+		"buildings": [],
 		"mobs": [],
 		"player": {},
 	}
@@ -455,6 +461,22 @@ func save_world() -> void:
 					# Если это вектор (или любой другой сложный тип), упаковываем его в спец-строку
 					entry["vars"][var_name] = var_to_str(val) 
 			save_data["objects"].append(entry)
+		
+		if child.is_in_group("buildings"):
+			entry = {
+				"name": child.nname,
+				"pos": [child.position.x, child.position.y, child.position.z],
+				"rot": [child.rotation.x, child.rotation.y, child.rotation.z],
+				"hp": child.health.current_health,
+				"vars": {},
+			}
+			for var_name in VARS_WHITELIST:
+				if var_name in child:
+					# Если у объекта есть такая 
+					var val = child.get(var_name)
+					# Если это вектор (или любой другой сложный тип), упаковываем его в спец-строку
+					entry["vars"][var_name] = var_to_str(val) 
+			save_data["buildings"].append(entry)
 		
 		elif child.is_in_group("items"):
 			entry = {
@@ -539,6 +561,27 @@ func load_world() -> void:
 				G.environment.add_child(instance, true)
 				instance.get_node("HealthComponent").current_health = obj_data["hp"]
 	
+	for obj_data in data["buildings"]:
+		var pos := Vector3(obj_data["pos"][0], obj_data["pos"][1], obj_data["pos"][2])
+		var rot := Vector3(obj_data["rot"][0], obj_data["rot"][1], obj_data["rot"][2])
+		var obj_name = obj_data["name"]
+		
+		var obj_scene = R.buildings.get(obj_name)["scene"]
+		if obj_scene:
+			var instance = obj_scene.instantiate()
+			instance.position = pos
+			instance.rotation = rot
+			instance.nname = obj_name
+			if obj_data.has("vars"):
+				for var_name in obj_data["vars"]:
+					var raw_value = obj_data["vars"][var_name]
+					var final_value = raw_value
+					if typeof(raw_value) == TYPE_STRING:
+						final_value = str_to_var(raw_value)
+					instance.set(var_name, final_value)
+			G.environment.add_child(instance, true)
+			instance.get_node("HealthComponent").current_health = obj_data["hp"]
+	
 	# Спавним мобов
 	for mob_data in data["mobs"]:
 		var pos = Vector3(mob_data["pos"][0], mob_data["pos"][1], mob_data["pos"][2])
@@ -550,3 +593,11 @@ func load_world() -> void:
 			instance.get_node("HealthComponent").current_health = mob_data["hp"]
 	
 	G.screen_text.text("")
+	print("World loaded from: ", path)
+
+
+func _on_autosave_timer_timeout() -> void:
+	if !world_name: return
+	if !G.gui.main_menu.autosave.button_pressed: return
+	save_world()
+	G.player.save_character()

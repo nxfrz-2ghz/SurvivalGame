@@ -25,6 +25,7 @@ func update_signals() -> void:
 
 func _input(_event: InputEvent) -> void:
 	if G.state_machine != "game": return
+	if %WeaponAnim.is_playing(): return
 	
 	if Input.is_action_just_pressed("1"):
 		current_item = 1
@@ -75,30 +76,21 @@ func check_progress(item_name) -> void:
 	if !G.player: return
 	var prg: Node = G.player.progress_controller
 	
-	if item_name == "stone":
-		if !prg.unlocked_notes.has(prg.notes["Новый мир"]):
-			prg.add_note("Новый мир")
-	elif item_name == "log":
-		if !prg.unlocked_notes.has(prg.notes["Первая древесина"]):
-			prg.add_note("Первая древесина")
-	elif item_name == "copper_ore":
-		if !prg.unlocked_notes.has(prg.notes["Первая медь"]):
-			prg.add_note("Первая медь")
-	elif item_name == "iron_ore":
-		if !prg.unlocked_notes.has(prg.notes["Первое железо"]):
-			prg.add_note("Первое железо")
-	elif item_name == "copper_bar":
-		if !prg.unlocked_notes.has(prg.notes["Медный слиток"]):
-			prg.add_note("Медный слиток")
-	elif item_name == "copper_shovel":
-		if !prg.unlocked_notes.has(prg.notes["Медная лопата"]):
-			prg.add_note("Медная лопата")
-	elif item_name == "clay":
-		if !prg.unlocked_notes.has(prg.notes["Глина"]):
-			prg.add_note("Глина")
-	elif item_name == "iron_bar":
-		if !prg.unlocked_notes.has(prg.notes["Железный слиток"]):
-			prg.add_note("Железный слиток")
+	if item_name == "iron_axe": G.player.progress_controller.add_achievement("ACH_6")
+	
+	var note_will_add: int
+	
+	if item_name == "stone": note_will_add = 1
+	elif item_name == "log": note_will_add = 2
+	elif item_name == "copper_ore": note_will_add = 5
+	elif item_name == "iron_ore": note_will_add = 6
+	elif item_name == "copper_ingot": note_will_add = 7
+	elif item_name == "copper_shovel": note_will_add = 8
+	elif item_name == "clay": note_will_add = 9
+	elif item_name == "iron_ingot": note_will_add = 10
+	elif item_name == "wall_wood": note_will_add = 11
+	
+	if note_will_add and !prg.unlocked_notes.has("NTV_"+str(note_will_add)): prg.add_note("NTK_"+str(note_will_add))
 
 ### --- ОСНОВНЫЕ ФУНКЦИИ ---
 
@@ -139,7 +131,7 @@ func add_item(item_name: String, amount: int = 1) -> void:
 
 func drop_item(slot_index: int, amount: int = 1) -> void:
 	$"../Audio/ActionsAudioPlayer3D".audio_play(R.sounds["actions"]["pickup"].resource_path)
-	if slot_index < 0 or slot_index >= MAX_SLOTS: return
+	if slot_index < 0 or slot_index >= MAX_SLOTS+1: return
 	
 	var slot = inventory[slot_index]
 	if slot:
