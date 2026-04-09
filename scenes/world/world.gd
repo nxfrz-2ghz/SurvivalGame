@@ -89,6 +89,11 @@ const VARS_WHITELIST := [
 	"full", # berry_bush
 	"corruption_size", # heart
 	"state", # walls
+	# for craft and cook components
+	"queue",
+	"complete",
+	"fuel",
+	# ========
 ]
 
 var server: bool
@@ -136,6 +141,8 @@ func _init_noise() -> void:
 	biome_noise.frequency = 0.05
 	
 	fall_defense_area.set_size(world_size)
+	weather.env.setup()
+
 
 func _generate_terrain() -> void:
 	# Генерируем меш террейна разбитый на чанки
@@ -342,6 +349,10 @@ func _generate_objects() -> void:
 
 func _generate_world() -> void:
 	
+	weather.toggle_fog.rpc(false)
+	weather.toggle_rain.rpc(false)
+	weather.toggle_meteor_rain.rpc(false)
+	
 	G.screen_text.text("Generating Terrain...")
 	await get_tree().process_frame
 	_generate_terrain()
@@ -438,6 +449,11 @@ func save_world() -> void:
 		"seed": world_seed,
 		"world_size": world_size,
 		"sun_rotation": G.time_controller.rotation_degrees.x,
+		"weather": {
+			"fog": weather.fog,
+			"rain": weather.rain,
+			"meteor_rain": weather.meteor_rain,
+		},
 		"objects": [],
 		"buildings": [],
 		"mobs": [],
@@ -453,6 +469,7 @@ func save_world() -> void:
 				"pos": [child.position.x, child.position.y, child.position.z],
 				"hp": child.health.current_health,
 				"vars": {},
+				"component_vars": {},
 			}
 			for var_name in VARS_WHITELIST:
 				if var_name in child:
@@ -460,6 +477,16 @@ func save_world() -> void:
 					var val = child.get(var_name)
 					# Если это вектор (или любой другой сложный тип), упаковываем его в спец-строку
 					entry["vars"][var_name] = var_to_str(val) 
+					
+				var cook_component := child.get_node_or_null("CookComponent")
+				if cook_component and var_name in cook_component:
+					var val = cook_component.get(var_name)
+					entry["component_vars"][var_name] = var_to_str(val) 
+				var craft_component := child.get_node_or_null("CraftComponent")
+				if craft_component and var_name in craft_component:
+					var val = craft_component.get(var_name)
+					entry["component_vars"][var_name] = var_to_str(val) 
+			
 			save_data["objects"].append(entry)
 		
 		if child.is_in_group("buildings"):
@@ -520,6 +547,12 @@ func load_world() -> void:
 	world_seed = data["seed"]
 	world_size = data["world_size"]
 	G.time_controller.rotation_degrees.x = data["sun_rotation"]
+	
+	if data.get("weather"):
+		weather.toggle_fog.rpc(data["weather"]["fog"])
+		weather.toggle_rain.rpc(data["weather"]["rain"])
+		weather.toggle_meteor_rain.rpc(data["weather"]["meteor_rain"])
+	
 	server = true # Обычно загрузку делает только сервер
 	
 	# Пересоздаем террейн
@@ -558,6 +591,16 @@ func load_world() -> void:
 						if typeof(raw_value) == TYPE_STRING:
 							final_value = str_to_var(raw_value)
 						instance.set(var_name, final_value)
+				if obj_data.has("component_vars"):
+					for var_name in obj_data["component_vars"]:
+						var raw_value = obj_data["component_vars"][var_name]
+						var final_value = raw_value
+						if typeof(raw_value) == TYPE_STRING:
+							final_value = str_to_var(raw_value)
+						var craft_component: Node = instance.get_node_or_null("CraftComponent")
+						if craft_component: craft_component.set(var_name, final_value)
+						var cook_component: Node = instance.get_node_or_null("CookComponent")
+						if cook_component: cook_component.set(var_name, final_value)
 				G.environment.add_child(instance, true)
 				instance.get_node("HealthComponent").current_health = obj_data["hp"]
 	

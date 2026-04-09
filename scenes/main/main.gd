@@ -11,7 +11,15 @@ func _ready() -> void:
 
 
 func _input(_event: InputEvent) -> void:
-	if Input.is_action_just_pressed("f1"):
+	if Input.is_action_just_pressed("f1") and G.state_machine == "game":
+		G.gui.hud.inventory.visible = !G.gui.hud.inventory.visible
+		G.gui.hud.aim.visible = !G.gui.hud.aim.visible
+		G.gui.hud.bar_box.visible = !G.gui.hud.bar_box.visible
+		G.gui.hud.stamina_bar.visible = !G.gui.hud.stamina_bar.visible
+		G.gui.hud.health_vignette.visible = !G.gui.hud.health_vignette.visible
+		G.gui.hud.damage_vignette.visible = !G.gui.hud.damage_vignette.visible
+		G.gui.hud.target_label.get_node("PanelContainer").visible = !G.gui.hud.target_label.get_node("PanelContainer").visible
+	if Input.is_action_just_pressed("f3"):
 		G.gui.hud.debug.visible = !G.gui.hud.debug.visible
 
 

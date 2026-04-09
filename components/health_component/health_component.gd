@@ -4,7 +4,9 @@ signal changed(current: float, max: float, last: float)
 signal on_damage
 signal died
 
-@export var resists := {}
+@export var resists := {
+	"melee": 1.0
+}
 
 @export var max_health: float = 1.0:
 	set(value):
@@ -12,6 +14,7 @@ signal died
 @export var current_health: float:
 	set(value):
 		current_health = round(value * 100) / 100.0
+@export var armor: float
 
 var last_health: float
 
@@ -39,6 +42,8 @@ func take_damage(base_damage: float, incoming_types: Dictionary = {"melee": 1.0}
 		# Берем сопротивление моба к этому типу (по умолчанию 1.0, если не указано)
 		var resistance: float = resists.get(type, 1.0) 
 		total_damage += base_damage * multiplier * resistance
+	
+	total_damage -= armor
 	
 	if total_damage > 0.0:
 		current_health -= total_damage

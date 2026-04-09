@@ -28,7 +28,7 @@ func _on_update_enemy_cooldown_timeout() -> void:
 	
 	var dist := global_position.distance_to(target_player.global_position)
 	
-	if dist < 4.0:
+	if dist < 3.0:
 		target_player.health.take_damage(damage)
 		tp_near_player()
 

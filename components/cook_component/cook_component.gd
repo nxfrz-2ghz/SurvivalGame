@@ -18,6 +18,13 @@ extends Node
 func _ready() -> void:
 	craft_timer.timeout.connect(_on_craft_timer_timeout)
 	fuel_timer.timeout.connect(_on_fuel_timer_timeout)
+	
+	await parent.ready
+	if fuel:
+		toggle()
+		start_cook()
+		fuel_timer.start()
+	update_label.rpc(queue, complete, fuel)
 
 func drop_queue() -> void:
 	for item in queue: parent.entity.drop(item)

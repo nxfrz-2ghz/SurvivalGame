@@ -46,6 +46,15 @@ const sounds := {
 			preload("res://res/sounds/idle/voron/damage_1.mp3"),
 			preload("res://res/sounds/idle/voron/damage_2.mp3"),
 			preload("res://res/sounds/idle/voron/damage_3.mp3"),
+		],
+		"evil_tree": [
+			preload("res://res/sounds/crack/2.mp3"),
+			preload("res://res/sounds/crack/3.mp3"),
+			preload("res://res/sounds/crack/4.mp3"),
+			preload("res://res/sounds/crack/5.mp3"),
+			preload("res://res/sounds/crack/6.mp3"),
+			preload("res://res/sounds/crack/7.mp3"),
+			preload("res://res/sounds/crack/8.mp3"),
 		]
 	},
 	"destroy": {
@@ -56,6 +65,7 @@ const sounds := {
 			preload("res://res/sounds/destroy/pig_destroy_1.mp3"),
 			preload("res://res/sounds/destroy/pig_destroy_2.mp3"),
 		],
+		"meteor": preload("res://res/sounds/destroy/meteorite_despawn.mp3"),
 		"instrument": preload("res://res/sounds/destroy/instrument_destroy.mp3"),
 	},
 	"idle": {
@@ -67,7 +77,11 @@ const sounds := {
 		"voron": [
 			preload("res://res/sounds/idle/voron/idle.mp3"),
 			preload("res://res/sounds/idle/voron/damage_2.mp3"),
-		]
+		],
+		"meteor": [
+			preload("res://res/sounds/idle/meteor/idle_meteor_1.mp3"),
+			preload("res://res/sounds/idle/meteor/idle_meteor_2.mp3"),
+		],
 	},
 	"actions": {
 		"eating": preload("res://res/sounds/actions/eating.mp3"),
@@ -143,7 +157,11 @@ const mobs := {
 		"texture": "res://res/sprites/mobs/voron/1.png",
 		"scene": preload("res://scenes/mobs/voron/voron.tscn"),
 		"spawn_weight": 2,
-	}
+	},
+	"evil_tree": {
+		"texture": "res://res/sprites/mobs/evil_tree/evil_tree.png",
+		"scene": preload("res://scenes/mobs/evil_tree/evil_tree.tscn"),
+	},
 }
 
 const buildings := {
@@ -193,6 +211,9 @@ const objects := {
 		"scene": preload("res://scenes/objects/iron_ore/iron_ore.tscn"),
 		#"recipe": {},
 	},
+	"meteorite": {
+		"scene": preload("res://scenes/objects/meteorite/meteorite.tscn"),
+	},
 	"campfire": {
 		"scene": preload("res://scenes/objects/campfire/campfire.tscn"),
 		"recipe": {"log": 3},
@@ -223,6 +244,18 @@ const items := {
 				"axe": 0.2,
 				"pickaxe": 0.1,
 			},
+	},
+	"health_ring": {
+		"texture": preload("res://res/sprites/items/rings/health_ring.png"),
+		"stack_size": 3,
+	},
+	"armor_ring": {
+		"texture": preload("res://res/sprites/items/rings/armor_ring.png"),
+		"stack_size": 3,
+	},
+	"speed_ring": {
+		"texture": preload("res://res/sprites/items/rings/speed_ring.png"),
+		"stack_size": 3,
 	},
 	"wall_wood": {
 		"texture": preload("res://res/sprites/items/building/building.png"),
@@ -405,6 +438,7 @@ const items := {
 			"melee": 0.5,
 			"axe": 0.0,
 			"pickaxe": 1.1,
+			"pickaxe_lvl2": 0.8,
 		},
 	},
 	"steel_axe": {
@@ -435,6 +469,7 @@ const items := {
 			"melee": 0.6,
 			"axe": 0.0,
 			"pickaxe": 1.2,
+			"pickaxe_lvl2": 1.2,
 		},
 	},
 	"wooden_hammer": {
@@ -525,6 +560,17 @@ const items := {
 	"brick": {
 		"texture": preload("res://res/sprites/items/brick.png"),
 		"stack_size": 50,
+		"damage": 3.0,
+		"attack_speed": 0.6,
+		"damage_types": {
+			"melee": 0.8,
+			"axe": 0.5,
+			"pickaxe": 0.3,
+		},
+		"durability": 10,
+		"throw_power": 15.0,
+		"throw_drop_chance": 0.1,
+		"billboard": true,
 	},
 	"coal": {
 		"texture": preload("res://res/sprites/items/coal.png"),

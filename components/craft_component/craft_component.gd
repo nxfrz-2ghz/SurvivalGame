@@ -13,6 +13,10 @@ extends Node
 
 func _ready() -> void:
 	craft_timer.timeout.connect(_on_craft_timer_timeout)
+	
+	await parent.ready
+	if queue: start_craft()
+	update_label.rpc(queue, complete)
 
 func drop_queue() -> void:
 	for item in queue: parent.enity.drop(item)

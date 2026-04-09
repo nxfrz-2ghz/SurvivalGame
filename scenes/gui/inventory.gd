@@ -12,6 +12,8 @@ extends MarginContainer
 	$PanelContainer/MarginContainer/HBoxContainer/Slot8,
 	$PanelContainer/MarginContainer/HBoxContainer/Slot9,
 	$PanelContainer/MarginContainer/HBoxContainer/Slot10,
+	$PanelContainer/MarginContainer/HBoxContainer/Slot11,
+	$PanelContainer/MarginContainer/HBoxContainer/Slot12,
 ]
 
 
@@ -21,7 +23,7 @@ func set_hotbar_slot(pos: int) -> void:
 
 func update(inventory: Dictionary) -> void:
 	show()
-	for i in range(10):
+	for i in range(12):
 		var item_data = inventory.get(i + 1) # Получаем данные слота (может быть null)
 		var current_slot = slot[i]
 		var label = current_slot.get_node("Label")

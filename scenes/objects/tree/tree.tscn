@@ -1,7 +1,8 @@
 [gd_scene format=3 uid="uid://1oleq1fyx67g"]
 
 [ext_resource type="PackedScene" uid="uid://darxc13rlkwt7" path="res://scenes/objects/object.tscn" id="1_8vn3u"]
-[ext_resource type="Texture2D" uid="uid://b0yknsbcg4kyy" path="res://res/sprites/objects/tree.png" id="2_83v3r"]
+[ext_resource type="Texture2D" uid="uid://c8tjqjy3niah0" path="res://res/sprites/objects/tree.png" id="2_83v3r"]
+[ext_resource type="Script" uid="uid://47e0kuarmfs1" path="res://scenes/objects/tree/tree.gd" id="2_dsyvi"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_83v3r"]
 radius = 0.77783203
@@ -9,18 +10,15 @@ height = 8.988647
 
 [node name="Tree" unique_id=108689247 instance=ExtResource("1_8vn3u")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.8763304, 0)
+script = ExtResource("2_dsyvi")
 nname = "tree"
-drop_items = {
-"log": 4
-}
-despawn_sound_name = "tree"
-exp_drop = 1.0
 
 [node name="HealthComponent" parent="." index="1" unique_id=1086116789]
 resists = {
 "axe": 1.0,
 "melee": 0.0,
-"pickaxe": 0.0
+"pickaxe": 0.0,
+"pickaxe_lvl2": 0.0
 }
 max_health = 5.0
 

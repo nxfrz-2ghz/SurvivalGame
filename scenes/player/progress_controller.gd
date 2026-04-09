@@ -20,6 +20,7 @@ const notes := {
 	"NTK_9": "NTV_9",
 	"NTK_10": "NTV_10",
 	"NTK_11": "NTV_11",
+	"NTK_12": "NTV_12",
 }
 
 var unlocked_notes := []

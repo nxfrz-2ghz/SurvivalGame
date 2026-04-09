@@ -4,25 +4,10 @@
 [ext_resource type="Script" uid="uid://d2ptcu2co03fy" path="res://scenes/world/directional_light_3d.gd" id="2_sl2e5"]
 [ext_resource type="Script" uid="uid://h5tkleehf2q1" path="res://scenes/world/mob_spawner.gd" id="3_1fp7r"]
 [ext_resource type="Script" uid="uid://1hlogfjs7k37" path="res://scenes/world/fall_defense_area.gd" id="3_6m72w"]
-[ext_resource type="Material" uid="uid://deyuxdxpaa6f5" path="res://scenes/world/procedural_sky_material.tres" id="3_t5ptc"]
+[ext_resource type="Environment" uid="uid://bimpothcwi152" path="res://scenes/world/world_environment.tres" id="3_j2gmx"]
+[ext_resource type="Script" uid="uid://stvuykj46mg1" path="res://scenes/world/world_environment.gd" id="4_1yooq"]
 [ext_resource type="Script" uid="uid://d0pejyu1trq8j" path="res://scenes/world/weather_controller.gd" id="5_v5dby"]
 [ext_resource type="Script" uid="uid://dqpoba67lh28c" path="res://scenes/world/background_audio_controller.gd" id="7_bq33v"]
-
-[sub_resource type="Sky" id="Sky_3s6yk"]
-sky_material = ExtResource("3_t5ptc")
-
-[sub_resource type="Environment" id="Environment_jte2u"]
-background_mode = 2
-sky = SubResource("Sky_3s6yk")
-ambient_light_color = Color(0.31431612, 0.31431612, 0.3143161, 1)
-fog_enabled = true
-fog_mode = 1
-fog_light_energy = 0.5
-fog_sun_scatter = 1.0
-fog_density = 1.0
-fog_depth_begin = 20.0
-volumetric_fog_enabled = true
-volumetric_fog_density = 0.0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_v5dby"]
 size = Vector3(1, 10, 1)
@@ -48,7 +33,8 @@ script = ExtResource("2_sl2e5")
 [node name="CanvasModulate" type="CanvasModulate" parent="DirectionalLight3D" unique_id=1602802164]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=352009880]
-environment = SubResource("Environment_jte2u")
+environment = ExtResource("3_j2gmx")
+script = ExtResource("4_1yooq")
 
 [node name="FallDefenseArea" type="Area3D" parent="." unique_id=1295186208]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -50, 0)
@@ -78,6 +64,10 @@ script = ExtResource("5_v5dby")
 wait_time = 50.0
 autostart = true
 
+[node name="MeteorTimer" type="Timer" parent="WeatherController" unique_id=269086994]
+wait_time = 3.0
+one_shot = true
+
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer" parent="WeatherController" unique_id=1241214212]
 bus = &"Sounds"
 
@@ -98,5 +88,6 @@ replication_config = SubResource("SceneReplicationConfig_1fp7r")
 [connection signal="body_entered" from="FallDefenseArea" to="FallDefenseArea" method="_on_body_entered"]
 [connection signal="timeout" from="MobSpawner/SpawnTimer" to="MobSpawner" method="_on_spawn_timer_timeout"]
 [connection signal="timeout" from="WeatherController/Timer" to="WeatherController" method="_on_timer_timeout"]
+[connection signal="timeout" from="WeatherController/MeteorTimer" to="WeatherController" method="_on_meteor_timer_timeout"]
 [connection signal="finished" from="BackgroundAudioController" to="BackgroundAudioController" method="_on_finished"]
 [connection signal="timeout" from="BackgroundAudioController/Timer" to="BackgroundAudioController" method="_on_timer_timeout"]

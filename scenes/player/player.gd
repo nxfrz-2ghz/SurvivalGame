@@ -9,6 +9,7 @@ extends CharacterBody3D
 @onready var hunger := $HungerController
 @onready var stamina := $StaminaController
 @onready var camera := $Head/Camera/Camera3D
+@onready var arms := $Head/Weapon/Arms
 @onready var book := %Book
 @onready var inv := %InventoryController
 @onready var progress_controller := $ProgressController
@@ -37,7 +38,7 @@ func _enter_tree() -> void:
 func _ready() -> void:
 	if not is_multiplayer_authority():
 		interact_ray.queue_free()
-		$Head/Weapon/Arms.queue_free()
+		arms.queue_free()
 		rain.queue_free()
 	else:
 		weapon.attack.connect(interact_ray.update)
@@ -47,6 +48,7 @@ func _ready() -> void:
 		hunger.heal.connect(health.heal)
 		
 		inv.set_item_in_arm.connect(weapon.set_item_in_arm)
+		inv.updatev.connect(weapon.update_player_stats)
 		inv.update_signals()
 		
 		book.open_book.connect(_on_open_book)
@@ -68,6 +70,9 @@ func _input(event: InputEvent) -> void:
 	
 	if G.state_machine != "game": return
 	if !camera.current: return
+	
+	if Input.is_action_just_pressed("f1"):
+		arms.visible = !arms.visible
 	
 	if event.is_action_pressed("lmb"): # или любая кнопка действия
 		if Input.get_mouse_mode() == Input.MOUSE_MODE_VISIBLE:
@@ -105,7 +110,7 @@ func _input(event: InputEvent) -> void:
 						if randi_range(0, int(clamp(100 - shovel_power, 0, 100))) == 0:
 							inv.add_item("iron_ore")
 			
-			weapon.weapon_anim.speed_scale = weapon.attack_speed
+			weapon.weapon_anim.speed_scale = weapon.attack_speed + float(weapon.speed_rings)/5
 			weapon.weapon_anim.play("use")
 			var vel: float = get_float_velocity()/10
 			var cur_dmg: float = weapon.damage + weapon.damage * vel
@@ -177,11 +182,20 @@ func _input(event: InputEvent) -> void:
 			
 			# Стрельба
 			elif R.items[item_name].get("throw_power") and !weapon.weapon_anim.is_playing():
-				weapon.weapon_anim.speed_scale = weapon.attack_speed
-				weapon.weapon_anim.play("throw")
+				weapon.weapon_anim.speed_scale = weapon.attack_speed + float(weapon.speed_rings)/5
+				weapon.weapon_anim.play("aim")
 	
-	if Input.is_action_just_released("rmb") and weapon.weapon_anim.is_playing() and weapon.weapon_anim.current_animation == "throw":
-		weapon.weapon_anim.speed_scale = -1.5
+	if Input.is_action_just_released("rmb") and weapon.weapon_anim.is_playing():
+		# Если прицеливания еще не закончилась то отмена
+		if weapon.weapon_anim.current_animation == "aim":
+			weapon.weapon_anim.speed_scale = -1.5
+		# Если же анимация готовности к выстрелу то выстрел
+		else:
+			var current_name: String = current_slot_data["name"]
+			if R.items[current_name].get("texture") != null:
+				weapon.actions.shoot(weapon.damage, weapon.damage_types, weapon.push_velocity, current_name, R.items[current_name]["texture"].resource_path, R.items[current_name]["throw_drop_chance"], R.items[current_name]["throw_power"], R.items[current_name]["billboard"])
+				inv.drop_item(inv.current_item, 1)
+			weapon.weapon_anim.play("throw")
 	
 	if Input.is_action_just_pressed("pickup") and !weapon.weapon_anim.is_playing():
 		weapon.weapon_anim.play("pickup")
@@ -297,6 +311,10 @@ func moving(delta: float) -> void:
 		state = STATE.IDLE
 	if is_underwater():
 		speed *= 0.5
+	if weapon.weapon_anim.is_playing() and weapon.weapon_anim.current_animation == "waiting_throw":
+		speed *= 0.5
+	
+	speed += weapon.speed_rings
 	
 	# Moving
 	if is_on_floor():

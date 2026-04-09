@@ -193,7 +193,7 @@ _spawnable_scenes = PackedStringArray("uid://dp83o7qw4ht4w")
 spawn_path = NodePath("..")
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="Environment" unique_id=2101221164]
-_spawnable_scenes = PackedStringArray("uid://darxc13rlkwt7", "uid://cddn37g14j7yf", "uid://s322lfir2gd7", "uid://bsqtn0fmjrxph", "uid://uwmukk060f86", "uid://qg4g44ocaejc")
+_spawnable_scenes = PackedStringArray("uid://darxc13rlkwt7", "uid://cddn37g14j7yf", "uid://s322lfir2gd7", "uid://bsqtn0fmjrxph", "uid://uwmukk060f86", "uid://qg4g44ocaejc", "uid://b3o1ii22rby54")
 spawn_path = NodePath("..")
 script = ExtResource("3_nvumn")
 
@@ -289,15 +289,14 @@ horizontal_alignment = 1
 
 [node name="Inventory" type="MarginContainer" parent="GUI/HUD" unique_id=1171740682]
 unique_name_in_owner = true
-visible = false
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -370.0
+offset_left = -321.0
 offset_top = -90.0
-offset_right = 3326.0
+offset_right = 3778.9995
 offset_bottom = 330.0
 grow_horizontal = 2
 grow_vertical = 0
@@ -502,6 +501,42 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 
 [node name="Label" type="Label" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer/Slot10" unique_id=1828558961]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -23.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 72
+
+[node name="Slot11" type="TextureRect" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer" unique_id=43627915]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer/Slot11" unique_id=1832655631]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -23.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 72
+
+[node name="Slot12" type="TextureRect" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer" unique_id=2054664015]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer/Slot12" unique_id=1069659240]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0

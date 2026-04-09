@@ -17,6 +17,19 @@ var damage_types: Dictionary
 var push_velocity: float
 
 
+var health_rings: int
+var speed_rings: int
+var armor_rings: int:
+	set(value):
+		armor_rings = value
+		G.player.health.armor = float(value) / 2
+
+func update_player_stats() -> void:
+	health_rings = actions.inv.get_item("health_ring")
+	armor_rings = actions.inv.get_item("armor_ring")
+	speed_rings = actions.inv.get_item("speed_ring")
+
+
 func get_dig_drop(hit_position: Vector3) -> String:
 	if hit_position.y < G.world.WATER_LEVEL:
 		return "clay"
@@ -32,10 +45,14 @@ func check_corrosion_item() -> void:
 			actions.inv.add_item(oxided_item)
 
 
+func regen() -> void:
+	G.player.health.heal(float(health_rings)/20)
+
+
 func use_item_durability() -> void:
 	check_corrosion_item()
 	if current_name != null and R.items[current_name].has("durability"):
-		if randi_range(0, R.items[current_name]["durability"]) == 0:
+		if randi_range(0, R.items[current_name]["durability"] + (R.items[current_name]["durability"] * armor_rings / 3)) == 0:
 			var item_name := current_name # Сохранеяем имя предмета, чтобы после удаления сигналы не обновили его на ""
 			actions.inv.drop_item(actions.inv.current_item)
 			
@@ -59,16 +76,6 @@ func choose_item(item: String = "") -> void:
 func set_item_in_arm(item: String):
 	choose_item(item)
 	update()
-
-
-func _on_weapon_anim_animation_finished(anim_name: StringName) -> void:
-	if anim_name == "throw": throw()
-
-func throw() -> void:
-	if Input.is_action_pressed("rmb") and R.items[current_name].get("texture") != null: # Не сработает при отмене
-		actions.shoot(damage, damage_types, push_velocity, current_name, R.items[current_name]["texture"].resource_path, R.items[current_name]["throw_drop_chance"], R.items[current_name]["throw_power"], R.items[current_name]["billboard"])
-		actions.inv.drop_item(actions.inv.current_item, 1)
-	weapon_anim.play("cd")
 
 
 func update() -> void:

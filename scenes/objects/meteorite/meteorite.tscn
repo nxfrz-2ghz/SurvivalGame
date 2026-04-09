@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://2e0mj6kmi7ol"]
+
+[ext_resource type="PackedScene" uid="uid://darxc13rlkwt7" path="res://scenes/objects/object.tscn" id="1_1v22l"]
+[ext_resource type="Texture2D" uid="uid://dq0mm76mm658f" path="res://res/sprites/objects/meteorite.png" id="2_vkufo"]
+[ext_resource type="PackedScene" uid="uid://kqqogxrnnqyf" path="res://components/fall_ray/fall_ray.tscn" id="3_h8saw"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_3cc6d"]
+radius = 1.0559356
+
+[node name="Meteorite" unique_id=1331540241 instance=ExtResource("1_1v22l")]
+nname = "meteorite"
+
+[node name="HealthComponent" parent="." index="1" unique_id=1086116789]
+resists = {
+"axe": 0.0,
+"melee": 0.0,
+"pickaxe": 0.0,
+"pickaxe_lvl2": 1.0
+}
+max_health = 35.0
+armor = 1.0
+
+[node name="EntityComponent" parent="." index="2" unique_id=1330161778]
+drop_items = {
+"coal": 1,
+"copper_ore": 1,
+"iron_ore": 1,
+"stone": 3
+}
+despawn_sound_name = "stone"
+exp_drop = 10.0
+
+[node name="CollisionShape3D" parent="." index="4" unique_id=1161658582]
+transform = Transform3D(1, 0, 0, 0, -0.015044166, -0.9998868, 0, 0.9998868, -0.015044166, 0, 1.0528266, 0)
+shape = SubResource("SphereShape3D_3cc6d")
+
+[node name="Sprite3D" parent="." index="5" unique_id=57594410]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7297134, 0)
+texture = ExtResource("2_vkufo")
+
+[node name="FallRay" parent="." index="9" unique_id=2065431078 instance=ExtResource("3_h8saw")]

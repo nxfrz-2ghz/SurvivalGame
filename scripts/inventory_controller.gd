@@ -1,10 +1,11 @@
 extends Node
 
 signal update(items: Dictionary)
+signal updatev
 signal set_hotbar_slot(pos: int)
 signal set_item_in_arm(item: String)
 
-const MAX_SLOTS = 10
+const MAX_SLOTS = 12
 
 # Структура предмета в слоте: {"name": String, "type": String, "amount": int}
 var inventory: Dictionary = {}
@@ -57,18 +58,24 @@ func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("0"):
 		current_item = 10
 		update_signals()
+	if Input.is_action_just_pressed("11"):
+		current_item = 11
+		update_signals()
+	if Input.is_action_just_pressed("12"):
+		current_item = 12
+		update_signals()
 	
 	
 	if Input.is_action_pressed("up_mouse_wheel"):
 		current_item -= 1
 		if current_item < 1:
-			current_item += 10
+			current_item += MAX_SLOTS
 		update_signals()
 	
 	if Input.is_action_pressed("down_mouse_wheel"):
 		current_item += 1
-		if current_item > 10:
-			current_item -= 10
+		if current_item > MAX_SLOTS:
+			current_item -= MAX_SLOTS
 		update_signals()
 
 
@@ -89,10 +96,18 @@ func check_progress(item_name) -> void:
 	elif item_name == "clay": note_will_add = 9
 	elif item_name == "iron_ingot": note_will_add = 10
 	elif item_name == "wall_wood": note_will_add = 11
+	elif item_name == "steel_ingot": note_will_add = 12
 	
 	if note_will_add and !prg.unlocked_notes.has("NTV_"+str(note_will_add)): prg.add_note("NTK_"+str(note_will_add))
 
 ### --- ОСНОВНЫЕ ФУНКЦИИ ---
+
+func get_item(item_name: String) -> int:
+	for slot_idx in inventory:
+		if inventory[slot_idx] != null:
+			if inventory[slot_idx]["name"] == item_name:
+				return inventory[slot_idx]["amount"]
+	return 0
 
 func add_item(item_name: String, amount: int = 1) -> void:
 	$"../Audio/ActionsAudioPlayer3D".audio_play(R.sounds["actions"]["pickup"].resource_path)
@@ -112,6 +127,7 @@ func add_item(item_name: String, amount: int = 1) -> void:
 			
 			if remaining_amount <= 0:
 				update_signals()
+				updatev.emit()
 				return
 
 	# 2. Если осталось что добавлять, ищем пустые слоты
@@ -128,6 +144,7 @@ func add_item(item_name: String, amount: int = 1) -> void:
 				break
 	
 	update_signals()
+	updatev.emit()
 
 func drop_item(slot_index: int, amount: int = 1) -> void:
 	$"../Audio/ActionsAudioPlayer3D".audio_play(R.sounds["actions"]["pickup"].resource_path)
@@ -141,3 +158,4 @@ func drop_item(slot_index: int, amount: int = 1) -> void:
 			inventory[slot_index] = null # Удаляем предмет полностью
 		
 		update_signals()
+		updatev.emit()

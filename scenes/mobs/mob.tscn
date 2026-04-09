@@ -38,9 +38,18 @@ size = Vector2(0.2, 0.2)
 orientation = 2
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_2sf44"]
-properties/0/path = NodePath(".:rotation")
+properties/0/path = NodePath(".:position")
 properties/0/spawn = true
 properties/0/replication_mode = 2
+properties/1/path = NodePath("HealthComponent:current_health")
+properties/1/spawn = true
+properties/1/replication_mode = 2
+properties/2/path = NodePath("HealthComponent:max_health")
+properties/2/spawn = true
+properties/2/replication_mode = 0
+properties/3/path = NodePath("HealthComponent:armor")
+properties/3/spawn = true
+properties/3/replication_mode = 0
 
 [node name="Mob" type="CharacterBody3D" unique_id=408161229 groups=["mobs"]]
 collision_layer = 16

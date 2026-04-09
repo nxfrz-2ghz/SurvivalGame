@@ -254,6 +254,58 @@ tracks/9/keys = {
 "values": [true]
 }
 
+[sub_resource type="Animation" id="Animation_jrbya"]
+resource_name = "throw"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../ThrowSprite:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.033333335),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../ThrowSprite:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.16666667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0.7535772, -0.6093204, -0.8978576), Vector3(0.7535772, -0.36498457, -0.7881731)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../ThrowSprite:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.16666667, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(-0.6195949, -1.5764775, 0.96955353), Vector3(-0.068710044, -1.6490926, 2.4339418), Vector3(-0.06806784, -1.6493361, 1.727876)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.033333335),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
 [sub_resource type="Animation" id="Animation_1u1sw"]
 resource_name = "book_close_page"
 tracks/0/type = "value"
@@ -480,9 +532,9 @@ tracks/3/keys = {
 "values": [Vector2(360, 50)]
 }
 
-[sub_resource type="Animation" id="Animation_jrbya"]
+[sub_resource type="Animation" id="Animation_ahqnk"]
 resource_name = "throw"
-length = 0.6
+length = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -490,10 +542,10 @@ tracks/0/path = NodePath("../ThrowSprite:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.033333335, 0.6),
-"transitions": PackedFloat32Array(1, 1, 1),
+"times": PackedFloat32Array(0, 0.099999994),
+"transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [false, true, false]
+"values": [true, false]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -502,10 +554,10 @@ tracks/1/path = NodePath("../ThrowSprite:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.16666667, 0.50940275, 0.56441826),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector3(0.7535772, -0.6093204, -0.8978576), Vector3(0.7535772, -0.36498457, -0.7881731), Vector3(0.754, -0.365, -0.583), Vector3(0.754, -0.365, -1.253)]
+"values": [Vector3(0.754, -0.365, -0.893), Vector3(0.754, -0.365, -0.363)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -514,10 +566,10 @@ tracks/2/path = NodePath("../ThrowSprite:rotation")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.16666667, 0.43333334),
-"transitions": PackedFloat32Array(1, 1, 1),
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector3(-0.6195949, -1.5764775, 0.96955353), Vector3(-0.068710044, -1.6490926, 2.4339418), Vector3(-0.06806784, -1.6493361, 1.727876)]
+"values": [Vector3(-0.06806784, -1.6493361, 1.727876), Vector3(-0.06806784, -1.6493361, 1.4049901)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -526,10 +578,10 @@ tracks/3/path = NodePath(".:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.033333335, 0.6),
-"transitions": PackedFloat32Array(1, 1, 1),
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [true, false, true]
+"values": [false, true]
 }
 
 [sub_resource type="Animation" id="Animation_jej8l"]
@@ -597,15 +649,45 @@ tracks/4/keys = {
 "values": [Vector2(20, 10)]
 }
 
+[sub_resource type="Animation" id="Animation_vb1ce"]
+resource_name = "waiting_throw"
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../ThrowSprite:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(-2, -2),
+"update": 0,
+"values": [Vector3(0.7535772, -0.36498457, -0.7881731), Vector3(0.754, -0.47, -0.788)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../ThrowSprite:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(-2, -2),
+"update": 0,
+"values": [Vector3(-0.06806784, -1.6493361, 1.727876), Vector3(-0.3996804, -1.6493361, 1.9547688)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_lopa8"]
 _data = {
 &"RESET": SubResource("Animation_iyg5g"),
+&"aim": SubResource("Animation_jrbya"),
 &"book_close_page": SubResource("Animation_1u1sw"),
 &"book_open_page": SubResource("Animation_ttakn"),
 &"cd": SubResource("Animation_2t3bg"),
 &"pickup": SubResource("Animation_lgqa7"),
-&"throw": SubResource("Animation_jrbya"),
-&"use": SubResource("Animation_jej8l")
+&"throw": SubResource("Animation_ahqnk"),
+&"use": SubResource("Animation_jej8l"),
+&"waiting_throw": SubResource("Animation_vb1ce")
 }
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_byj34"]
@@ -1067,7 +1149,7 @@ flip_h = true
 position = Vector2(400, 150)
 scale = Vector2(1.4, 1.4)
 
-[node name="CheckCorrosionItem" type="Timer" parent="Head/Weapon" unique_id=710060702]
+[node name="TimerOneSecond" type="Timer" parent="Head/Weapon" unique_id=710060702]
 autostart = true
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1021319399]
@@ -1076,6 +1158,6 @@ replication_config = SubResource("SceneReplicationConfig_mf2ua")
 [connection signal="timeout" from="Timers/StartEmitTimer" to="." method="_on_start_emit_timer_timeout"]
 [connection signal="died" from="HealthComponent" to="." method="_on_health_component_died"]
 [connection signal="timeout" from="HungerController/Timer" to="HungerController" method="_on_timer_timeout"]
-[connection signal="animation_finished" from="Head/Weapon/Arms/WeaponAnim" to="Head/Weapon" method="_on_weapon_anim_animation_finished"]
 [connection signal="animation_finished" from="Head/Weapon/Arms/WeaponAnim" to="Head/Weapon/Arms/WeaponAnim" method="_on_animation_finished"]
-[connection signal="timeout" from="Head/Weapon/CheckCorrosionItem" to="Head/Weapon" method="check_corrosion_item"]
+[connection signal="timeout" from="Head/Weapon/TimerOneSecond" to="Head/Weapon" method="check_corrosion_item"]
+[connection signal="timeout" from="Head/Weapon/TimerOneSecond" to="Head/Weapon" method="regen"]

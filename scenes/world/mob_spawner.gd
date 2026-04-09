@@ -14,7 +14,6 @@ func spawn_mob(mob_scene: PackedScene, position: Vector3) -> void:
 	if !parent.server: return
 	var mob_instance := mob_scene.instantiate()
 	mob_instance.position = position
-	G.environment.add_child(mob_instance, true)
 	
 	# Scale mob stats with player progress
 	var mob_health: Node = mob_instance.get_node_or_null("HealthComponent")
@@ -25,9 +24,15 @@ func spawn_mob(mob_scene: PackedScene, position: Vector3) -> void:
 		if G.player.progress_controller.unlocked_notes.has("NTV_10"):
 			mob_health.max_health *= 1.35
 			mob_health.current_health *= 1.35
+			mob_health.armor += 0.1
 		if G.player.progress_controller.unlocked_notes.has("NTV_12"):
 			mob_health.max_health *= 1.5
 			mob_health.current_health *= 1.5
+			mob_health.armor += 0.5
+	
+	G.environment.add_child(mob_instance, true)
+	
+	
 
 
 func _on_directional_light_3d_night_come() -> void:
