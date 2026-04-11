@@ -4,18 +4,17 @@ signal attack
 
 @onready var weapon_anim := %WeaponAnim
 @onready var actions := $Actions
+@onready var build := $BuildingController
 @onready var throw_sprite := $ThrowSprite
 
 @onready var arms_sprite := $Arms/ShakingContainer/SwayContainer/Sprites/Arms
 @onready var item_sprite := $Arms/ShakingContainer/SwayContainer/Sprites/Item
-
 
 var current_name: String
 var damage: float
 var attack_speed: float
 var damage_types: Dictionary
 var push_velocity: float
-
 
 var health_rings: int
 var speed_rings: int
@@ -79,8 +78,7 @@ func set_item_in_arm(item: String):
 
 
 func update() -> void:
-	
-	actions.build_zone_mesh.visible = R.items[current_name].has("is_building")
+	build.set_item(current_name)
 	
 	if current_name == "":
 		arms_sprite.show()

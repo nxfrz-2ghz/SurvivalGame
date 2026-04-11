@@ -1,7 +1,6 @@
 extends Area3D
 
 @onready var craft_zone_label := $CraftZone
-@onready var build_zone_mesh := $BuildZone
 @onready var inv := %InventoryController
 
 var crafting_mode := false:
@@ -14,8 +13,8 @@ func attack(dmg: float, damage_types: Dictionary, push_velocity: float) -> void:
 	server_attack.rpc(dmg, damage_types, push_velocity, multiplayer.get_unique_id())
 
 
-func shoot(dmg: float, damage_types: Dictionary, push_velocity: float, item_name: String, texture_path: String, despawn_chance: float, throw_power: float, billboard: bool) -> void:
-	server_shoot.rpc(dmg, damage_types, push_velocity, item_name, texture_path, despawn_chance, throw_power, billboard, multiplayer.get_unique_id())
+func shoot(dmg: float, damage_types: Dictionary, push_velocity: float, item_name: String) -> void:
+	server_shoot.rpc(dmg, damage_types, push_velocity, item_name, multiplayer.get_unique_id())
 
 
 func pickup() -> void:
@@ -31,8 +30,8 @@ func craft() -> void:
 	server_craft.rpc(multiplayer.get_unique_id())
 
 
-func build(item_name: String) -> void:
-	server_build.rpc(multiplayer.get_unique_id(), item_name, build_zone_mesh.global_position, build_zone_mesh.global_rotation)
+func build(item_name: String, pos: Vector3, rot: Vector3) -> void:
+	server_build.rpc(multiplayer.get_unique_id(), item_name, pos, rot)
 	G.player.progress_controller.add_achievement("ACH_5")
 
 
@@ -73,23 +72,24 @@ func server_attack(dmg: float, damage_types: Dictionary, push_velocity: float, p
 
 
 @rpc("authority", "call_local")
-func server_shoot(dmg: float, damage_types: Dictionary, push_velocity: float, item_name: String, texture_path: String, despawn_chance: float, throw_power: float, billboard: bool, peer_id: int) -> void:
+func server_shoot(dmg: float, damage_types: Dictionary, push_velocity: float, item_name: String, peer_id: int) -> void:
 	if not multiplayer.is_server(): return
 	
 	var player = G.environment.get_node(str(peer_id))
 	var actions_node = player.weapon.actions
-	
+	 
 	var throwable_item := R.throwable_item.instantiate()
 	throwable_item.position = actions_node.global_position
 	throwable_item.rotation = actions_node.global_rotation
 	throwable_item.item_name = item_name
-	throwable_item.texture_path = texture_path
-	throwable_item.despawn_chance = despawn_chance
+	throwable_item.texture_path = R.items[item_name]["texture"].resource_path
+	throwable_item.despawn_chance = R.items[item_name]["throw_drop_chance"]
 	throwable_item.damage = dmg
 	throwable_item.damage_types = damage_types
 	throwable_item.push_velocity = push_velocity
-	throwable_item.throw_power = throw_power
-	throwable_item.billboard = billboard
+	throwable_item.throw_power = R.items[item_name]["throw_power"]
+	throwable_item.billboard = R.items[item_name]["billboard"]
+	throwable_item.explose = R.items[item_name]["explose"]
 	
 	G.environment.add_child(throwable_item, true)
 	throwable_item.apply_central_impulse(player.velocity)
@@ -262,22 +262,3 @@ func _physics_process(_delta: float) -> void:
 			craft_zone_label.text = "Ready to craft: " + result_id
 		else:
 			craft_zone_label.text = "Drop ingridients here"
-	
-	if build_zone_mesh.visible:
-		build_zone_mesh.global_position.x = snappedf(G.player.weapon.actions.global_position.x, 1.5)
-		build_zone_mesh.global_position.z = snappedf(G.player.weapon.actions.global_position.z, 1.5)
-		build_zone_mesh.global_rotation_degrees.x = snappedf(G.player.head.rotation_degrees.x, 90.0)
-		
-		# Изменение поворота и позиции в зависимости от того, горизонтальная стена или вертикальная (пол)
-		if build_zone_mesh.global_rotation_degrees.x == 0.0:
-			build_zone_mesh.global_rotation_degrees.y = snappedf(G.player.rotation_degrees.y, 90.0)
-			build_zone_mesh.global_rotation_degrees.z = 0.0
-			build_zone_mesh.global_position.y = snappedf(G.player.weapon.actions.global_position.y, 0.5) + 1.0
-		else:
-			build_zone_mesh.global_rotation_degrees.y = 0.0
-			build_zone_mesh.global_rotation_degrees.z = snappedf(G.player.rotation_degrees.y, 90.0)
-			build_zone_mesh.global_position.y = snappedf(G.player.weapon.actions.global_position.y, 0.5)
-		
-		# Диагональный наклон на R
-		if Input.is_action_pressed("R"):
-			build_zone_mesh.global_rotation_degrees.x = -45.0

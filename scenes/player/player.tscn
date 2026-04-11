@@ -19,18 +19,22 @@
 [ext_resource type="AudioStream" uid="uid://d0m7xlcuijtaq" path="res://res/sounds/actions/new_note.mp3" id="9_1u1sw"]
 [ext_resource type="Texture2D" uid="uid://bm5qrehnvp7bt" path="res://res/sprites/attack_anim/attack2.png" id="9_8ydkj"]
 [ext_resource type="Texture2D" uid="uid://4btr3xv0nwap" path="res://res/sprites/attack_anim/attack3.png" id="10_3j4b4"]
+[ext_resource type="Script" uid="uid://b2jrdess6e2c1" path="res://scenes/player/fear_controller.gd" id="10_jrbya"]
 [ext_resource type="Texture2D" uid="uid://ycutifsjus3w" path="res://res/sprites/attack_anim/attack4.png" id="11_yj68g"]
 [ext_resource type="Script" uid="uid://cfjnb1j8kmdwu" path="res://scenes/player/weapon_anim.gd" id="12_hyqqp"]
 [ext_resource type="Texture2D" uid="uid://4l6ojpdrpbdq" path="res://res/sprites/attack_anim/attack5.png" id="12_ioxgp"]
 [ext_resource type="Texture2D" uid="uid://dsvrbtqjxwxas" path="res://res/sprites/attack_anim/attack6.png" id="13_cnsyf"]
 [ext_resource type="PackedScene" uid="uid://b0ubt0f8epxbi" path="res://components/sway_container/sway_container.tscn" id="14_007i1"]
 [ext_resource type="Texture2D" uid="uid://cetu0m2kc1cye" path="res://res/sprites/items/weapons/copper/copper_knife.png" id="16_2t3bg"]
+[ext_resource type="Script" uid="uid://600u6rc1w26x" path="res://scenes/player/building_controller.gd" id="16_ahqnk"]
 [ext_resource type="Texture2D" uid="uid://crbe50sl1agx4" path="res://res/sprites/items/arm.png" id="16_j4nxn"]
 [ext_resource type="Texture2D" uid="uid://nuea13giuwk5" path="res://res/sprites/pickup_anim/1.png" id="17_6cv16"]
+[ext_resource type="BoxMesh" uid="uid://cfj1jdk1jg164" path="res://scenes/building/wall/_meshes/wall_mesh.tres" id="18_0ncpa"]
 [ext_resource type="Texture2D" uid="uid://bludxqo7346wv" path="res://res/sprites/pickup_anim/2.png" id="18_j4nxn"]
 [ext_resource type="Texture2D" uid="uid://dqs0evsgf44aa" path="res://res/sprites/open_book0/1.png" id="18_ttakn"]
 [ext_resource type="Texture2D" uid="uid://cmw2iu4wcsh13" path="res://res/sprites/pickup_anim/3.png" id="19_28m0y"]
 [ext_resource type="Texture2D" uid="uid://bt2ryvtoayu2q" path="res://res/sprites/open_book0/2.png" id="19_rw8a5"]
+[ext_resource type="Shape3D" uid="uid://c2jcrbimfbtfc" path="res://scenes/building/wall/_shapes/wall_shape.tres" id="19_upxxc"]
 [ext_resource type="Texture2D" uid="uid://boxxnctr3t24x" path="res://res/sprites/open_book0/3.png" id="20_iwuka"]
 [ext_resource type="Texture2D" uid="uid://bad74ra1vdglh" path="res://res/sprites/pickup_anim/4.png" id="20_uniwh"]
 [ext_resource type="Texture2D" uid="uid://cuf863ctiio27" path="res://res/sprites/open_book0/4.png" id="21_hyqqp"]
@@ -119,17 +123,36 @@ func play_on_damage() -> void:
 	play(\"on_damage\")
 "
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_ylpk0"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_2t3bg"]
 size = Vector3(2, 1.3305664, 2)
+
+[sub_resource type="GDScript" id="GDScript_2t3bg"]
+script/source = "extends Area3D
+
+@onready var mesh := $Mesh
+@onready var shape := $CollisionShape3D
+
+func is_colliding() -> bool:
+	# 1. Получаем состояние физического пространства
+	var space_state = get_world_3d().direct_space_state
+	
+	# 2. Настраиваем параметры запроса
+	var query = PhysicsShapeQueryParameters3D.new()
+	query.shape = shape.shape
+	query.transform = global_transform * shape.transform 
+	query.collision_mask = collision_mask
+	query.exclude = [self] # Игнорируем игрока и саму зону
+	
+	# 3. Выполняем проверку (ищем пересечения)
+	var result = space_state.intersect_shape(query, 1) # Ищем хотя бы 1 пересечение
+	
+	return result.size() > 0
+"
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2t3bg"]
 transparency = 1
 shading_mode = 0
 albedo_color = Color(1, 1, 1, 0.09803922)
-
-[sub_resource type="BoxMesh" id="BoxMesh_jrbya"]
-material = SubResource("StandardMaterial3D_2t3bg")
-size = Vector3(3, 3, 0.2)
 
 [sub_resource type="Animation" id="Animation_iyg5g"]
 length = 0.001
@@ -945,6 +968,9 @@ autostart = true
 wait_time = 0.2
 one_shot = true
 
+[node name="TimerOneSecond" type="Timer" parent="Timers" unique_id=710060702]
+autostart = true
+
 [node name="Audio" type="Node3D" parent="." unique_id=380747070]
 
 [node name="ActionsAudioPlayer3D" type="AudioStreamPlayer3D" parent="Audio" unique_id=1411296627]
@@ -966,8 +992,8 @@ max_health = 10.0
 [node name="HungerController" type="Node" parent="." unique_id=1615523263]
 script = ExtResource("3_j4nxn")
 
-[node name="Timer" type="Timer" parent="HungerController" unique_id=292068303]
-autostart = true
+[node name="FearController" type="Node3D" parent="." unique_id=1049717410]
+script = ExtResource("10_jrbya")
 
 [node name="StaminaController" type="Node" parent="." unique_id=1216768285]
 script = ExtResource("4_rw8a5")
@@ -994,14 +1020,14 @@ billboard = 2
 double_sided = false
 texture = ExtResource("4_lgqa7")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1426141509]
-transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 0, 0, 0)
-shape = SubResource("CapsuleShape3D_qnmj6")
-
 [node name="Label3D" type="Label3D" parent="." unique_id=1750692344]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0821313, 0)
 billboard = 2
 double_sided = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1426141509]
+transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 0, 0, 0)
+shape = SubResource("CapsuleShape3D_qnmj6")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=1618732350]
 light_energy = 0.5
@@ -1015,6 +1041,7 @@ script = ExtResource("2_rxibo")
 script = ExtResource("3_244u8")
 
 [node name="Camera3D" type="Camera3D" parent="Head/Camera" unique_id=585511788]
+cull_mask = 1048543
 fov = 90.0
 far = 105.0
 
@@ -1043,18 +1070,31 @@ script = ExtResource("8_uf5tr")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Head/Weapon/Actions" unique_id=2145705635]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1652832, 0)
-shape = SubResource("BoxShape3D_ylpk0")
+shape = SubResource("BoxShape3D_2t3bg")
 
 [node name="CraftZone" type="Label3D" parent="Head/Weapon/Actions" unique_id=1601957492]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5304802, 0.6547494)
 visible = false
 font_size = 24
 
-[node name="BuildZone" type="MeshInstance3D" parent="Head/Weapon/Actions" unique_id=159217324]
+[node name="BuildingController" type="Node" parent="Head/Weapon" unique_id=1508557304]
+script = ExtResource("16_ahqnk")
+
+[node name="BuildArea" type="Area3D" parent="Head/Weapon/BuildingController" unique_id=1366419647]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68520355, -3)
 top_level = true
-visible = false
-mesh = SubResource("BoxMesh_jrbya")
+collision_layer = 0
+collision_mask = 4
+script = SubResource("GDScript_2t3bg")
+
+[node name="Mesh" type="MeshInstance3D" parent="Head/Weapon/BuildingController/BuildArea" unique_id=159217324]
+material_override = SubResource("StandardMaterial3D_2t3bg")
+mesh = ExtResource("18_0ncpa")
+skeleton = NodePath("../../../Actions")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Head/Weapon/BuildingController/BuildArea" unique_id=1078614918]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0, 0)
+shape = ExtResource("19_upxxc")
 
 [node name="ThrowSprite" type="Sprite3D" parent="Head/Weapon" unique_id=1391296709]
 transform = Transform3D(0.018707214, -0.00021001161, -0.1790251, 0.11673299, -0.13645764, 0.012358077, -0.13573301, -0.11738514, -0.014045703, 0.7535772, -0.6093204, -0.8978576)
@@ -1149,15 +1189,13 @@ flip_h = true
 position = Vector2(400, 150)
 scale = Vector2(1.4, 1.4)
 
-[node name="TimerOneSecond" type="Timer" parent="Head/Weapon" unique_id=710060702]
-autostart = true
-
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1021319399]
 replication_config = SubResource("SceneReplicationConfig_mf2ua")
 
 [connection signal="timeout" from="Timers/StartEmitTimer" to="." method="_on_start_emit_timer_timeout"]
+[connection signal="timeout" from="Timers/TimerOneSecond" to="HungerController" method="_on_timer_timeout"]
+[connection signal="timeout" from="Timers/TimerOneSecond" to="FearController" method="_on_timer_one_second_timeout"]
+[connection signal="timeout" from="Timers/TimerOneSecond" to="Head/Weapon" method="check_corrosion_item"]
+[connection signal="timeout" from="Timers/TimerOneSecond" to="Head/Weapon" method="regen"]
 [connection signal="died" from="HealthComponent" to="." method="_on_health_component_died"]
-[connection signal="timeout" from="HungerController/Timer" to="HungerController" method="_on_timer_timeout"]
 [connection signal="animation_finished" from="Head/Weapon/Arms/WeaponAnim" to="Head/Weapon/Arms/WeaponAnim" method="_on_animation_finished"]
-[connection signal="timeout" from="Head/Weapon/TimerOneSecond" to="Head/Weapon" method="check_corrosion_item"]
-[connection signal="timeout" from="Head/Weapon/TimerOneSecond" to="Head/Weapon" method="regen"]

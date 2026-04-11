@@ -1,10 +1,11 @@
-# entity_component.gd
-class_name EntityComponent
 extends Node
+
+const EXP_SPHERE := preload("res://scenes/prefabs/exp_sphere/exp_sphere.tscn")
 
 var entity: Node3D
 
 @export var drop_items := {}
+@export var drop_chance := {}
 @export var despawn_particles_size := 1.0
 @export var despawn_sound_name: String
 @export var exp_drop: float = 0.0
@@ -35,11 +36,15 @@ func drop(item_name: String) -> void:
 func drop_loot() -> void:
 	if drop_items.is_empty(): return
 	for item_name in drop_items:
-		for i in range(drop_items[item_name] + randi_range(0, 1)):
-			drop(item_name)
+		var chance := 1.0
+		if item_name in drop_chance:
+			chance = drop_chance[item_name]
+		for i in range(drop_items[item_name]):
+			if randf() <= chance:
+				drop(item_name)
 
 func drop_exp_sphere(value: float) -> void:
-	var exp_sphere: RigidBody3D = R.exp_sphere.instantiate()
+	var exp_sphere: RigidBody3D = EXP_SPHERE.instantiate()
 	exp_sphere.value = value
 	exp_sphere.position = entity.position + Vector3(
 		randf_range(-0.5, 0.5),

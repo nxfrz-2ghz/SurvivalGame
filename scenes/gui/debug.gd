@@ -15,23 +15,6 @@ func _physics_process(_delta: float) -> void:
 	text += "X: " + str(G.player.rotation.y) + "\n"
 	text += "Y: " + str(G.player.head.rotation.x) + "\n"
 	
-	text += output
-
-
-# STATS_LABEL
-
-var health: float
-var hunger: float
-
-var output: String
-
-func on_health_changed(cur: float, _maxx: float, _last: float) -> void:
-	health = cur
-	update()
-
-func on_hunger_changed(cur: float) -> void:
-	hunger = cur
-	update()
-
-func update() -> void:
-	output = "\nHealth: " + str(health) + "\nHunger: " + str(hunger)
+	text += "Health: " + str(G.player.health.current_health) + "\n"
+	text += "Hunger: " + str(G.player.hunger.current_hunger) + "\n"
+	text += "Fear: " + str(G.player.fear.current_fear) + "\n"

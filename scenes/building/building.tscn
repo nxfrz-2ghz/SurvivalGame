@@ -18,6 +18,7 @@ properties/2/replication_mode = 2
 
 [node name="Building" type="StaticBody3D" unique_id=1331540241 groups=["buildings"]]
 collision_layer = 4
+collision_mask = 4
 script = ExtResource("1_nedpk")
 
 [node name="HealthComponent" parent="." unique_id=1086116789 instance=ExtResource("1_qg5jt")]
@@ -31,10 +32,10 @@ resists = {
 bus = &"Sounds"
 script = ExtResource("3_p8amu")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1161658582]
-
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=2006591672]
 visibility_range_end = 100.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1161658582]
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1679314553]
 replication_config = SubResource("SceneReplicationConfig_nedpk")

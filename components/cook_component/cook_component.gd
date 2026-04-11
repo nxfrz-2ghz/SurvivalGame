@@ -3,7 +3,7 @@ extends Node
 @export var cook_category: String
 
 @onready var parent := get_parent()
-@onready var toogle_on := $"../ToggleOn"
+@onready var toggle_on := $"../ToggleOn"
 @onready var craft_timer := $"../Timers/CraftTimer"
 @onready var fuel_timer := $"../Timers/FuelTimer"
 @onready var label := $"../Label3D"
@@ -16,6 +16,7 @@ extends Node
 @export var complete: Array = []
 
 func _ready() -> void:
+	if not is_multiplayer_authority(): return
 	craft_timer.timeout.connect(_on_craft_timer_timeout)
 	fuel_timer.timeout.connect(_on_fuel_timer_timeout)
 	
@@ -36,7 +37,7 @@ func drop_queue() -> void:
 	update_label.rpc(queue, complete, fuel)
 
 func toggle() -> void:
-	toogle_on.visible = !toogle_on.visible
+	toggle_on.visible = !toggle_on.visible
 	parent.sprite.visible = !parent.sprite.visible
 	parent.shadow.visible = !parent.shadow.visible
 	$"../SmokeParticle".emitting = !$"../SmokeParticle".emitting

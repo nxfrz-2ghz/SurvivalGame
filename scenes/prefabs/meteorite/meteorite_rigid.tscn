@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b3o1ii22rby54"]
 
-[ext_resource type="Script" uid="uid://bhdwywjtluiwv" path="res://scenes/meteorite/meteorite_rigid.gd" id="1_7pook"]
-[ext_resource type="Texture2D" uid="uid://caafjypjhepvm" path="res://scenes/meteorite/meteorite_texture.jpg" id="2_gv3mv"]
+[ext_resource type="Script" uid="uid://bhdwywjtluiwv" path="res://scenes/prefabs/meteorite/meteorite_rigid.gd" id="1_7pook"]
+[ext_resource type="Texture2D" uid="uid://caafjypjhepvm" path="res://scenes/prefabs/meteorite/meteorite_texture.jpg" id="2_gv3mv"]
 [ext_resource type="Script" uid="uid://dknrk65skptje" path="res://scripts/base_audio_player_rpc.gd" id="3_gv3mv"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_7pook"]

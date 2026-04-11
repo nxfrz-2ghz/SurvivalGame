@@ -42,6 +42,7 @@ objects=""
 players=""
 mobs=""
 buildings=""
+can_affect_fear=""
 
 [gui]
 
@@ -213,6 +214,7 @@ locale/translations=PackedStringArray("res://res/translation/translation.en.tran
 
 3d_render/layer_2="shadow decal"
 3d_render/layer_3="corruption_decal"
+3d_render/layer_6="self(player)"
 3d_physics/layer_1="world"
 3d_physics/layer_2="player"
 3d_physics/layer_3="object"

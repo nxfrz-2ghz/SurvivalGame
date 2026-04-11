@@ -6,9 +6,6 @@
 
 [node name="FurnaceT2" unique_id=1921849884 instance=ExtResource("1_etrvu")]
 nname = "furnace_t2"
-drop_items = {
-"brick": 3
-}
 
 [node name="FuelTimer" parent="Timers" parent_id_path=PackedInt32Array(203408184) index="2" unique_id=301717867]
 wait_time = 20.0
@@ -27,7 +24,7 @@ fuel_type = "coal"
 
 [node name="EntityComponent" parent="." index="3" unique_id=1330161778]
 drop_items = {
-"brick": 3
+"brick": 5
 }
 
 [node name="Sprite3D" parent="ToggleOn" parent_id_path=PackedInt32Array(1471818564) index="0" unique_id=163627065]

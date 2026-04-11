@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://dqeqkmtec5wtu"]
+
+[ext_resource type="PackedScene" uid="uid://q8syis2q1qup" path="res://scenes/building/wall/wall.tscn" id="1_cvy0d"]
+[ext_resource type="Material" uid="uid://53fxxgmi2ran" path="res://scenes/building/_materials/x2/wood.tres" id="2_wdxb2"]
+
+[node name="WoodWall" unique_id=1331540241 instance=ExtResource("1_cvy0d")]
+nname = "wood_wall"
+
+[node name="HealthComponent" parent="." index="0" unique_id=1086116789]
+resists = {
+"melee": 0.0,
+"pickaxe": 0.0
+}
+max_health = 4.0
+
+[node name="EntityComponent" parent="." index="1" unique_id=1330161778]
+drop_items = {
+"log": 2
+}
+drop_chance = {
+"log": 1.0
+}
+despawn_sound_name = "wood"
+
+[node name="MeshInstance3D" parent="." index="3" unique_id=2006591672]
+material_override = ExtResource("2_wdxb2")

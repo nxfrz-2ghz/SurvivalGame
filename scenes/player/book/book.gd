@@ -257,7 +257,9 @@ func set_page(page: String) -> void:
 				
 				spawn_label("HP: " + str(obj.get_node("HealthComponent").max_health))
 				if obj.get_node("EntityComponent").drop_items:
-					spawn_label("Drop_items: " + str(obj.get_node("EntityComponent").drop_items))
+					spawn_label("Drop items: " + str(obj.get_node("EntityComponent").drop_items))
+				if obj.get_node("EntityComponent").drop_items:
+					spawn_label("Drop chance: " + str(obj.get_node("EntityComponent").drop_chance))
 				
 				obj.queue_free()
 				continue
@@ -286,7 +288,9 @@ func set_page(page: String) -> void:
 				
 				spawn_label("HP: " + str(obj.get_node("HealthComponent").max_health))
 				if obj.get_node("EntityComponent").drop_items:
-					spawn_label("Drop_items: " + str(obj.get_node("EntityComponent").drop_items))
+					spawn_label("Drop items: " + str(obj.get_node("EntityComponent").drop_items))
+				if obj.get_node("EntityComponent").drop_items:
+					spawn_label("Drop chance: " + str(obj.get_node("EntityComponent").drop_chance))
 				
 				obj.queue_free()
 				continue
@@ -333,7 +337,9 @@ func set_page(page: String) -> void:
 				var mob: CharacterBody3D = R.mobs[page][txt].instantiate()
 				spawn_label("HP: " + str(mob.get_node("HealthComponent").max_health))
 				if mob.get_node("EntityComponent").drop_items:
-					spawn_label("Drop_items: " + str(mob.get_node("EntityComponent").drop_items))
+					spawn_label("Drop items: " + str(mob.get_node("EntityComponent").drop_items))
+				if mob.get_node("EntityComponent").drop_items:
+					spawn_label("Drop chance: " + str(mob.get_node("EntityComponent").drop_chance))
 				
 				mob.queue_free()
 				continue

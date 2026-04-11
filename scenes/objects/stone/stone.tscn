@@ -9,11 +9,6 @@ radius = 1.2216797
 
 [node name="Stone" unique_id=1810351797 instance=ExtResource("1_bfce7")]
 nname = "stone"
-drop_items = {
-"stone": 3
-}
-despawn_sound_name = "stone"
-exp_drop = 1.5
 
 [node name="HealthComponent" parent="." index="1" unique_id=1086116789]
 resists = {
@@ -25,7 +20,10 @@ max_health = 8.0
 
 [node name="EntityComponent" parent="." index="2" unique_id=1330161778]
 drop_items = {
-"stone": 3
+"stone": 4
+}
+drop_chance = {
+"stone": 0.7
 }
 despawn_sound_name = "stone"
 exp_drop = 1.5

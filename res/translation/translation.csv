@@ -22,8 +22,9 @@ LBL_H5;ESC - MENU;ESC - МЕНЮ
 LBL_H6;LMB - ATTACK;ЛКМ - АТКАК
 LBL_H7;RMB - INTERACT;ПКМ - ВЗАИМОДЕЙСТВИЕ
 LBL_H8;B - OPEN BOOK;B - ОТКРЫТЬ ДНЕВНИК
-LBL_H9;SHIFT - RUN; SHIFT - БЕГ
-LBL_H10;F1 - DEBUG INFO;F1 - ОТЛАДКА
+LBL_H9;SHIFT - RUN;SHIFT - БЕГ
+LBL_H10;F1 - HIDE UI;F1 - Скрыть UI
+LBL_H11;F3 - DEBUG INFO;F3 - ОТЛАДКА
 TGL_HOST;HOST;ХОСТ
 TGL_FULSCRN;Fullscreen;Во весь экран
 TGL_LANG_SWITCH;"[EN]/ru";"en/[RU]"

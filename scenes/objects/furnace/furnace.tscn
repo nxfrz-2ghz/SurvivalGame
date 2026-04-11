@@ -26,9 +26,6 @@ properties/2/replication_mode = 2
 [node name="Furnace" unique_id=1921849884 instance=ExtResource("1_mbkog")]
 script = ExtResource("2_qnkj5")
 nname = "furnace"
-drop_items = {
-"stone": 4
-}
 
 [node name="CraftTimer" type="Timer" parent="Timers" parent_id_path=PackedInt32Array(203408184) index="1" unique_id=16731806]
 wait_time = 5.0
@@ -51,7 +48,7 @@ cook_category = "furnace"
 
 [node name="EntityComponent" parent="." index="3" unique_id=1330161778]
 drop_items = {
-"stone": 4
+"stone": 5
 }
 
 [node name="Label3D" type="Label3D" parent="." index="4" unique_id=388106055]

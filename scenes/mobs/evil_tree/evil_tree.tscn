@@ -38,7 +38,10 @@ max_health = 50.0
 
 [node name="EntityComponent" parent="." index="3" unique_id=1330161778]
 drop_items = {
-"log": 5
+"log": 12
+}
+drop_chance = {
+"log": 0.5
 }
 despawn_sound_name = "tree"
 exp_drop = 10.0

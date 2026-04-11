@@ -26,9 +26,8 @@ func on_damage() -> void:
 
 func summon(scene: PackedScene) -> void:
 	anim_sprite.anim_play.rpc("on_summon")
-	var corrupted_territory_size := 0.0
-	var pos: Vector3 = G.mob_spawner.get_random_spawn_position(self.position, corrupted_territory_size/3, corrupted_territory_size)
-	pos.y = 50
+	var pos: Vector3 = G.mob_spawner.get_random_spawn_position(self.position, corruption_size.x/3, corruption_size.x)
+	pos.y = 30
 	G.mob_spawner.spawn_mob(scene, pos)
 
 
@@ -42,7 +41,7 @@ func _on_grow_timer_timeout() -> void:
 	if not is_multiplayer_authority(): return
 	if G.state_machine != "game": return
 	if health.max_health < 40.0:
-		health.max_health += health.max_health / 100
+		health.max_health += health.max_health / 10
 		
 		# Целевой размер расширения
 		var target_size = corruption_size + (Vector3.ONE * 3) / (corruption_size / 2)
@@ -56,7 +55,7 @@ func _on_grow_timer_timeout() -> void:
 		tween.tween_property(self, "corruption_size", target_size, 0.5) 
 	else:
 		if randf() > 0.1:
-			summon(R.objects["heart"]["scene"])
+			summon(load(self.scene_file_path))
 
 
 func _on_animated_sprite_3d_animation_finished() -> void:

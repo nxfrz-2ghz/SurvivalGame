@@ -20,7 +20,10 @@ max_health = 20.0
 
 [node name="EntityComponent" parent="." index="2" unique_id=1330161778]
 drop_items = {
-"iron_ore": 3
+"iron_ore": 4
+}
+drop_chance = {
+"iron_ore": 0.5
 }
 despawn_sound_name = "stone"
 exp_drop = 10.0

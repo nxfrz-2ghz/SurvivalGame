@@ -1,12 +1,15 @@
 extends CharacterBody3D
 
 @onready var head := $Head
+@onready var sprite := $Sprite3D
+@onready var label3d := $Label3D
 @onready var interact_ray := %InteractRay
 @onready var ground_ray := $Head/GroundRay
 @onready var weapon := %Weapon
 @onready var arm_anim := %ArmAnim
 @onready var health := %HealthComponent
 @onready var hunger := $HungerController
+@onready var fear := $FearController
 @onready var stamina := $StaminaController
 @onready var camera := $Head/Camera/Camera3D
 @onready var arms := $Head/Weapon/Arms
@@ -37,10 +40,23 @@ func _enter_tree() -> void:
 
 func _ready() -> void:
 	if not is_multiplayer_authority():
+		# Переключаем игрока на слой, который видит камера
+		sprite.set_layer_mask_value(1, true)
+		sprite.set_layer_mask_value(6, false)
+		label3d.set_layer_mask_value(1, true)
+		label3d.set_layer_mask_value(6, false)
+		
 		interact_ray.queue_free()
 		arms.queue_free()
 		rain.queue_free()
+		fear.queue_free()
 	else:
+		# Переключаем себя на слой, который не видит камера
+		sprite.set_layer_mask_value(1, false)
+		sprite.set_layer_mask_value(6, true)
+		label3d.set_layer_mask_value(1, false)
+		label3d.set_layer_mask_value(6, true)
+		
 		weapon.attack.connect(interact_ray.update)
 		weapon.attack.connect(hunger.on_attack)
 		
@@ -59,7 +75,7 @@ func _ready() -> void:
 		health.changed.connect(spawn_damage_perticle)
 		
 		self.nname = G.gui.main_menu.player_name.text
-		$Label3D.text = self.nname
+		label3d.text = self.nname
 
 
 func _input(event: InputEvent) -> void:
@@ -110,10 +126,22 @@ func _input(event: InputEvent) -> void:
 						if randi_range(0, int(clamp(100 - shovel_power, 0, 100))) == 0:
 							inv.add_item("iron_ore")
 			
-			weapon.weapon_anim.speed_scale = weapon.attack_speed + float(weapon.speed_rings)/5
-			weapon.weapon_anim.play("use")
+			var atk_spd: float = weapon.attack_speed + float(weapon.speed_rings)/5
 			var vel: float = get_float_velocity()/10
 			var cur_dmg: float = weapon.damage + weapon.damage * vel
+			
+			if is_underwater():
+				atk_spd *= 0.5
+				cur_dmg *= 0.5
+			
+			if health.current_health < health.max_health / 4:
+				cur_dmg *= 0.8
+			
+			if hunger.current_hunger < hunger.MAX_HUNGER / 8:
+				atk_spd *= 0.8
+			
+			weapon.weapon_anim.speed_scale = atk_spd
+			weapon.weapon_anim.play("use")
 			weapon.actions.attack(cur_dmg, weapon.damage_types, weapon.push_velocity + weapon.push_velocity * vel)
 			weapon.attack.emit()
 		interact_ray.update()
@@ -177,7 +205,7 @@ func _input(event: InputEvent) -> void:
 			
 			# Строительство
 			elif R.items[item_name].get("is_building"):
-				weapon.actions.build(item_name)
+				weapon.actions.build(item_name, weapon.build.area.global_position, weapon.build.area.global_rotation)
 				inv.drop_item(current_slot_idx, 1)
 			
 			# Стрельба
@@ -185,7 +213,7 @@ func _input(event: InputEvent) -> void:
 				weapon.weapon_anim.speed_scale = weapon.attack_speed + float(weapon.speed_rings)/5
 				weapon.weapon_anim.play("aim")
 	
-	if Input.is_action_just_released("rmb") and weapon.weapon_anim.is_playing():
+	if Input.is_action_just_released("rmb") and weapon.weapon_anim.is_playing() and current_slot_data != null and R.items[current_slot_data["name"]].get("throw_power"):
 		# Если прицеливания еще не закончилась то отмена
 		if weapon.weapon_anim.current_animation == "aim":
 			weapon.weapon_anim.speed_scale = -1.5
@@ -193,7 +221,7 @@ func _input(event: InputEvent) -> void:
 		else:
 			var current_name: String = current_slot_data["name"]
 			if R.items[current_name].get("texture") != null:
-				weapon.actions.shoot(weapon.damage, weapon.damage_types, weapon.push_velocity, current_name, R.items[current_name]["texture"].resource_path, R.items[current_name]["throw_drop_chance"], R.items[current_name]["throw_power"], R.items[current_name]["billboard"])
+				weapon.actions.shoot(weapon.damage, weapon.damage_types, weapon.push_velocity, current_name)
 				inv.drop_item(inv.current_item, 1)
 			weapon.weapon_anim.play("throw")
 	
@@ -244,7 +272,7 @@ func _on_health_component_died() -> void:
 			for k in range(item["amount"]):
 					weapon.actions.drop(slot_idx)
 	
-	self.position = Vector3(0, 100, 0)
+	self.position = Vector3(0, 300, 0)
 	health.heal(99999999.9)
 	hunger.eat(99999999)
 
@@ -313,6 +341,12 @@ func moving(delta: float) -> void:
 		speed *= 0.5
 	if weapon.weapon_anim.is_playing() and weapon.weapon_anim.current_animation == "waiting_throw":
 		speed *= 0.5
+	if health.current_health < health.max_health / 2:
+		speed *= 0.8
+	if health.current_health < health.max_health / 4:
+		speed *= 0.8
+	if hunger.current_hunger < hunger.MAX_HUNGER / 8:
+		speed *= 0.6
 	
 	speed += weapon.speed_rings
 	

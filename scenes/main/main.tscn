@@ -19,12 +19,12 @@
 [ext_resource type="Script" uid="uid://b32rflbupbfwf" path="res://scenes/gui/health_vignette.gd" id="13_necax"]
 [ext_resource type="Script" uid="uid://bcvafvya4wcrc" path="res://scenes/gui/damage_vignette.gd" id="14_r4lks"]
 [ext_resource type="Script" uid="uid://d25jbatuakb3x" path="res://scenes/gui/stamina_bar.gd" id="15_necax"]
-[ext_resource type="Texture2D" uid="uid://kflc51gj346l" path="res://res/sprites/gui/Screenshot_20260306_182814.png" id="15_nvumn"]
 [ext_resource type="Script" uid="uid://bni0q2stunvev" path="res://scenes/gui/debug.gd" id="15_p8abn"]
 [ext_resource type="Script" uid="uid://du8hko50uql36" path="res://scenes/gui/bar_box.gd" id="16_37hlw"]
 [ext_resource type="Texture2D" uid="uid://dcrq1x4627cg7" path="res://res/sprites/items/star.png" id="17_6llfj"]
 [ext_resource type="Script" uid="uid://bryy4ri3hhmgs" path="res://scenes/gui/screen_text.gd" id="17_m4h2d"]
 [ext_resource type="Texture2D" uid="uid://dcyjc6tphl14d" path="res://res/sprites/items/meat/raw_meat.png" id="18_0bhws"]
+[ext_resource type="Script" uid="uid://1edbclpx56bk" path="res://scenes/gui/background.gd" id="20_tbnf8"]
 [ext_resource type="Script" uid="uid://dytq3mhb6tscq" path="res://scenes/gui/settings_buttons/buttons/fullscreen_button.gd" id="22_37hlw"]
 [ext_resource type="Script" uid="uid://deo4mus5ovkdy" path="res://scenes/gui/settings_buttons/buttons/vsync_button.gd" id="23_6llfj"]
 [ext_resource type="Script" uid="uid://dhmt4xs0ug4pa" path="res://scenes/gui/setting_lines/base_line.gd" id="24_62atk"]
@@ -104,6 +104,9 @@ corner_radius_bottom_right = 12
 bg_color = Color(0.70980394, 0.70980394, 0.70980394, 0.47058824)
 corner_radius_top_right = 12
 corner_radius_bottom_right = 12
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_r1bmu"]
+load_path = "res://.godot/imported/Screenshot_20260306_182814.png-96c9f26a1f49b2c5f145ddfdafa89e16.ctex"
 
 [sub_resource type="Animation" id="Animation_necax"]
 length = 0.001
@@ -193,7 +196,7 @@ _spawnable_scenes = PackedStringArray("uid://dp83o7qw4ht4w")
 spawn_path = NodePath("..")
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="Environment" unique_id=2101221164]
-_spawnable_scenes = PackedStringArray("uid://darxc13rlkwt7", "uid://cddn37g14j7yf", "uid://s322lfir2gd7", "uid://bsqtn0fmjrxph", "uid://uwmukk060f86", "uid://qg4g44ocaejc", "uid://b3o1ii22rby54")
+_spawnable_scenes = PackedStringArray("uid://darxc13rlkwt7", "uid://cddn37g14j7yf", "uid://s322lfir2gd7", "uid://uwmukk060f86", "uid://qg4g44ocaejc")
 spawn_path = NodePath("..")
 script = ExtResource("3_nvumn")
 
@@ -666,9 +669,10 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("15_nvumn")
+texture = SubResource("CompressedTexture2D_r1bmu")
 expand_mode = 1
 stretch_mode = 3
+script = ExtResource("20_tbnf8")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="GUI/Background" unique_id=1531877782]
 libraries/ = SubResource("AnimationLibrary_pg34l")
@@ -898,7 +902,7 @@ key = "vsync"
 layout_mode = 2
 button_pressed = true
 text = "TGL_AUTOSAVE"
-script = ExtResource("23_6llfj")
+script = ExtResource("25_7nlll")
 key = "autosave"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="GUI/MainMenu/HBoxContainer" unique_id=1822817579]
@@ -962,6 +966,10 @@ text = "LBL_H9"
 [node name="Label11" type="Label" parent="GUI/MainMenu/HBoxContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=294154767]
 layout_mode = 2
 text = "LBL_H10"
+
+[node name="Label12" type="Label" parent="GUI/MainMenu/HBoxContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=995240618]
+layout_mode = 2
+text = "LBL_H11"
 
 [node name="PlayerContainer" type="PanelContainer" parent="GUI/MainMenu" unique_id=1879437193]
 layout_mode = 2

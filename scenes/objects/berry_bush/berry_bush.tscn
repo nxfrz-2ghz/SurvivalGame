@@ -19,12 +19,6 @@ properties/0/replication_mode = 0
 script = ExtResource("2_8hlsa")
 full = true
 nname = "berry_bush"
-drop_items = {
-"log": 1,
-"raw_berry": 3
-}
-despawn_sound_name = "tree"
-exp_drop = 0.5
 
 [node name="GrowUp" type="Timer" parent="Timers" parent_id_path=PackedInt32Array(203408184) index="1" unique_id=1477719022]
 wait_time = 100.0
@@ -39,8 +33,12 @@ max_health = 3.0
 
 [node name="EntityComponent" parent="." index="2" unique_id=1330161778]
 drop_items = {
-"log": 1,
-"raw_berry": 3
+"log": 3,
+"raw_berry": 5
+}
+drop_chance = {
+"log": 0.7,
+"raw_berry": 0.7
 }
 despawn_sound_name = "tree"
 exp_drop = 0.5

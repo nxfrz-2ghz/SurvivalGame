@@ -41,7 +41,7 @@ properties/2/path = NodePath("ToggleOn:visible")
 properties/2/spawn = true
 properties/2/replication_mode = 2
 
-[node name="Campfire" unique_id=1331540241 instance=ExtResource("1_yqtuu")]
+[node name="Campfire" unique_id=1331540241 groups=["can_affect_fear"] instance=ExtResource("1_yqtuu")]
 script = ExtResource("2_gdl1i")
 nname = "campfire"
 
@@ -58,7 +58,10 @@ cook_category = "campfire"
 
 [node name="EntityComponent" parent="." index="3" unique_id=1330161778]
 drop_items = {
-"log": 1
+"log": 3
+}
+drop_chance = {
+"log": 0.5
 }
 
 [node name="Label3D" type="Label3D" parent="." index="5" unique_id=1697573655]

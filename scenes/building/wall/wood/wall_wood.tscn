@@ -1,9 +1,0 @@
-[gd_scene format=3 uid="uid://dqeqkmtec5wtu"]
-
-[ext_resource type="PackedScene" uid="uid://q8syis2q1qup" path="res://scenes/building/wall/wall.tscn" id="1_xlupn"]
-[ext_resource type="Material" uid="uid://53fxxgmi2ran" path="res://scenes/building/_materials/wood.tres" id="2_nqi1g"]
-
-[node name="WallWood" unique_id=1331540241 instance=ExtResource("1_xlupn")]
-
-[node name="MeshInstance3D" parent="." index="4" unique_id=2006591672]
-material_override = ExtResource("2_nqi1g")

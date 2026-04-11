@@ -22,10 +22,16 @@ armor = 1.0
 
 [node name="EntityComponent" parent="." index="2" unique_id=1330161778]
 drop_items = {
-"coal": 1,
-"copper_ore": 1,
-"iron_ore": 1,
-"stone": 3
+"coal": 4,
+"copper_ore": 3,
+"iron_ore": 3,
+"stone": 5
+}
+drop_chance = {
+"coal": 0.6,
+"copper_ore": 0.4,
+"iron_ore": 0.3,
+"stone": 0.8
 }
 despawn_sound_name = "stone"
 exp_drop = 10.0

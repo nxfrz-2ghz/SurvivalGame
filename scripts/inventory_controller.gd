@@ -26,7 +26,7 @@ func update_signals() -> void:
 
 func _input(_event: InputEvent) -> void:
 	if G.state_machine != "game": return
-	if %WeaponAnim.is_playing(): return
+	if is_multiplayer_authority() and %WeaponAnim.is_playing(): return
 	
 	if Input.is_action_just_pressed("1"):
 		current_item = 1

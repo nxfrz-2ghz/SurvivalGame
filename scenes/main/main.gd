@@ -58,8 +58,6 @@ func set_up_player(player: CharacterBody3D) -> void:
 	player.get_node("HungerController").changed.connect(G.gui.hud.bar_box.hunger_changed)
 	player.get_node("ProgressController").changed.connect(G.gui.hud.bar_box.exp_changed)
 	player.get_node("StaminaController").changed.connect(G.gui.hud.stamina_bar.on_stamina_changed)
-	player.get_node("%HealthComponent").changed.connect(G.gui.hud.debug.on_health_changed)
-	player.get_node("HungerController").changed.connect(G.gui.hud.debug.on_hunger_changed)
 	G.player = player
 
 

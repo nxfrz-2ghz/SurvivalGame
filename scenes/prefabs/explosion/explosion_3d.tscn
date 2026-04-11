@@ -1,0 +1,120 @@
+[gd_scene format=3 uid="uid://dq78ulyt42tce"]
+
+[ext_resource type="AudioStream" uid="uid://rodsik5c4ont" path="res://res/sounds/actions/explode.mp3" id="1_cxv3a"]
+
+[sub_resource type="GDScript" id="GDScript_cpoil"]
+script/source = "extends Area3D
+
+@onready var particles := $GPUParticles3D
+
+@export var damage: int = 4
+@export var falloff_factor = 0.5
+@export var force: float = 100.0
+@export var lifetime: int = 1
+
+func _ready() -> void:
+	await get_tree().create_timer(0.05).timeout
+	# Проверяем всех тел в радиусе
+	apply_explosion_effects()
+	
+	particles.emitting = true
+	
+	# Через lifetime удаляем себя
+	await get_tree().create_timer(lifetime).timeout
+	queue_free()
+
+func apply_explosion_effects():
+	for body in get_overlapping_bodies():
+		if not body: 
+			continue
+		
+		var distance = global_position.distance_to(body.global_position)
+		var calculated_damage = damage / (1.0 + distance * falloff_factor)
+		var calculated_force = force / (1.0 + distance * falloff_factor)
+		
+		if body.has_node(\"HealthComponent\"):
+			body.health.take_damage(calculated_damage, {\"explosion\": 1.0})
+		
+		if body is RigidBody3D:
+			var dir = (body.global_position - global_position).normalized()
+			body.apply_impulse(dir * calculated_force)
+		elif body.has_method(\"apply_push\"):
+			var dir = (body.global_position - global_position).normalized()
+			body.apply_push(dir, calculated_force)
+"
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_cxv3a"]
+radius = 8.0
+
+[sub_resource type="Gradient" id="Gradient_d3g7i"]
+offsets = PackedFloat32Array(0.26666668, 0.7714286, 1)
+colors = PackedColorArray(1, 0.74509805, 0.39215687, 1, 0.9019608, 0.22745098, 0.12156863, 0.79607844, 0.85882354, 0, 0, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_4gjq8"]
+gradient = SubResource("Gradient_d3g7i")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_pjxc1"]
+emission_shape = 6
+emission_ring_axis = Vector3(0, 90, 1)
+emission_ring_height = 1.0
+emission_ring_radius = 1.0
+emission_ring_inner_radius = 0.0
+emission_ring_cone_angle = 90.0
+angle_min = 1.0728835e-05
+angle_max = 45.00001
+direction = Vector3(1, 1, 0)
+spread = 180.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, -1, 0)
+color_ramp = SubResource("GradientTexture1D_4gjq8")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mb75w"]
+transparency = 1
+vertex_color_use_as_albedo = true
+albedo_color = Color(1, 0.7764706, 0.24705882, 0.7176471)
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_x4i4k"]
+material = SubResource("StandardMaterial3D_mb75w")
+size = Vector2(0.3, 0.3)
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_d3g7i"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 0
+properties/1/path = NodePath(".:damage")
+properties/1/spawn = true
+properties/1/replication_mode = 0
+properties/2/path = NodePath(".:falloff_factor")
+properties/2/spawn = true
+properties/2/replication_mode = 0
+properties/3/path = NodePath(".:lifetime")
+properties/3/spawn = true
+properties/3/replication_mode = 0
+
+[node name="Explosion3D" type="Area3D" unique_id=782794036]
+collision_layer = 0
+collision_mask = 127
+script = SubResource("GDScript_cpoil")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1620643640]
+shape = SubResource("SphereShape3D_cxv3a")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="." unique_id=1075195479]
+emitting = false
+amount = 1280
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_pjxc1")
+draw_pass_1 = SubResource("QuadMesh_x4i4k")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=2105275267]
+stream = ExtResource("1_cxv3a")
+autoplay = true
+bus = &"Sounds"
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1239889751]
+replication_config = SubResource("SceneReplicationConfig_d3g7i")

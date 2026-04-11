@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://crptsdnu1ermv"]
+
+[ext_resource type="PackedScene" uid="uid://uwmukk060f86" path="res://scenes/building/building.tscn" id="1_p5mmr"]
+[ext_resource type="Shape3D" uid="uid://dqu8gov4cgibr" path="res://scenes/building/block/_shapes/full_box.tres" id="2_llm0o"]
+[ext_resource type="Script" uid="uid://cm837qr2krkk6" path="res://scenes/building/block/block.gd" id="2_uj1wg"]
+[ext_resource type="BoxMesh" uid="uid://co3km863qbnma" path="res://scenes/building/block/_meshes/full_box.tres" id="3_uj1wg"]
+
+[node name="Block" unique_id=1331540241 instance=ExtResource("1_p5mmr")]
+script = ExtResource("2_uj1wg")
+state = 0
+
+[node name="MeshInstance3D" parent="." index="3" unique_id=2006591672]
+mesh = ExtResource("3_uj1wg")
+
+[node name="CollisionShape3D" parent="." index="4" unique_id=1161658582]
+shape = ExtResource("2_llm0o")

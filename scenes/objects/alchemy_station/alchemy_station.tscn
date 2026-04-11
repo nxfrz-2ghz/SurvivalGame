@@ -44,7 +44,7 @@ craft_category = "alchemy_station"
 
 [node name="EntityComponent" parent="." index="3" unique_id=1330161778]
 drop_items = {
-"copper_ingot": 3
+"copper_ingot": 5
 }
 
 [node name="CollisionShape3D" parent="." index="5" unique_id=1161658582]

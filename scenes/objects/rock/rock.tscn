@@ -9,11 +9,6 @@ radius = 1.2216797
 
 [node name="Rock" unique_id=1228032656 instance=ExtResource("1_snhm6")]
 nname = "rock"
-drop_items = {
-"stone": 6
-}
-despawn_sound_name = "stone"
-exp_drop = 2.0
 
 [node name="HealthComponent" parent="." index="1" unique_id=1086116789]
 resists = {
@@ -25,7 +20,10 @@ max_health = 10.0
 
 [node name="EntityComponent" parent="." index="2" unique_id=1330161778]
 drop_items = {
-"stone": 6
+"stone": 10
+}
+drop_chance = {
+"stone": 0.5
 }
 despawn_sound_name = "stone"
 exp_drop = 2.0

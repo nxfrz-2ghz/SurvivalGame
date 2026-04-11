@@ -41,7 +41,10 @@ max_health = 5.0
 
 [node name="EntityComponent" parent="." index="3" unique_id=1330161778]
 drop_items = {
-"raw_meat": 1
+"raw_meat": 3
+}
+drop_chance = {
+"raw_meat": 0.5
 }
 despawn_particles_size = 0.8
 despawn_sound_name = "pig"

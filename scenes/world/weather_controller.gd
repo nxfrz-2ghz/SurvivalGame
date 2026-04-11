@@ -4,8 +4,6 @@ extends Node
 @onready var audio_player := $AudioStreamPlayer3D
 @onready var meteor_timer := $MeteorTimer
 
-const meteor := preload("res://scenes/meteorite/meteorite_rigid.tscn")
-
 var fog: bool
 var rain: bool
 var meteor_rain: bool
@@ -73,7 +71,7 @@ func _on_meteor_timer_timeout() -> void:
 	
 	var spawn_pos: Vector3 = G.mob_spawner.get_random_spawn_position(G.player.position, 0.0, 10.0)
 	spawn_pos.y += 50.0
-	G.mob_spawner.spawn_mob(meteor, spawn_pos)
+	G.mob_spawner.spawn_mob(R.prefabs["meteor"], spawn_pos)
 	
 	if meteor_rain:
 		meteor_timer.wait_time = randf_range(0.5, 1.5)
@@ -90,7 +88,7 @@ func _on_timer_timeout() -> void:
 	
 	if randf() < 0.1:
 		toggle_fog.rpc(true)
-	elif randf() < 0.15:
+	if randf() < 0.15:
 		toggle_rain.rpc(true)
-	elif randf() < 0.05:
+	if randf() < 0.05:
 		toggle_meteor_rain.rpc(true)

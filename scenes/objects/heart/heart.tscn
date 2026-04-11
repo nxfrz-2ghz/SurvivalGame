@@ -139,7 +139,7 @@ properties/1/path = NodePath(".:corruption_size")
 properties/1/spawn = true
 properties/1/replication_mode = 2
 
-[node name="Heart" unique_id=1331540241 instance=ExtResource("1_3awjx")]
+[node name="Heart" unique_id=1331540241 groups=["can_affect_fear"] instance=ExtResource("1_3awjx")]
 script = ExtResource("2_xfilk")
 corruption_size = Vector3(2, 2, 2)
 nname = "heart"
@@ -163,7 +163,10 @@ max_health = 18.0
 [node name="EntityComponent" parent="." index="2" unique_id=1330161778]
 script = ExtResource("3_221hr")
 drop_items = {
-"raw_meat": 4
+"raw_meat": 6
+}
+drop_chance = {
+"raw_meat": 0.5
 }
 despawn_sound_name = "meat"
 exp_drop = 5.0

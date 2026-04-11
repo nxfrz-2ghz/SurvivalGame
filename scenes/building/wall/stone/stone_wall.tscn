@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://cglkc5u0dhdfk"]
+
+[ext_resource type="PackedScene" uid="uid://q8syis2q1qup" path="res://scenes/building/wall/wall.tscn" id="1_du0x4"]
+[ext_resource type="Material" uid="uid://ba1xtrddgfs3b" path="res://scenes/building/_materials/x2/stone.tres" id="2_2cche"]
+
+[node name="StoneWall" unique_id=1331540241 instance=ExtResource("1_du0x4")]
+nname = "stone_wall"
+
+[node name="HealthComponent" parent="." index="0" unique_id=1086116789]
+resists = {
+"axe": 0.0,
+"melee": 0.0
+}
+max_health = 8.0
+armor = 0.5
+
+[node name="EntityComponent" parent="." index="1" unique_id=1330161778]
+drop_items = {
+"stone": 2
+}
+drop_chance = {
+"stone": 1.0
+}
+despawn_sound_name = "stone"
+
+[node name="MeshInstance3D" parent="." index="3" unique_id=2006591672]
+material_override = ExtResource("2_2cche")

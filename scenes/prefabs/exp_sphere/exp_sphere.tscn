@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bsqtn0fmjrxph"]
 
-[ext_resource type="Script" uid="uid://cwc4jbhorc3k3" path="res://scenes/exp_sphere/exp_sphere.gd" id="1_4wyng"]
+[ext_resource type="Script" uid="uid://cwc4jbhorc3k3" path="res://scenes/prefabs/exp_sphere/exp_sphere.gd" id="1_4wyng"]
 [ext_resource type="Texture2D" uid="uid://dcrq1x4627cg7" path="res://res/sprites/items/star.png" id="1_b4lq5"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_oy0wd"]

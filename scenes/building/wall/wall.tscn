@@ -15,11 +15,6 @@ script = ExtResource("2_wrdkq")
 state = 0
 nname = "wall_wood"
 
-[node name="EntityComponent" parent="." index="1" unique_id=1330161778]
-drop_items = {
-"log": 1
-}
-
 [node name="CollisionShape3D" parent="." index="3" unique_id=1161658582]
 shape = ExtResource("3_4htj5")
 

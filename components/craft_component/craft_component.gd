@@ -3,7 +3,7 @@ extends Node
 @export var craft_category: String
 
 @onready var parent := get_parent()
-@onready var toogle_on := $"../ToggleOn"
+@onready var toggle_on := $"../ToggleOn"
 @onready var craft_timer := $"../Timers/CraftTimer"
 @onready var label := $"../Label3D"
 
@@ -12,6 +12,7 @@ extends Node
 @export var complete: Array = []
 
 func _ready() -> void:
+	if not is_multiplayer_authority(): return
 	craft_timer.timeout.connect(_on_craft_timer_timeout)
 	
 	await parent.ready
@@ -20,13 +21,13 @@ func _ready() -> void:
 
 func drop_queue() -> void:
 	for item in queue: parent.enity.drop(item)
-	for item in complete: parent.enity.drop(item)
+	for item in complete: parent.entity.drop(item)
 	queue.clear()
 	complete.clear()
 	update_label.rpc(queue, complete)
 
 func toggle() -> void:
-	toogle_on.visible = !toogle_on.visible
+	toggle_on.visible = !toggle_on.visible
 	parent.sprite.visible = !parent.sprite.visible
 	parent.shadow.visible = !parent.shadow.visible
 	$"../SmokeParticle".emitting = !$"../SmokeParticle".emitting

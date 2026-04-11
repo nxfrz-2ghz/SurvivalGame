@@ -11,6 +11,7 @@ extends RigidBody3D
 @export var despawn_chance: float
 @export var throw_power: float
 @export var billboard: bool
+@export var explose: bool
 
 func _ready() -> void:
 	if texture_path:
@@ -46,8 +47,14 @@ func _on_body_entered(body: Node) -> void:
 		if self.position.distance_to(G.player.position) > 25.0:
 			G.player.progress_controller.add_achievement("ACH_4")
 	else:
-		if item_name:
+		if item_name and !explose:
 			spawn_item()
+	
+	if explose:
+		var expl: Area3D = R.prefabs["explosion"].instantiate()
+		expl.position = self.global_position
+		expl.damage = self.damage
+		G.environment.add_child(expl, true)
 	
 	queue_free()
 

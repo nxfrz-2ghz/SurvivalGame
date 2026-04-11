@@ -1,7 +1,6 @@
 extends Node
 
 const item := preload("res://scenes/items/item.tscn")
-const exp_sphere := preload("res://scenes/exp_sphere/exp_sphere.tscn")
 const throwable_item := preload("res://scenes/items/throwable_item.tscn")
 
 const OXIDING_SPEED := 50
@@ -64,6 +63,16 @@ const sounds := {
 		"pig": [
 			preload("res://res/sounds/destroy/pig_destroy_1.mp3"),
 			preload("res://res/sounds/destroy/pig_destroy_2.mp3"),
+		],
+		"wood": [
+			preload("res://res/sounds/crack/1.mp3"),
+			preload("res://res/sounds/crack/2.mp3"),
+			preload("res://res/sounds/crack/3.mp3"),
+			preload("res://res/sounds/crack/4.mp3"),
+			preload("res://res/sounds/crack/5.mp3"),
+			preload("res://res/sounds/crack/6.mp3"),
+			preload("res://res/sounds/crack/7.mp3"),
+			preload("res://res/sounds/crack/8.mp3"),
 		],
 		"meteor": preload("res://res/sounds/destroy/meteorite_despawn.mp3"),
 		"instrument": preload("res://res/sounds/destroy/instrument_destroy.mp3"),
@@ -131,6 +140,12 @@ const exchangeable_items := {
 	},
 }
 
+const prefabs := {
+	"meteor": preload("res://scenes/prefabs/meteorite/meteorite_rigid.tscn"),
+	"explosion": preload("res://scenes/prefabs/explosion/explosion_3d.tscn"),
+	"exp_sphere": preload("res://scenes/prefabs/exp_sphere/exp_sphere.tscn"),
+}
+
 const mobs := {
 	"darkness_eye": {
 		"texture": "res://res/sprites/mobs/darkness_eye/eye0.png",
@@ -165,21 +180,26 @@ const mobs := {
 }
 
 const buildings := {
-	"wall_wood": {
-		"scene": preload("res://scenes/building/wall/wood/wall_wood.tscn"),
+	# Стены Walls
+	"wood_wall": {
+		"scene": preload("res://scenes/building/wall/wood/wood_wall.tscn"),
 	},
-#	"wall_stone": {
-#		"scene": preload("res://scenes/building/wall_stone/wall_stone.tscn"),
-#		"recipe": {"stone": 4},
-#	},
-#	"door_wood": {
-#		"scene": preload("res://scenes/building/door_wood/door_wood.tscn"),
-#		"recipe": {"log": 3},
-#	},
-#	"chest": {
-#		"scene": preload("res://scenes/building/chest/chest.tscn"),
-#		"recipe": {"log": 6},
-#	},
+	"stone_wall": {
+		"scene": preload("res://scenes/building/wall/stone/stone_wall.tscn"),
+	},
+	"brick_wall": {
+		"scene": preload("res://scenes/building/wall/brick/brick_wall.tscn"),
+	},
+	# Блоки Blocks
+	"wood_block": {
+		"scene": preload("res://scenes/building/block/wood/wood_block.tscn"),
+	},
+	"stone_block": {
+		"scene": preload("res://scenes/building/block/stone/stone_block.tscn"),
+	},
+	"brick_block": {
+		"scene": preload("res://scenes/building/block/brick/brick_block.tscn"),
+	},
 }
 
 const objects := {
@@ -236,6 +256,69 @@ const objects := {
 }
 
 const items := {
+	# BUILDING ITEMS
+	"wood_wall": {
+		"texture": preload("res://res/sprites/items/building/wall.png"),
+		"recipe": {
+			"log":4,
+		},
+		"amount_craft": 2,
+		"stack_size": 10,
+		"is_building": true,
+		"build_type": "wall",
+	},
+	"stone_wall": {
+		"texture": preload("res://res/sprites/items/building/wall.png"),
+		"recipe": {
+			"stone":4,
+		},
+		"amount_craft": 2,
+		"stack_size": 10,
+		"is_building": true,
+		"build_type": "wall",
+	},
+	"brick_wall": {
+		"texture": preload("res://res/sprites/items/building/wall.png"),
+		"recipe": {
+			"brick":4,
+		},
+		"amount_craft": 2,
+		"stack_size": 10,
+		"is_building": true,
+		"build_type": "wall",
+	},
+	"wood_block": {
+		"texture": preload("res://res/sprites/items/building/block.png"),
+		"recipe": {
+			"log":2,
+		},
+		"amount_craft": 2,
+		"stack_size": 30,
+		"is_building": true,
+		"build_type": "block",
+	},
+	"stone_block": {
+		"texture": preload("res://res/sprites/items/building/block.png"),
+		"recipe": {
+			"stone":2,
+		},
+		"amount_craft": 2,
+		"stack_size": 30,
+		"is_building": true,
+		"build_type": "block",
+	},
+	"brick_block": {
+		"texture": preload("res://res/sprites/items/building/block.png"),
+		"recipe": {
+			"brick":2,
+		},
+		"amount_craft": 2,
+		"stack_size": 30,
+		"is_building": true,
+		"build_type": "block",
+	},
+	
+	# ITEMS
 	"": {
 		"attack_speed": 1.2,
 		"damage_types":
@@ -256,14 +339,6 @@ const items := {
 	"speed_ring": {
 		"texture": preload("res://res/sprites/items/rings/speed_ring.png"),
 		"stack_size": 3,
-	},
-	"wall_wood": {
-		"texture": preload("res://res/sprites/items/building/building.png"),
-		"recipe": {
-			"log":4,
-		},
-		"stack_size": 10,
-		"is_building": true,
 	},
 	"stone_axe": {
 		"texture": preload("res://res/sprites/items/weapons/stone_axe.png"),
@@ -315,6 +390,7 @@ const items := {
 		"throw_power": 15.0,
 		"throw_drop_chance": 0.5,
 		"billboard": false,
+		"explose": false,
 	},
 	"copper_shovel": {
 		"texture": preload("res://res/sprites/items/weapons/copper/copper_shovel.png"),
@@ -472,6 +548,28 @@ const items := {
 			"pickaxe_lvl2": 1.2,
 		},
 	},
+	"bomb": {
+		"texture": preload("res://res/sprites/items/weapons/bomb.png"),
+		"recipe": {
+			"iron_ingot":1,
+			"coal": 1,
+		},
+		"stack_size": 10,
+		"amount_craft": 2,
+		"durability": 1,
+		"attack_speed": 1.0,
+		"damage": 25.0,
+		"damage_types": {
+			"melee": 0.0,
+			"axe": 0.0,
+			"pickaxe": 0.0,
+			"explose": 1.0,
+		},
+		"throw_power": 15.0,
+		"throw_drop_chance": 1.0,
+		"billboard": true,
+		"explose": true,
+	},
 	"wooden_hammer": {
 		"texture": preload("res://res/sprites/items/weapons/wooden_hammer.png"),
 		"recipe": {
@@ -532,6 +630,7 @@ const items := {
 		"throw_power": 7.0,
 		"throw_drop_chance": 1.0,
 		"billboard": true,
+		"explose": false,
 	},
 	"copper_ore": {
 		"texture": preload("res://res/sprites/items/copper_ore.png"),
@@ -571,6 +670,7 @@ const items := {
 		"throw_power": 15.0,
 		"throw_drop_chance": 0.1,
 		"billboard": true,
+		"explose": false,
 	},
 	"coal": {
 		"texture": preload("res://res/sprites/items/coal.png"),

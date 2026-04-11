@@ -11,3 +11,5 @@ func _ready() -> void:
 		add_spawnable_scene(R.mobs[mob]["scene"].get_path())
 	for particle in R.particles:
 		add_spawnable_scene(R.particles[particle].get_path())
+	for prefab in R.prefabs:
+		add_spawnable_scene(R.prefabs[prefab].get_path())
