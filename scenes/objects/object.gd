@@ -27,18 +27,33 @@ func _ready() -> void:
 	health.on_damage.connect(on_damage.rpc)
 	health.changed.connect(entity.spawn_damage_perticle)
 	
-	G.time_controller.night_come.connect(shadow.hide)
-	G.time_controller.day_come.connect(shadow.show)
+	G.time_controller.night_come.connect(shadow.hide_rpc)
+	G.time_controller.day_come.connect(shadow.show_rpc)
+	
+	for spr in visual_sprites:
+		spr.visibility_range_end = G.world.objects_visible_range
 
 @rpc("authority", "call_local")
 func on_damage() -> void:
 	take_damage_audio.play_sound()
 	damage_particle.emitting = true
+	_on_damage_scale_anim()
 	
 	for spr in visual_sprites:
 		spr.modulate = Color(1, 0 ,0)
 	
 	damage_frame_timer.start()
+
+
+func _on_damage_scale_anim() -> void:
+	# Scale animation
+	var tween := create_tween()
+	tween.tween_property(self, "scale", Vector3.ONE*0.85, 0.05)\
+			.set_trans(Tween.TRANS_QUAD)\
+			.set_ease(Tween.EASE_OUT)
+	tween.tween_property(self, "scale", Vector3.ONE, 0.25)\
+			.set_trans(Tween.TRANS_QUAD)\
+			.set_ease(Tween.EASE_IN)
 
 func _on_damage_frame_remove_timeout() -> void:
 	for spr in visual_sprites:

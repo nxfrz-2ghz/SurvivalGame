@@ -13,8 +13,8 @@ const BIOME_CONFIG = {
 		"height_multiplier": 2.0,
 		"noise_threshold": 0.4,
 		"objects": {
-			"grass": {"weight": 25, "density": 0.07},
-			"tree": {"weight": 60, "density": 0.04},
+			"grass": {"weight": 25, "density": 0.01},
+			"tree": {"weight": 55, "density": 0.04},
 			"stone": {"weight": 5, "density": 0.02},
 			"berry_bush" : {"weight": 10, "density": 0.05},
 		}
@@ -34,7 +34,7 @@ const BIOME_CONFIG = {
 		"height_multiplier": 5.0,
 		"noise_threshold": 0.7,
 		"objects": {
-			"rock": {"weight": 50, "density": 0.01},
+			"rock": {"weight": 45, "density": 0.01},
 			"copper_ore": {"weight": 20, "density": 0.005},
 			"iron_ore": {"weight": 20, "density": 0.005},
 			"tree": {"weight": 10, "density": 0.01},
@@ -45,7 +45,7 @@ const BIOME_CONFIG = {
 		"height_multiplier": 1.0,
 		"noise_threshold": 0.0,
 		"objects": {
-			"grass": {"weight": 93, "density": 0.1},
+			"grass": {"weight": 92, "density": 0.005},
 			"stone": {"weight": 3, "density": 0.01},
 			"tree": {"weight": 2, "density": 0.01},
 			"berry_bush" : {"weight": 2, "density": 0.04},
@@ -70,7 +70,12 @@ var biome_noise: FastNoiseLite
 
 @export var world_size := 500
 @export var height_max := 10.0
-@export var visible_mesh_range := 120.0
+@export var terrain_visible_range := 100.0
+@export var grass_visible_range := 90.0
+@export var objects_visible_range := 100.0
+@export var buildings_visible_range := 100.0
+@export var items_visible_range := 100.0
+@export var mobs_visible_range := 100.0
 const WATER_LEVEL := -5.5
 const spacing := 1.0     # Расстояние между вершинами
 # object gen
@@ -85,6 +90,12 @@ const noise_scale := 5.0
 const ground_material := preload("res://scenes/world/world_material.tres")
 const water_material := preload("res://scenes/world/water_material.tres")
 
+# Grass
+const GRASS_DENSITY := 0.5      # вероятность травы на точку
+const GRASS_SPAWN_STEP := 0.5
+const GRASS_SCALE := Vector3(0.5, 0.5, 0.5)
+const grass_mesh := preload("res://res/models/grass/grass.res")
+
 const VARS_WHITELIST := [
 	"full", # berry_bush
 	"corruption_size", # heart
@@ -94,6 +105,7 @@ const VARS_WHITELIST := [
 	"complete",
 	"fuel",
 	# ========
+	"lvl_cost", # loot_chest
 ]
 
 var server: bool
@@ -142,6 +154,7 @@ func _init_noise() -> void:
 	
 	fall_defense_area.set_size(world_size)
 	weather.env.setup()
+	#NodeOptimizer.start()
 
 
 func _generate_terrain() -> void:
@@ -209,12 +222,80 @@ func _generate_terrain() -> void:
 			var collision = CollisionShape3D.new()
 			mesh_instance.mesh = mesh
 			collision.shape = mesh_instance.mesh.create_trimesh_shape()
-			mesh_instance.visibility_range_end = visible_mesh_range
+			mesh_instance.visibility_range_end = terrain_visible_range
 			mesh_instance.material_overlay = ground_material
 			mesh_instance.set_layer_mask_value(2, true) # Enable shadow decal support
 			mesh_instance.set_layer_mask_value(3, true) # Enable corruption decal support
+			collision.add_to_group("optimized_sync")
 			terrain.call_deferred("add_child", mesh_instance)
 			terrain.call_deferred("add_child", collision)
+
+func _generate_grass() -> void:
+	G.screen_text.text("Generating Grass...")
+	await get_tree().process_frame
+	
+	var offset := (world_size - 1) * spacing / 2.0
+	var chunks_count = ceili(float(world_size) / float(CHUNK_SIZE))
+	var rng := RandomNumberGenerator.new()
+	rng.seed = world_seed + 999  # отдельный seed чтобы не мешать объектам
+	
+	for chunk_z in range(chunks_count):
+		for chunk_x in range(chunks_count):
+			var start_x = chunk_x * CHUNK_SIZE
+			var start_z = chunk_z * CHUNK_SIZE
+			var end_x = mini(start_x + CHUNK_SIZE, world_size - 1)
+			var end_z = mini(start_z + CHUNK_SIZE, world_size - 1)
+			
+			# Собираем позиции травы в этом чанке
+			var transforms: Array[Transform3D] = []
+			
+			var gx := float(start_x)
+			while gx < end_x:
+				var gz := float(start_z)
+				while gz < end_z:
+					var world_x = gx * spacing - offset
+					var world_z = gz * spacing - offset
+					
+					# Проверяем биом — трава только в лесу и равнине
+					var biome_val = biome_noise.get_noise_2d(world_x / 20.0, world_z / 20.0)
+					var biome = _get_biome(biome_val, world_x, world_z)
+					
+					if biome == Biome.FOREST or biome == Biome.PLAINS:
+						if rng.randf() < GRASS_DENSITY:
+							var spawn_y = _get_height(world_x, world_z)
+							if spawn_y >= WATER_LEVEL:
+								# Случайный поворот и небольшой разброс позиции
+								var offset_x = rng.randf_range(-0.5, 0.5)
+								var offset_z = rng.randf_range(-0.5, 0.5)
+								var rot_y = rng.randf() * TAU
+								
+								var t := Transform3D()
+								t = t.rotated(Vector3.UP, rot_y)
+								t = t.scaled(GRASS_SCALE)
+								t.origin = Vector3(world_x + offset_x, spawn_y, world_z + offset_z)
+								transforms.append(t)
+					
+					gz += GRASS_SPAWN_STEP
+				gx += GRASS_SPAWN_STEP
+			
+			if transforms.is_empty():
+				continue
+			
+			# Создаём MultiMeshInstance3D для этого чанка
+			var mmi := MultiMeshInstance3D.new()
+			var mm := MultiMesh.new()
+			mm.transform_format = MultiMesh.TRANSFORM_3D
+			mm.mesh = grass_mesh
+			mm.instance_count = transforms.size()
+			
+			for i in transforms.size():
+				mm.set_instance_transform(i, transforms[i])
+			
+			mmi.multimesh = mm
+			mmi.visibility_range_end = grass_visible_range
+			mmi.set_layer_mask_value(2, true) # Enable shadow decal support
+			mmi.set_layer_mask_value(3, true) # Enable corruption decal support
+			terrain.call_deferred("add_child", mmi)
 
 func _generate_water() -> void:
 	var offset := (world_size - 1) * spacing / 2.0
@@ -279,7 +360,7 @@ func _generate_water() -> void:
 			var mesh_instance := MeshInstance3D.new()
 			mesh_instance.mesh = st.commit()
 			mesh_instance.material_override = water_material
-			mesh_instance.visibility_range_end = visible_mesh_range
+			mesh_instance.visibility_range_end = terrain_visible_range
 			terrain.call_deferred("add_child", mesh_instance)
 
 
@@ -287,7 +368,6 @@ func _generate_objects() -> void:
 	G.screen_text.text("Spawning objects...")
 	await get_tree().process_frame
 	
-	# Генерируем все объекты одновременно
 	var offset := (world_size - 1) * spacing / 2.0
 	var rng = RandomNumberGenerator.new()
 	rng.seed = int(world_seed)
@@ -320,12 +400,44 @@ func _generate_objects() -> void:
 			
 			gz += OBJ_SPAWN_STEP
 		gx += OBJ_SPAWN_STEP
+
+func _generate_loot_chests() -> void:
+	G.screen_text.text("Spawning loot...")
+	await get_tree().process_frame
 	
+	var offset := (world_size - 1) * spacing / 2.0
+	var rng = RandomNumberGenerator.new()
+	rng.seed = int(world_seed)
+	
+	var gx = 0
+	var gz = 0
+	while gx < world_size:
+		gz = 0
+		while gz < world_size:
+			var world_x = gx * spacing - offset
+			var world_z = gz * spacing - offset
+			var obj_scene = R.objects.get("loot_chest")["scene"]
+			if obj_scene and randf() < 0.001:
+				var instance = obj_scene.instantiate()
+				var spawn_y = _get_height(world_x, world_z)
+				instance.position = Vector3(world_x, spawn_y, world_z)
+				instance.lvl_cost = randi_range(2, 8)
+				G.environment.call_deferred("add_child", instance, true)
+			
+			gz += OBJ_SPAWN_STEP
+		gx += OBJ_SPAWN_STEP
+
+func _generate_items() -> void:
 	G.screen_text.text("Spawning items...")
 	await get_tree().process_frame
 	
+	var offset := (world_size - 1) * spacing / 2.0
+	var rng = RandomNumberGenerator.new()
+	rng.seed = int(world_seed)
+	
 	# Раскидываем предметы по миру
-	gx = 0
+	var gx = 0
+	var gz = 0
 	while gx < world_size:
 		gz = 0
 		while gz < world_size:
@@ -343,30 +455,42 @@ func _generate_objects() -> void:
 			
 			gz += DROP_SPAWN_STEP
 		gx += DROP_SPAWN_STEP
-	
-	G.screen_text.text("")
+		G.screen_text.text("")
 
 
 func _generate_world() -> void:
 	
-	weather.toggle_fog.rpc(false)
-	weather.toggle_rain.rpc(false)
-	weather.toggle_meteor_rain.rpc(false)
+	if server:
+		weather.toggle_fog.rpc(false)
+		weather.toggle_rain.rpc(false)
+		weather.toggle_meteor_rain.rpc(false)
 	
-	G.screen_text.text("Generating Terrain...")
-	await get_tree().process_frame
-	_generate_terrain()
+	if G.gui.main_menu.debug.terrain_gen.button_pressed:
+		G.screen_text.text("Generating Terrain...")
+		await get_tree().process_frame
+		_generate_terrain()
 	
-	G.screen_text.text("Generating Water...")
-	await get_tree().process_frame
-	_generate_water()
+	if G.gui.main_menu.debug.grass_gen.button_pressed:
+		G.screen_text.text("Generating Grass...")
+		await get_tree().process_frame
+		_generate_grass()
 	
-	G.screen_text.text("Spawning Grass...")
-	await get_tree().process_frame
+	if G.gui.main_menu.debug.water_gen.button_pressed:
+		G.screen_text.text("Generating Water...")
+		await get_tree().process_frame
+		_generate_water()
 	
 	G.screen_text.text("")
 	if !server: return
-	_generate_objects()
+	
+	if G.gui.main_menu.debug.objects_gen.button_pressed:
+		_generate_objects()
+	
+	if G.gui.main_menu.debug.loot_chests_gen.button_pressed:
+		_generate_loot_chests()
+	
+	if G.gui.main_menu.debug.items_gen.button_pressed:
+		_generate_items()
 
 
 func _get_height(world_x: float, world_z: float) -> float:
@@ -556,13 +680,20 @@ func load_world() -> void:
 	server = true # Обычно загрузку делает только сервер
 	
 	# Пересоздаем террейн
-	G.screen_text.text("Generating Terrain...")
-	await get_tree().process_frame
 	_init_noise()
-	_generate_terrain()
-	G.screen_text.text("Generating Water...")
-	await get_tree().process_frame
-	_generate_water()
+	
+	if G.gui.main_menu.debug.terrain_gen.button_pressed:
+		G.screen_text.text("Generating Terrain...")
+		await get_tree().process_frame
+		_generate_terrain()
+	if G.gui.main_menu.debug.grass_gen.button_pressed:
+		G.screen_text.text("Generating Grass...")
+		await get_tree().process_frame
+		_generate_grass()
+	if G.gui.main_menu.debug.water_gen.button_pressed:
+		G.screen_text.text("Generating Water...")
+		await get_tree().process_frame
+		_generate_water()
 	
 	G.screen_text.text("Loading Data...")
 	await get_tree().process_frame
@@ -572,12 +703,14 @@ func load_world() -> void:
 		var obj_name = obj_data["name"]
 		
 		if obj_data.has("is_drop"):
+			if !G.gui.main_menu.debug.items_gen.button_pressed: return
 			# Загрузка предметов (дропа)
 			var item_instance = R.item.instantiate()
 			item_instance.position = pos
 			item_instance.nname = obj_name
 			G.environment.add_child(item_instance, true)
 		else:
+			if !G.gui.main_menu.debug.objects_gen.button_pressed: return
 			# Загрузка статичных объектов (деревья, руда)
 			var obj_scene = R.objects.get(obj_name)["scene"]
 			if obj_scene:
@@ -624,16 +757,17 @@ func load_world() -> void:
 					instance.set(var_name, final_value)
 			G.environment.add_child(instance, true)
 			instance.get_node("HealthComponent").current_health = obj_data["hp"]
-	
-	# Спавним мобов
-	for mob_data in data["mobs"]:
-		var pos = Vector3(mob_data["pos"][0], mob_data["pos"][1], mob_data["pos"][2])
-		var mob_scene = R.mobs.get(mob_data["name"])["scene"]
-		if mob_scene:
-			var instance = mob_scene.instantiate()
-			instance.position = pos
-			G.environment.add_child(instance, true)
-			instance.get_node("HealthComponent").current_health = mob_data["hp"]
+
+	if G.gui.main_menu.debug.mobs_spawn.button_pressed:
+		# Спавним мобов
+		for mob_data in data["mobs"]:
+			var pos = Vector3(mob_data["pos"][0], mob_data["pos"][1], mob_data["pos"][2])
+			var mob_scene = R.mobs.get(mob_data["name"])["scene"]
+			if mob_scene:
+				var instance = mob_scene.instantiate()
+				instance.position = pos
+				G.environment.add_child(instance, true)
+				instance.get_node("HealthComponent").current_health = mob_data["hp"]
 	
 	G.screen_text.text("")
 	print("World loaded from: ", path)

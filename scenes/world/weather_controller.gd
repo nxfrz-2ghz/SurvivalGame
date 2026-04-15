@@ -58,7 +58,7 @@ func toggle_meteor_rain(is_active: bool) -> void:
 	var target_fog_color := Color.from_rgba8(145,54,13) if is_active else Color.from_rgba8(132,141,155)
 	
 	# Плавно меняем цвет за 2.0 секунды
-	fog_tween.tween_property(env.environment, "fog_light_color", target_fog_color, 2.0)\
+	meteor_rain_tween.tween_property(env.environment, "fog_light_color", target_fog_color, 2.0)\
 		.set_trans(Tween.TRANS_SINE)\
 		.set_ease(Tween.EASE_IN_OUT)
 	
@@ -90,5 +90,5 @@ func _on_timer_timeout() -> void:
 		toggle_fog.rpc(true)
 	if randf() < 0.15:
 		toggle_rain.rpc(true)
-	if randf() < 0.05:
+	if randf() < 0.01:
 		toggle_meteor_rain.rpc(true)

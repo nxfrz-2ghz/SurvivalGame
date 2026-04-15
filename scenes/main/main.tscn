@@ -21,9 +21,12 @@
 [ext_resource type="Script" uid="uid://d25jbatuakb3x" path="res://scenes/gui/stamina_bar.gd" id="15_necax"]
 [ext_resource type="Script" uid="uid://bni0q2stunvev" path="res://scenes/gui/debug.gd" id="15_p8abn"]
 [ext_resource type="Script" uid="uid://du8hko50uql36" path="res://scenes/gui/bar_box.gd" id="16_37hlw"]
+[ext_resource type="Script" uid="uid://bh5milvjdob5o" path="res://scenes/gui/choosed_item_name.gd" id="16_os81g"]
 [ext_resource type="Texture2D" uid="uid://dcrq1x4627cg7" path="res://res/sprites/items/star.png" id="17_6llfj"]
 [ext_resource type="Script" uid="uid://bryy4ri3hhmgs" path="res://scenes/gui/screen_text.gd" id="17_m4h2d"]
 [ext_resource type="Texture2D" uid="uid://dcyjc6tphl14d" path="res://res/sprites/items/meat/raw_meat.png" id="18_0bhws"]
+[ext_resource type="FontFile" uid="uid://68qmd4p0lr6p" path="res://res/fonts/WANTED.ttf" id="18_6w6mm"]
+[ext_resource type="Script" uid="uid://ba74co5137wjp" path="res://scenes/gui/heart_cardiogram.gd" id="20_r1bmu"]
 [ext_resource type="Script" uid="uid://1edbclpx56bk" path="res://scenes/gui/background.gd" id="20_tbnf8"]
 [ext_resource type="Script" uid="uid://dytq3mhb6tscq" path="res://scenes/gui/settings_buttons/buttons/fullscreen_button.gd" id="22_37hlw"]
 [ext_resource type="Script" uid="uid://deo4mus5ovkdy" path="res://scenes/gui/settings_buttons/buttons/vsync_button.gd" id="23_6llfj"]
@@ -33,7 +36,17 @@
 [ext_resource type="Script" uid="uid://dddkx60gqd0pf" path="res://scenes/gui/load_chooser.gd" id="25_ii537"]
 [ext_resource type="Script" uid="uid://c4hd2l8yalwss" path="res://scenes/gui/delete_world_button.gd" id="26_rofvo"]
 [ext_resource type="Script" uid="uid://coxg27urrssnb" path="res://scenes/gui/settings_buttons/buttons/lang_button.gd" id="27_tbnf8"]
-[ext_resource type="PackedScene" uid="uid://bylhfkt27b0hb" path="res://components/cursor_controller/cursor_controller.tscn" id="30_gkmcc"]
+[ext_resource type="Script" uid="uid://dgmy8kx2r10fi" path="res://scenes/gui/settings_buttons/buttons/shadows_button.gd" id="33_1k3ck"]
+[ext_resource type="Script" uid="uid://cmhic80ucvwxl" path="res://scenes/gui/settings_buttons/buttons/fog_button.gd" id="35_5nwjq"]
+[ext_resource type="Script" uid="uid://cch7xp3kou6hd" path="res://scenes/gui/restart_button.gd" id="36_6g32y"]
+[ext_resource type="Script" uid="uid://qn5hjxtc0hcf" path="res://scenes/gui/settings_buttons/buttons/contrast_grass_button.gd" id="36_g2upo"]
+[ext_resource type="Script" uid="uid://6h77dpruyvj4" path="res://scenes/gui/debug_menu.gd" id="37_62f45"]
+[ext_resource type="Script" uid="uid://bukq26l6kjfx0" path="res://scenes/gui/setting_lines/line_edits/mesh_visibility_range.gd" id="37_i6fjx"]
+[ext_resource type="Script" uid="uid://ds0nxr7af78nr" path="res://scenes/gui/setting_lines/line_edits/grass_visibility_range.gd" id="38_7dg2i"]
+[ext_resource type="Script" uid="uid://cotb4ieafcayn" path="res://scenes/gui/setting_lines/line_edits/objects_visibility_range.gd" id="43_wcrab"]
+[ext_resource type="Script" uid="uid://cskiodujmd078" path="res://scenes/gui/setting_lines/line_edits/buildings_visibility_range.gd" id="44_gohbf"]
+[ext_resource type="Script" uid="uid://bwv87qx5mfgbm" path="res://scenes/gui/setting_lines/line_edits/items_visibility_range.gd" id="45_jucdw"]
+[ext_resource type="Script" uid="uid://b1ui5htwlne0y" path="res://scenes/gui/setting_lines/line_edits/mobs_visibility_range.gd" id="46_6miv3"]
 
 [sub_resource type="GDScript" id="GDScript_ou6is"]
 script/source = "extends Node3D
@@ -104,9 +117,6 @@ corner_radius_bottom_right = 12
 bg_color = Color(0.70980394, 0.70980394, 0.70980394, 0.47058824)
 corner_radius_top_right = 12
 corner_radius_bottom_right = 12
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_r1bmu"]
-load_path = "res://.godot/imported/Screenshot_20260306_182814.png-96c9f26a1f49b2c5f145ddfdafa89e16.ctex"
 
 [sub_resource type="Animation" id="Animation_necax"]
 length = 0.001
@@ -183,6 +193,13 @@ _data = {
 &"show": SubResource("Animation_raeie")
 }
 
+[sub_resource type="GDScript" id="GDScript_wcrab"]
+script/source = "extends Timer
+
+func _ready() -> void:
+	G.timer_1sec = self
+"
+
 [node name="Main" type="Node" unique_id=885458657]
 script = ExtResource("1_l3cfh")
 
@@ -196,7 +213,10 @@ _spawnable_scenes = PackedStringArray("uid://dp83o7qw4ht4w")
 spawn_path = NodePath("..")
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="Environment" unique_id=2101221164]
-_spawnable_scenes = PackedStringArray("uid://darxc13rlkwt7", "uid://cddn37g14j7yf", "uid://s322lfir2gd7", "uid://uwmukk060f86", "uid://qg4g44ocaejc")
+process_thread_group = 2
+process_thread_group_order = 0
+process_thread_messages = 0
+_spawnable_scenes = PackedStringArray("uid://darxc13rlkwt7", "uid://cddn37g14j7yf", "uid://s322lfir2gd7", "uid://uwmukk060f86", "uid://qg4g44ocaejc", "")
 spawn_path = NodePath("..")
 script = ExtResource("3_nvumn")
 
@@ -216,7 +236,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("7_0bhws")
 
-[node name="HealthVignette" type="TextureRect" parent="GUI/HUD" unique_id=1049265694]
+[node name="FearVignette" type="TextureRect" parent="GUI/HUD" unique_id=1049265694]
 modulate = Color(0, 0, 0, 0)
 anchors_preset = 15
 anchor_right = 1.0
@@ -603,11 +623,58 @@ max_value = 1.0
 value = 1.0
 show_percentage = false
 
+[node name="ChoosedItemDisplay" type="Label" parent="GUI/HUD" unique_id=1938713663]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = 168.0
+offset_right = 20.0
+offset_bottom = 197.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("16_os81g")
+
 [node name="Debug" type="Label" parent="GUI/HUD" unique_id=350619231]
 visible = false
 offset_right = 40.0
 offset_bottom = 77.0
 script = ExtResource("15_p8abn")
+
+[node name="HeartCardiogram" type="Control" parent="GUI/HUD" unique_id=552919460]
+custom_minimum_size = Vector2(150, 50)
+layout_mode = 3
+anchors_preset = 0
+offset_left = 34.0
+offset_top = 507.855
+offset_right = 184.0
+offset_bottom = 557.855
+size_flags_horizontal = 0
+script = ExtResource("20_r1bmu")
+
+[node name="Panel" type="Panel" parent="GUI/HUD/HeartCardiogram" unique_id=1527983574]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="GUI/HUD/HeartCardiogram" unique_id=309557630]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -16.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("18_6w6mm")
 
 [node name="BarBox" type="VBoxContainer" parent="GUI/HUD" unique_id=79276170]
 anchors_preset = 2
@@ -669,7 +736,6 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
-texture = SubResource("CompressedTexture2D_r1bmu")
 expand_mode = 1
 stretch_mode = 3
 script = ExtResource("20_tbnf8")
@@ -885,6 +951,13 @@ text = "TGL_HOST"
 script = ExtResource("25_7nlll")
 key = "host"
 
+[node name="AutoSaveButton" type="CheckButton" parent="GUI/MainMenu/HBoxContainer/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer" unique_id=582361117]
+layout_mode = 2
+button_pressed = true
+text = "TGL_AUTOSAVE"
+script = ExtResource("25_7nlll")
+key = "autosave"
+
 [node name="FullscreenButton" type="CheckButton" parent="GUI/MainMenu/HBoxContainer/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer" unique_id=1870858388]
 layout_mode = 2
 text = "TGL_FULSCRN"
@@ -898,12 +971,24 @@ text = "Vsync"
 script = ExtResource("23_6llfj")
 key = "vsync"
 
-[node name="AutoSaveButton" type="CheckButton" parent="GUI/MainMenu/HBoxContainer/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer" unique_id=582361117]
+[node name="ShadowsButton" type="CheckButton" parent="GUI/MainMenu/HBoxContainer/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer" unique_id=1848598357]
 layout_mode = 2
 button_pressed = true
-text = "TGL_AUTOSAVE"
-script = ExtResource("25_7nlll")
-key = "autosave"
+text = "TGL_SHADOWS"
+script = ExtResource("33_1k3ck")
+key = "shadows"
+
+[node name="FogButton" type="CheckButton" parent="GUI/MainMenu/HBoxContainer/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer" unique_id=184710388]
+layout_mode = 2
+button_pressed = true
+text = "TGL_FOG"
+script = ExtResource("35_5nwjq")
+
+[node name="ContrastGrassButton" type="CheckButton" parent="GUI/MainMenu/HBoxContainer/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer" unique_id=1629504014]
+layout_mode = 2
+text = "TGL_CONTRAST_GRASS"
+script = ExtResource("36_g2upo")
+key = "contrast_grass"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="GUI/MainMenu/HBoxContainer" unique_id=1822817579]
 layout_mode = 2
@@ -995,12 +1080,188 @@ layout_mode = 2
 script = ExtResource("24_i7in8")
 key = "player_name"
 
-[node name="LeaveButton" type="Button" parent="GUI/MainMenu" unique_id=1336085257]
+[node name="SystemButtons" type="VBoxContainer" parent="GUI/MainMenu" unique_id=1181554613]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+
+[node name="RestartButton" type="Button" parent="GUI/MainMenu/SystemButtons" unique_id=399177720]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+text = "BTN_RESTART_GAME"
+script = ExtResource("36_6g32y")
+
+[node name="LeaveButton" type="Button" parent="GUI/MainMenu/SystemButtons" unique_id=1336085257]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
 text = "BTN_LEAVE_GAME"
 script = ExtResource("11_blune")
+
+[node name="DebugMenu" type="PanelContainer" parent="GUI/MainMenu" unique_id=1340887986]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("37_62f45")
+
+[node name="MarginContainer" type="MarginContainer" parent="GUI/MainMenu/DebugMenu" unique_id=1740185649]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GUI/MainMenu/DebugMenu/MarginContainer" unique_id=1777008638]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="GUI/MainMenu/DebugMenu/MarginContainer/VBoxContainer" unique_id=1328500032]
+layout_mode = 2
+text = "[[[WORLD_GEN]]]"
+
+[node name="TerrainGen" type="CheckButton" parent="GUI/MainMenu/DebugMenu/MarginContainer/VBoxContainer" unique_id=6306571]
+layout_mode = 2
+button_pressed = true
+text = "terrain_gen"
+script = ExtResource("25_7nlll")
+key = "terrain_gen"
+
+[node name="WaterGen" type="CheckButton" parent="GUI/MainMenu/DebugMenu/MarginContainer/VBoxContainer" unique_id=948172396]
+layout_mode = 2
+button_pressed = true
+text = "water_gen"
+script = ExtResource("25_7nlll")
+key = "water_gen"
+
+[node name="ObjectsGen" type="CheckButton" parent="GUI/MainMenu/DebugMenu/MarginContainer/VBoxContainer" unique_id=1141441231]
+layout_mode = 2
+button_pressed = true
+text = "object_gen"
+script = ExtResource("25_7nlll")
+key = "object_gen"
+
+[node name="LootChestsGen" type="CheckButton" parent="GUI/MainMenu/DebugMenu/MarginContainer/VBoxContainer" unique_id=1550692929]
+layout_mode = 2
+button_pressed = true
+text = "loot_chests_gen"
+script = ExtResource("25_7nlll")
+key = "loot_chests_gen"
+
+[node name="GrassGen" type="CheckButton" parent="GUI/MainMenu/DebugMenu/MarginContainer/VBoxContainer" unique_id=736645429]
+layout_mode = 2
+button_pressed = true
+text = "grass_gen"
+script = ExtResource("25_7nlll")
+key = "grass_gen"
+
+[node name="ItemsGen" type="CheckButton" parent="GUI/MainMenu/DebugMenu/MarginContainer/VBoxContainer" unique_id=1406607478]
+layout_mode = 2
+button_pressed = true
+text = "items_gen"
+script = ExtResource("25_7nlll")
+key = "items_gen"
+
+[node name="MobsSpawn" type="CheckButton" parent="GUI/MainMenu/DebugMenu/MarginContainer/VBoxContainer" unique_id=850672718]
+layout_mode = 2
+button_pressed = true
+text = "mobs_spawn"
+script = ExtResource("25_7nlll")
+key = "mobs_spawn"
+
+[node name="Label2" type="Label" parent="GUI/MainMenu/DebugMenu/MarginContainer/VBoxContainer" unique_id=1903937641]
+layout_mode = 2
+text = "[[[GRAPHICS]]]"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GUI/MainMenu/DebugMenu/MarginContainer/VBoxContainer" unique_id=125463333]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="GUI/MainMenu/DebugMenu/MarginContainer/VBoxContainer/HBoxContainer" unique_id=224652659]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SET_VISIBILITY_RANGE_TERRAIN"
+
+[node name="TerrainVisibilityRange" type="LineEdit" parent="GUI/MainMenu/DebugMenu/MarginContainer/VBoxContainer/HBoxContainer" unique_id=235006795]
+layout_mode = 2
+text = "100"
+placeholder_text = "100"
+script = ExtResource("37_i6fjx")
+key = "terrain_visible_range"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="GUI/MainMenu/DebugMenu/MarginContainer/VBoxContainer" unique_id=1723209987]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="GUI/MainMenu/DebugMenu/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1267093077]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SET_VISIBILITY_RANGE_GRASS"
+
+[node name="GrassVisibilityRange" type="LineEdit" parent="GUI/MainMenu/DebugMenu/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=748252981]
+layout_mode = 2
+text = "95"
+placeholder_text = "95"
+script = ExtResource("38_7dg2i")
+key = "grass_visible_range"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="GUI/MainMenu/DebugMenu/MarginContainer/VBoxContainer" unique_id=279440742]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="GUI/MainMenu/DebugMenu/MarginContainer/VBoxContainer/HBoxContainer3" unique_id=1932609774]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SET_VISIBILITY_RANGE_OBJECTS"
+
+[node name="ObjectsVisibilityRange" type="LineEdit" parent="GUI/MainMenu/DebugMenu/MarginContainer/VBoxContainer/HBoxContainer3" unique_id=2139709487]
+layout_mode = 2
+text = "100"
+placeholder_text = "100"
+script = ExtResource("43_wcrab")
+key = "objects_visible_range"
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="GUI/MainMenu/DebugMenu/MarginContainer/VBoxContainer" unique_id=329820414]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="GUI/MainMenu/DebugMenu/MarginContainer/VBoxContainer/HBoxContainer4" unique_id=181131316]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SET_VISIBILITY_RANGE_BUILDINGS"
+
+[node name="BuildingsVisibilityRange" type="LineEdit" parent="GUI/MainMenu/DebugMenu/MarginContainer/VBoxContainer/HBoxContainer4" unique_id=1773616938]
+layout_mode = 2
+text = "100"
+placeholder_text = "100"
+script = ExtResource("44_gohbf")
+key = "buildings_visible_range"
+
+[node name="HBoxContainer6" type="HBoxContainer" parent="GUI/MainMenu/DebugMenu/MarginContainer/VBoxContainer" unique_id=379781485]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="GUI/MainMenu/DebugMenu/MarginContainer/VBoxContainer/HBoxContainer6" unique_id=130353048]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SET_VISIBILITY_RANGE_ITEMS"
+
+[node name="ItemsVisibilityRange" type="LineEdit" parent="GUI/MainMenu/DebugMenu/MarginContainer/VBoxContainer/HBoxContainer6" unique_id=1244710843]
+layout_mode = 2
+text = "100"
+placeholder_text = "100"
+script = ExtResource("45_jucdw")
+key = "items_visible_range"
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="GUI/MainMenu/DebugMenu/MarginContainer/VBoxContainer" unique_id=517431130]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="GUI/MainMenu/DebugMenu/MarginContainer/VBoxContainer/HBoxContainer5" unique_id=1123208767]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SET_VISIBILITY_RANGE_MOBS"
+
+[node name="MobsVisibilityRange" type="LineEdit" parent="GUI/MainMenu/DebugMenu/MarginContainer/VBoxContainer/HBoxContainer5" unique_id=166469858]
+layout_mode = 2
+text = "100"
+placeholder_text = "100"
+script = ExtResource("46_6miv3")
+key = "mobs_visible_range"
 
 [node name="GameMenu" type="PanelContainer" parent="GUI" unique_id=742273661]
 visible = false
@@ -1043,15 +1304,19 @@ text = "LBL_EXIT_WITHOUT_SAVE"
 layout_mode = 2
 text = "LBL_SAVE_EXIT"
 
-[node name="CursorController" parent="." unique_id=1229743695 instance=ExtResource("30_gkmcc")]
+[node name="TimerOneSecond" type="Timer" parent="." unique_id=753860230]
+autostart = true
+script = SubResource("GDScript_wcrab")
 
 [connection signal="spawned" from="Environment/PlayerSpawner" to="." method="_on_player_spawner_spawned"]
 [connection signal="animation_finished" from="GUI/TextMessage/AnimationPlayer" to="GUI/TextMessage" method="_on_animation_player_animation_finished"]
 [connection signal="pressed" from="GUI/MainMenu/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/CreateButton" to="." method="_on_create_button_pressed"]
+[connection signal="item_selected" from="GUI/MainMenu/VBoxContainer/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer/WorldChooser" to="GUI/MainMenu/VBoxContainer/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer/WorldChooser" method="_on_item_selected"]
 [connection signal="pressed" from="GUI/MainMenu/VBoxContainer/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer/DeleteWorldButton" to="GUI/MainMenu/VBoxContainer/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer/DeleteWorldButton" method="_on_pressed"]
 [connection signal="pressed" from="GUI/MainMenu/VBoxContainer/PanelContainer2/MarginContainer/VBoxContainer/LoadButton" to="." method="_on_load_button_pressed"]
 [connection signal="pressed" from="GUI/MainMenu/VBoxContainer/PanelContainer3/MarginContainer/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
-[connection signal="pressed" from="GUI/MainMenu/LeaveButton" to="GUI/MainMenu/LeaveButton" method="_on_pressed"]
+[connection signal="pressed" from="GUI/MainMenu/SystemButtons/RestartButton" to="GUI/MainMenu/SystemButtons/RestartButton" method="_on_pressed"]
+[connection signal="pressed" from="GUI/MainMenu/SystemButtons/LeaveButton" to="GUI/MainMenu/SystemButtons/LeaveButton" method="_on_pressed"]
 [connection signal="pressed" from="GUI/GameMenu/MarginContainer/VBoxContainer/Continue" to="GUI/GameMenu" method="_on_continue_pressed"]
 [connection signal="pressed" from="GUI/GameMenu/MarginContainer/VBoxContainer/Save" to="GUI/GameMenu" method="_on_save_pressed"]
 [connection signal="pressed" from="GUI/GameMenu/MarginContainer/VBoxContainer/ExitWithoutSave" to="GUI/GameMenu" method="_on_exit_without_save_pressed"]

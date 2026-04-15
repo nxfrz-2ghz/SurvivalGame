@@ -18,3 +18,4 @@ fog_density = 1.0
 fog_depth_begin = 20.0
 volumetric_fog_enabled = true
 volumetric_fog_density = 0.0
+adjustment_enabled = true

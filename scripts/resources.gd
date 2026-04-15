@@ -108,7 +108,7 @@ const music := [
 const exchangeable_items := {
 	"campfire": {
 		"raw_berry": {"amount": 1, "output": "cooked_berry", "speed": 3},
-		"raw_meat":  {"amount": 1, "output": "cooked_meet", "speed": 5},
+		"raw_meat":  {"amount": 1, "output": "cooked_meat", "speed": 5},
 	},
 	"furnace": {
 		"copper_ore": {"amount": 1, "output": "copper_ingot", "speed": 8},
@@ -144,6 +144,7 @@ const prefabs := {
 	"meteor": preload("res://scenes/prefabs/meteorite/meteorite_rigid.tscn"),
 	"explosion": preload("res://scenes/prefabs/explosion/explosion_3d.tscn"),
 	"exp_sphere": preload("res://scenes/prefabs/exp_sphere/exp_sphere.tscn"),
+	"fall_ray": preload("res://components/fall_ray/fall_ray.tscn"),
 }
 
 const mobs := {
@@ -165,7 +166,7 @@ const mobs := {
 	"long": {
 		"texture": "res://res/sprites/mobs/pegur/front.png",
 		"scene": preload("res://scenes/mobs/long/long.tscn"),
-		"requirements": ["night", ],
+		"requirements": ["night", "NTK_5"],
 		"spawn_weight": 1,
 	},
 	"voron": {
@@ -176,6 +177,10 @@ const mobs := {
 	"evil_tree": {
 		"texture": "res://res/sprites/mobs/evil_tree/evil_tree.png",
 		"scene": preload("res://scenes/mobs/evil_tree/evil_tree.tscn"),
+	},
+	"chest_mimic": {
+		"texture": "res://res/sprites/mobs/chest_mimic/chest_mimic.png",
+		"scene": preload("res://scenes/mobs/chest_mimic/chest_mimic.tscn"),
 	},
 }
 
@@ -190,6 +195,15 @@ const buildings := {
 	"brick_wall": {
 		"scene": preload("res://scenes/building/wall/brick/brick_wall.tscn"),
 	},
+	"copper_wall": {
+		"scene": preload("res://scenes/building/wall/copper/copper_wall.tscn"),
+	},
+	"iron_wall": {
+		"scene": preload("res://scenes/building/wall/iron/iron_wall.tscn"),
+	},
+	"steel_wall": {
+		"scene": preload("res://scenes/building/wall/steel/steel_wall.tscn"),
+	},
 	# Блоки Blocks
 	"wood_block": {
 		"scene": preload("res://scenes/building/block/wood/wood_block.tscn"),
@@ -199,6 +213,15 @@ const buildings := {
 	},
 	"brick_block": {
 		"scene": preload("res://scenes/building/block/brick/brick_block.tscn"),
+	},
+	"copper_block": {
+		"scene": preload("res://scenes/building/block/copper/copper_block.tscn"),
+	},
+	"iron_block": {
+		"scene": preload("res://scenes/building/block/iron/iron_block.tscn"),
+	},
+	"steel_block": {
+		"scene": preload("res://scenes/building/block/steel/steel_block.tscn"),
 	},
 }
 
@@ -253,6 +276,9 @@ const objects := {
 	"heart": {
 		"scene": preload("res://scenes/objects/heart/heart.tscn"),
 	},
+	"loot_chest": {
+		"scene": preload("res://scenes/objects/loot_chest/loot_chest.tscn"),
+	},
 }
 
 const items := {
@@ -287,6 +313,36 @@ const items := {
 		"is_building": true,
 		"build_type": "wall",
 	},
+	"copper_wall": {
+		"texture": preload("res://res/sprites/items/building/wall.png"),
+		"recipe": {
+			"copper_ingot":4,
+		},
+		"amount_craft": 2,
+		"stack_size": 10,
+		"is_building": true,
+		"build_type": "wall",
+	},
+	"iron_wall": {
+		"texture": preload("res://res/sprites/items/building/wall.png"),
+		"recipe": {
+			"iron_ingot":4,
+		},
+		"amount_craft": 2,
+		"stack_size": 10,
+		"is_building": true,
+		"build_type": "wall",
+	},
+	"steel_wall": {
+		"texture": preload("res://res/sprites/items/building/wall.png"),
+		"recipe": {
+			"steel_ingotr":4,
+		},
+		"amount_craft": 2,
+		"stack_size": 10,
+		"is_building": true,
+		"build_type": "wall",
+	},
 	"wood_block": {
 		"texture": preload("res://res/sprites/items/building/block.png"),
 		"recipe": {
@@ -311,6 +367,36 @@ const items := {
 		"texture": preload("res://res/sprites/items/building/block.png"),
 		"recipe": {
 			"brick":2,
+		},
+		"amount_craft": 2,
+		"stack_size": 30,
+		"is_building": true,
+		"build_type": "block",
+	},
+	"copper_block": {
+		"texture": preload("res://res/sprites/items/building/block.png"),
+		"recipe": {
+			"copper_ingot":2,
+		},
+		"amount_craft": 2,
+		"stack_size": 30,
+		"is_building": true,
+		"build_type": "block",
+	},
+	"iron_block": {
+		"texture": preload("res://res/sprites/items/building/block.png"),
+		"recipe": {
+			"iron_ingot":2,
+		},
+		"amount_craft": 2,
+		"stack_size": 30,
+		"is_building": true,
+		"build_type": "block",
+	},
+	"steel_block": {
+		"texture": preload("res://res/sprites/items/building/block.png"),
+		"recipe": {
+			"steel_ingot":2,
 		},
 		"amount_craft": 2,
 		"stack_size": 30,
@@ -441,7 +527,7 @@ const items := {
 		},
 	},
 	"copper_axe_ox1": {
-		"texture": preload("res://res/sprites/items/weapons/copper/copper_axe.png"),
+		"texture": preload("res://res/sprites/items/weapons/copper/copper_axe_ox1.png"),
 		"can_oxiding": "copper_axe_ox2",
 		"durability": 80,
 		"attack_speed": 0.9,
@@ -453,7 +539,7 @@ const items := {
 		},
 	},
 	"copper_pickaxe_ox1": {
-		"texture": preload("res://res/sprites/items/weapons/copper/copper_pickaxe.png"),
+		"texture": preload("res://res/sprites/items/weapons/copper/copper_pickaxe_ox1.png"),
 		"can_oxiding": "copper_pickaxe_ox2",
 		"durability": 80,
 		"attack_speed": 0.9,
@@ -465,7 +551,7 @@ const items := {
 		},
 	},
 	"copper_axe_ox2": {
-		"texture": preload("res://res/sprites/items/weapons/copper/copper_axe.png"),
+		"texture": preload("res://res/sprites/items/weapons/copper/copper_axe_ox2.png"),
 		"durability": 100,
 		"attack_speed": 0.7,
 		"damage": 2.9,
@@ -476,7 +562,7 @@ const items := {
 		},
 	},
 	"copper_pickaxe_ox2": {
-		"texture": preload("res://res/sprites/items/weapons/copper/copper_pickaxe.png"),
+		"texture": preload("res://res/sprites/items/weapons/copper/copper_pickaxe_ox2.png"),
 		"durability": 100,
 		"attack_speed": 0.7,
 		"damage": 2.9,
@@ -484,6 +570,7 @@ const items := {
 			"melee": 0.5,
 			"axe": 0.0,
 			"pickaxe": 1.1,
+			"pickaxe_lvl2": 0.5,
 		},
 	},
 	"iron_axe": {
@@ -548,6 +635,26 @@ const items := {
 			"pickaxe_lvl2": 1.2,
 		},
 	},
+	"steel_sword": {
+		"texture": preload("res://res/sprites/items/weapons/steel_sword.png"),
+		"recipe": {
+			"steel_ingot":5,
+			"log":3,
+		},
+		"stack_size": 1,
+		"durability": 650,
+		"attack_speed": 1.5,
+		"damage": 3.8,
+		"damage_types": {
+			"melee": 0.9,
+			"axe": 0.2,
+			"pickaxe": 0.1,
+		},
+		"throw_power": 12.0,
+		"throw_drop_chance": 0.9,
+		"billboard": false,
+		"explose": false,
+	},
 	"bomb": {
 		"texture": preload("res://res/sprites/items/weapons/bomb.png"),
 		"recipe": {
@@ -576,7 +683,7 @@ const items := {
 			"log":2,
 		},
 		"durability": 30,
-		"attack_speed":  0.5,
+		"attack_speed": 0.5,
 		"damage": 2.0,
 		"damage_types": {
 			"melee": 0.5,
@@ -586,25 +693,45 @@ const items := {
 		},
 		"can_change_state_buildings": true,
 	},
+	"wooden_torch": {
+		"texture": preload("res://res/sprites/items/weapons/wooden_torch.png"),
+		"recipe": {
+			"log":2,
+			"coal":1,
+		},
+		"light": {
+			"color": Color.GOLDENROD,
+			"energy": 1.0,
+		},
+		"damage": 2.0,
+	},
 	"raw_berry": {
 		"texture": preload("res://res/sprites/items/berry/raw_berry.png"),
 		"stack_size": 20,
 		"nutrition": 40,
+		"fear_affect": 0,
+		"attack_speed": 1.5,
 	},
 	"cooked_berry": {
 		"texture": preload("res://res/sprites/items/berry/cooked_berry.png"),
 		"stack_size": 20,
 		"nutrition": 80,
+		"fear_affect": 1,
+		"attack_speed": 1.5,
 	},
 	"raw_meat": {
 		"texture": preload("res://res/sprites/items/meat/raw_meat.png"),
 		"stack_size": 8,
 		"nutrition": 50,
+		"fear_affect": -2,
+		"attack_speed": 0.5,
 	},
-	"cooked_meet": {
+	"cooked_meat": {
 		"texture": preload("res://res/sprites/items/meat/cooked_meat.png"),
 		"stack_size": 8,
 		"nutrition": 200,
+		"fear_affect": 2,
+		"attack_speed": 0.7,
 	},
 	"log": {
 		"texture": preload("res://res/sprites/items/log.png"),
@@ -675,6 +802,19 @@ const items := {
 	"coal": {
 		"texture": preload("res://res/sprites/items/coal.png"),
 		"stack_size": 50,
+	},
+	"grass_fiber": {
+		"texture": preload("res://res/sprites/items/grass_fiber.png"),
+		"stack_size": 50,
+	},
+	"grass_fabric": {
+		"texture": preload("res://res/sprites/items/grass_fabric.png"),
+		"stack_size": 15,
+		"recipe": {
+			"grass_fiber": 5,
+		},
+		"heal": 0.5,
+		"attack_speed": 0.3,
 	},
 	"empty": {
 		"texture": preload("res://res/sprites/items/empty.png"),

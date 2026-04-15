@@ -31,8 +31,6 @@ func spawn_mob(mob_scene: PackedScene, position: Vector3) -> void:
 			mob_health.armor += 0.5
 	
 	G.environment.add_child(mob_instance, true)
-	
-	
 
 
 func _on_directional_light_3d_night_come() -> void:
@@ -82,8 +80,15 @@ func _on_spawn_timer_timeout() -> void:
 			# Проверка моба и требования как спавну
 			if R.mobs[mob_id].has("requirements"):
 				# Если требование моба не выполнимо, останавливаем
+				
+				# Ночные мобы
 				if R.mobs[mob_id]["requirements"].has("night"):
 					if not G.time_controller.night:
+						return
+				
+				# Мобы не спавнящиеся при низком прогрессе игрока (нет определенной заметки)
+				for note in G.player.progress_controller.notes:
+					if R.mobs[mob_id]["requirements"].has(note) and !G.player.progress_controller.unlocked_notes.has(note):
 						return
 			
 			# Спавн моба и остановка цикла поиска

@@ -29,6 +29,10 @@ TGL_HOST;HOST;ХОСТ
 TGL_FULSCRN;Fullscreen;Во весь экран
 TGL_LANG_SWITCH;"[EN]/ru";"en/[RU]"
 TGL_AUTOSAVE;Autosave;Автосохранение
+TGL_SHADOWS;Better Shadows;Улучшенные Тени
+TGL_FOG;FOG;Туман
+TGL_CONTRAST_GRASS;Contrast Grass;Контрастная трава
+BTN_RESTART_GAME;RESTART GAME;ПЕРЕЗАПУСТИТЬ ИГРУ
 BTN_LEAVE_GAME;LEAVE GAME...;ПОКИНУТЬ ИГРУ...
 
 LBL_CONTINUE;CONTINUE;ПРОДОЛЖИТЬ
@@ -59,6 +63,8 @@ NTK_9;Clay;Глина
 NTK_10;Iron ingot;Железный слиток
 NTK_11;Building;Строительство
 NTK_12;STEEL!;СТАЛЬ!
+NTK_13;Copper pickaxe;Медная кирка
+NTK_14;Magic rings;Магические кольца
 
 NTV_1;"It's unlikely you'll survive empty-handed! First, you need to somehow get some wood; any nearby stone will do for that [pick up a stone - F]";"С пустыми руками вряд-ли получится выжить! Для начало нужно как-нибудь добыть древесину, для этого подойдет любой близлежащий камень [подобрать камень - F]"
 NTV_2;"I managed to get some wood! But I don't want to use stone any more; I need to make some primitive tools from what I have. I can make stone tools: an axe requires stone[x2] and wood[x3], and a pickaxe requires stone[x3] and wood[x2]. To make anything, you need to place [Q] materials on the ground and start crafting [C].";"У меня получилось добыть древесину! Но дальше орудовать камнем желания нет, нужно сделать примитивные инструменты из того что есть. Я могу сделать каменные инструменты: для топора нужен камень[x2] и дерево[x3], а для кирки камень[x3] и дерево[x2]. Чтобы что-то сделать нужно сложить [Q] материалы на землю и начать крафт [C]."
@@ -72,6 +78,8 @@ NTV_9;"It looks like I've managed to dig up the clay, and if I put a few lumps i
 NTV_10;"After all, I was able to smelt this damn iron, now I can make cool, durable tools and even try to get steel!";"Все таки я смог переплавить это гребанное железо, теперь я могу делать крутые прочные инструменты и даже, попробовать получить сталь!"
 NTV_11;"Now I can build structures like houses from walls, floors, and ceilings (just look in the right direction to change the wall's direction), and with [R] I can rotate the structure 45 degrees to create slopes or roof tiles. Similar walls can be created from other materials as well.";"Теперь я могу строить постройки, например дома из стен, полов и потолка (достаточно посмотреть в нужную сторону, чтобы сменить направление стены), а на [R] могу повернуть постройку на 45 градусов для создания подъемов или черепицы крыш. Подобные стены можно создать и из других материалов"
 NTV_12;"Here it is, the most powerful alloy—steel—right now in my hands. Am I now the god of this world, or will it adapt to me?... I noticed that the creatures of this world have become much stronger a long time ago. I can find the recipe for creating a portal in this journal and leave this world! Finally, I'll return home.";"Вот он самый мощнейший сплав - сталь - прямо сейчас у меня на руках, теперь я бог этого мира, или он адаптируется под меня?... заметил, что еще давно существа этого мира стали намного сильнее. Я могу найти рецепт создания портала в этом дневнике и покинуть этот мир! Наконецто вернусь домой"
+NTV_13;"It looks like this pickaxe can oxidize and become stronger and more powerful if you hold it in your hand or use it for a while.";"Похоже эта кирка может окислится и стать прочнее и мощнее, если поносить ее в руке или по пользоваться ейы некоторое время"
+NTV_14;"These rings give me strength as long as I wear them. I found descriptions of some rings in the journal: Red Ring - Ring of Life Force, Silver - Ring of Strength, and Blue - Ring of Speed";"Эти кольца придают мне силы, пока я ношу их с собой. Я нашел описания некоторых колец в дневнике: Красное кольцо - кольцо жизненной силы, Серебрянное - кольцо прочности, а Голубое - кольцо скорости"
 
 ACH_1;To leave this world is to go beyond the edge of the map;Покинуть этот мир - выйти за край карты
 ACH_3;Homecoming - Complete the game;Возвращение домой - пройти игру
@@ -96,3 +104,10 @@ ACH_UNL;     [🏆]\nCOMPLETE;        [🏆]\nВЫПОЛНЕНО
 ACH_SHW;   [❌]\nNOT YET;     [❌]\nПОКА НЕТ
 
 UNLK_ACH_TIP;TO UNLOCK\nACHIEVEMENTS\nYOU NEED: ;ЧТОБЫ\nРАЗБЛО-\nКИРОВАТЬ\nДОСТИЖЕНИЯ\nВАМ НУЖНО: 
+
+RPL_LVL_NOT_ENOUGH;❌ NOT ENOUGH LEVEL!;❌ НЕДОСТАТОЧНО УРОВНЯ!
+RPL_NEW_NOTE;📝 NEW NOTE UNLOCKED! [press B];📝 НОВАЯ ЗАПИСЬ РАЗБЛОКИРОВАНА! [press B]
+RPL_NEW_ACHIEVEMENT;⭐ ACHIEVEMENT COMPLETED! [press B];⭐ ДОСТИЖЕНИЕ ВЫПОЛНЕНО! [press B]
+RPL_NEW_LVL;🏆 NEW LEVEL REACHED!;🏆 ДОСТИГНУТ НОВЫЙ УРОВЕНЬ!
+RPL_LITTLE_HUNGER;⚠️ I'm a little hungy;⚠️ Я немного голоден
+RPL_BIG_HUNGER;⚠️ I'm very hungry;⚠️ Я очень голоден

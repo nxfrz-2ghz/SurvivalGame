@@ -1,0 +1,60 @@
+[gd_scene format=3 uid="uid://ry7m67teus81"]
+
+[ext_resource type="PackedScene" uid="uid://darxc13rlkwt7" path="res://scenes/objects/object.tscn" id="1_fhc1j"]
+[ext_resource type="Script" uid="uid://cuk1urmsfpg1l" path="res://scenes/objects/loot_chest/loot_chest.gd" id="2_qa11o"]
+[ext_resource type="Texture2D" uid="uid://d00w8rpmejkmw" path="res://res/sprites/objects/loot_chest.png" id="3_remiq"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_qa11o"]
+radius = 0.8594882
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_remiq"]
+properties/0/path = NodePath(".:lvl_cost")
+properties/0/spawn = true
+properties/0/replication_mode = 0
+
+[node name="LootChest" unique_id=1331540241 instance=ExtResource("1_fhc1j")]
+script = ExtResource("2_qa11o")
+lvl_cost = 0
+nname = "loot_chest"
+
+[node name="HealthComponent" parent="." index="1" unique_id=1086116789]
+max_health = 20.0
+
+[node name="EntityComponent" parent="." index="2" unique_id=1330161778]
+drop_items = {
+"armor_ring": 1,
+"brick": 10,
+"coal": 5,
+"copper_ore": 3,
+"health_ring": 1,
+"iron_ore": 3,
+"speed_ring": 1
+}
+drop_chance = {
+"armor_ring": 0.1,
+"brick": 0.1,
+"coal": 0.3,
+"copper_ore": 0.3,
+"health_ring": 0.1,
+"iron_ore": 0.3,
+"speed_ring": 0.1
+}
+
+[node name="CollisionShape3D" parent="." index="4" unique_id=1161658582]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.93435264, 0)
+shape = SubResource("SphereShape3D_qa11o")
+
+[node name="Sprite3D" parent="." index="5" unique_id=57594410]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2459517, 0)
+texture = ExtResource("3_remiq")
+
+[node name="Label3D" type="Label3D" parent="." index="8" unique_id=2142405983]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
+billboard = 2
+shaded = true
+double_sided = false
+no_depth_test = true
+text = "LVL"
+
+[node name="MultiplayerSynchronizer2" type="MultiplayerSynchronizer" parent="." index="10" unique_id=537535896]
+replication_config = SubResource("SceneReplicationConfig_remiq")

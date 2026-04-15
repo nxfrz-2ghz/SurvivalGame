@@ -16,6 +16,7 @@ extends CharacterBody3D
 @onready var book := %Book
 @onready var inv := %InventoryController
 @onready var progress_controller := $ProgressController
+@onready var light_controller := $LightController
 @onready var actions_audio_player := $Audio/ActionsAudioPlayer3D
 @onready var damage_audio_player := $Audio/TakeDamageAudio
 @onready var walk_audio_player := $Audio/WalkAudioPlayer3D
@@ -50,6 +51,7 @@ func _ready() -> void:
 		arms.queue_free()
 		rain.queue_free()
 		fear.queue_free()
+		light_controller.queue_free()
 	else:
 		# Переключаем себя на слой, который не видит камера
 		sprite.set_layer_mask_value(1, false)
@@ -141,7 +143,7 @@ func _input(event: InputEvent) -> void:
 				atk_spd *= 0.8
 			
 			weapon.weapon_anim.speed_scale = atk_spd
-			weapon.weapon_anim.play("use")
+			weapon.weapon_anim.play("attack")
 			weapon.actions.attack(cur_dmg, weapon.damage_types, weapon.push_velocity + weapon.push_velocity * vel)
 			weapon.attack.emit()
 		interact_ray.update()
@@ -171,7 +173,7 @@ func _input(event: InputEvent) -> void:
 			elif collider.is_in_group("buildings") and current_slot_data and R.items[current_slot_data["name"]].has("can_change_state_buildings") and !weapon.weapon_anim.is_playing():
 				collider.change_state.rpc_id(1)
 				weapon.use_item_durability()
-				weapon.weapon_anim.play("cd")
+				weapon.weapon_anim.play("use")
 			
 			# Достать готовые предметы
 			elif collider.nname in R.exchangeable_items.keys():
@@ -192,14 +194,33 @@ func _input(event: InputEvent) -> void:
 							inv.add_item("raw_berry")
 				collider.pick.rpc_id(1)
 				return
+			
+			elif collider.nname == "loot_chest":
+				if collider.lvl_cost <= progress_controller.lvl:
+					progress_controller.spend_exp_by_lvl(collider.lvl_cost)
+					collider.open.rpc_id(1)
+				else:
+					G.text_message.add(tr("RPL_LVL_NOT_ENOUGH"))
+				return
 		
 		# Использование предметов (items)
 		if current_slot_data != null:
 			var item_name = current_slot_data["name"]
 			
 			# Еда
-			if R.items[item_name].get("nutrition"):
+			if R.items[item_name].get("nutrition") and !weapon.weapon_anim.is_playing():
+				weapon.weapon_anim.speed_scale = weapon.attack_speed + float(weapon.speed_rings)/5
+				weapon.weapon_anim.play("use")
 				hunger.eat(R.items[item_name]["nutrition"])
+				fear.apply_eat(item_name)
+				inv.drop_item(current_slot_idx, 1)
+				actions_audio_player.audio_play(R.sounds["actions"]["eating"].resource_path)
+			
+			# Лечение
+			if R.items[item_name].get("heal") and !weapon.weapon_anim.is_playing():
+				weapon.weapon_anim.speed_scale = weapon.attack_speed + float(weapon.speed_rings)/5
+				weapon.weapon_anim.play("use")
+				health.heal(R.items[item_name]["heal"])
 				inv.drop_item(current_slot_idx, 1)
 				actions_audio_player.audio_play(R.sounds["actions"]["eating"].resource_path)
 			
@@ -273,8 +294,15 @@ func _on_health_component_died() -> void:
 					weapon.actions.drop(slot_idx)
 	
 	self.position = Vector3(0, 300, 0)
+
+
+func respawn() -> void:
+	self.position = Vector3(0, 100, 0)
 	health.heal(99999999.9)
 	hunger.eat(99999999)
+	fear.current_fear = 0
+	camera.current = true
+	camera.fov = 120.0
 
 
 @rpc("any_peer", "call_local")
@@ -410,10 +438,13 @@ func _physics_process(delta: float) -> void:
 
 
 func _on_start_emit_timer_timeout() -> void:
+	G.screen_text.text("")
 	health.heal(0)
 	hunger.eat(0)
-	inv.update_signals()
 	progress_controller.add_exp(0)
+	
+	if G.state_machine == "game":
+		inv.update_signals()
 	
 	# First Note
 	await get_tree().create_timer(15.0).timeout
@@ -433,6 +464,7 @@ func save_character() -> void:
 		"rot": [rotation.y, head.rotation.x],
 		"health": health.current_health,
 		"hunger": hunger.current_hunger,
+		"fear": fear.current_fear,
 		"inventory": inv.inventory,
 		"unlocked_notes": progress_controller.unlocked_notes,
 		"unlocked_achievements": progress_controller.unlocked_achievements,
@@ -471,6 +503,7 @@ func load_character() -> void:
 		
 		health.current_health = data.get("health", health.current_health)
 		hunger.current_hunger = data.get("hunger", hunger.current_hunger)
+		fear.current_fear = data.get("fear", fear.current_fear)
 		progress_controller.unlocked_notes = data.get("unlocked_notes", [])
 		progress_controller.cur_exp = data.get("current exp", 0)
 		progress_controller.lvl = data.get("current lvl", 0)

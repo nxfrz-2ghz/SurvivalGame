@@ -15,6 +15,7 @@ const spawn_mob := R.mobs["krab"]["scene"]
 func _ready() -> void:
 	super()
 	corruption_decal.size = corruption_size
+	anim_sprite.visibility_range_end = G.world.objects_visible_range
 
 
 @rpc("authority", "call_local")
@@ -40,11 +41,11 @@ func _on_regeneration_timer_timeout() -> void:
 func _on_grow_timer_timeout() -> void:
 	if not is_multiplayer_authority(): return
 	if G.state_machine != "game": return
-	if health.max_health < 40.0:
-		health.max_health += health.max_health / 10
+	if health.max_health < 60.0:
+		health.max_health += health.max_health / 30
 		
 		# Целевой размер расширения
-		var target_size = corruption_size + (Vector3.ONE * 3) / (corruption_size / 2)
+		var target_size = corruption_size + (Vector3.ONE * 3)
 		
 		# Создаем анимацию
 		var tween = create_tween()
@@ -54,7 +55,7 @@ func _on_grow_timer_timeout() -> void:
 		# Анимируем свойство size (или scale, в зависимости от узла)
 		tween.tween_property(self, "corruption_size", target_size, 0.5) 
 	else:
-		if randf() > 0.1:
+		if randf() > 0.05:
 			summon(load(self.scene_file_path))
 
 
@@ -66,7 +67,7 @@ func _on_animated_sprite_3d_animation_finished() -> void:
 func _on_summon_timer_timeout() -> void:
 	if not is_multiplayer_authority(): return
 	if G.state_machine != "game": return
-	summon_timer.wait_time = randi_range(40, 60) - corruption_decal.size.x
+	summon_timer.wait_time = randi_range(40, 60)
 	anim_sprite.anim_play.rpc("on_summon")
 	summon(spawn_mob)
 	summon_timer.start()

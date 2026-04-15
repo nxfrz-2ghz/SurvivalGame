@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://ctrjs53rxyy5p"]
+
+[ext_resource type="Texture2D" uid="uid://cyiqiwjb0vta5" path="res://res/sprites/material_textures/steel.png" id="1_1opw8"]
+
+[resource]
+albedo_texture = ExtResource("1_1opw8")
+uv1_scale = Vector3(3, 2, 1)
+texture_filter = 0

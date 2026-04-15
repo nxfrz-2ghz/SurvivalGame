@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://dknrk65skptje" path="res://scripts/base_audio_player_rpc.gd" id="2_62b1e"]
 [ext_resource type="PackedScene" uid="uid://4ffu5apey8sh" path="res://components/shadow/shadow.tscn" id="3_q44lt"]
 [ext_resource type="PackedScene" uid="uid://cm8dp3hd0yxoq" path="res://components/entity_component/entity_component.tscn" id="4_2sf44"]
+[ext_resource type="Script" uid="uid://girfrsvtnhsv" path="res://scripts/base_shadow.gd" id="6_rqkdu"]
 
 [sub_resource type="Gradient" id="Gradient_2sf44"]
 colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 0)
@@ -51,7 +52,7 @@ properties/3/path = NodePath("HealthComponent:armor")
 properties/3/spawn = true
 properties/3/replication_mode = 0
 
-[node name="Mob" type="CharacterBody3D" unique_id=408161229 groups=["mobs"]]
+[node name="Mob" type="CharacterBody3D" unique_id=408161229 groups=["mobs", "optimized_sync"]]
 collision_layer = 16
 collision_mask = 7
 script = ExtResource("1_q44lt")
@@ -93,6 +94,7 @@ shaded = true
 double_sided = false
 
 [node name="Shadow" parent="." unique_id=437352595 instance=ExtResource("3_q44lt")]
+script = ExtResource("6_rqkdu")
 
 [node name="DamageParticle" type="GPUParticles3D" parent="." unique_id=72867474]
 visibility_range_end = 100.0

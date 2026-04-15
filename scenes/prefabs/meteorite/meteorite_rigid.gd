@@ -32,6 +32,7 @@ func _on_body_entered(body: Node) -> void:
 
 
 func _on_sleeping_state_changed() -> void:
+	if not is_multiplayer_authority(): return
 	var meteorite_node := R.objects["meteorite"]["scene"].instantiate()
 	meteorite_node.position = self.position
 	G.environment.add_child(meteorite_node, true)

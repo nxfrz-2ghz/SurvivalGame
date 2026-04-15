@@ -9,6 +9,9 @@ const HUNGER_SPEED := 2
 const MAX_HUNGER := 1000
 var current_hunger := MAX_HUNGER
 
+func _ready() -> void:
+	G.timer_1sec.timeout.connect(_on_timer_timeout)
+
 func eat(hng: int) -> void:
 	if current_hunger < MAX_HUNGER:
 		current_hunger += hng
@@ -24,10 +27,10 @@ func take_hunger(hng: int) -> void:
 		
 		@warning_ignore("integer_division")
 		if current_hunger == MAX_HUNGER/2:
-			G.text_message.add("I'm a little hungy")
+			G.text_message.add(tr("RPL_LITTLE_HUNGER"))
 		@warning_ignore("integer_division")
 		if current_hunger == MAX_HUNGER/4:
-			G.text_message.add("I'm very hungry")
+			G.text_message.add(tr("RPL_BIG_HUNGER"))
 	
 	else:
 		take_damage.emit(HUNGER_DAMAGE)

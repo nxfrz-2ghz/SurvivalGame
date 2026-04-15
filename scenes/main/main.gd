@@ -16,11 +16,15 @@ func _input(_event: InputEvent) -> void:
 		G.gui.hud.aim.visible = !G.gui.hud.aim.visible
 		G.gui.hud.bar_box.visible = !G.gui.hud.bar_box.visible
 		G.gui.hud.stamina_bar.visible = !G.gui.hud.stamina_bar.visible
-		G.gui.hud.health_vignette.visible = !G.gui.hud.health_vignette.visible
+		G.gui.hud.fear_vignette.visible = !G.gui.hud.fear_vignette.visible
 		G.gui.hud.damage_vignette.visible = !G.gui.hud.damage_vignette.visible
 		G.gui.hud.target_label.get_node("PanelContainer").visible = !G.gui.hud.target_label.get_node("PanelContainer").visible
 	if Input.is_action_just_pressed("f3"):
-		G.gui.hud.debug.visible = !G.gui.hud.debug.visible
+		match G.state_machine:
+			"game":
+				G.gui.hud.debug.visible = !G.gui.hud.debug.visible
+			"main_menu":
+				G.gui.main_menu.debug.visible = !G.gui.main_menu.debug.visible
 
 
 func prepare_for_a_game(type: String) -> void:
@@ -49,12 +53,18 @@ func set_up_player(player: CharacterBody3D) -> void:
 	player.get_node("%InteractRay").target_found.connect(G.gui.hud.target_label.update)
 	player.get_node("%InventoryController").update.connect(G.gui.hud.inventory.update)
 	player.get_node("%InventoryController").set_hotbar_slot.connect(G.gui.hud.inventory.set_hotbar_slot)
+	player.get_node("%InventoryController").set_item_in_arm.connect(G.gui.hud.choosed_item_display.on_choosed)
 	player.get_node("%Book").open_book.connect(G.gui.hud.inventory.hide)
 	player.get_node("%Book").close_book.connect(G.gui.hud.inventory.show)
 	player.get_node("%Book").open_book.connect(G.gui.hud.aim.hide)
 	player.get_node("%Book").close_book.connect(G.gui.hud.aim.show)
-	player.get_node("%HealthComponent").changed.connect(G.gui.hud.health_vignette.on_health_changed)
+	player.get_node("FearController").changed.connect(G.gui.hud.fear_vignette.on_fear_changed)
 	player.get_node("%HealthComponent").on_damage.connect(G.gui.hud.damage_vignette.on_damage)
+	player.get_node("%HealthComponent").changed.connect(G.gui.hud.heart_cradiogram.on_health_changed)
+	player.get_node("FearController").suspense.connect(G.gui.hud.heart_cradiogram.set_suspense)
+	player.get_node("FearController").panic.connect(G.gui.hud.heart_cradiogram.set_panic)
+	player.get_node("FearController").scare.connect(G.gui.hud.heart_cradiogram.trigger_scare)
+	player.get_node("FearController").shock.connect(G.gui.hud.heart_cradiogram.trigger_shock)
 	player.get_node("HungerController").changed.connect(G.gui.hud.bar_box.hunger_changed)
 	player.get_node("ProgressController").changed.connect(G.gui.hud.bar_box.exp_changed)
 	player.get_node("StaminaController").changed.connect(G.gui.hud.stamina_bar.on_stamina_changed)
@@ -72,7 +82,7 @@ func add_player(peer_id: int) -> void:
 	if peer_id == multiplayer.get_unique_id():
 		set_up_player(player)
 	else:
-		G.world.rpc_id(peer_id, "join_world", G.world.world_name, G.world.world_seed, int(G.gui.main_menu.world_size.text))
+		G.world.rpc_id(peer_id, "join_world", G.world.world_name, G.world.world_seed, G.world.world_size)
 
 
 func remove_player(peer_id: int) -> void:

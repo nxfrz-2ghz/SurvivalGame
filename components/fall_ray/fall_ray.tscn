@@ -15,7 +15,7 @@ func _physics_process(_delta: float) -> void:
 	if not is_colliding():
 		parent.global_position.y -= 0.1
 	else:
-		if position.y < G.world.WATER_LEVEL:
+		if is_multiplayer_authority() and position.y < G.world.WATER_LEVEL:
 			parent.health.take_damage(9999999.0)
 		self.queue_free()
 "

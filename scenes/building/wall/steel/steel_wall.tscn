@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://3m57v8acxkvl"]
+
+[ext_resource type="PackedScene" uid="uid://q8syis2q1qup" path="res://scenes/building/wall/wall.tscn" id="1_apnia"]
+[ext_resource type="Material" uid="uid://dc6kn6gbq5yo" path="res://scenes/building/_materials/x2/steel.tres" id="2_nr4fw"]
+
+[node name="SteelWall" unique_id=1331540241 instance=ExtResource("1_apnia")]
+nname = "steel_wall"
+
+[node name="HealthComponent" parent="." index="0" unique_id=1086116789]
+resists = {
+"iron_ingot": 2
+}
+max_health = 25.0
+armor = 4.0
+
+[node name="EntityComponent" parent="." index="1" unique_id=1330161778]
+drop_items = {
+"steel_ingot": 2
+}
+
+[node name="MeshInstance3D" parent="." index="3" unique_id=2006591672]
+material_override = ExtResource("2_nr4fw")

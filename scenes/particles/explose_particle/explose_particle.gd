@@ -13,4 +13,5 @@ func _ready() -> void:
 	emitting = true
 
 func _on_finished() -> void:
+	if not is_multiplayer_authority(): return
 	queue_free()

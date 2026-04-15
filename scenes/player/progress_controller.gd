@@ -21,13 +21,15 @@ const notes := {
 	"NTK_10": "NTV_10",
 	"NTK_11": "NTV_11",
 	"NTK_12": "NTV_12",
+	"NTK_13": "NTV_13",
+	"NTK_14": "NTV_14",
 }
 
 var unlocked_notes := []
 
 func add_note(note_name: String) -> void:
 	unlocked_notes.append(notes[note_name])
-	G.text_message.add("NEW NOTE UNLOCKED! VIEW IT IN BOOK [press B]")
+	G.text_message.add(tr("RPL_NEW_NOTE"))
 	audio_player.stream = new_note
 	audio_player.play()
 
@@ -60,7 +62,7 @@ func add_achievement(ach_name: String) -> void:
 	if completed_achievements.has(ach_name): return
 	unlocked_achievements.append(ach_name)
 	completed_achievements.append(ach_name)
-	G.text_message.add("NEW NOTE ACHIEVEMENT! VIEW IT IN BOOK [press B]")
+	G.text_message.add(tr("RPL_NEW_ACHIEVEMENT"))
 	audio_player.stream = new_achievement
 	audio_player.play()
 
@@ -76,7 +78,7 @@ func add_exp(added_exp: float) -> void:
 	if cur_exp > get_lvlup_cost():
 		cur_exp -= get_lvlup_cost()
 		lvl += 1
-		G.text_message.add("NEW LEVEL REACHED!")
+		G.text_message.add(tr("RPL_NEW_LVL"))
 	
 	changed.emit(cur_exp, get_lvlup_cost(), lvl)
 

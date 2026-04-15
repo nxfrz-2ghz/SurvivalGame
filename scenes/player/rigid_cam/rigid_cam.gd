@@ -13,8 +13,7 @@ func _ready() -> void:
 	label.text = splashes.pick_random()
 
 func despawn() -> void:
-	G.player.camera.current = true
-	G.player.camera.fov = 120.0
+	G.player.respawn()
 	queue_free()
 
 func _on_timer_timeout() -> void:

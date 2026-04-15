@@ -25,6 +25,10 @@ G="*res://scripts/service_locator.gd"
 R="*res://scripts/resources.gd"
 E="*uid://dqmiwo5v5st18"
 DiskControl="*uid://cdnannsrse4u4"
+NodeOptimizer="*uid://dg38yrvl3c6ff"
+Console="*uid://ouiu5xh1cs8n"
+CursorController="uid://dg5tm667gptn4"
+ConsoleFunctions="uid://c0r8gqg3mbhte"
 
 [display]
 
@@ -35,6 +39,10 @@ window/stretch/mode="viewport"
 window/stretch/aspect="expand"
 mouse_cursor/custom_image="uid://dsy3g7d07boy1"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/console/plugin.cfg")
+
 [global_group]
 
 items=""
@@ -43,6 +51,7 @@ players=""
 mobs=""
 buildings=""
 can_affect_fear=""
+optimized_sync=""
 
 [gui]
 
@@ -222,3 +231,4 @@ locale/translations=PackedStringArray("res://res/translation/translation.en.tran
 3d_physics/layer_5="mob"
 3d_physics/layer_6="uncolliding_object"
 3d_physics/layer_7="throwable_items"
+3d_physics/layer_8="light_detector"

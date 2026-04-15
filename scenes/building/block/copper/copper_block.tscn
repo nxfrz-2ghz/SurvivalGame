@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://c3eucntv301qj"]
+
+[ext_resource type="PackedScene" uid="uid://crptsdnu1ermv" path="res://scenes/building/block/block.tscn" id="1_bmixi"]
+[ext_resource type="Material" uid="uid://gw86bd53dpde" path="res://scenes/building/_materials/x1/copper.tres" id="2_bmixi"]
+
+[node name="CopperBlock" unique_id=1331540241 instance=ExtResource("1_bmixi")]
+nname = "copper_block"
+
+[node name="HealthComponent" parent="." index="0" unique_id=1086116789]
+resists = {
+"axe": 0.0,
+"melee": 0.0
+}
+max_health = 8.0
+
+[node name="EntityComponent" parent="." index="1" unique_id=1330161778]
+drop_items = {
+"copper_ingot": 1
+}
+
+[node name="MeshInstance3D" parent="." index="3" unique_id=2006591672]
+material_override = ExtResource("2_bmixi")

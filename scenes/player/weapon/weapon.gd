@@ -7,6 +7,10 @@ signal attack
 @onready var build := $BuildingController
 @onready var throw_sprite := $ThrowSprite
 
+@onready var light2d := $Arms/ShakingContainer/SwayContainer/Sprites/Item/FireParticles2D/PointLight2D
+@onready var light3d := $OmniLight3D
+@onready var fire_particles := $Arms/ShakingContainer/SwayContainer/Sprites/Item/FireParticles2D
+
 @onready var arms_sprite := $Arms/ShakingContainer/SwayContainer/Sprites/Arms
 @onready var item_sprite := $Arms/ShakingContainer/SwayContainer/Sprites/Item
 
@@ -15,6 +19,10 @@ var damage: float
 var attack_speed: float
 var damage_types: Dictionary
 var push_velocity: float
+
+func _ready() -> void:
+	G.timer_1sec.timeout.connect(check_corrosion_item)
+	G.timer_1sec.timeout.connect(regen)
 
 var health_rings: int
 var speed_rings: int
@@ -36,6 +44,8 @@ func get_dig_drop(hit_position: Vector3) -> String:
 
 
 func check_corrosion_item() -> void:
+	if G.state_machine != "game": return
+	
 	# Оксисление
 	if R.items[current_name].has("can_oxiding"):
 		if randi_range(0, R.OXIDING_SPEED) == 0:
@@ -45,7 +55,10 @@ func check_corrosion_item() -> void:
 
 
 func regen() -> void:
-	G.player.health.heal(float(health_rings)/20)
+	if G.state_machine != "game": return
+	
+	if G.player:
+		G.player.health.heal(float(health_rings)/20)
 
 
 func use_item_durability() -> void:
@@ -70,6 +83,20 @@ func choose_item(item: String = "") -> void:
 	damage_types = R.items[item].get("damage_types", {"melee": 1.0})
 	push_velocity = R.items[item].get("push_velocity", 1.0) * 10
 	throw_sprite.texture =  R.items[item].get("texture", R.items["empty"]["texture"])
+	
+	if R.items[item].has("light"):
+		fire_particles.emitting = true
+		light3d.visible = true
+		light3d.light_energy = R.items[item]["light"]["energy"]
+		light3d.light_color = R.items[item]["light"]["color"]
+		light2d.visible = true
+		light2d.energy = R.items[item]["light"]["energy"]
+		light2d.color = R.items[item]["light"]["color"]
+		
+	else:
+		fire_particles.emitting = false
+		light3d.visible = false
+		light2d.visible = false
 
 
 func set_item_in_arm(item: String):

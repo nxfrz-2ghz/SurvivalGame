@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://cilqg125ej3tw"]
+
+[ext_resource type="PackedScene" uid="uid://q8syis2q1qup" path="res://scenes/building/wall/wall.tscn" id="1_xad4l"]
+[ext_resource type="Material" uid="uid://ba46uwhuekkfr" path="res://scenes/building/_materials/x2/copper.tres" id="2_pks7w"]
+
+[node name="CopperWall" unique_id=1331540241 instance=ExtResource("1_xad4l")]
+nname = "copper_wall"
+
+[node name="HealthComponent" parent="." index="0" unique_id=1086116789]
+resists = {
+"axe": 0.0,
+"melee": 0.0
+}
+max_health = 10.0
+
+[node name="EntityComponent" parent="." index="1" unique_id=1330161778]
+drop_items = {
+"copper_ingot": 2
+}
+
+[node name="MeshInstance3D" parent="." index="3" unique_id=2006591672]
+material_override = ExtResource("2_pks7w")

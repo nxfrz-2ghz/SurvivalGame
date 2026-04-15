@@ -37,14 +37,16 @@ func _on_idle_sound_timer_timeout() -> void:
 	last_pos = position
 
 
+@rpc("authority", "call_local")
 func on_damage() -> void:
 	super()
 	run_timer.start()
-	sprite.anim_play.rpc("walk")
+	sprite.anim_play("walk")
 	state = STATE.RUNAWAY
 	look_at(last_pos)
 
 
 func _on_run_timer_timeout() -> void:
+	if not is_multiplayer_authority(): return
 	state = STATE.IDLE
 	sprite.anim_play.rpc("idle")

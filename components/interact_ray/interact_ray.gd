@@ -20,6 +20,8 @@ func update() -> void:
 				target_name += "\n[RIGHT CLICK] TO COOK"
 			if current_target.get("full"):
 				target_name += "\n[RIGHT CLICK] TO COLLECT"
+			if current_target.get("lvl_cost"):
+				target_name += "\n[RIGHT CLICK] TO OPEN"
 		if current_target.is_in_group("items"):
 			target_name += "\nPRESS [F] TO PICKUP"
 	target_found.emit(target_name)

@@ -14,6 +14,8 @@ func _ready() -> void:
 	health.died.connect(entity.despawn)
 	health.on_damage.connect(on_damage.rpc)
 	health.changed.connect(entity.spawn_damage_perticle)
+	
+	mesh.visibility_range_end = G.world.buildings_visible_range
 
 @rpc("authority", "call_local")
 func on_damage() -> void:

@@ -21,14 +21,28 @@ func _ready() -> void:
 	health.on_damage.connect(on_damage.rpc)
 	health.changed.connect(entity.spawn_damage_perticle)
 	
-	G.time_controller.night_come.connect(shadow.hide)
-	G.time_controller.day_come.connect(shadow.show)
+	G.time_controller.night_come.connect(shadow.hide_rpc)
+	G.time_controller.day_come.connect(shadow.show_rpc)
+	
+	sprite.visibility_range_end = G.world.mobs_visible_range
+
+
+func _on_damage_scale_anim() -> void:
+	# Scale animation
+	var tween := create_tween()
+	tween.tween_property(self, "scale", Vector3.ONE*0.85, 0.05)\
+			.set_trans(Tween.TRANS_QUAD)\
+			.set_ease(Tween.EASE_OUT)
+	tween.tween_property(self, "scale", Vector3.ONE, 0.25)\
+			.set_trans(Tween.TRANS_QUAD)\
+			.set_ease(Tween.EASE_IN)
 
 @rpc("authority", "call_local")
 func on_damage() -> void:
 	damage_particle.emitting = true
 	if R.sounds["hit"].has(nname):
 		take_damage_audio.audio_play(R.sounds["hit"][nname].pick_random().resource_path)
+	_on_damage_scale_anim()
 	sprite.modulate = Color(1, 0 ,0)
 	damage_frame_timer.start()
 
@@ -92,6 +106,8 @@ func apply_push(direction_vector: Vector3, velocity_power: float) -> void:
 	velocity += direction_vector * velocity_power
 
 func _on_update_timer_timeout() -> void:
+	if not is_multiplayer_authority(): return
+	
 	if position.distance_to(get_target_player().position) > 120.0:
 		queue_free()
 	if position.y < G.world.WATER_LEVEL:

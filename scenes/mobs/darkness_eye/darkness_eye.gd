@@ -1,7 +1,6 @@
 extends "res://scenes/mobs/mob.gd"
 
 const damage := 0.1
-const jump_velocity := 4.0
 var target_player: CharacterBody3D
 
 

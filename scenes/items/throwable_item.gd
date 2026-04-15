@@ -61,4 +61,12 @@ func _on_body_entered(body: Node) -> void:
 
 func _integrate_forces(_state: PhysicsDirectBodyState3D) -> void:
 	if linear_velocity.length() > 0.5:
-		look_at(global_transform.origin + linear_velocity, Vector3.UP)
+		var target_pos = global_transform.origin + linear_velocity
+		var v_z = (global_transform.origin - target_pos).normalized()
+		
+		# Если летим почти вертикально, используем другой вектор "верха" (например, Vector3.RIGHT)
+		var up = Vector3.UP
+		if abs(v_z.dot(Vector3.UP)) > 0.99:
+			up = Vector3.RIGHT
+			
+		look_at(target_pos, up)

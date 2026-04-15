@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://gw86bd53dpde"]
+
+[ext_resource type="Texture2D" uid="uid://dy5dg73tyiio8" path="res://res/sprites/material_textures/copper.png" id="1_iuoye"]
+
+[resource]
+albedo_texture = ExtResource("1_iuoye")
+uv1_scale = Vector3(3, 2, 1)
+texture_filter = 0

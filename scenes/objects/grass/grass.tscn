@@ -12,7 +12,16 @@ collision_layer = 32
 script = ExtResource("2_ujv02")
 nname = "grass"
 
+[node name="HealthComponent" parent="." index="1" unique_id=1086116789]
+max_health = 3.0
+
 [node name="EntityComponent" parent="." index="2" unique_id=1330161778]
+drop_items = {
+"grass_fiber": 3
+}
+drop_chance = {
+"grass_fiber": 0.3
+}
 despawn_particles_size = 0.5
 
 [node name="CollisionShape3D" parent="." index="4" unique_id=1161658582]

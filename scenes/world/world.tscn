@@ -30,8 +30,6 @@ light_color = Color(1, 1, 0.9647059, 1)
 directional_shadow_mode = 0
 script = ExtResource("2_sl2e5")
 
-[node name="CanvasModulate" type="CanvasModulate" parent="DirectionalLight3D" unique_id=1602802164]
-
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=352009880]
 environment = ExtResource("3_j2gmx")
 script = ExtResource("4_1yooq")

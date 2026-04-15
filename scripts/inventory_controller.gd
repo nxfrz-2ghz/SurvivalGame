@@ -97,6 +97,8 @@ func check_progress(item_name) -> void:
 	elif item_name == "iron_ingot": note_will_add = 10
 	elif item_name == "wall_wood": note_will_add = 11
 	elif item_name == "steel_ingot": note_will_add = 12
+	elif item_name == "copper_piclaxe": note_will_add = 13
+	elif "ring" in item_name: note_will_add = 14
 	
 	if note_will_add and !prg.unlocked_notes.has("NTV_"+str(note_will_add)): prg.add_note("NTK_"+str(note_will_add))
 

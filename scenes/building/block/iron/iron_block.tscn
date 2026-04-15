@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://c5egkbum5458y"]
+
+[ext_resource type="PackedScene" uid="uid://crptsdnu1ermv" path="res://scenes/building/block/block.tscn" id="1_xmflw"]
+[ext_resource type="Material" uid="uid://dj0u2qxf8jxo4" path="res://scenes/building/_materials/x1/iron.tres" id="2_251ey"]
+
+[node name="IronBlock" unique_id=1331540241 instance=ExtResource("1_xmflw")]
+nname = "iron_block"
+
+[node name="HealthComponent" parent="." index="0" unique_id=1086116789]
+resists = {
+"axe": 0.0,
+"melee": 0.0
+}
+max_health = 12.0
+armor = 1.5
+
+[node name="EntityComponent" parent="." index="1" unique_id=1330161778]
+drop_items = {
+"iron_ingot": 1
+}
+
+[node name="MeshInstance3D" parent="." index="3" unique_id=2006591672]
+material_override = ExtResource("2_251ey")

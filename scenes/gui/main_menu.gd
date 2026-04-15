@@ -8,3 +8,5 @@ extends Node
 @onready var world_seed := $VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/WorldSeed
 @onready var world_chooser := $VBoxContainer/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer/WorldChooser
 @onready var autosave := $HBoxContainer/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer/AutoSaveButton
+
+@onready var debug := $DebugMenu
