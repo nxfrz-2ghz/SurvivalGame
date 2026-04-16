@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://c5egkbum5458y"]
 
 [ext_resource type="PackedScene" uid="uid://crptsdnu1ermv" path="res://scenes/building/block/block.tscn" id="1_xmflw"]
-[ext_resource type="Material" uid="uid://dj0u2qxf8jxo4" path="res://scenes/building/_materials/x1/iron.tres" id="2_251ey"]
+[ext_resource type="Material" uid="uid://dj0u2qxf8jxo4" path="res://scenes/building/_materials/iron.tres" id="2_251ey"]
 
 [node name="IronBlock" unique_id=1331540241 instance=ExtResource("1_xmflw")]
 nname = "iron_block"

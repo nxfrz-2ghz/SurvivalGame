@@ -8,6 +8,8 @@
 [node name="Block" unique_id=1331540241 instance=ExtResource("1_p5mmr")]
 script = ExtResource("2_uj1wg")
 state = 0
+grid_size = 8
+block_size = 1.0
 nname = "block"
 
 [node name="MeshInstance3D" parent="." index="3" unique_id=2006591672]

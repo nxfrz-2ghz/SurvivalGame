@@ -111,11 +111,11 @@ const exchangeable_items := {
 		"raw_meat":  {"amount": 1, "output": "cooked_meat", "speed": 5},
 	},
 	"furnace": {
-		"copper_ore": {"amount": 1, "output": "copper_ingot", "speed": 8},
+		"copper_ore": {"amount": 2, "output": "copper_ingot", "speed": 8},
 		"clay":       {"amount": 1, "output": "brick", "speed": 6},
 	},
 	"furnace_t2": {
-		"iron_ore": {"amount": 1, "output": "iron_ingot", "speed": 8},
+		"iron_ore": {"amount": 2, "output": "iron_ingot", "speed": 8},
 		"iron_ingot": {"amount": 5, "output": "steel_ingot", "speed": 15},
 		
 		# Uncrafting Trash
@@ -145,6 +145,7 @@ const prefabs := {
 	"explosion": preload("res://scenes/prefabs/explosion/explosion_3d.tscn"),
 	"exp_sphere": preload("res://scenes/prefabs/exp_sphere/exp_sphere.tscn"),
 	"fall_ray": preload("res://components/fall_ray/fall_ray.tscn"),
+	"chisel_part": preload("res://scenes/building/block/_chiseled_part/chisel_part.tscn"),
 }
 
 const mobs := {
@@ -691,7 +692,7 @@ const items := {
 			"axe": 0.1,
 			"pickaxe": 0.0,
 		},
-		"can_change_state_buildings": true,
+		"change_buildings": "state",
 	},
 	"wooden_torch": {
 		"texture": preload("res://res/sprites/items/weapons/wooden_torch.png"),
@@ -704,6 +705,7 @@ const items := {
 			"energy": 1.0,
 		},
 		"damage": 2.0,
+		"change_buildings": "chisel",
 	},
 	"raw_berry": {
 		"texture": preload("res://res/sprites/items/berry/raw_berry.png"),

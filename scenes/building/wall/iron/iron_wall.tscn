@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://t5rt4faj80vp"]
 
 [ext_resource type="PackedScene" uid="uid://q8syis2q1qup" path="res://scenes/building/wall/wall.tscn" id="1_pm8l6"]
-[ext_resource type="Material" uid="uid://blb7r2djak3iw" path="res://scenes/building/_materials/x2/iron.tres" id="2_7n1s0"]
+[ext_resource type="Material" uid="uid://dj0u2qxf8jxo4" path="res://scenes/building/_materials/iron.tres" id="2_pm8l6"]
 
 [node name="IronWall" unique_id=1331540241 instance=ExtResource("1_pm8l6")]
 
@@ -19,4 +19,4 @@ drop_items = {
 }
 
 [node name="MeshInstance3D" parent="." index="3" unique_id=2006591672]
-material_override = ExtResource("2_7n1s0")
+material_override = ExtResource("2_pm8l6")

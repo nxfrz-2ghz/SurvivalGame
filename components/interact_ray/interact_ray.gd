@@ -12,7 +12,7 @@ func update() -> void:
 	last_target = current_target
 	# Если нашли объект — шлем имя, если нет — пустую строку
 	var target_name = ""
-	if current_target:
+	if current_target and current_target.has_meta(target_name):
 		target_name = current_target.nname 
 		if current_target.is_in_group("objects") or current_target.is_in_group("buildings") or current_target.is_in_group("players") or current_target.is_in_group("mobs"):
 			target_name += "\n" + str(current_target.health.current_health) + "/" + str(current_target.health.max_health)

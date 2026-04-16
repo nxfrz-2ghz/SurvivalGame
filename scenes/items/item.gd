@@ -1,6 +1,7 @@
 extends RigidBody3D
 
 @onready var sprite := $Sprite3D
+@onready var light := $Light
 
 @export var nname: String
 
@@ -8,6 +9,12 @@ extends RigidBody3D
 func _ready() -> void:
 	sprite.texture = R.items[self.nname]["texture"]
 	sprite.visibility_range_end = G.world.items_visible_range
+	
+	if R.items[nname].has("light"):
+		light.color = R.items[nname]["light"]["color"]
+		light.energy = R.items[nname]["light"]["energy"]
+	else:
+		light.queue_free()
 
 
 func get_save_data() -> Dictionary:

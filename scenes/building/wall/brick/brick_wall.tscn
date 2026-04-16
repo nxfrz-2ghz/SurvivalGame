@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://d105d84m35wyb"]
 
 [ext_resource type="PackedScene" uid="uid://q8syis2q1qup" path="res://scenes/building/wall/wall.tscn" id="1_ks7u4"]
-[ext_resource type="Material" uid="uid://lrnmfalvrule" path="res://scenes/building/_materials/x2/brick.tres" id="2_kpayu"]
+[ext_resource type="Material" uid="uid://c6b7j578lhs03" path="res://scenes/building/_materials/brick.tres" id="2_ks7u4"]
 
 [node name="BrickWall" unique_id=1331540241 instance=ExtResource("1_ks7u4")]
 nname = "brick_wall"
@@ -24,4 +24,4 @@ drop_chance = {
 despawn_sound_name = "stone"
 
 [node name="MeshInstance3D" parent="." index="3" unique_id=2006591672]
-material_override = ExtResource("2_kpayu")
+material_override = ExtResource("2_ks7u4")

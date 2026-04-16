@@ -5,4 +5,4 @@ func _ready() -> void:
 	if text == "":
 		text = "player" + str(randi_range(0, 999999))
 		# Сохраняем сгенерированное имя
-		_on_text_submitted(text)
+		_on_save()

@@ -152,28 +152,44 @@ func _input(event: InputEvent) -> void:
 		if interact_ray.is_colliding():
 			var collider: Node = interact_ray.get_collider()
 			
-			if current_slot_data != null and collider.nname in R.exchangeable_items.keys():
-				var item_in_arm = current_slot_data["name"]
-				var amount = current_slot_data["amount"]
-				var ex_items = R.exchangeable_items[collider.nname]
-				
-				if ex_items.get(item_in_arm) and amount >= ex_items.get(item_in_arm)["amount"]:
-					if collider.has_node("CookComponent"): collider.cook.craft.rpc_id(1, item_in_arm)
-					elif collider.has_node("CraftComponent"): collider.craft.craft.rpc_id(1, item_in_arm)
-					# Выбрасываем (удаляем) из текущего слота
-					inv.drop_item(current_slot_idx, ex_items.get(item_in_arm)["amount"])
-					return
+			if current_slot_data != null:
+				if collider.nname in R.exchangeable_items.keys():
+					var item_in_arm = current_slot_data["name"]
+					var amount = current_slot_data["amount"]
+					var ex_items = R.exchangeable_items[collider.nname]
 					
-				if collider.has_node("CookComponent") and item_in_arm == collider.cook.fuel_type:
-					collider.cook.add_fuel.rpc_id(1)
-					inv.drop_item(current_slot_idx, 1)
-					return
-			
-			# Поменять состояние стены
-			elif collider.is_in_group("buildings") and current_slot_data and R.items[current_slot_data["name"]].has("can_change_state_buildings") and !weapon.weapon_anim.is_playing():
-				collider.change_state.rpc_id(1)
-				weapon.use_item_durability()
-				weapon.weapon_anim.play("use")
+					if ex_items.get(item_in_arm) and amount >= ex_items.get(item_in_arm)["amount"]:
+						if collider.has_node("CookComponent"): collider.cook.craft.rpc_id(1, item_in_arm)
+						elif collider.has_node("CraftComponent"): collider.craft.craft.rpc_id(1, item_in_arm)
+						# Выбрасываем (удаляем) из текущего слота
+						inv.drop_item(current_slot_idx, ex_items.get(item_in_arm)["amount"])
+						return
+						
+					if collider.has_node("CookComponent") and item_in_arm == collider.cook.fuel_type:
+						collider.cook.add_fuel.rpc_id(1)
+						inv.drop_item(current_slot_idx, 1)
+						return
+				
+				# Смена состояния постройки
+				elif !weapon.weapon_anim.is_playing() and R.items[current_slot_data["name"]].has("change_buildings"):
+					if R.items[current_slot_data["name"]]["change_buildings"] == "state":
+						# Простая смена состояния
+						if collider.is_in_group("buildings"):
+							collider.change_state.rpc_id(1)
+							weapon.use_item_durability()
+							weapon.weapon_anim.play("use")
+						elif collider.is_in_group("chiseled_parts"):
+							collider.get_parent().reset_to_default.rpc_id(1)
+				
+					# Режим chiseling
+					elif R.items[current_slot_data["name"]]["change_buildings"] == "chisel":
+						# Вырезаем
+						if collider.is_in_group("chiseled_parts"):
+							collider.get_parent().chisel_at(collider)
+							# Последующая обработка в block
+						# Или если это еще обычный блок, делаем его резным
+						elif collider is ChiseledBlock:
+							collider.make_chiseled.rpc_id(1)
 			
 			# Достать готовые предметы
 			elif collider.nname in R.exchangeable_items.keys():

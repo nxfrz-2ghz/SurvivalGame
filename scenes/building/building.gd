@@ -17,6 +17,18 @@ func _ready() -> void:
 	
 	mesh.visibility_range_end = G.world.buildings_visible_range
 
+
+func _on_damage_scale_anim() -> void:
+	# Scale animation
+	var tween := create_tween()
+	tween.tween_property(self, "scale", Vector3.ONE*0.85, 0.05)\
+			.set_trans(Tween.TRANS_QUAD)\
+			.set_ease(Tween.EASE_OUT)
+	tween.tween_property(self, "scale", Vector3.ONE, 0.25)\
+			.set_trans(Tween.TRANS_QUAD)\
+			.set_ease(Tween.EASE_IN)
+
 @rpc("authority", "call_local")
 func on_damage() -> void:
 	take_damage_audio.play_sound()
+	_on_damage_scale_anim()

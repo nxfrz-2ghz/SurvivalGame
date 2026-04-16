@@ -92,3 +92,11 @@ func _on_timer_timeout() -> void:
 		toggle_rain.rpc(true)
 	if randf() < 0.01:
 		toggle_meteor_rain.rpc(true)
+
+
+@rpc("any_peer", "call_local")
+func update() -> void:
+	if not is_multiplayer_authority(): return
+	toggle_fog.rpc(fog)
+	toggle_rain.rpc(rain)
+	toggle_meteor_rain.rpc(meteor_rain)

@@ -2,6 +2,8 @@ extends Node
 
 func _ready() -> void:
 	Console.add_command("spawn", spawn, ["entity_name", "amount", "position", "delay"], 1)
+	Console.add_command("tick", tick, ["rate"])
+	
 	Console.console_opened.connect(_on_console_opened)
 	Console.console_closed.connect(_on_console_closed)
 
@@ -65,3 +67,6 @@ func spawn(entity_name: String, amount, position, delay) -> void:
 		
 		node.position = position
 		G.environment.add_child(node, true)
+
+func tick(rate: int = 60) -> void:
+	Engine.physics_ticks_per_second = rate

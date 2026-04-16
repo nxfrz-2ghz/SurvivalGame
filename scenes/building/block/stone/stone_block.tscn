@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://c285w3yots01b"]
 
 [ext_resource type="PackedScene" uid="uid://crptsdnu1ermv" path="res://scenes/building/block/block.tscn" id="1_ndf5e"]
-[ext_resource type="Material" uid="uid://b76dt40pkav8h" path="res://scenes/building/_materials/x1/stone.tres" id="2_ofd7u"]
+[ext_resource type="Material" uid="uid://b76dt40pkav8h" path="res://scenes/building/_materials/stone.tres" id="2_ofd7u"]
 
 [node name="StoneBlock" unique_id=1331540241 instance=ExtResource("1_ndf5e")]
 nname = "stone_block"

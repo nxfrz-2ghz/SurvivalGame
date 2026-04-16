@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://cw2ju52dtn1fv" path="res://res/sprites/objects/campfire/campfire_3.png" id="4_irh8k"]
 [ext_resource type="PackedScene" uid="uid://c4bc1csuh283u" path="res://scenes/particles/smoke_particle/smoke_particle.tscn" id="4_wkwmc"]
 [ext_resource type="Texture2D" uid="uid://dlf5ve55ng67a" path="res://res/sprites/objects/campfire/campfire_2.png" id="5_wkwmc"]
+[ext_resource type="PackedScene" uid="uid://bbyjk300qdo76" path="res://scenes/prefabs/light/light.tscn" id="8_ncuph"]
 [ext_resource type="PackedScene" uid="uid://kqqogxrnnqyf" path="res://components/fall_ray/fall_ray.tscn" id="8_x1bif"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_x1bif"]
@@ -80,14 +81,7 @@ texture = ExtResource("2_fyjhv")
 [node name="ToggleOn" type="Node3D" parent="." index="8" unique_id=440124899]
 visible = false
 
-[node name="OmniLight3D" type="OmniLight3D" parent="ToggleOn" index="0" unique_id=1416207734]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7948087, 0)
-light_color = Color(1, 0.6862745, 0.39215687, 1)
-light_energy = 6.0
-distance_fade_enabled = true
-omni_range = 10.0
-
-[node name="AnimSprite3D" type="AnimatedSprite3D" parent="ToggleOn" index="1" unique_id=1256987556]
+[node name="AnimSprite3D" type="AnimatedSprite3D" parent="ToggleOn" index="0" unique_id=1256987556]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7948087, 0)
 visibility_range_end = 100.0
 billboard = 2
@@ -97,6 +91,11 @@ alpha_cut = 1
 sprite_frames = SubResource("SpriteFrames_ncuph")
 autoplay = "default"
 frame_progress = 0.0647054
+
+[node name="Light" parent="ToggleOn" index="1" unique_id=920727058 instance=ExtResource("8_ncuph")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5085771, 0)
+energy = 6.0
+color = Color(1, 0.6862745, 0.39215687, 1)
 
 [node name="SmokeParticle" parent="." index="9" unique_id=2097639369 instance=ExtResource("4_wkwmc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5075673, 0)

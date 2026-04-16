@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://c3eucntv301qj"]
 
 [ext_resource type="PackedScene" uid="uid://crptsdnu1ermv" path="res://scenes/building/block/block.tscn" id="1_bmixi"]
-[ext_resource type="Material" uid="uid://gw86bd53dpde" path="res://scenes/building/_materials/x1/copper.tres" id="2_bmixi"]
+[ext_resource type="Material" uid="uid://gw86bd53dpde" path="res://scenes/building/_materials/copper.tres" id="2_bmixi"]
 
 [node name="CopperBlock" unique_id=1331540241 instance=ExtResource("1_bmixi")]
 nname = "copper_block"

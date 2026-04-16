@@ -3,8 +3,8 @@ extends Area3D
 @onready var canvas_modulate := $CanvasModulate
 
 # Параметры затухания света
-@export var light_radius: float = 10.0   # Максимальный радиус влияния (для расчета яркости)
-@export var light_power: float = 1.5    # Общая яркость источников
+@export var light_radius: float = 5.0   # Максимальный радиус влияния (для расчета яркости)
+@export var light_power: float = 1.0    # Общая яркость источников
 
 var color: Color
 
@@ -14,7 +14,7 @@ func _physics_process(_delta: float) -> void:
 	color = Color(val, val, val)
 	
 	# 2. Перебираем объекты в зоне
-	var light_nodes := get_overlapping_bodies()
+	var light_nodes := get_overlapping_areas()
 	
 	for node in light_nodes:
 		# Проверяем, есть ли у узла переменная 'color'

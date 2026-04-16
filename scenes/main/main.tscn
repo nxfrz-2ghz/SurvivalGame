@@ -216,7 +216,7 @@ spawn_path = NodePath("..")
 process_thread_group = 2
 process_thread_group_order = 0
 process_thread_messages = 0
-_spawnable_scenes = PackedStringArray("uid://darxc13rlkwt7", "uid://cddn37g14j7yf", "uid://s322lfir2gd7", "uid://uwmukk060f86", "uid://qg4g44ocaejc", "")
+_spawnable_scenes = PackedStringArray("uid://darxc13rlkwt7", "uid://cddn37g14j7yf", "uid://s322lfir2gd7", "uid://uwmukk060f86", "uid://qg4g44ocaejc")
 spawn_path = NodePath("..")
 script = ExtResource("3_nvumn")
 
@@ -911,6 +911,8 @@ layout_mode = 2
 layout_mode = 2
 placeholder_text = "PLC_IP"
 alignment = 1
+script = ExtResource("24_62atk")
+key = "join_ip_addres"
 
 [node name="JoinButton" type="Button" parent="GUI/MainMenu/VBoxContainer/PanelContainer3/MarginContainer/VBoxContainer" unique_id=776928020]
 layout_mode = 2

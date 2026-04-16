@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cilqg125ej3tw"]
 
 [ext_resource type="PackedScene" uid="uid://q8syis2q1qup" path="res://scenes/building/wall/wall.tscn" id="1_xad4l"]
-[ext_resource type="Material" uid="uid://ba46uwhuekkfr" path="res://scenes/building/_materials/x2/copper.tres" id="2_pks7w"]
+[ext_resource type="Material" uid="uid://gw86bd53dpde" path="res://scenes/building/_materials/copper.tres" id="2_xad4l"]
 
 [node name="CopperWall" unique_id=1331540241 instance=ExtResource("1_xad4l")]
 nname = "copper_wall"
@@ -19,4 +19,4 @@ drop_items = {
 }
 
 [node name="MeshInstance3D" parent="." index="3" unique_id=2006591672]
-material_override = ExtResource("2_pks7w")
+material_override = ExtResource("2_xad4l")

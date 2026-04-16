@@ -4,7 +4,7 @@ extends LineEdit
 
 func _ready() -> void:
 	# Подключаем сигнал окончания ввода (когда нажали Enter или сменили фокус)
-	text_submitted.connect(_on_text_submitted)
+	editing_toggled.connect(_on_save)
 	
 	# Загрузка данных
 	if DiskControl.has(key):
@@ -12,15 +12,16 @@ func _ready() -> void:
 		text = str(val)
 		apply(text)
 
-func _on_text_submitted(new_text: String) -> void:
-	apply(new_text)
+func _on_save(toggle: bool = false) -> void:
+	if toggle: return
+	apply(text)
 	
 	# Сохраняем, если значение изменилось
 	if DiskControl.has(key):
-		if str(DiskControl.take(key)) != new_text:
-			DiskControl.save(key, new_text)
+		if str(DiskControl.take(key)) != text:
+			DiskControl.save(key, text)
 	else:
 		# Если ключа еще нет в DiskControl, просто сохраняем
-		DiskControl.save(key, new_text)
+		DiskControl.save(key, text)
 
 func apply(_val: String) -> void: pass

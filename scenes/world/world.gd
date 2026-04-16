@@ -137,6 +137,7 @@ func join_world(nname: String, sseed: int, wworld_size: int) -> void:
 	_init_noise()
 	_generate_world()
 	G.player.load_character()
+	weather.update.rpc_id(1)
 
 
 func _init_noise() -> void:

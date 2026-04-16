@@ -50,7 +50,7 @@
 [ext_resource type="Texture2D" uid="uid://i23qfb8e41u0" path="res://res/sprites/particles/circle.png" id="47_hyqqp"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_1u1sw"]
-radius = 15.0
+radius = 5.0
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ds1xl"]
 emission_shape_offset = Vector3(0, 20, 0)
@@ -1074,6 +1074,7 @@ script = ExtResource("10_jrbya")
 [node name="LightController" type="Area3D" parent="." unique_id=2078281524]
 collision_layer = 0
 collision_mask = 128
+input_ray_pickable = false
 monitorable = false
 script = ExtResource("7_ds1xl")
 

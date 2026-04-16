@@ -63,11 +63,11 @@ func server_attack(dmg: float, damage_types: Dictionary, push_velocity: float, p
 		
 		# Урон по объектам
 		if body.is_in_group("objects") or body.is_in_group("buildings"):
-			body.health.take_damage(dmg, damage_types)
+			body.health.take_damage.rpc(dmg, damage_types)
 		
 		# Урон по мобам
 		if body.is_in_group("mobs"):
-			body.health.take_damage(dmg, damage_types)
+			body.health.take_damage.rpc(dmg, damage_types)
 			body.apply_push(-actions_node.global_transform.basis.z.normalized() + Vector3.UP/2, push_velocity)
 
 

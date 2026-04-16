@@ -31,9 +31,5 @@ func _update_state() -> void:
 func change_state() -> void:
 	if not is_multiplayer_authority(): return
 	
-	if state == State.WALL:
-		state = State.DOOR
-	elif state == State.DOOR:
-		state = State.DESCENT
-	elif state == State.DESCENT:
-		state = State.WALL
+	# Следующий state по порядку
+	state = (state + 1) % State.size() as State

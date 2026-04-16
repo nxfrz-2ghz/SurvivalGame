@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dqeqkmtec5wtu"]
 
 [ext_resource type="PackedScene" uid="uid://q8syis2q1qup" path="res://scenes/building/wall/wall.tscn" id="1_cvy0d"]
-[ext_resource type="Material" uid="uid://53fxxgmi2ran" path="res://scenes/building/_materials/x2/wood.tres" id="2_wdxb2"]
+[ext_resource type="Material" uid="uid://c2u7qng4dq7y0" path="res://scenes/building/_materials/wood.tres" id="2_cvy0d"]
 
 [node name="WoodWall" unique_id=1331540241 instance=ExtResource("1_cvy0d")]
 nname = "wood_wall"
@@ -23,4 +23,4 @@ drop_chance = {
 despawn_sound_name = "wood"
 
 [node name="MeshInstance3D" parent="." index="3" unique_id=2006591672]
-material_override = ExtResource("2_wdxb2")
+material_override = ExtResource("2_cvy0d")

@@ -52,11 +52,15 @@ func _on_timer_timeout() -> void:
 	if Input.is_action_pressed("right"):
 		take_hunger(HUNGER_SPEED)
 	
-	# Heal
-	@warning_ignore("integer_division")
-	if G.player and current_hunger >= MAX_HUNGER/10*8 and G.player.health.current_health < G.player.health.max_health:
-		heal.emit(G.player.health.max_health/100)
-		take_hunger(HUNGER_SPEED * 3)
+	if G.player:
+		# Heal
+		@warning_ignore("integer_division")
+		if G.player and current_hunger >= MAX_HUNGER/10*8 and G.player.health.current_health < G.player.health.max_health:
+			heal.emit(G.player.health.max_health/100)
+			take_hunger(HUNGER_SPEED * 3)
+		
+		if !G.player.progress_controller.unlocked_notes.has("NTV_3") and current_hunger <= MAX_HUNGER/2:
+			G.player.progress_controller.add_note("NTK_3")
 
 func on_attack() -> void:
 	take_hunger(HUNGER_SPEED * 5)
