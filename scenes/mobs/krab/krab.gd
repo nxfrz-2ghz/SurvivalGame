@@ -77,3 +77,8 @@ func dash() -> void:
 		velocity += -self.global_transform.basis.z.normalized() * dash_power
 	else:
 		velocity += -self.global_transform.basis.z.normalized() * dash_power / 20
+
+
+func _on_despawn_timer_timeout() -> void:
+	if not is_multiplayer_authority(): return
+	queue_free()

@@ -1,15 +1,29 @@
 extends DirectionalLight3D
 
-@onready var parent := get_parent()
-
 signal night_come
 signal day_come
 
-var night := false
+enum n { FALSE, PEACEFUL, DEFAULT, HORROR }
+var night := n.FALSE
+const night_chances := [
+	n.PEACEFUL,
+	n.DEFAULT,
+	n.DEFAULT,
+	n.DEFAULT,
+	n.DEFAULT,
+	n.HORROR,
+]
 
-const min_energy := 0.05
-var max_energy := 1.0
-@export var time_speed = 0.5 # Скорость смены дня
+@export var min_energy := n.DEFAULT
+@export var max_energy := 1.0
+const min_night_energy := {
+	n.PEACEFUL: 0.1,
+	n.DEFAULT: 0.05,
+	n.HORROR: 0.01,
+}
+
+@export var day_counter: int
+@export var time_speed = 0.5
 
 var current_color: float
 
@@ -21,31 +35,32 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if G.state_machine != "game": return
 	
-	rotation_degrees.x += time_speed * delta
-	if night:
-		rotation_degrees.x += time_speed * delta # X2 SPEED
+	if is_multiplayer_authority():
 	
-	if Input.is_action_pressed("X"):
-		for i in range(100):
-			rotation_degrees.x += time_speed * delta
+		rotation_degrees.x += time_speed * delta
+		if night:
+			rotation_degrees.x += time_speed * delta # X2 SPEED
+		
+		if Input.is_action_pressed("X"):
+			for i in range(100):
+				rotation_degrees.x += time_speed * delta
 	
-	if rotation_degrees.x > 180 and night:
-		night = false
-		rotation_degrees.x = -rotation_degrees.x
-		max_energy = randf_range(0.8, 1.5)
+		if rotation_degrees.x > 180 and night != n.FALSE:
+			night = n.FALSE
+			rotation_degrees.x = -rotation_degrees.x
+			max_energy = randf_range(0.8, 2.5) #Случайная яркость дня
+			day_counter += 1
+			day_come.emit()
 		
-		if !G.player.progress_controller.unlocked_notes.has(G.player.progress_controller.notes["NTK_4"]):
-			G.player.progress_controller.add_note("NTK_4")
-		
-		if parent.server: day_come.emit()
-	
-	if rotation_degrees.x > 0 and !night:
-		night = true
-		
-		if !G.player.progress_controller.unlocked_notes.has(G.player.progress_controller.notes["NTK_3"]):
-			G.player.progress_controller.add_note("NTK_3")
-		
-		if parent.server: night_come.emit()
+		if rotation_degrees.x > 0 and night == n.FALSE:
+			night = night_chances.pick_random()
+			
+			# Первая ночь мирная
+			if day_counter == 1: night = n.PEACEFUL
+			
+			min_energy = min_night_energy[night]
+			
+			night_come.emit()
 	
 	# Контроль яркости солнца
 	# Вычисляем яркость

@@ -33,6 +33,17 @@ func add_note(note_name: String) -> void:
 	audio_player.stream = new_note
 	audio_player.play()
 
+func _ready() -> void:
+	G.time_controller.day_come.connect(_on_day_come)
+	G.time_controller.night_come.connect(_on_night_come)
+
+func _on_day_come() -> void:
+	if !unlocked_notes.has(notes["NTK_4"]):
+		add_note("NTK_4")
+func _on_night_come() -> void:
+	if !unlocked_notes.has(notes["NTK_3"]):
+		add_note("NTK_3")
+
 # ACHIEVEMENTS
 const achievements := [
 	"ACH_1",

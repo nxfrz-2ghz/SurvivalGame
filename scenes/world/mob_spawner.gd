@@ -83,7 +83,7 @@ func _on_spawn_timer_timeout() -> void:
 				
 				# Ночные мобы
 				if R.mobs[mob_id]["requirements"].has("night"):
-					if not G.time_controller.night:
+					if G.time_controller.night == G.time_controller.n.PEACEFUL:
 						return
 				
 				# Мобы не спавнящиеся при низком прогрессе игрока (нет определенной заметки)

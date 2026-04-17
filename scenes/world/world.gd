@@ -578,6 +578,7 @@ func save_world() -> void:
 		"seed": world_seed,
 		"world_size": world_size,
 		"sun_rotation": G.time_controller.rotation_degrees.x,
+		"day_counter": G.time_controller.day_counter,
 		"weather": {
 			"fog": weather.fog,
 			"rain": weather.rain,
@@ -676,6 +677,7 @@ func load_world() -> void:
 	world_seed = data["seed"]
 	world_size = data["world_size"]
 	G.time_controller.rotation_degrees.x = data["sun_rotation"]
+	G.time_controller.day_counter = data.get("day_counter", 1)
 	
 	if data.get("weather"):
 		weather.toggle_fog.rpc(data["weather"]["fog"])

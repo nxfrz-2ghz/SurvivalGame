@@ -38,6 +38,10 @@ wait_time = 6.0
 one_shot = true
 autostart = true
 
+[node name="DespawnTimer" type="Timer" parent="Timers" parent_id_path=PackedInt32Array(1401815993) index="7" unique_id=324803654]
+wait_time = 150.0
+autostart = true
+
 [node name="HealthComponent" parent="." index="2" unique_id=1086839518]
 max_health = 4.0
 
@@ -68,4 +72,5 @@ replication_config = SubResource("SceneReplicationConfig_malmu")
 
 [connection signal="timeout" from="Timers/ChangeState" to="." method="_on_timer_timeout"]
 [connection signal="timeout" from="Timers/ScanPlayers" to="." method="_on_scan_players_timeout"]
+[connection signal="timeout" from="Timers/DespawnTimer" to="." method="_on_despawn_timer_timeout"]
 [connection signal="animation_finished" from="AnimatedSprite3D" to="." method="_on_animated_sprite_3d_animation_finished"]
