@@ -19,11 +19,13 @@ const BLOCK_SHAPES := {
 @export var grid_size: int = 8
 @export var block_size: float = 1.0
 
+const SUB_BLOCK := preload("res://scenes/building/block/_sub_block/sub_block.tscn")
+
 # Список удалённых позиций (Vector3i)
-var removed_subs: Array[Vector3i] = []
-# Словарь для быстрого доступа: { Vector3i: StaticBody3D }
 var sub_blocks: Dictionary = {}
-var is_chiseled: bool = false
+@export var removed_subs: Array[Vector3i] = []
+# Словарь для быстрого доступа: { Vector3i: StaticBody3D }
+@export var is_chiseled: bool = false
 
 func _ready() -> void:
 	super()
@@ -50,7 +52,7 @@ func change_state() -> void:
 
 @rpc("any_peer", "call_local")
 func make_chiseled() -> void:
-	if not is_multiplayer_authority() or is_chiseled:
+	if is_chiseled:
 		return
 		
 	is_chiseled = true
@@ -71,7 +73,7 @@ func _spawn_sub_blocks() -> void:
 				_create_sub_block(grid_pos, step, offset)
 
 func _create_sub_block(grid_pos: Vector3i, step: float, offset: float) -> void:
-	var sub := R.prefabs["chisel_part"].instantiate()
+	var sub := SUB_BLOCK.instantiate()
 	
 	sub.nname = self.nname
 	sub.size = Vector3.ONE * step
@@ -83,7 +85,7 @@ func _create_sub_block(grid_pos: Vector3i, step: float, offset: float) -> void:
 		grid_pos.z * step - offset
 	)
 	
-	add_child(sub, true)
+	add_child(sub)
 	sub_blocks[grid_pos] = sub
 	sub.mesh.material_override = mesh.get_active_material(0)
 
@@ -113,9 +115,6 @@ func chisel_at_rpc(grid_pos: Vector3i) -> void:
 
 @rpc("any_peer", "call_local")
 func reset_to_default() -> void:
-	if not is_multiplayer_authority():
-		return
-		
 	for sub in sub_blocks.values():
 		sub.queue_free()
 		

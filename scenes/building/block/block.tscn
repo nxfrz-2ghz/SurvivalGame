@@ -5,11 +5,21 @@
 [ext_resource type="Script" uid="uid://cm837qr2krkk6" path="res://scenes/building/block/block.gd" id="2_uj1wg"]
 [ext_resource type="BoxMesh" uid="uid://co3km863qbnma" path="res://scenes/building/block/_meshes/full_box.tres" id="3_uj1wg"]
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_nedpk"]
+properties/0/path = NodePath(".:removed_subs")
+properties/0/spawn = true
+properties/0/replication_mode = 0
+properties/1/path = NodePath(".:is_chiseled")
+properties/1/spawn = true
+properties/1/replication_mode = 0
+
 [node name="Block" unique_id=1331540241 instance=ExtResource("1_p5mmr")]
 script = ExtResource("2_uj1wg")
 state = 0
 grid_size = 8
 block_size = 1.0
+removed_subs = Array[Vector3i]([])
+is_chiseled = false
 nname = "block"
 
 [node name="MeshInstance3D" parent="." index="3" unique_id=2006591672]
@@ -17,3 +27,6 @@ mesh = ExtResource("3_uj1wg")
 
 [node name="CollisionShape3D" parent="." index="4" unique_id=1161658582]
 shape = ExtResource("2_llm0o")
+
+[node name="MultiplayerSynchronizer2" type="MultiplayerSynchronizer" parent="." index="6" unique_id=1044406262]
+replication_config = SubResource("SceneReplicationConfig_nedpk")

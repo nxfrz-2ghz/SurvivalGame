@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bhdwywjtluiwv" path="res://scenes/prefabs/meteorite/meteorite_rigid.gd" id="1_7pook"]
 [ext_resource type="Texture2D" uid="uid://caafjypjhepvm" path="res://scenes/prefabs/meteorite/meteorite_texture.jpg" id="2_gv3mv"]
+[ext_resource type="PackedScene" uid="uid://dqmtonvm4lxcw" path="res://scenes/particles/fire_particle/fire_particle.tscn" id="3_dm3w0"]
 [ext_resource type="Script" uid="uid://dknrk65skptje" path="res://scripts/base_audio_player_rpc.gd" id="3_gv3mv"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_7pook"]
@@ -19,37 +20,6 @@ height = 3.0
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_tgipe"]
 radius = 1.5
-
-[sub_resource type="Gradient" id="Gradient_ggmd3"]
-offsets = PackedFloat32Array(0, 0.99523807)
-colors = PackedColorArray(1, 0.28235295, 0, 1, 1, 1, 1, 0)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_7ytub"]
-gradient = SubResource("Gradient_ggmd3")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ym6vq"]
-emission_shape = 1
-emission_sphere_radius = 2.0
-direction = Vector3(1, 0, 1)
-spread = 180.0
-initial_velocity_min = -1.0
-initial_velocity_max = 1.0
-gravity = Vector3(0, 3, 0)
-color_ramp = SubResource("GradientTexture1D_7ytub")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sb5y2"]
-transparency = 1
-shading_mode = 0
-vertex_color_use_as_albedo = true
-billboard_mode = 3
-particles_anim_h_frames = 1
-particles_anim_v_frames = 1
-particles_anim_loop = false
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_v8j7p"]
-material = SubResource("StandardMaterial3D_sb5y2")
-size = Vector2(0.2, 0.2)
-orientation = 2
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_7pook"]
 properties/0/path = NodePath(".:position")
@@ -73,13 +43,7 @@ mesh = SubResource("SphereMesh_tgipe")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=543427473]
 shape = SubResource("SphereShape3D_tgipe")
 
-[node name="FireParticle" type="GPUParticles3D" parent="." unique_id=2097639369]
-visibility_range_end = 60.0
-amount = 192
-lifetime = 3.0
-randomness = 0.4
-process_material = SubResource("ParticleProcessMaterial_ym6vq")
-draw_pass_1 = SubResource("PlaneMesh_v8j7p")
+[node name="FireParticle" parent="." unique_id=1019042937 instance=ExtResource("3_dm3w0")]
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=66147843]
 replication_config = SubResource("SceneReplicationConfig_7pook")

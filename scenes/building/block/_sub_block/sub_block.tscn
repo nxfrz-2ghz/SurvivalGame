@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://bbh1t3knmrsgt"]
+
+[ext_resource type="Script" uid="uid://b12g1m078d152" path="res://scenes/building/block/_sub_block/sub_block.gd" id="1_gai0k"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_k1dib"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_u021d"]
+
+[node name="SubBlock" type="StaticBody3D" unique_id=183511366 groups=["sub_blocks"]]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("1_gai0k")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1363809550]
+mesh = SubResource("BoxMesh_k1dib")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=884845533]
+shape = SubResource("BoxShape3D_u021d")

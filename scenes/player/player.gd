@@ -176,20 +176,26 @@ func _input(event: InputEvent) -> void:
 						# Простая смена состояния
 						if collider.is_in_group("buildings"):
 							collider.change_state.rpc_id(1)
-							weapon.use_item_durability()
-							weapon.weapon_anim.play("use")
-						elif collider.is_in_group("chiseled_parts"):
-							collider.get_parent().reset_to_default.rpc_id(1)
+						elif collider.is_in_group("sub_blocks"):
+							collider.get_parent().reset_to_default.rpc()
+						
+						weapon.use_item_durability()
+						weapon.weapon_anim.speed_scale = weapon.attack_speed + float(weapon.speed_rings)/5
+						weapon.weapon_anim.play("use")
 				
 					# Режим chiseling
 					elif R.items[current_slot_data["name"]]["change_buildings"] == "chisel":
 						# Вырезаем
-						if collider.is_in_group("chiseled_parts"):
+						if collider.is_in_group("sub_blocks"):
 							collider.get_parent().chisel_at(collider)
 							# Последующая обработка в block
 						# Или если это еще обычный блок, делаем его резным
 						elif collider is ChiseledBlock:
-							collider.make_chiseled.rpc_id(1)
+							collider.make_chiseled.rpc()
+						
+						weapon.use_item_durability()
+						weapon.weapon_anim.speed_scale = weapon.attack_speed + float(weapon.speed_rings)/5
+						weapon.weapon_anim.play("use")
 			
 			# Достать готовые предметы
 			elif collider.nname in R.exchangeable_items.keys():
@@ -391,6 +397,8 @@ func moving(delta: float) -> void:
 		speed *= 0.8
 	if hunger.current_hunger < hunger.MAX_HUNGER / 8:
 		speed *= 0.6
+	if Input.is_action_pressed("alt"):
+		speed *= 0.5
 	
 	speed += weapon.speed_rings
 	
@@ -439,7 +447,16 @@ func camera_control() -> void:
 	elif camera.fov > needed_fov:
 		if state == STATE.AIM:
 			camera.fov -= 1.0
-		camera.fov -= 0.5
+		camera.fov -= 0.
+
+
+func scale_y_control() -> void:
+	if Input.is_action_pressed("alt"):
+		if self.scale.y > 0.5:
+			scale.y -= 0.02
+	else:
+		if self.scale.y < 1.0:
+			scale.y += 0.02
 
 
 func _physics_process(delta: float) -> void:
@@ -449,6 +466,7 @@ func _physics_process(delta: float) -> void:
 	moving(delta)
 	if Input.is_action_pressed("rmb") and R.items[weapon.current_name].get("throw_power"): state = STATE.AIM
 	camera_control()
+	scale_y_control()
 	
 	move_and_slide()
 

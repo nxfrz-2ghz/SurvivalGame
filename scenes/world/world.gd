@@ -106,6 +106,10 @@ const VARS_WHITELIST := [
 	"fuel",
 	# ========
 	"lvl_cost", # loot_chest
+	# for saving chiseled blocks
+	"is_chiseled",
+	"removed_subs",
+	# ========
 ]
 
 var server: bool

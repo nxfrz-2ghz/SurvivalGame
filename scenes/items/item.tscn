@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://y6cc2r2erxqe" path="res://scenes/items/item.gd" id="1_xhhhv"]
 [ext_resource type="PackedScene" uid="uid://4ffu5apey8sh" path="res://components/shadow/shadow.tscn" id="2_jgeia"]
 [ext_resource type="PackedScene" uid="uid://bbyjk300qdo76" path="res://scenes/prefabs/light/light.tscn" id="3_fat2f"]
+[ext_resource type="PackedScene" uid="uid://dqmtonvm4lxcw" path="res://scenes/particles/fire_particle/fire_particle.tscn" id="4_tfqyq"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_xhhhv"]
 
@@ -41,3 +42,7 @@ transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 replication_config = SubResource("SceneReplicationConfig_xhhhv")
 
 [node name="Light" parent="." unique_id=438359777 instance=ExtResource("3_fat2f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2697596, 0)
+
+[node name="FireParticle" parent="Light" unique_id=1019042937 instance=ExtResource("4_tfqyq")]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)

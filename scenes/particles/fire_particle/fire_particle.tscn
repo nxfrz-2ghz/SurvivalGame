@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://dqmtonvm4lxcw"]
+
+[sub_resource type="Gradient" id="Gradient_ggmd3"]
+offsets = PackedFloat32Array(0, 0.99523807)
+colors = PackedColorArray(1, 0.28235295, 0, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_7ytub"]
+gradient = SubResource("Gradient_ggmd3")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ym6vq"]
+emission_shape = 1
+emission_sphere_radius = 2.0
+direction = Vector3(1, 0, 1)
+spread = 180.0
+initial_velocity_min = -1.0
+initial_velocity_max = 1.0
+gravity = Vector3(0, 3, 0)
+color_ramp = SubResource("GradientTexture1D_7ytub")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sb5y2"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_v8j7p"]
+material = SubResource("StandardMaterial3D_sb5y2")
+size = Vector2(0.2, 0.2)
+orientation = 2
+
+[node name="FireParticle" type="GPUParticles3D" unique_id=1019042937]
+visibility_range_end = 60.0
+amount = 192
+lifetime = 3.0
+randomness = 0.4
+process_material = SubResource("ParticleProcessMaterial_ym6vq")
+draw_pass_1 = SubResource("PlaneMesh_v8j7p")

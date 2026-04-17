@@ -23,7 +23,6 @@ func _ready() -> void:
 	current_health = max_health
 
 
-@rpc("any_peer", "call_local")
 func heal(health: float) -> void:
 	last_health = current_health
 	

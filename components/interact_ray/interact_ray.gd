@@ -12,8 +12,13 @@ func update() -> void:
 	last_target = current_target
 	# Если нашли объект — шлем имя, если нет — пустую строку
 	var target_name = ""
-	if current_target and current_target.has_meta(target_name):
+	if current_target:
 		target_name = current_target.nname 
+		
+		if current_target.is_in_group("sub_blocks"):
+			current_target = current_target.get_parent()
+			update()
+		
 		if current_target.is_in_group("objects") or current_target.is_in_group("buildings") or current_target.is_in_group("players") or current_target.is_in_group("mobs"):
 			target_name += "\n" + str(current_target.health.current_health) + "/" + str(current_target.health.max_health)
 			if current_target.nname in R.exchangeable_items.keys():
@@ -22,8 +27,10 @@ func update() -> void:
 				target_name += "\n[RIGHT CLICK] TO COLLECT"
 			if current_target.get("lvl_cost"):
 				target_name += "\n[RIGHT CLICK] TO OPEN"
+		
 		if current_target.is_in_group("items"):
 			target_name += "\nPRESS [F] TO PICKUP"
+		
 	target_found.emit(target_name)
 
 

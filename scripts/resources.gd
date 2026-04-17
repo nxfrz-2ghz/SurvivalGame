@@ -145,7 +145,6 @@ const prefabs := {
 	"explosion": preload("res://scenes/prefabs/explosion/explosion_3d.tscn"),
 	"exp_sphere": preload("res://scenes/prefabs/exp_sphere/exp_sphere.tscn"),
 	"fall_ray": preload("res://components/fall_ray/fall_ray.tscn"),
-	"chisel_part": preload("res://scenes/building/block/_chiseled_part/chisel_part.tscn"),
 }
 
 const mobs := {
@@ -681,11 +680,11 @@ const items := {
 	"wooden_hammer": {
 		"texture": preload("res://res/sprites/items/weapons/wooden_hammer.png"),
 		"recipe": {
-			"log":2,
+			"log":5,#"log":2,
 		},
-		"durability": 30,
+		"durability": 50,#30,
 		"attack_speed": 0.5,
-		"damage": 2.0,
+		"damage": 3.0,#"damage": 2.0,
 		"damage_types": {
 			"melee": 0.5,
 			"heavy": 1.0,
