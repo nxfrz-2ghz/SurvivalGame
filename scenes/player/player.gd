@@ -23,7 +23,7 @@ extends CharacterBody3D
 @onready var walk_sound_timer := $Timers/WalkSoundPlay
 @onready var rain := $RainParticles3D
 
-const SPEED = 6.0
+const SPEED = 3.0
 const JUMP_VELOCITY = 4.0
 
 const RIGID_CAM := preload("res://scenes/player/rigid_cam/rigid_cam.tscn")

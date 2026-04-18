@@ -510,6 +510,33 @@ const items := {
 			"pickaxe": 0.0,
 		},
 	},
+	"copper_chisel": {
+		"texture": preload("res://res/sprites/items/weapons/copper/copper_chisel.png"),
+		"recipe": {
+			"log":1,
+			"copper_ingot":1,
+		},
+		"can_oxiding": "copper_chisel_ox1",
+		"durability": 60,
+		"attack_speed": 2.5,
+		"damage": 2.0,
+		"change_buildings": "chisel",
+	},
+	"copper_chisel_ox1": {
+		"texture": preload("res://res/sprites/items/weapons/copper/copper_chisel_ox1.png"),
+		"can_oxiding": "copper_chisel_ox2",
+		"durability": 80,
+		"attack_speed": 2.4,
+		"damage": 2.0,
+		"change_buildings": "chisel",
+	},
+	"copper_chisel_ox2": {
+		"texture": preload("res://res/sprites/items/weapons/copper/copper_chisel_ox2.png"),
+		"durability": 100,
+		"attack_speed": 2.3,
+		"damage": 2.0,
+		"change_buildings": "chisel",
+	},
 	"copper_pickaxe": {
 		"texture": preload("res://res/sprites/items/weapons/copper/copper_pickaxe.png"),
 		"recipe": {
@@ -604,6 +631,17 @@ const items := {
 			"pickaxe_lvl2": 0.8,
 		},
 	},
+	"iron_chisel": {
+		"texture": preload("res://res/sprites/items/weapons/iron_chisel.png"),
+		"recipe": {
+			"log":1,
+			"iron_ingot":1,
+		},
+		"durability": 250,
+		"attack_speed": 2.8,
+		"damage": 2.0,
+		"change_buildings": "chisel",
+	},
 	"steel_axe": {
 		"texture": preload("res://res/sprites/items/weapons/steel_axe.png"),
 		"recipe": {
@@ -634,6 +672,17 @@ const items := {
 			"pickaxe": 1.2,
 			"pickaxe_lvl2": 1.2,
 		},
+	},
+	"steel_chisel": {
+		"texture": preload("res://res/sprites/items/weapons/steel_chisel.png"),
+		"recipe": {
+			"log":1,
+			"steel_ingot":1,
+		},
+		"durability": 650,
+		"attack_speed": 3.2,
+		"damage": 2.0,
+		"change_buildings": "chisel",
 	},
 	"steel_sword": {
 		"texture": preload("res://res/sprites/items/weapons/steel_sword.png"),
@@ -704,7 +753,7 @@ const items := {
 			"energy": 1.0,
 		},
 		"damage": 2.0,
-		"change_buildings": "chisel",
+		"can_oxiding": "", # Костыльное угасание факела если долго его использовать
 	},
 	"raw_berry": {
 		"texture": preload("res://res/sprites/items/berry/raw_berry.png"),

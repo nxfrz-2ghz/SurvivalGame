@@ -58,6 +58,7 @@ func make_chiseled() -> void:
 	is_chiseled = true
 	mesh.visible = false
 	collision.disabled = true
+	entity.spawn_died_particle()
 	_spawn_sub_blocks()
 
 func _spawn_sub_blocks() -> void:

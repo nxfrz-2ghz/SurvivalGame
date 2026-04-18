@@ -13,7 +13,7 @@ var entity: Node3D
 func _ready() -> void:
 	entity = get_parent()
 
-func spawn_damage_perticle(cur: float, _maxx: float, last: float) -> void:
+func spawn_damage_particle(cur: float, _maxx: float, last: float) -> void:
 	var change_hp := cur - last
 	change_hp = snappedf(change_hp, 0.01)
 	if change_hp == 0.0: return
@@ -26,6 +26,19 @@ func spawn_damage_perticle(cur: float, _maxx: float, last: float) -> void:
 		particle.modulate = Color.RED
 	particle.position = entity.global_position + Vector3.UP
 	G.environment.add_child(particle, true)
+
+func spawn_died_particle() -> void:
+	var died_particles := R.particles["explose"].instantiate()
+	
+	if despawn_sound_name:
+		var sound_data = R.sounds["destroy"][despawn_sound_name]
+		died_particles.audio = (
+			sound_data.pick_random() if sound_data is Array else sound_data
+		).resource_path
+	
+	died_particles.position = entity.position
+	died_particles.size = despawn_particles_size
+	G.environment.add_child(died_particles, true)
 
 func drop(item_name: String) -> void:
 	var drop_item: RigidBody3D = R.item.instantiate()
@@ -55,18 +68,7 @@ func drop_exp_sphere(value: float) -> void:
 
 func despawn() -> void:
 	drop_loot()
-	
-	var died_particles := R.particles["explose"].instantiate()
-	
-	if despawn_sound_name:
-		var sound_data = R.sounds["destroy"][despawn_sound_name]
-		died_particles.audio = (
-			sound_data.pick_random() if sound_data is Array else sound_data
-		).resource_path
-	
-	died_particles.position = entity.position
-	died_particles.size = despawn_particles_size
-	G.environment.add_child(died_particles, true)
+	spawn_died_particle()
 	
 	if exp_drop > 0:
 		var count: int

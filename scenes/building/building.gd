@@ -13,7 +13,7 @@ func _ready() -> void:
 	
 	health.died.connect(entity.despawn)
 	health.on_damage.connect(on_damage.rpc)
-	health.changed.connect(entity.spawn_damage_perticle)
+	health.changed.connect(entity.spawn_damage_particle)
 	
 	mesh.visibility_range_end = G.world.buildings_visible_range
 

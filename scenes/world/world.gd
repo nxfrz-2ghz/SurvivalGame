@@ -12,62 +12,69 @@ const BIOME_CONFIG = {
 		"name": "Forest",
 		"height_multiplier": 2.0,
 		"noise_threshold": 0.4,
-		"objects": {
+		
+		# Objects
+		"ground": {
 			"grass": {"weight": 25, "density": 0.01},
 			"tree": {"weight": 55, "density": 0.04},
 			"stone": {"weight": 5, "density": 0.02},
 			"berry_bush" : {"weight": 10, "density": 0.05},
-		}
+		},
+		"sand": {},
+		"snow": {},
 	},
 	Biome.ORE_PLATEAU: {
 		"name": "Ore_plateu",
 		"height_multiplier": 1.0,
 		"noise_threshold": 0.7,
-		"objects": {
+		
+		# Objects
+		"ground": {
 			"rock": {"weight": 50, "density": 0.05},
 			"copper_ore": {"weight": 30, "density": 0.03},
 			"iron_ore": {"weight": 20, "density": 0.03},
-		}
+		},
+		"sand": {},
+		"snow": {},
 	},
 	Biome.MOUNTAINS: {
 		"name": "Mountains",
 		"height_multiplier": 5.0,
 		"noise_threshold": 0.7,
-		"objects": {
+		
+		# Objects
+		"ground": {
 			"rock": {"weight": 45, "density": 0.01},
 			"copper_ore": {"weight": 20, "density": 0.005},
 			"iron_ore": {"weight": 20, "density": 0.005},
 			"tree": {"weight": 10, "density": 0.01},
-		}
+		},
+		"sand": {},
+		"snow": {},
 	},
 	Biome.PLAINS: {
 		"name": "Plains",
 		"height_multiplier": 1.0,
 		"noise_threshold": 0.0,
-		"objects": {
+		
+		# Objects
+		"ground": {
 			"grass": {"weight": 92, "density": 0.005},
 			"stone": {"weight": 3, "density": 0.01},
 			"tree": {"weight": 2, "density": 0.01},
 			"berry_bush" : {"weight": 2, "density": 0.04},
-		}
+		},
+		"sand": {},
+		"snow": {},
 	},
 	Biome.UNDERWATER: {
 		"name": "Underwater",
 		"noise_threshold": 0.0,
-		"objects": {}
-	},
-}
-
-const BIOME_TEMP_SWAP := {
-	"sand": {
-		"tree": "",
-		"grass": "",
-		"berry_bush": "",
-	},
-	"snow": {
-		"tree": "",
-		"grass": "",
-		"berry_bush": "",
+		
+		# Objects
+		"ground": {},
+		"sand": {},
+		"snow": {},
 	},
 }
 
@@ -425,15 +432,21 @@ func _generate_objects() -> void:
 			var world_x := gx * spacing - offset
 			var world_z := gz * spacing - offset
 			
+			# Определяем температуру
+			var temp := _get_temp(world_x, world_z)
+			var temp_zone: String
+			if temp <= TEMP_BORDER_SAND: temp_zone = "sand"
+			elif temp <= TEMP_BORDER_GROUND: temp_zone = "ground"
+			elif temp <= TEMP_BORDER_SNOW: temp_zone = "snow"
 			# Определяем биом в этой позиции
 			var biom_value := biome_noise.get_noise_2d(world_x / 20.0, world_z / 20.0)
 			var biome := _get_biome(biom_value, world_x, world_z)
-			var biome_config: Dictionary = BIOME_CONFIG[biome]
+			var biome_config: Dictionary = BIOME_CONFIG[biome][temp_zone]
 			
 			# Шум для принятия решения о спавне и для выбора варианта
 			var noise_value := _get_height(world_x, world_z)
 			
-			var object_name: String = _select_object(biome_config, noise_value, rng, world_x, world_z)
+			var object_name: String = _select_object(biome_config, noise_value, rng)
 			if object_name != "":
 				var obj_scene: PackedScene = R.objects.get(object_name)["scene"]
 				if obj_scene:
@@ -592,34 +605,23 @@ func _get_blended_height_multiplier(biome_value: float) -> float:
 	else:
 		return m_mountain
 
-func _select_object(biome_config: Dictionary, _noise_value: float, rng: RandomNumberGenerator, pos_x: float, pos_z: float) -> String:
+func _select_object(biome_config: Dictionary, _noise_value: float, rng: RandomNumberGenerator) -> String:
 	# 1. Сначала считаем общий вес
 	var total_weight := 0.0
-	for obj_name in biome_config["objects"]:
-		total_weight += biome_config["objects"][obj_name]["weight"]
+	for obj_name in biome_config:
+		total_weight += biome_config[obj_name]["weight"]
 
 	# 2. ВЫБИРАЕМ ТИП ОБЪЕКТА ЧЕРЕЗ РАНДОМ (а не через шум)
 	var selection := rng.randf() * total_weight
 	var current_weight := 0.0
 
-	for obj_name in biome_config["objects"]:
-		var obj_config: Dictionary = biome_config["objects"][obj_name]
+	for obj_name in biome_config:
+		var obj_config: Dictionary = biome_config[obj_name]
 		current_weight += obj_config["weight"]
 
 		if selection <= current_weight:
 			# 3. Проверяем плотность (тоже через рандом)
 			if rng.randf() < obj_config["density"]:
-				# 4. Проверяем температуру
-				var temp := _get_temp(pos_x, pos_z)
-				
-				# Если не обычный биом, то ищем замену в биомных вариантах объектов
-				if temp < TEMP_BORDER_SAND:
-					if BIOME_TEMP_SWAP["sand"].get(obj_name):
-						obj_name = BIOME_TEMP_SWAP["sand"][obj_name]
-				elif temp > TEMP_BORDER_SNOW:
-					if BIOME_TEMP_SWAP["snow"].get(obj_name):
-						obj_name = BIOME_TEMP_SWAP["snow"][obj_name]
-				
 				return obj_name
 			return ""
 

@@ -25,7 +25,7 @@ func _ready() -> void:
 	
 	health.died.connect(entity.despawn)
 	health.on_damage.connect(on_damage.rpc)
-	health.changed.connect(entity.spawn_damage_perticle)
+	health.changed.connect(entity.spawn_damage_particle)
 	
 	G.time_controller.night_come.connect(shadow.hide_rpc)
 	G.time_controller.day_come.connect(shadow.show_rpc)
