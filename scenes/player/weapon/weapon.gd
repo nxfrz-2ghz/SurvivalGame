@@ -38,7 +38,7 @@ func update_player_stats() -> void:
 
 
 func get_dig_drop(hit_position: Vector3) -> String:
-	if hit_position.y < G.world.WATER_LEVEL:
+	if hit_position.y < G.world.CLAY_LEVEL:
 		return "clay"
 	return "dirt"
 

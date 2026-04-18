@@ -83,7 +83,7 @@ func _on_spawn_timer_timeout() -> void:
 				
 				# Ночные мобы
 				if R.mobs[mob_id]["requirements"].has("night"):
-					if G.time_controller.night == G.time_controller.n.PEACEFUL:
+					if G.time_controller.night in [G.time_controller.n.FALSE, G.time_controller.n.PEACEFUL]:
 						return
 				
 				# Мобы не спавнящиеся при низком прогрессе игрока (нет определенной заметки)
@@ -106,6 +106,10 @@ func _on_spawn_timer_timeout() -> void:
 		
 		# Создание экземпляра
 		spawn_mob(selected_mob_scene, spawn_pos)
+		
+		# Повышенный спавн в HORROR NIGHT
+		if G.time_controller.night == G.time_controller.n.HORROR:
+			spawn_mob(selected_mob_scene, spawn_pos)
 
 
 func get_random_spawn_position(center: Vector3, min_spawn_radius := MIN_SPAWN_RADIUS, max_spawn_radius := MAX_SPAWN_RADIUS) -> Vector3:

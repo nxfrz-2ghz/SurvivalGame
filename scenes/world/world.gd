@@ -58,15 +58,33 @@ const BIOME_CONFIG = {
 	},
 }
 
+const BIOME_TEMP_SWAP := {
+	"sand": {
+		"tree": "",
+		"grass": "",
+		"berry_bush": "",
+	},
+	"snow": {
+		"tree": "",
+		"grass": "",
+		"berry_bush": "",
+	},
+}
+
 const BIOME_BLEND := 0.03
 const BIOME_BORDER_PLATEU := -0.3  # плато / лес
 const BIOME_BORDER_FOREST   := -0.1   # лес / равнина
 const BIOME_BORDER_PLAINS   := 0.1   # равнина / горы
 
+const TEMP_BORDER_SAND := 0.2
+const TEMP_BORDER_GROUND := 0.8
+const TEMP_BORDER_SNOW := 1.0
+
 var world_name: String
 var world_seed: int
 var noise: FastNoiseLite
 var biome_noise: FastNoiseLite
+var temp_noise: FastNoiseLite
 
 @export var world_size := 500
 @export var height_max := 10.0
@@ -76,10 +94,14 @@ var biome_noise: FastNoiseLite
 @export var buildings_visible_range := 100.0
 @export var items_visible_range := 100.0
 @export var mobs_visible_range := 100.0
+
 const WATER_LEVEL := -5.5
+const CLAY_LEVEL := -7.5
+
 const spacing := 1.0     # Расстояние между вершинами
 # object gen
 const OBJ_SPAWN_STEP := 1.5  # Генерируем объекты с шагом (экономит спавны)
+const LOOT_SPAWN_STEP := 50.0
 # drop gen
 const DROP_SPAWN_STEP := 25.0  # Генерируем предметы с шагом (экономит спавны)
 # mesh gen
@@ -87,8 +109,9 @@ const CHUNK_SIZE := 64  # Размер одного чанка в вершина
 const CHUNK_VERTEX_COUNT := CHUNK_SIZE + 1
 const noise_scale := 5.0
 
-const ground_material := preload("res://scenes/world/world_material.tres")
-const water_material := preload("res://scenes/world/water_material.tres")
+const ground_material := preload("res://scenes/world/materials/ground_material.tres")
+const water_material := preload("res://scenes/world/materials/water_material.tres")
+
 
 # Grass
 const GRASS_DENSITY := 0.5      # вероятность травы на точку
@@ -157,45 +180,53 @@ func _init_noise() -> void:
 	biome_noise.noise_type = FastNoiseLite.TYPE_PERLIN
 	biome_noise.frequency = 0.05
 	
+	# Шум для определения температуры
+	temp_noise = FastNoiseLite.new()
+	temp_noise.seed = world_seed + 2
+	temp_noise.noise_type = FastNoiseLite.TYPE_PERLIN
+	temp_noise.frequency = 0.002
+	
 	fall_defense_area.set_size(world_size)
 	weather.env.setup()
 	#NodeOptimizer.start()
 
 
 func _generate_terrain() -> void:
-	# Генерируем меш террейна разбитый на чанки
 	var offset := (world_size - 1) * spacing / 2.0
-	# Вычисляем количество чанков
-	var chunks_count = ceili(float(world_size) / float(CHUNK_SIZE))
+	var chunks_count := ceili(float(world_size) / float(CHUNK_SIZE))
 	
-	# Создаем чанки
 	for chunk_z in range(chunks_count):
 		for chunk_x in range(chunks_count):
 			var st := SurfaceTool.new()
 			st.begin(Mesh.PRIMITIVE_TRIANGLES)
 			
-			var start_x = chunk_x * CHUNK_SIZE
-			var start_z = chunk_z * CHUNK_SIZE
-			var end_x = mini(start_x + CHUNK_SIZE, world_size - 1)
-			var end_z = mini(start_z + CHUNK_SIZE, world_size - 1)
+			var start_x := chunk_x * CHUNK_SIZE
+			var start_z := chunk_z * CHUNK_SIZE
+			var end_x := mini(start_x + CHUNK_SIZE, world_size - 1)
+			var end_z := mini(start_z + CHUNK_SIZE, world_size - 1)
 			
-			# Создаем вершины для этого чанка
-			var vertex_map = {}
-			var vertex_index = 0
+			var vertex_map := {}
+			var vertex_index := 0
 			
 			for z in range(start_z, end_z + 1):
 				for x in range(start_x, end_x + 1):
-					var pos_x = x * spacing - offset
-					var pos_z = z * spacing - offset
+					var pos_x := x * spacing - offset
+					var pos_z := z * spacing - offset
+					var height_y := _get_height(pos_x, pos_z)
 					
-					var height_y = _get_height(pos_x, pos_z)
+					# Крутизна — сравниваем высоту с соседними точками
+					var h_right := _get_height(pos_x + spacing, pos_z)
+					var h_down  := _get_height(pos_x, pos_z + spacing)
+					var slope: float= max(abs(height_y - h_right), abs(height_y - h_down))
+					var steepness := clampf(slope / 2.0, 0.0, 1.0)  # 0=плоско, 1=скала
 					
-					if height_y < WATER_LEVEL:
-						st.set_color(Color(0.6, 0.4, 0.2))  # коричневый — глина
-					else:
-						st.set_color(Color.WHITE)
+					# Температура из шума
+					var temp := _get_temp(pos_x, pos_z)
 					
+					# Подводная глина
+					var clay := 1.0 if height_y < CLAY_LEVEL else 0.0
 					
+					st.set_color(Color(steepness, temp, clay, 0.0))
 					st.set_uv(Vector2(float(x) / float(world_size - 1), float(z) / float(world_size - 1)))
 					st.add_vertex(Vector3(pos_x, height_y, pos_z))
 					
@@ -205,10 +236,10 @@ func _generate_terrain() -> void:
 			# Индексы для треугольников в этом чанке
 			for z in range(start_z, end_z):
 				for x in range(start_x, end_x):
-					var i0 = vertex_map.get(Vector2i(x, z), -1)
-					var i1 = vertex_map.get(Vector2i(x + 1, z), -1)
-					var i2 = vertex_map.get(Vector2i(x, z + 1), -1)
-					var i3 = vertex_map.get(Vector2i(x + 1, z + 1), -1)
+					var i0: int = vertex_map.get(Vector2i(x, z), -1)
+					var i1: int = vertex_map.get(Vector2i(x + 1, z), -1)
+					var i2: int = vertex_map.get(Vector2i(x, z + 1), -1)
+					var i3: int = vertex_map.get(Vector2i(x + 1, z + 1), -1)
 					
 					if i0 >= 0 and i1 >= 0 and i2 >= 0 and i3 >= 0:
 						st.add_index(i0)
@@ -223,12 +254,14 @@ func _generate_terrain() -> void:
 			var mesh = st.commit()
 			
 			# Создаем геометрия для визуализации чанка
-			var mesh_instance = MeshInstance3D.new()
-			var collision = CollisionShape3D.new()
+			var mesh_instance := MeshInstance3D.new()
+			var collision := CollisionShape3D.new()
 			mesh_instance.mesh = mesh
 			collision.shape = mesh_instance.mesh.create_trimesh_shape()
 			mesh_instance.visibility_range_end = terrain_visible_range
 			mesh_instance.material_overlay = ground_material
+			mesh_instance.material_overlay.set_shader_parameter("hot_threshold", 1.0 - TEMP_BORDER_SAND)
+			mesh_instance.material_overlay.set_shader_parameter("cold_threshold", 1.0 - TEMP_BORDER_GROUND)
 			mesh_instance.set_layer_mask_value(2, true) # Enable shadow decal support
 			mesh_instance.set_layer_mask_value(3, true) # Enable corruption decal support
 			collision.add_to_group("optimized_sync")
@@ -240,48 +273,55 @@ func _generate_grass() -> void:
 	await get_tree().process_frame
 	
 	var offset := (world_size - 1) * spacing / 2.0
-	var chunks_count = ceili(float(world_size) / float(CHUNK_SIZE))
+	var chunks_count := ceili(float(world_size) / float(CHUNK_SIZE))
 	var rng := RandomNumberGenerator.new()
 	rng.seed = world_seed + 999  # отдельный seed чтобы не мешать объектам
 	
 	for chunk_z in range(chunks_count):
 		for chunk_x in range(chunks_count):
-			var start_x = chunk_x * CHUNK_SIZE
-			var start_z = chunk_z * CHUNK_SIZE
-			var end_x = mini(start_x + CHUNK_SIZE, world_size - 1)
-			var end_z = mini(start_z + CHUNK_SIZE, world_size - 1)
+			var start_x := chunk_x * CHUNK_SIZE
+			var start_z := chunk_z * CHUNK_SIZE
+			var end_x := mini(start_x + CHUNK_SIZE, world_size - 1)
+			var end_z := mini(start_z + CHUNK_SIZE, world_size - 1)
 			
 			# Собираем позиции травы в этом чанке
 			var transforms: Array[Transform3D] = []
 			
 			var gx := float(start_x)
 			while gx < end_x:
+				gx += GRASS_SPAWN_STEP
 				var gz := float(start_z)
 				while gz < end_z:
-					var world_x = gx * spacing - offset
-					var world_z = gz * spacing - offset
+					gz += GRASS_SPAWN_STEP
+					var world_x := gx * spacing - offset
+					var world_z := gz * spacing - offset
+					
+					# Проверка высоты
+					var spawn_y := _get_height(world_x, world_z)
+					if spawn_y <= WATER_LEVEL: continue
 					
 					# Проверяем биом — трава только в лесу и равнине
-					var biome_val = biome_noise.get_noise_2d(world_x / 20.0, world_z / 20.0)
-					var biome = _get_biome(biome_val, world_x, world_z)
+					var biome_val := biome_noise.get_noise_2d(world_x / 20.0, world_z / 20.0)
+					var biome := _get_biome(biome_val, world_x, world_z)
+					if biome not in [Biome.FOREST, Biome.PLAINS]: continue
 					
-					if biome == Biome.FOREST or biome == Biome.PLAINS:
-						if rng.randf() < GRASS_DENSITY:
-							var spawn_y = _get_height(world_x, world_z)
-							if spawn_y >= WATER_LEVEL:
-								# Случайный поворот и небольшой разброс позиции
-								var offset_x = rng.randf_range(-0.5, 0.5)
-								var offset_z = rng.randf_range(-0.5, 0.5)
-								var rot_y = rng.randf() * TAU
-								
-								var t := Transform3D()
-								t = t.rotated(Vector3.UP, rot_y)
-								t = t.scaled(GRASS_SCALE)
-								t.origin = Vector3(world_x + offset_x, spawn_y, world_z + offset_z)
-								transforms.append(t)
+					# Проверка температуры
+					var temp := _get_temp(world_x, world_z)
+					if temp < TEMP_BORDER_SAND or temp > TEMP_BORDER_GROUND: continue
 					
-					gz += GRASS_SPAWN_STEP
-				gx += GRASS_SPAWN_STEP
+					# Уменьшаем колво травы
+					if rng.randf() > GRASS_DENSITY: continue
+					
+					# Случайный поворот и небольшой разброс позиции
+					var offset_x := rng.randf_range(-0.5, 0.5)
+					var offset_z := rng.randf_range(-0.5, 0.5)
+					var rot_y := rng.randf() * TAU
+					
+					var t := Transform3D()
+					t = t.rotated(Vector3.UP, rot_y)
+					t = t.scaled(GRASS_SCALE)
+					t.origin = Vector3(world_x + offset_x, spawn_y, world_z + offset_z)
+					transforms.append(t)
 			
 			if transforms.is_empty():
 				continue
@@ -304,7 +344,7 @@ func _generate_grass() -> void:
 
 func _generate_water() -> void:
 	var offset := (world_size - 1) * spacing / 2.0
-	var chunks_count = ceili(float(world_size) / float(CHUNK_SIZE))
+	var chunks_count := ceili(float(world_size) / float(CHUNK_SIZE))
 	
 	for chunk_z in range(chunks_count):
 		for chunk_x in range(chunks_count):
@@ -312,19 +352,19 @@ func _generate_water() -> void:
 			var st := SurfaceTool.new()
 			st.begin(Mesh.PRIMITIVE_TRIANGLES)
 			
-			var start_x = chunk_x * CHUNK_SIZE
-			var start_z = chunk_z * CHUNK_SIZE
-			var end_x = mini(start_x + CHUNK_SIZE, world_size - 1)
-			var end_z = mini(start_z + CHUNK_SIZE, world_size - 1)
+			var start_x := chunk_x * CHUNK_SIZE
+			var start_z := chunk_z * CHUNK_SIZE
+			var end_x := mini(start_x + CHUNK_SIZE, world_size - 1)
+			var end_z := mini(start_z + CHUNK_SIZE, world_size - 1)
 			
 			var vertex_map := {}
 			var vertex_index := 0
 			
 			for z in range(start_z, end_z + 1):
 				for x in range(start_x, end_x + 1):
-					var pos_x = x * spacing - offset
-					var pos_z = z * spacing - offset
-					var terrain_h = _get_height(pos_x, pos_z)
+					var pos_x := x * spacing - offset
+					var pos_z := z * spacing - offset
+					var terrain_h := _get_height(pos_x, pos_z)
 					
 					# Вершину воды добавляем только там где terrain ниже уровня воды
 					if terrain_h < WATER_LEVEL:
@@ -343,9 +383,9 @@ func _generate_water() -> void:
 					# Проверяем что хотя бы одна вершина квада — над водой
 					var any_underwater := false
 					for check in [Vector2i(x,z), Vector2i(x+1,z), Vector2i(x,z+1), Vector2i(x+1,z+1)]:
-						var px = check.x * spacing - offset
-						var pz = check.y * spacing - offset
-						var h = _get_height(px, pz)
+						var px: float = check.x * spacing - offset
+						var pz: float = check.y * spacing - offset
+						var h := _get_height(px, pz)
 						if h < WATER_LEVEL:
 							any_underwater = true
 							break
@@ -353,10 +393,10 @@ func _generate_water() -> void:
 					if not any_underwater:
 						continue
 					
-					var i0 = vertex_map[Vector2i(x, z)]
-					var i1 = vertex_map[Vector2i(x + 1, z)]
-					var i2 = vertex_map[Vector2i(x, z + 1)]
-					var i3 = vertex_map[Vector2i(x + 1, z + 1)]
+					var i0: int = vertex_map[Vector2i(x, z)]
+					var i1: int = vertex_map[Vector2i(x + 1, z)]
+					var i2: int = vertex_map[Vector2i(x, z + 1)]
+					var i3: int = vertex_map[Vector2i(x + 1, z + 1)]
 					
 					st.add_index(i0); st.add_index(i1); st.add_index(i2)
 					st.add_index(i2); st.add_index(i1); st.add_index(i3)
@@ -374,32 +414,32 @@ func _generate_objects() -> void:
 	await get_tree().process_frame
 	
 	var offset := (world_size - 1) * spacing / 2.0
-	var rng = RandomNumberGenerator.new()
+	var rng := RandomNumberGenerator.new()
 	rng.seed = int(world_seed)
 	
-	var gx = 0
-	var gz = 0
+	var gx := 0.0
+	var gz := 0.0
 	while gx < world_size:
 		gz = 0
 		while gz < world_size:
-			var world_x = gx * spacing - offset
-			var world_z = gz * spacing - offset
+			var world_x := gx * spacing - offset
+			var world_z := gz * spacing - offset
 			
 			# Определяем биом в этой позиции
-			var biom_value = biome_noise.get_noise_2d(world_x / 20.0, world_z / 20.0)
-			var biome = _get_biome(biom_value, world_x, world_z)
-			var biome_config = BIOME_CONFIG[biome]
+			var biom_value := biome_noise.get_noise_2d(world_x / 20.0, world_z / 20.0)
+			var biome := _get_biome(biom_value, world_x, world_z)
+			var biome_config: Dictionary = BIOME_CONFIG[biome]
 			
 			# Шум для принятия решения о спавне и для выбора варианта
-			var noise_value = _get_height(world_x, world_z)
+			var noise_value := _get_height(world_x, world_z)
 			
-			var object_name = _select_object_for_biome(biome_config, noise_value, rng)
+			var object_name: String = _select_object(biome_config, noise_value, rng, world_x, world_z)
 			if object_name != "":
-				var obj_scene = R.objects.get(object_name)["scene"]
+				var obj_scene: PackedScene = R.objects.get(object_name)["scene"]
 				if obj_scene:
-					var instance = obj_scene.instantiate()
+					var instance := obj_scene.instantiate()
 					# Высота спавна — берем с того же шума, чтобы объект стоял на поверхности
-					var spawn_y = _get_height(world_x, world_z)
+					var spawn_y := _get_height(world_x, world_z)
 					instance.position = Vector3(world_x, spawn_y, world_z)
 					G.environment.call_deferred("add_child", instance, true)
 			
@@ -414,42 +454,42 @@ func _generate_loot_chests() -> void:
 	var rng = RandomNumberGenerator.new()
 	rng.seed = int(world_seed)
 	
-	var gx = 0
-	var gz = 0
+	var gx := 0.0
+	var gz := 0.0
 	while gx < world_size:
 		gz = 0
 		while gz < world_size:
-			var world_x = gx * spacing - offset
-			var world_z = gz * spacing - offset
-			var obj_scene = R.objects.get("loot_chest")["scene"]
-			if obj_scene and randf() < 0.001:
-				var instance = obj_scene.instantiate()
-				var spawn_y = _get_height(world_x, world_z)
+			var world_x := gx * spacing - offset
+			var world_z := gz * spacing - offset
+			var obj_scene: PackedScene = R.objects.get("loot_chest")["scene"]
+			if obj_scene:
+				var instance := obj_scene.instantiate()
+				var spawn_y := _get_height(world_x, world_z)
 				instance.position = Vector3(world_x, spawn_y, world_z)
 				instance.lvl_cost = randi_range(2, 8)
 				G.environment.call_deferred("add_child", instance, true)
 			
-			gz += OBJ_SPAWN_STEP
-		gx += OBJ_SPAWN_STEP
+			gz += LOOT_SPAWN_STEP
+		gx += LOOT_SPAWN_STEP
 
 func _generate_items() -> void:
 	G.screen_text.text("Spawning items...")
 	await get_tree().process_frame
 	
 	var offset := (world_size - 1) * spacing / 2.0
-	var rng = RandomNumberGenerator.new()
+	var rng := RandomNumberGenerator.new()
 	rng.seed = int(world_seed)
 	
 	# Раскидываем предметы по миру
-	var gx = 0
-	var gz = 0
+	var gx := 0.0
+	var gz := 0.0
 	while gx < world_size:
 		gz = 0
 		while gz < world_size:
-			var world_x = gx * spacing - offset
-			var world_z = gz * spacing - offset
+			var world_x := gx * spacing - offset
+			var world_z := gz * spacing - offset
 			
-			var spawn_y = +_get_height(world_x, world_z)
+			var spawn_y := +_get_height(world_x, world_z)
 			
 			# Не спавним предметы под водой
 			if spawn_y >= WATER_LEVEL:
@@ -499,14 +539,22 @@ func _generate_world() -> void:
 
 
 func _get_height(world_x: float, world_z: float) -> float:
-	var biome_value = biome_noise.get_noise_2d(world_x / 20.0, world_z / 20.0)
-	var multiplier = _get_blended_height_multiplier(biome_value)
+	var biome_value := biome_noise.get_noise_2d(world_x / 20.0, world_z / 20.0)
+	var multiplier := _get_blended_height_multiplier(biome_value)
 	return noise.get_noise_2d(world_x / noise_scale, world_z / noise_scale) * height_max * multiplier
+
+
+func _get_temp(world_x: float, world_z: float) -> float:
+	var raw_noise_temp := temp_noise.get_noise_2d(world_x, world_z)
+	# Переводим из -1..1 в 0..1
+	var normalized := (raw_noise_temp + 1.0) / 2.0
+	# Растягиваем 0.4-0.6 в 0.0-1.0
+	return clamp(inverse_lerp(0.4, 0.6, normalized), 0.0, 1.0)
 
 
 func _get_biome(value: float, world_x: float = 0.0, world_z: float = 0.0) -> int:
 	# Сначала проверяем высоту — если под водой, это водный биом
-	var height = _get_height(world_x, world_z)
+	var height := _get_height(world_x, world_z)
 	if height < WATER_LEVEL:
 		return Biome.UNDERWATER
 	
@@ -521,46 +569,57 @@ func _get_biome(value: float, world_x: float = 0.0, world_z: float = 0.0) -> int
 
 
 func _get_blended_height_multiplier(biome_value: float) -> float:
-	var m_ore      = BIOME_CONFIG[Biome.ORE_PLATEAU]["height_multiplier"]
-	var m_forest   = BIOME_CONFIG[Biome.FOREST]["height_multiplier"]
-	var m_plains   = BIOME_CONFIG[Biome.PLAINS]["height_multiplier"]
-	var m_mountain = BIOME_CONFIG[Biome.MOUNTAINS]["height_multiplier"]
+	var m_ore      := BIOME_CONFIG[Biome.ORE_PLATEAU]["height_multiplier"]
+	var m_forest   := BIOME_CONFIG[Biome.FOREST]["height_multiplier"]
+	var m_plains   := BIOME_CONFIG[Biome.PLAINS]["height_multiplier"]
+	var m_mountain := BIOME_CONFIG[Biome.MOUNTAINS]["height_multiplier"]
 
 	if biome_value < BIOME_BORDER_PLATEU - BIOME_BLEND:
 		return m_ore
 	elif biome_value < BIOME_BORDER_PLATEU + BIOME_BLEND:
-		var t = inverse_lerp(BIOME_BORDER_PLATEU - BIOME_BLEND, BIOME_BORDER_PLATEU + BIOME_BLEND, biome_value)
+		var t := inverse_lerp(BIOME_BORDER_PLATEU - BIOME_BLEND, BIOME_BORDER_PLATEU + BIOME_BLEND, biome_value)
 		return lerp(m_ore, m_forest, t)
 	elif biome_value < BIOME_BORDER_FOREST - BIOME_BLEND:
 		return m_forest
 	elif biome_value < BIOME_BORDER_FOREST + BIOME_BLEND:
-		var t = inverse_lerp(BIOME_BORDER_FOREST - BIOME_BLEND, BIOME_BORDER_FOREST + BIOME_BLEND, biome_value)
+		var t := inverse_lerp(BIOME_BORDER_FOREST - BIOME_BLEND, BIOME_BORDER_FOREST + BIOME_BLEND, biome_value)
 		return lerp(m_forest, m_plains, t)
 	elif biome_value < BIOME_BORDER_PLAINS - BIOME_BLEND:
 		return m_plains
 	elif biome_value < BIOME_BORDER_PLAINS + BIOME_BLEND:
-		var t = inverse_lerp(BIOME_BORDER_PLAINS - BIOME_BLEND, BIOME_BORDER_PLAINS + BIOME_BLEND, biome_value)
+		var t := inverse_lerp(BIOME_BORDER_PLAINS - BIOME_BLEND, BIOME_BORDER_PLAINS + BIOME_BLEND, biome_value)
 		return lerp(m_plains, m_mountain, t)
 	else:
 		return m_mountain
 
-func _select_object_for_biome(biome_config: Dictionary, _noise_value: float, rng: RandomNumberGenerator) -> String:
+func _select_object(biome_config: Dictionary, _noise_value: float, rng: RandomNumberGenerator, pos_x: float, pos_z: float) -> String:
 	# 1. Сначала считаем общий вес
-	var total_weight = 0.0
+	var total_weight := 0.0
 	for obj_name in biome_config["objects"]:
 		total_weight += biome_config["objects"][obj_name]["weight"]
 
 	# 2. ВЫБИРАЕМ ТИП ОБЪЕКТА ЧЕРЕЗ РАНДОМ (а не через шум)
-	var selection = rng.randf() * total_weight
-	var current_weight = 0.0
+	var selection := rng.randf() * total_weight
+	var current_weight := 0.0
 
 	for obj_name in biome_config["objects"]:
-		var obj_config = biome_config["objects"][obj_name]
+		var obj_config: Dictionary = biome_config["objects"][obj_name]
 		current_weight += obj_config["weight"]
 
 		if selection <= current_weight:
 			# 3. Проверяем плотность (тоже через рандом)
 			if rng.randf() < obj_config["density"]:
+				# 4. Проверяем температуру
+				var temp := _get_temp(pos_x, pos_z)
+				
+				# Если не обычный биом, то ищем замену в биомных вариантах объектов
+				if temp < TEMP_BORDER_SAND:
+					if BIOME_TEMP_SWAP["sand"].get(obj_name):
+						obj_name = BIOME_TEMP_SWAP["sand"][obj_name]
+				elif temp > TEMP_BORDER_SNOW:
+					if BIOME_TEMP_SWAP["snow"].get(obj_name):
+						obj_name = BIOME_TEMP_SWAP["snow"][obj_name]
+				
 				return obj_name
 			return ""
 

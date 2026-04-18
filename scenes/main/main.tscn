@@ -838,8 +838,8 @@ text = "LBL_WORLD_SIZE"
 
 [node name="WorldSize" type="LineEdit" parent="GUI/MainMenu/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=137349936]
 layout_mode = 2
-text = "800"
-placeholder_text = "800"
+text = "1000"
+placeholder_text = "1000"
 script = ExtResource("24_62atk")
 key = "world_size"
 
@@ -1057,6 +1057,10 @@ text = "LBL_H10"
 [node name="Label12" type="Label" parent="GUI/MainMenu/HBoxContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=995240618]
 layout_mode = 2
 text = "LBL_H11"
+
+[node name="Label13" type="Label" parent="GUI/MainMenu/HBoxContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=704620491]
+layout_mode = 2
+text = "LBL_H12"
 
 [node name="PlayerContainer" type="PanelContainer" parent="GUI/MainMenu" unique_id=1879437193]
 layout_mode = 2
