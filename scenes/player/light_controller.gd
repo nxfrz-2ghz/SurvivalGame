@@ -18,7 +18,7 @@ func _physics_process(_delta: float) -> void:
 	
 	for node in light_nodes:
 		# Проверяем, есть ли у узла переменная 'color'
-		if "color" in node:
+		if "color" in node and node.get_parent().visible:
 			var node_color: Color = node.color
 			var dist := global_position.distance_to(node.global_position)
 			

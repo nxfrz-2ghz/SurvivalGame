@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dfa27vu5do04p"]
+
+[ext_resource type="PackedScene" uid="uid://s322lfir2gd7" path="res://scenes/mobs/mob.tscn" id="1_2fbr7"]
+
+[node name="BossBoulder" unique_id=408161229 instance=ExtResource("1_2fbr7")]
+nname = "boss_boulder"

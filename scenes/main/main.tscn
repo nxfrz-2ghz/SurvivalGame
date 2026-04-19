@@ -47,6 +47,7 @@
 [ext_resource type="Script" uid="uid://cskiodujmd078" path="res://scenes/gui/setting_lines/line_edits/buildings_visibility_range.gd" id="44_gohbf"]
 [ext_resource type="Script" uid="uid://bwv87qx5mfgbm" path="res://scenes/gui/setting_lines/line_edits/items_visibility_range.gd" id="45_jucdw"]
 [ext_resource type="Script" uid="uid://b1ui5htwlne0y" path="res://scenes/gui/setting_lines/line_edits/mobs_visibility_range.gd" id="46_6miv3"]
+[ext_resource type="PackedScene" uid="uid://cgg667awjklv7" path="res://components/screensaver_component/screen_saver_component.tscn" id="48_wcrab"]
 
 [sub_resource type="GDScript" id="GDScript_ou6is"]
 script/source = "extends Node3D
@@ -1189,8 +1190,8 @@ text = "SET_VISIBILITY_RANGE_TERRAIN"
 
 [node name="TerrainVisibilityRange" type="LineEdit" parent="GUI/MainMenu/DebugMenu/MarginContainer/VBoxContainer/HBoxContainer" unique_id=235006795]
 layout_mode = 2
-text = "100"
-placeholder_text = "100"
+text = "120"
+placeholder_text = "120"
 script = ExtResource("37_i6fjx")
 key = "terrain_visible_range"
 
@@ -1313,6 +1314,8 @@ text = "LBL_SAVE_EXIT"
 [node name="TimerOneSecond" type="Timer" parent="." unique_id=753860230]
 autostart = true
 script = SubResource("GDScript_wcrab")
+
+[node name="ScreenSaverComponent" parent="." unique_id=53644911 instance=ExtResource("48_wcrab")]
 
 [connection signal="spawned" from="Environment/PlayerSpawner" to="." method="_on_player_spawner_spawned"]
 [connection signal="animation_finished" from="GUI/TextMessage/AnimationPlayer" to="GUI/TextMessage" method="_on_animation_player_animation_finished"]

@@ -2,21 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c66vre25lbual"
-path.s3tc="res://.godot/imported/full_berry_bush.png-9f26c918869b2e81b0129c6b18a80144.s3tc.ctex"
+uid="uid://3p4jqne7u7ep"
+path="res://.godot/imported/black_dye.png-936175790aeef0b9c66ed0f517f52e97.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
-source_file="res://res/sprites/objects/full_berry_bush.png"
-dest_files=["res://.godot/imported/full_berry_bush.png-9f26c918869b2e81b0129c6b18a80144.s3tc.ctex"]
+source_file="res://res/sprites/items/dyes/black_dye.png"
+dest_files=["res://.godot/imported/black_dye.png-936175790aeef0b9c66ed0f517f52e97.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
@@ -24,7 +23,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=true
+mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
@@ -38,4 +37,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=0
+detect_3d/compress_to=1

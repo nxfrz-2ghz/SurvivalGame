@@ -93,7 +93,7 @@ autoplay = "default"
 frame_progress = 0.0647054
 
 [node name="Light" parent="ToggleOn" index="1" unique_id=920727058 instance=ExtResource("8_ncuph")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5085771, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6503595, 0)
 energy = 6.0
 color = Color(1, 0.6862745, 0.39215687, 1)
 

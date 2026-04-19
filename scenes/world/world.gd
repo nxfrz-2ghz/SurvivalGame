@@ -16,12 +16,22 @@ const BIOME_CONFIG = {
 		# Objects
 		"ground": {
 			"grass": {"weight": 25, "density": 0.01},
-			"tree": {"weight": 55, "density": 0.04},
+			"oak_tree": {"weight": 55, "density": 0.04},
 			"stone": {"weight": 5, "density": 0.02},
 			"berry_bush" : {"weight": 10, "density": 0.05},
 		},
-		"sand": {},
-		"snow": {},
+		"sand": {
+			"grass": {"weight": 25, "density": 0.01},
+			"oak_tree": {"weight": 55, "density": 0.04},
+			"stone": {"weight": 5, "density": 0.02},
+			"dry_bush" : {"weight": 10, "density": 0.05},
+		},
+		"snow": {
+			"grass": {"weight": 25, "density": 0.01},
+			"spruce_tree": {"weight": 55, "density": 0.04},
+			"stone": {"weight": 5, "density": 0.02},
+			"berry_bush" : {"weight": 10, "density": 0.05},
+		},
 	},
 	Biome.ORE_PLATEAU: {
 		"name": "Ore_plateu",
@@ -34,8 +44,18 @@ const BIOME_CONFIG = {
 			"copper_ore": {"weight": 30, "density": 0.03},
 			"iron_ore": {"weight": 20, "density": 0.03},
 		},
-		"sand": {},
-		"snow": {},
+		"sand": {
+			#gold?
+			"rock": {"weight": 50, "density": 0.05},
+			"copper_ore": {"weight": 30, "density": 0.03},
+			"iron_ore": {"weight": 20, "density": 0.03},
+		},
+		"snow": {
+			#ice, saphire?
+			"rock": {"weight": 50, "density": 0.05},
+			"copper_ore": {"weight": 30, "density": 0.03},
+			"iron_ore": {"weight": 20, "density": 0.03},
+		},
 	},
 	Biome.MOUNTAINS: {
 		"name": "Mountains",
@@ -47,10 +67,15 @@ const BIOME_CONFIG = {
 			"rock": {"weight": 45, "density": 0.01},
 			"copper_ore": {"weight": 20, "density": 0.005},
 			"iron_ore": {"weight": 20, "density": 0.005},
-			"tree": {"weight": 10, "density": 0.01},
+			"oak_tree": {"weight": 10, "density": 0.01},
 		},
 		"sand": {},
-		"snow": {},
+		"snow": {
+			"rock": {"weight": 45, "density": 0.01},
+			"copper_ore": {"weight": 10, "density": 0.005},
+			"iron_ore": {"weight": 10, "density": 0.005},
+			"spruce_tree": {"weight": 30, "density": 0.01},
+		},
 	},
 	Biome.PLAINS: {
 		"name": "Plains",
@@ -61,11 +86,20 @@ const BIOME_CONFIG = {
 		"ground": {
 			"grass": {"weight": 92, "density": 0.005},
 			"stone": {"weight": 3, "density": 0.01},
-			"tree": {"weight": 2, "density": 0.01},
+			"oak_tree": {"weight": 2, "density": 0.01},
 			"berry_bush" : {"weight": 2, "density": 0.04},
 		},
-		"sand": {},
-		"snow": {},
+		"sand": {
+			"stone": {"weight": 3, "density": 0.01},
+			"oak_tree": {"weight": 1, "density": 0.01},
+			"dry_bush" : {"weight": 5, "density": 0.04},
+		},
+		"snow": {
+			"grass": {"weight": 1, "density": 0.005},
+			"stone": {"weight": 3, "density": 0.01},
+			"spruce_tree": {"weight": 4, "density": 0.01},
+			"berry_bush" : {"weight": 1, "density": 0.04},
+		},
 	},
 	Biome.UNDERWATER: {
 		"name": "Underwater",
@@ -95,7 +129,7 @@ var temp_noise: FastNoiseLite
 
 @export var world_size := 500
 @export var height_max := 10.0
-@export var terrain_visible_range := 100.0
+@export var terrain_visible_range := 120.0
 @export var grass_visible_range := 90.0
 @export var objects_visible_range := 100.0
 @export var buildings_visible_range := 100.0
@@ -227,13 +261,16 @@ func _generate_terrain() -> void:
 					var slope: float= max(abs(height_y - h_right), abs(height_y - h_down))
 					var steepness := clampf(slope / 2.0, 0.0, 1.0)  # 0=плоско, 1=скала
 					
-					# Температура из шума
-					var temp := _get_temp(pos_x, pos_z)
-					
 					# Подводная глина
 					var clay := 1.0 if height_y < CLAY_LEVEL else 0.0
 					
-					st.set_color(Color(steepness, temp, clay, 0.0))
+					# Температура из шума
+					var temp := _get_temp(pos_x, pos_z)
+					# Глина только в обычном биоме
+					if temp < TEMP_BORDER_SAND or temp > TEMP_BORDER_SNOW:
+						clay = 0.0
+					
+					st.set_color(Color(steepness, 1.0 - temp, clay, 0.0))
 					st.set_uv(Vector2(float(x) / float(world_size - 1), float(z) / float(world_size - 1)))
 					st.add_vertex(Vector3(pos_x, height_y, pos_z))
 					
@@ -465,7 +502,7 @@ func _generate_loot_chests() -> void:
 	
 	var offset := (world_size - 1) * spacing / 2.0
 	var rng = RandomNumberGenerator.new()
-	rng.seed = int(world_seed)
+	rng.seed = int(world_seed+1)
 	
 	var gx := 0.0
 	var gz := 0.0
@@ -491,7 +528,7 @@ func _generate_items() -> void:
 	
 	var offset := (world_size - 1) * spacing / 2.0
 	var rng := RandomNumberGenerator.new()
-	rng.seed = int(world_seed)
+	rng.seed = int(world_seed+2)
 	
 	# Раскидываем предметы по миру
 	var gx := 0.0
@@ -513,6 +550,7 @@ func _generate_items() -> void:
 			
 			gz += DROP_SPAWN_STEP
 		gx += DROP_SPAWN_STEP
+		
 		G.screen_text.text("")
 
 

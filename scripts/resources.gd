@@ -231,28 +231,29 @@ const objects := {
 		#"recipe": {},
 	},
 	"berry_bush": {
-		"scene": preload("res://scenes/objects/berry_bush/berry_bush.tscn"),
+		"scene": preload("res://scenes/objects/bush/berry_bush/berry_bush.tscn"),
 		"recipe": {"log": 2, "raw_berry": 5},
 	},
-	"tree": {
-		"scene": preload("res://scenes/objects/tree/tree.tscn"),
-		#"recipe": {},
+	"dry_bush": {
+		"scene": preload("res://scenes/objects/bush/dry_bush/dry_bush.tscn"),
+	},
+	"oak_tree": {
+		"scene": preload("res://scenes/objects/tree/oak/oak.tscn"),
+	},
+	"spruce_tree": {
+		"scene": preload("res://scenes/objects/tree/spruce/spruce.tscn"),
 	},
 	"stone": {
 		"scene": preload("res://scenes/objects/stone/stone.tscn"),
-		#"recipe": {},
 	},
 	"rock": {
 		"scene": preload("res://scenes/objects/rock/rock.tscn"),
-		#"recipe": {},
 	},
 	"copper_ore": {
 		"scene": preload("res://scenes/objects/copper_ore/copper_ore.tscn"),
-		#"recipe": {},
 	},
 	"iron_ore": {
 		"scene": preload("res://scenes/objects/iron_ore/iron_ore.tscn"),
-		#"recipe": {},
 	},
 	"meteorite": {
 		"scene": preload("res://scenes/objects/meteorite/meteorite.tscn"),
@@ -260,6 +261,7 @@ const objects := {
 	"campfire": {
 		"scene": preload("res://scenes/objects/campfire/campfire.tscn"),
 		"recipe": {"log": 3},
+		"can_sleep": true,
 	},
 	"furnace": {
 		"scene": preload("res://scenes/objects/furnace/furnace.tscn"),

@@ -165,7 +165,7 @@ func play_on_damage() -> void:
 "
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_2t3bg"]
-size = Vector3(2, 1.3305664, 2)
+size = Vector3(0.8, 0.8, 2)
 
 [sub_resource type="GDScript" id="GDScript_2t3bg"]
 script/source = "extends Area3D

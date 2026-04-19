@@ -30,7 +30,7 @@ const RIGID_CAM := preload("res://scenes/player/rigid_cam/rigid_cam.tscn")
 
 @export var nname := "Player"
 
-enum STATE { IDLE, RUN, AIM }
+enum STATE { IDLE, RUN, AIM, SLEEP }
 var state := STATE.IDLE
 
 
@@ -152,7 +152,23 @@ func _input(event: InputEvent) -> void:
 		if interact_ray.is_colliding():
 			var collider: Node = interact_ray.get_collider()
 			
-			if current_slot_data != null:
+			if collider.nname == "berry_bush":
+				if collider.full:
+					for i in range(3):
+						if randf() > 0.3:
+							inv.add_item("raw_berry")
+				collider.pick.rpc_id(1)
+				return
+			
+			if collider.nname == "loot_chest":
+				if collider.lvl_cost <= progress_controller.lvl:
+					progress_controller.spend_exp_by_lvl(collider.lvl_cost)
+					collider.open.rpc_id(1)
+				else:
+					G.text_message.add(tr("RPL_LVL_NOT_ENOUGH"))
+				return
+			
+			elif current_slot_data != null:
 				if collider.nname in R.exchangeable_items.keys():
 					var item_in_arm = current_slot_data["name"]
 					var amount = current_slot_data["amount"]
@@ -207,22 +223,6 @@ func _input(event: InputEvent) -> void:
 					for i in collider.craft.complete:
 						inv.add_item(i)
 					collider.craft.pick.rpc_id(1)
-				return
-			
-			elif collider.nname == "berry_bush":
-				if collider.full:
-					for i in range(3):
-						if randf() > 0.3:
-							inv.add_item("raw_berry")
-				collider.pick.rpc_id(1)
-				return
-			
-			elif collider.nname == "loot_chest":
-				if collider.lvl_cost <= progress_controller.lvl:
-					progress_controller.spend_exp_by_lvl(collider.lvl_cost)
-					collider.open.rpc_id(1)
-				else:
-					G.text_message.add(tr("RPL_LVL_NOT_ENOUGH"))
 				return
 		
 		# Использование предметов (items)
@@ -314,6 +314,8 @@ func _on_health_component_died() -> void:
 			# Выбрасываем предмет столько раз, сколько указано в amount
 			for k in range(item["amount"]):
 					weapon.actions.drop(slot_idx)
+	
+	progress_controller.spend_exp_by_lvl(progress_controller.lvl/1.6)
 	
 	self.position = Vector3(0, 300, 0)
 
@@ -435,19 +437,20 @@ func moving(delta: float) -> void:
 
 func camera_control() -> void:
 	var needed_fov: float
+	
 	if state == STATE.AIM:
 		needed_fov = 70.0
 	elif state == STATE.IDLE:
 		needed_fov = 90.0
 	elif state == STATE.RUN:
 		needed_fov = 110.0
+	elif state == STATE.SLEEP:
+		needed_fov = 140.0
 	
 	if camera.fov < needed_fov:
 		camera.fov += 1.0
 	elif camera.fov > needed_fov:
-		if state == STATE.AIM:
-			camera.fov -= 1.0
-		camera.fov -= 0.
+		camera.fov -= 1.0
 
 
 func scale_y_control() -> void:

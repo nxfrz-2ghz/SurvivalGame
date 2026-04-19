@@ -34,7 +34,7 @@ resists = {
 "melee": 0.2,
 "pickaxe": 0.0
 }
-max_health = 50.0
+max_health = 75.0
 
 [node name="EntityComponent" parent="." index="3" unique_id=1330161778]
 drop_items = {

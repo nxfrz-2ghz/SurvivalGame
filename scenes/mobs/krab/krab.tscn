@@ -43,7 +43,7 @@ wait_time = 150.0
 autostart = true
 
 [node name="HealthComponent" parent="." index="2" unique_id=1086839518]
-max_health = 4.0
+max_health = 7.0
 
 [node name="EntityComponent" parent="." index="3" unique_id=1330161778]
 drop_items = {

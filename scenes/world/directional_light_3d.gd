@@ -14,10 +14,10 @@ const night_chances := [
 	n.HORROR,
 ]
 
-@export var min_energy := n.DEFAULT
+@export var min_energy := min_night_energy[n.DEFAULT]
 @export var max_energy := 1.0
 const min_night_energy := {
-	n.PEACEFUL: 0.1,
+	n.PEACEFUL: 0.15,
 	n.DEFAULT: 0.05,
 	n.HORROR: 0.01,
 }
@@ -41,7 +41,8 @@ func _physics_process(delta: float) -> void:
 		if night:
 			rotation_degrees.x += time_speed * delta # X2 SPEED
 		
-		if Input.is_action_pressed("X"):
+		# In sleeping time speed up x100
+		if G.player.state == G.player.STATE.SLEEP:
 			for i in range(100):
 				rotation_degrees.x += time_speed * delta
 	
@@ -56,8 +57,7 @@ func _physics_process(delta: float) -> void:
 			night = night_chances.pick_random()
 			
 			# Первая ночь мирная
-			if day_counter == 1: night = n.PEACEFUL
-			
+			if day_counter == 0: night = n.PEACEFUL
 			min_energy = min_night_energy[night]
 			
 			night_come.emit()

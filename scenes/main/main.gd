@@ -81,6 +81,8 @@ func add_player(peer_id: int) -> void:
 	# Если игрок это мы, отложенно подключаем сигналы
 	if peer_id == multiplayer.get_unique_id():
 		set_up_player(player)
+		player.position.x = randf_range(-10.0, 10.0)
+		player.position.z = randf_range(-10.0, 10.0)
 	else:
 		G.world.rpc_id(peer_id, "join_world", G.world.world_name, G.world.world_seed, G.world.world_size)
 

@@ -2,20 +2,21 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d1echtwkpxj5w"
-path="res://.godot/imported/portal_off.png-431e65572bdf89d528c59d8802ff020e.ctex"
+uid="uid://rc8qnarmvd3v"
+path.s3tc="res://.godot/imported/spruce.png-754f32904a6ede1b9b7a78e48ede00f1.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 
 [deps]
 
-source_file="res://res/sprites/objects/portal_off.png"
-dest_files=["res://.godot/imported/portal_off.png-431e65572bdf89d528c59d8802ff020e.ctex"]
+source_file="res://res/sprites/objects/tree/spruce.png"
+dest_files=["res://.godot/imported/spruce.png-754f32904a6ede1b9b7a78e48ede00f1.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
@@ -23,7 +24,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
@@ -37,4 +38,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=1
+detect_3d/compress_to=0

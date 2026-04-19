@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://cgg667awjklv7"]
+
+[ext_resource type="Script" uid="uid://b5tc8w5gmxcyd" path="res://components/screensaver_component/screen_saver_component.gd" id="1_1pepd"]
+[ext_resource type="Texture2D" uid="uid://bl3ogpcp2jfn6" path="res://components/screensaver_component/dvd.png" id="2_faxld"]
+
+[node name="ScreenSaverComponent" type="CanvasLayer" unique_id=53644911]
+script = ExtResource("1_1pepd")
+
+[node name="IdleTimer" type="Timer" parent="." unique_id=174791842]
+wait_time = 30.0
+one_shot = true
+autostart = true
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1314605304]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_faxld")
+
+[connection signal="timeout" from="IdleTimer" to="." method="_on_idle_timer_timeout"]

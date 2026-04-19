@@ -42,7 +42,7 @@ resists = {
 "axe": 1.6,
 "melee": 0.9
 }
-max_health = 5.0
+max_health = 10.0
 
 [node name="EntityComponent" parent="." index="3" unique_id=1330161778]
 exp_drop = 4.0

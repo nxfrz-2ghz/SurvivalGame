@@ -23,6 +23,8 @@ func update() -> void:
 			target_name += "\n" + str(current_target.health.current_health) + "/" + str(current_target.health.max_health)
 			if current_target.nname in R.exchangeable_items.keys():
 				target_name += "\n[RIGHT CLICK] TO COOK"
+			if R.objects.has(current_target.nname) and R.objects[current_target.nname].get("can_sleep"):
+				target_name += "\n[TOGGLE X] TO SLEEP"
 			if current_target.get("full"):
 				target_name += "\n[RIGHT CLICK] TO COLLECT"
 			if current_target.get("lvl_cost"):
