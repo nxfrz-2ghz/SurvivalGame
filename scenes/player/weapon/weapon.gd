@@ -38,9 +38,40 @@ func update_player_stats() -> void:
 
 
 func get_dig_drop(hit_position: Vector3) -> String:
+<<<<<<< Updated upstream
 	if hit_position.y < G.world.CLAY_LEVEL:
+=======
+	
+	# Rare drop
+	if randf() < 0.01:
+		return ["coal", "copper_ore", "iron_ore"].pick_random()
+	
+	var w := G.world
+	# Clay drop
+	if hit_position.y < w.CLAY_LEVEL:
+>>>>>>> Stashed changes
 		return "clay"
-	return "dirt"
+	
+	# Mountain drop
+	var height_y: float = w._get_height(hit_position.x, hit_position.z)
+	var h_right: float = w._get_height(hit_position.x + w.spacing, hit_position.z)
+	var h_down: float = w._get_height(hit_position.x, hit_position.z + w.spacing)
+	var slope: float = max(abs(height_y - h_right), abs(height_y - h_down))
+	var steepness := clampf(slope / 2.0, 0.0, 1.0)  # 0=плоско, 1=скала
+	
+	if steepness >= 0.5:
+		return ["gravel", "stone"].pick_random()
+	
+	# Ground drop
+	var temp: float = w._get_temp(hit_position.x, hit_position.z)
+	if temp <= w.TEMP_BORDER_SAND:
+		return "sand"
+	if temp <= w.TEMP_BORDER_GROUND:
+		return "dirt"
+	if temp <= w.TEMP_BORDER_SNOW:
+		return "snow"
+	
+	return ""
 
 
 func check_corrosion_item() -> void:

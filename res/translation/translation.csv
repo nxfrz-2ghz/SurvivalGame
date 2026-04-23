@@ -33,6 +33,10 @@ TGL_AUTOSAVE;Autosave;Автосохранение
 TGL_SHADOWS;Better Shadows;Улучшенные Тени
 TGL_FOG;FOG;Туман
 TGL_CONTRAST_GRASS;Contrast Grass;Контрастная трава
+<<<<<<< Updated upstream
+=======
+TGL_SUPER_VISIBILITY;Super Visibility;Супер прорисовка
+>>>>>>> Stashed changes
 BTN_RESTART_GAME;RESTART GAME;ПЕРЕЗАПУСТИТЬ ИГРУ
 BTN_LEAVE_GAME;LEAVE GAME...;ПОКИНУТЬ ИГРУ...
 

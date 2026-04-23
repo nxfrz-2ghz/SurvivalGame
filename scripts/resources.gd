@@ -103,6 +103,10 @@ const sounds := {
 
 const music := [
 	preload("res://res/music/wtf2.mp3"),
+<<<<<<< Updated upstream
+=======
+	preload("res://res/music/wtf3ambient.mp3"),
+>>>>>>> Stashed changes
 ]
 
 const exchangeable_items := {
@@ -602,6 +606,18 @@ const items := {
 			"pickaxe_lvl2": 0.5,
 		},
 	},
+<<<<<<< Updated upstream
+=======
+	"iron_syringe": {
+		"texture": preload("res://res/sprites/items/syringe.png"),
+		"recipe": {
+			"iron_ingot": 3,
+		},
+		"on_use_drop": {"blood": 1},
+		"on_use_damage": 2.0,
+		"durability": 200,
+	},
+>>>>>>> Stashed changes
 	"iron_axe": {
 		"texture": preload("res://res/sprites/items/weapons/iron_axe.png"),
 		"recipe": {
@@ -868,6 +884,17 @@ const items := {
 		"heal": 0.5,
 		"attack_speed": 0.3,
 	},
+<<<<<<< Updated upstream
+=======
+	"darkness_essncion": {
+		"texture": preload("res://res/sprites/items/darkness_essencion.png"),
+		"stack_size": 25,
+	},
+	"blood": {
+		"texture": preload("res://res/sprites/items/blood.png"),
+		"stack_size": 25,
+	},
+>>>>>>> Stashed changes
 	"empty": {
 		"texture": preload("res://res/sprites/items/empty.png"),
 	},

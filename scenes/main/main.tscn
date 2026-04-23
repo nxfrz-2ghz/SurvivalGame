@@ -993,6 +993,15 @@ text = "TGL_CONTRAST_GRASS"
 script = ExtResource("36_g2upo")
 key = "contrast_grass"
 
+<<<<<<< Updated upstream
+=======
+[node name="SuperVisibilityButton" type="CheckButton" parent="GUI/MainMenu/HBoxContainer/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer" unique_id=631770465]
+layout_mode = 2
+text = "TGL_SUPER_VISIBILITY"
+script = ExtResource("36_g2upo")
+key = "super_visibility"
+
+>>>>>>> Stashed changes
 [node name="VBoxContainer" type="VBoxContainer" parent="GUI/MainMenu/HBoxContainer" unique_id=1822817579]
 layout_mode = 2
 size_flags_horizontal = 8

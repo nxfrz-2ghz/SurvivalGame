@@ -131,5 +131,9 @@ func _handle_stage_change() -> void:
 			shock.emit()
 		if randf() < 0.1:
 			shock.emit()
+<<<<<<< Updated upstream
 			G.player.health.take_damage(99999999.9)
+=======
+			G.player.health.take_damage(100.0, false)
+>>>>>>> Stashed changes
 	

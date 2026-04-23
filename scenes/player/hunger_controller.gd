@@ -1,6 +1,6 @@
 extends Node
 
-signal take_damage(dmg: float)
+signal take_damage(dmg: float, ignore_armor: bool)
 signal heal(health: float)
 signal changed(current_hunger: float)
 
@@ -33,7 +33,11 @@ func take_hunger(hng: int) -> void:
 			G.text_message.add(tr("RPL_BIG_HUNGER"))
 	
 	else:
+<<<<<<< Updated upstream
 		take_damage.emit(HUNGER_DAMAGE)
+=======
+		take_damage.emit(HUNGER_DAMAGE, true)
+>>>>>>> Stashed changes
 
 func _on_timer_timeout() -> void:
 	if G.state_machine != "game": return

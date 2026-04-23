@@ -1036,7 +1036,7 @@ properties/8/replication_mode = 2
 
 [node name="Player" type="CharacterBody3D" unique_id=2118560617 groups=["players"]]
 collision_layer = 2
-collision_mask = 5
+collision_mask = 21
 script = ExtResource("1_4anbu")
 
 [node name="Timers" type="Node" parent="." unique_id=1961006219]
@@ -1285,7 +1285,11 @@ position = Vector2(400, 150)
 scale = Vector2(1.4, 1.4)
 
 [node name="FireParticles2D" type="GPUParticles2D" parent="Head/Weapon/Arms/ShakingContainer/SwayContainer/Sprites/Item" unique_id=37759157]
+<<<<<<< Updated upstream
 position = Vector2(65.71428, -70.71428)
+=======
+position = Vector2(10.209, -74.929)
+>>>>>>> Stashed changes
 emitting = false
 amount = 1024
 texture = ExtResource("46_iwuka")

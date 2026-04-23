@@ -47,7 +47,11 @@ func toggle_rain(is_active: bool) -> void:
 		# Плавно глушим до -40 и выключаем
 		rain_tween.tween_property(audio_player, "volume_db", -40.0, 3.0)
 		rain_tween.tween_callback(audio_player.stop)
+<<<<<<< Updated upstream
 		G.player.rain.emitting = false
+=======
+		if G.player: G.player.rain.emitting = false
+>>>>>>> Stashed changes
 
 @rpc("authority", "call_local")
 func toggle_meteor_rain(is_active: bool) -> void:

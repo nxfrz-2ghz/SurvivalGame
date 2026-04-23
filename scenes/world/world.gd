@@ -230,6 +230,18 @@ func _init_noise() -> void:
 	fall_defense_area.set_size(world_size)
 	weather.env.setup()
 	#NodeOptimizer.start()
+<<<<<<< Updated upstream
+=======
+	
+	if DiskControl.take("super_visibility"):
+		mobs_visible_range *= 5
+		grass_visible_range *= 5
+		items_visible_range *= 5
+		objects_visible_range *= 5
+		buildings_visible_range *= 5
+		terrain_visible_range *= 5
+		weather.env.environment.fog_depth_end *= 5
+>>>>>>> Stashed changes
 
 
 func _generate_terrain() -> void:

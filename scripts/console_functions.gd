@@ -3,6 +3,10 @@ extends Node
 func _ready() -> void:
 	Console.add_command("spawn", spawn, ["entity_name", "amount", "position", "delay"], 1)
 	Console.add_command("tick", tick, ["rate"])
+<<<<<<< Updated upstream
+=======
+	Console.add_command("tp", tp, ["x","y","z", "node_name"], 3)
+>>>>>>> Stashed changes
 	
 	Console.console_opened.connect(_on_console_opened)
 	Console.console_closed.connect(_on_console_closed)
@@ -70,3 +74,19 @@ func spawn(entity_name: String, amount, position, delay) -> void:
 
 func tick(rate: int = 60) -> void:
 	Engine.physics_ticks_per_second = rate
+<<<<<<< Updated upstream
+=======
+
+func tp(x: float, y: float, z: float, node_name: String = G.player.name) -> void:
+	var node: Node3D = G.environment.get_node_or_null(node_name)
+	if !node: return
+	node.position.x = x
+	node.position.y = y
+	node.position.z = z
+
+func attack(dmg: float, damage_types := {"melee":1}, node_name: String = G.player.name) -> void:
+	var node: Node3D = G.environment.get_node_or_null(node_name)
+	if !node: return
+	var health: Node = node.get_node_or_null("HealthComponent")
+	if health: health.take_damage(dmg, false, damage_types)
+>>>>>>> Stashed changes

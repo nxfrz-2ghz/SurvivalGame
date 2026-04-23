@@ -37,7 +37,11 @@ func _on_body_entered(body: Node) -> void:
 	if not is_multiplayer_authority(): return
 	
 	if body.has_node("HealthComponent"):
+<<<<<<< Updated upstream
 		body.health.take_damage(damage, damage_types)
+=======
+		body.health.take_damage(damage, false, damage_types)
+>>>>>>> Stashed changes
 		if body is CharacterBody3D:
 			body.apply_push(self.global_transform.basis.z.normalized() + Vector3.UP/2, push_velocity)
 		
