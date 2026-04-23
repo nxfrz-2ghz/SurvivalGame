@@ -1,10 +1,6 @@
 extends Node
 
-<<<<<<< Updated upstream
-@export var visibility_range: float = 120.0
-=======
 @export var visibility_range: float = 50.0
->>>>>>> Stashed changes
 @export var update_interval: float = 1.0
 
 func start() -> void:

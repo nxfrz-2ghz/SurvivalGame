@@ -78,12 +78,9 @@ func _ready() -> void:
 		
 		self.nname = G.gui.main_menu.player_name.text
 		label3d.text = self.nname
-<<<<<<< Updated upstream
-=======
 		
 		if DiskControl.take("super_visibility"):
 			camera.far *= 5
->>>>>>> Stashed changes
 
 
 func _input(event: InputEvent) -> void:
@@ -175,16 +172,10 @@ func _input(event: InputEvent) -> void:
 				return
 			
 			elif current_slot_data != null:
-<<<<<<< Updated upstream
-				if collider.nname in R.exchangeable_items.keys():
-					var item_in_arm = current_slot_data["name"]
-					var amount = current_slot_data["amount"]
-=======
 				var item_in_arm = current_slot_data["name"]
 				var amount = current_slot_data["amount"]
 					
 				if collider.nname in R.exchangeable_items.keys():
->>>>>>> Stashed changes
 					var ex_items = R.exchangeable_items[collider.nname]
 					
 					if ex_items.get(item_in_arm) and amount >= ex_items.get(item_in_arm)["amount"]:
@@ -199,34 +190,6 @@ func _input(event: InputEvent) -> void:
 						inv.drop_item(current_slot_idx, 1)
 						return
 				
-<<<<<<< Updated upstream
-				# Смена состояния постройки
-				elif !weapon.weapon_anim.is_playing() and R.items[current_slot_data["name"]].has("change_buildings"):
-					if R.items[current_slot_data["name"]]["change_buildings"] == "state":
-						# Простая смена состояния
-						if collider.is_in_group("buildings"):
-							collider.change_state.rpc_id(1)
-						elif collider.is_in_group("sub_blocks"):
-							collider.get_parent().reset_to_default.rpc()
-						
-						weapon.use_item_durability()
-						weapon.weapon_anim.speed_scale = weapon.attack_speed + float(weapon.speed_rings)/5
-						weapon.weapon_anim.play("use")
-				
-					# Режим chiseling
-					elif R.items[current_slot_data["name"]]["change_buildings"] == "chisel":
-						# Вырезаем
-						if collider.is_in_group("sub_blocks"):
-							collider.get_parent().chisel_at(collider)
-							# Последующая обработка в block
-						# Или если это еще обычный блок, делаем его резным
-						elif collider is ChiseledBlock:
-							collider.make_chiseled.rpc()
-						
-						weapon.use_item_durability()
-						weapon.weapon_anim.speed_scale = weapon.attack_speed + float(weapon.speed_rings)/5
-						weapon.weapon_anim.play("use")
-=======
 				# Использование предмета по коллайдеру на пкм
 				if !weapon.weapon_anim.is_playing():
 					# Смена состояния постройки
@@ -255,7 +218,6 @@ func _input(event: InputEvent) -> void:
 							weapon.use_item_durability()
 							weapon.weapon_anim.speed_scale = weapon.attack_speed + float(weapon.speed_rings)/5
 							weapon.weapon_anim.play("use")
->>>>>>> Stashed changes
 			
 			# Достать готовые предметы
 			elif collider.nname in R.exchangeable_items.keys():
@@ -299,8 +261,6 @@ func _input(event: InputEvent) -> void:
 			elif R.items[item_name].get("throw_power") and !weapon.weapon_anim.is_playing():
 				weapon.weapon_anim.speed_scale = weapon.attack_speed + float(weapon.speed_rings)/5
 				weapon.weapon_anim.play("aim")
-<<<<<<< Updated upstream
-=======
 			
 			# Получение предмета при использовании
 			if R.items[item_name].has("on_use_drop"):
@@ -316,7 +276,6 @@ func _input(event: InputEvent) -> void:
 				weapon.use_item_durability()
 				weapon.weapon_anim.speed_scale = weapon.attack_speed + float(weapon.speed_rings)/5
 				weapon.weapon_anim.play("use")
->>>>>>> Stashed changes
 	
 	if Input.is_action_just_released("rmb") and weapon.weapon_anim.is_playing() and current_slot_data != null and R.items[current_slot_data["name"]].get("throw_power"):
 		# Если прицеливания еще не закончилась то отмена
@@ -329,11 +288,8 @@ func _input(event: InputEvent) -> void:
 				weapon.actions.shoot(weapon.damage, weapon.damage_types, weapon.push_velocity, current_name)
 				inv.drop_item(inv.current_item, 1)
 			weapon.weapon_anim.play("throw")
-<<<<<<< Updated upstream
-=======
 	
 	if Input.is_action_pressed("shift"): return
->>>>>>> Stashed changes
 	
 	if Input.is_action_just_pressed("pickup") and !weapon.weapon_anim.is_playing():
 		weapon.weapon_anim.play("pickup")
@@ -421,11 +377,7 @@ func get_float_velocity() -> float:
 
 
 func is_underwater() -> bool:
-<<<<<<< Updated upstream
-	return position.y < G.world.WATER_LEVEL
-=======
 	return G.world._get_height(position.x, position.z) < position.y and position.y < G.world.WATER_LEVEL
->>>>>>> Stashed changes
 
 
 func moving(delta: float) -> void:
@@ -539,8 +491,6 @@ func _physics_process(delta: float) -> void:
 	
 	moving(delta)
 	if Input.is_action_pressed("rmb") and R.items[weapon.current_name].get("throw_power"): state = STATE.AIM
-<<<<<<< Updated upstream
-=======
 	if Input.is_action_pressed("X"): state = STATE.SLEEP
 	if Input.is_action_pressed("shift"):
 		if Input.is_action_pressed("drop"):
@@ -548,7 +498,6 @@ func _physics_process(delta: float) -> void:
 		if Input.is_action_pressed("pickup"):
 			weapon.actions.pickup()
 		
->>>>>>> Stashed changes
 	camera_control()
 	scale_y_control()
 	

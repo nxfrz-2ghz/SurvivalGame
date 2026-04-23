@@ -33,11 +33,7 @@ func heal(health: float) -> void:
 
 
 @rpc("any_peer", "call_local")
-<<<<<<< Updated upstream
-func take_damage(base_damage: float, incoming_types: Dictionary = {"melee": 1.0}) -> void:
-=======
 func take_damage(base_damage: float, ignore_armor := false, incoming_types: Dictionary = {"melee": 1.0}) -> void:
->>>>>>> Stashed changes
 	last_health = current_health
 	
 	var total_damage = 0.0
@@ -47,12 +43,8 @@ func take_damage(base_damage: float, ignore_armor := false, incoming_types: Dict
 		var resistance: float = resists.get(type, 1.0) 
 		total_damage += base_damage * multiplier * resistance
 	
-<<<<<<< Updated upstream
-	total_damage -= armor
-=======
 	if !ignore_armor:
 		total_damage -= armor
->>>>>>> Stashed changes
 	
 	if total_damage > 0.0:
 		current_health -= total_damage

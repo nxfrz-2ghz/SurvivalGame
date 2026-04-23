@@ -38,9 +38,6 @@ func update_player_stats() -> void:
 
 
 func get_dig_drop(hit_position: Vector3) -> String:
-<<<<<<< Updated upstream
-	if hit_position.y < G.world.CLAY_LEVEL:
-=======
 	
 	# Rare drop
 	if randf() < 0.01:
@@ -49,7 +46,6 @@ func get_dig_drop(hit_position: Vector3) -> String:
 	var w := G.world
 	# Clay drop
 	if hit_position.y < w.CLAY_LEVEL:
->>>>>>> Stashed changes
 		return "clay"
 	
 	# Mountain drop

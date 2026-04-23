@@ -1285,11 +1285,7 @@ position = Vector2(400, 150)
 scale = Vector2(1.4, 1.4)
 
 [node name="FireParticles2D" type="GPUParticles2D" parent="Head/Weapon/Arms/ShakingContainer/SwayContainer/Sprites/Item" unique_id=37759157]
-<<<<<<< Updated upstream
-position = Vector2(65.71428, -70.71428)
-=======
 position = Vector2(10.209, -74.929)
->>>>>>> Stashed changes
 emitting = false
 amount = 1024
 texture = ExtResource("46_iwuka")

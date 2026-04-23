@@ -50,10 +50,7 @@ texture = ExtResource("3_remiq")
 
 [node name="Label3D" type="Label3D" parent="." index="8" unique_id=2142405983]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
-<<<<<<< Updated upstream
-=======
 visibility_range_end = 20.0
->>>>>>> Stashed changes
 billboard = 2
 shaded = true
 double_sided = false

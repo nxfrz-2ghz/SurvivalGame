@@ -63,27 +63,16 @@ func server_attack(dmg: float, damage_types: Dictionary, push_velocity: float, p
 		
 		# Урон по объектам
 		if body.is_in_group("objects") or body.is_in_group("buildings"):
-<<<<<<< Updated upstream
-			body.health.take_damage.rpc_id(1, dmg, damage_types)
-		
-		if body.is_in_group("sub_blocks"):
-			body.get_parent().health.take_damage.rpc_id(1, dmg, damage_types)
-=======
 			body.health.take_damage.rpc_id(1, dmg, false, damage_types)
 		
 		if body.is_in_group("sub_blocks"):
 			body.get_parent().health.take_damage.rpc_id(1, dmg, false, damage_types)
->>>>>>> Stashed changes
 			# Останавливаем выполнение, тк в зоне коллизии куча микро блоков и каждый нанесет урон
 			return
 		
 		# Урон по мобам
 		if body.is_in_group("mobs"):
-<<<<<<< Updated upstream
-			body.health.take_damage.rpc_id(1, dmg, damage_types)
-=======
 			body.health.take_damage.rpc_id(1, dmg, false, damage_types)
->>>>>>> Stashed changes
 			body.apply_push(-actions_node.global_transform.basis.z.normalized() + Vector3.UP/2, push_velocity)
 
 
