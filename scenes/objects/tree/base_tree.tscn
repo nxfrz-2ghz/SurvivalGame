@@ -1,17 +1,14 @@
-[gd_scene format=3 uid="uid://1oleq1fyx67g"]
+[gd_scene format=3 uid="uid://btaavxxs767ge"]
 
-[ext_resource type="PackedScene" uid="uid://darxc13rlkwt7" path="res://scenes/objects/object.tscn" id="1_36xy5"]
-[ext_resource type="Script" uid="uid://47e0kuarmfs1" path="res://scenes/objects/tree/spruce/spruce.gd" id="2_wow87"]
-[ext_resource type="Texture2D" uid="uid://rc8qnarmvd3v" path="res://res/sprites/objects/tree/spruce.png" id="3_5vuvh"]
+[ext_resource type="PackedScene" uid="uid://darxc13rlkwt7" path="res://scenes/objects/object.tscn" id="1_w8yy1"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_83v3r"]
 radius = 0.77783203
 height = 8.988647
 
-[node name="Spruce" unique_id=108689247 instance=ExtResource("1_36xy5")]
+[node name="BaseTree" unique_id=108689247 instance=ExtResource("1_w8yy1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.8763304, 0)
-script = ExtResource("2_wow87")
-nname = "spruce_tree"
+nname = "base_tree"
 
 [node name="HealthComponent" parent="." index="1" unique_id=1086116789]
 resists = {
@@ -24,7 +21,7 @@ max_health = 5.0
 
 [node name="EntityComponent" parent="." index="2" unique_id=1330161778]
 drop_items = {
-"log": 4
+"log": 5
 }
 drop_chance = {
 "log": 0.65
@@ -38,4 +35,3 @@ shape = SubResource("CapsuleShape3D_83v3r")
 
 [node name="Sprite3D" parent="." index="5" unique_id=57594410]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.046256, 0)
-texture = ExtResource("3_5vuvh")

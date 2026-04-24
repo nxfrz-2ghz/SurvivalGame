@@ -233,16 +233,24 @@ const objects := {
 	},
 	"berry_bush": {
 		"scene": preload("res://scenes/objects/bush/berry_bush/berry_bush.tscn"),
-		"recipe": {"log": 2, "raw_berry": 5},
+		"recipe": {"log": 2, "raw_berry": 5, "blood": 1},
 	},
 	"dry_bush": {
 		"scene": preload("res://scenes/objects/bush/dry_bush/dry_bush.tscn"),
 	},
 	"oak_tree": {
-		"scene": preload("res://scenes/objects/tree/oak/oak.tscn"),
+		"scene": preload("res://scenes/objects/tree/oak/oak_tree.tscn"),
 	},
 	"spruce_tree": {
-		"scene": preload("res://scenes/objects/tree/spruce/spruce.tscn"),
+		"scene": preload("res://scenes/objects/tree/spruce/spruce_tree.tscn"),
+	},
+	"oak_sapling": {
+		"scene": preload("res://scenes/objects/sapling/oak/oak_sapling.tscn"),
+		"recipe": {"log": 3, "blood": 2},
+	},
+	"spruce_sapling": {
+		"scene": preload("res://scenes/objects/sapling/spruce/spruce_sapling.tscn"),
+		"recipe": {"log": 2, "blood": 1},
 	},
 	"stone": {
 		"scene": preload("res://scenes/objects/stone/stone.tscn"),

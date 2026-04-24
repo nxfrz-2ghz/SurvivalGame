@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://bw7rf7p5i55he"]
+
+[ext_resource type="PackedScene" uid="uid://darxc13rlkwt7" path="res://scenes/objects/object.tscn" id="1_hk2k3"]
+[ext_resource type="Script" uid="uid://dsphfmrapredi" path="res://scenes/objects/sapling/base_sapling.gd" id="2_7weed"]
+[ext_resource type="PackedScene" uid="uid://kqqogxrnnqyf" path="res://components/fall_ray/fall_ray.tscn" id="3_opte5"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_opte5"]
+properties/0/path = NodePath(".:grow_state")
+properties/0/spawn = true
+properties/0/replication_mode = 2
+
+[node name="BaseSapling" unique_id=1331540241 instance=ExtResource("1_hk2k3")]
+collision_layer = 32
+script = ExtResource("2_7weed")
+tree = null
+grow_state = 0
+max_grow_state = 10
+nname = "base_sapling"
+
+[node name="GrowTimer" type="Timer" parent="Timers" parent_id_path=PackedInt32Array(203408184) index="1" unique_id=575575046]
+wait_time = 30.0
+autostart = true
+
+[node name="EntityComponent" parent="." index="2" unique_id=1330161778]
+despawn_sound_name = "tree"
+exp_drop = 0.5
+
+[node name="MultiplayerSynchronizer2" type="MultiplayerSynchronizer" parent="." index="9" unique_id=177276286]
+replication_config = SubResource("SceneReplicationConfig_opte5")
+
+[node name="FallRay" parent="." index="10" unique_id=2065431078 instance=ExtResource("3_opte5")]
+
+[connection signal="timeout" from="Timers/GrowTimer" to="." method="_on_grow_timer_timeout"]

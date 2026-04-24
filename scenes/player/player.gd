@@ -67,7 +67,7 @@ func _ready() -> void:
 		
 		inv.set_item_in_arm.connect(weapon.set_item_in_arm)
 		inv.updatev.connect(weapon.update_player_stats)
-		inv.update_signals()
+		inv.update.emit(inv.inventory)
 		
 		book.open_book.connect(_on_open_book)
 		book.close_book.connect(_on_close_book)
@@ -318,6 +318,7 @@ func _on_close_book() -> void:
 
 
 func _on_health_component_died() -> void:
+	if not is_multiplayer_authority(): return
 	
 	var died_particles := R.particles["explose"].instantiate()
 	died_particles.position = self.position
@@ -377,7 +378,8 @@ func get_float_velocity() -> float:
 
 
 func is_underwater() -> bool:
-	return G.world._get_height(position.x, position.z) < position.y and position.y < G.world.WATER_LEVEL
+	#return G.world._get_height(position.x, position.z) < position.y and position.y < G.world.WATER_LEVEL
+	return position.y < G.world.WATER_LEVEL
 
 
 func moving(delta: float) -> void:
@@ -491,7 +493,9 @@ func _physics_process(delta: float) -> void:
 	
 	moving(delta)
 	if Input.is_action_pressed("rmb") and R.items[weapon.current_name].get("throw_power"): state = STATE.AIM
-	if Input.is_action_pressed("X"): state = STATE.SLEEP
+	if Input.is_action_pressed("X") and interact_ray.is_colliding() and R.objects.has(interact_ray.current_target.nname) and R.objects[interact_ray.current_target.nname].get("can_sleep"):
+		state = STATE.SLEEP
+		G.time_controller.sleep.rpc_id(1, delta)
 	if Input.is_action_pressed("shift"):
 		if Input.is_action_pressed("drop"):
 			if inv.inventory[inv.current_item] != null: weapon.actions.drop(inv.current_item)
@@ -581,7 +585,7 @@ func load_character() -> void:
 			if item:
 				inv.add_item(item["name"], item["amount"])
 		
-		if randf() < 0.1:
+		if randf() < 0.05:
 			G.player.progress_controller.add_achievement("ACH_9")
 		
 		print("Character loaded from: ", path)

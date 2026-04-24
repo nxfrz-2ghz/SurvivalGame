@@ -5,78 +5,94 @@ signal updatev
 signal set_hotbar_slot(pos: int)
 signal set_item_in_arm(item: String)
 
-const MAX_SLOTS = 12
+const MAX_SLOTS = 11
 
 # Структура предмета в слоте: {"name": String, "type": String, "amount": int}
 var inventory: Dictionary = {}
-var current_item := 1
+var current_item := 0
 
 
 func _ready() -> void:
 	# Инициализируем пустые слоты
-	for i in range(1, MAX_SLOTS + 1):
+	for i in range(0, MAX_SLOTS+1):
 		inventory[i] = null
+
 
 func update_signals() -> void:
 	set_hotbar_slot.emit(current_item)
 	update.emit(inventory)
-	var item_data = inventory[current_item]
-	set_item_in_arm.emit(item_data["name"] if item_data != null else "")
+	set_item_in_arm.emit(inventory[current_item]["name"] if inventory[current_item] != null else "")
+
+
+func apply_slot() -> void:
+	set_hotbar_slot.emit(current_item)
+	if inventory[current_item] != null:
+		set_item_in_arm.emit(inventory[current_item]["name"])
+		if get_node_or_null("%WeaponAnim") and !%WeaponAnim.is_playing(): %WeaponAnim.play("cd")
+	else:
+		set_item_in_arm.emit("")
 
 
 func _input(_event: InputEvent) -> void:
 	if G.state_machine != "game": return
-	if is_multiplayer_authority() and %WeaponAnim.is_playing(): return
+	if not is_multiplayer_authority(): return
 	
 	if Input.is_action_just_pressed("1"):
-		current_item = 1
-		update_signals()
+		current_item = 0
+		apply_slot()
 	if Input.is_action_just_pressed("2"):
-		current_item = 2
-		update_signals()
+		current_item = 1
+		apply_slot()
 	if Input.is_action_just_pressed("3"):
-		current_item = 3
-		update_signals()
+		current_item = 2
+		apply_slot()
 	if Input.is_action_just_pressed("4"):
-		current_item = 4
-		update_signals()
+		current_item = 3
+		apply_slot()
 	if Input.is_action_just_pressed("5"):
-		current_item = 5
-		update_signals()
+		current_item = 4
+		apply_slot()
 	if Input.is_action_just_pressed("6"):
-		current_item = 6
-		update_signals()
+		current_item = 5
+		apply_slot()
 	if Input.is_action_just_pressed("7"):
-		current_item = 7
-		update_signals()
+		current_item = 6
+		apply_slot()
 	if Input.is_action_just_pressed("8"):
-		current_item = 8
-		update_signals()
+		current_item = 7
+		apply_slot()
 	if Input.is_action_just_pressed("9"):
-		current_item = 9
-		update_signals()
+		current_item = 8
+		apply_slot()
 	if Input.is_action_just_pressed("0"):
-		current_item = 10
-		update_signals()
+		current_item = 9
+		apply_slot()
 	if Input.is_action_just_pressed("11"):
-		current_item = 11
-		update_signals()
+		current_item = 10
+		apply_slot()
 	if Input.is_action_just_pressed("12"):
-		current_item = 12
-		update_signals()
+		current_item = 11
+		apply_slot()
 	
 	
 	if Input.is_action_pressed("up_mouse_wheel"):
 		current_item -= 1
-		if current_item < 1:
-			current_item += MAX_SLOTS
-		update_signals()
+		if current_item < 0:
+			current_item += MAX_SLOTS+1
+		apply_slot()
 	
 	if Input.is_action_pressed("down_mouse_wheel"):
 		current_item += 1
 		if current_item > MAX_SLOTS:
-			current_item -= MAX_SLOTS
-		update_signals()
+			current_item -= MAX_SLOTS+1
+		apply_slot()
+
+
+var now_choosed_slot: int
+func _physics_process(_delta: float) -> void:
+	if !%WeaponAnim.is_playing() and now_choosed_slot != current_item:
+		now_choosed_slot = current_item
+		update.emit(inventory)
 
 
 func check_progress(item_name) -> void:
@@ -118,7 +134,7 @@ func add_item(item_name: String, amount: int = 1) -> void:
 	check_progress(item_name)
 
 	# 1. Сначала пытаемся добавить в существующие стаки того же типа
-	for i in range(1, MAX_SLOTS + 1):
+	for i in range(0, MAX_SLOTS):
 		var slot = inventory[i]
 		if slot and slot["name"] == item_name and slot["amount"] < max_s:
 			var can_add = max_s - slot["amount"]
@@ -128,12 +144,12 @@ func add_item(item_name: String, amount: int = 1) -> void:
 			remaining_amount -= added
 			
 			if remaining_amount <= 0:
-				update_signals()
+				update.emit(inventory)
 				updatev.emit()
 				return
 
 	# 2. Если осталось что добавлять, ищем пустые слоты
-	for i in range(1, MAX_SLOTS + 1):
+	for i in range(0, MAX_SLOTS):
 		if inventory[i] == null:
 			var added = min(max_s, remaining_amount)
 			inventory[i] = {
@@ -145,12 +161,12 @@ func add_item(item_name: String, amount: int = 1) -> void:
 			if remaining_amount <= 0:
 				break
 	
-	update_signals()
+	update.emit(inventory)
 	updatev.emit()
 
 func drop_item(slot_index: int, amount: int = 1) -> void:
 	$"../Audio/ActionsAudioPlayer3D".audio_play(R.sounds["actions"]["pickup"].resource_path)
-	if slot_index < 0 or slot_index >= MAX_SLOTS+1: return
+	if slot_index < 0 or slot_index >= MAX_SLOTS: return
 	
 	var slot = inventory[slot_index]
 	if slot:
@@ -159,5 +175,5 @@ func drop_item(slot_index: int, amount: int = 1) -> void:
 		else:
 			inventory[slot_index] = null # Удаляем предмет полностью
 		
-		update_signals()
+		update.emit(inventory)
 		updatev.emit()

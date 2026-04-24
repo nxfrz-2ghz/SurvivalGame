@@ -18,13 +18,13 @@ extends MarginContainer
 
 
 func set_hotbar_slot(pos: int) -> void:
-	choose_slot.global_position = slot[pos-1].global_position
+	choose_slot.global_position = slot[pos].global_position
 
 
 func update(inventory: Dictionary) -> void:
 	show()
 	for i in range(12):
-		var item_data = inventory.get(i + 1) # Получаем данные слота (может быть null)
+		var item_data = inventory.get(i) # Получаем данные слота (может быть null)
 		var current_slot = slot[i]
 		var label = current_slot.get_node("Label")
 

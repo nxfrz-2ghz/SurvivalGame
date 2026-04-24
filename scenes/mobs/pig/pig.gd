@@ -43,7 +43,7 @@ func on_damage() -> void:
 	run_timer.start()
 	sprite.anim_play("walk")
 	state = STATE.RUNAWAY
-	look_at(last_pos)
+	if last_pos: look_at(last_pos)
 
 
 func _on_run_timer_timeout() -> void:

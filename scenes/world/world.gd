@@ -164,6 +164,7 @@ const VARS_WHITELIST := [
 	"full", # berry_bush
 	"corruption_size", # heart
 	"state", # walls
+	"grow_state", #growing status of tree sapling
 	# for craft and cook components
 	"queue",
 	"complete",
@@ -233,8 +234,8 @@ func _init_noise() -> void:
 	
 	if DiskControl.take("super_visibility"):
 		mobs_visible_range *= 5
-		grass_visible_range *= 5
-		items_visible_range *= 5
+		grass_visible_range *= 2
+		items_visible_range *= 3
 		objects_visible_range *= 5
 		buildings_visible_range *= 5
 		terrain_visible_range *= 5

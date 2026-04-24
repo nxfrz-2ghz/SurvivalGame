@@ -4,6 +4,8 @@ func _ready() -> void:
 	Console.add_command("spawn", spawn, ["entity_name", "amount", "position", "delay"], 1)
 	Console.add_command("tick", tick, ["rate"])
 	Console.add_command("tp", tp, ["x","y","z", "node_name"], 3)
+	Console.add_command("give", give, ["item_name", "amount"], 1)
+	Console.add_command("attack", attack, ["dmg","damage_types","node_name"], 1)
 	
 	Console.console_opened.connect(_on_console_opened)
 	Console.console_closed.connect(_on_console_closed)
@@ -69,18 +71,28 @@ func spawn(entity_name: String, amount, position, delay) -> void:
 		node.position = position
 		G.environment.add_child(node, true)
 
-func tick(rate: int = 60) -> void:
-	Engine.physics_ticks_per_second = rate
+# Измените объявления функций на такие:
 
-func tp(x: float, y: float, z: float, node_name: String = G.player.name) -> void:
-	var node: Node3D = G.environment.get_node_or_null(node_name)
+func tick(rate) -> void:
+	if !rate: rate = 60
+	Engine.physics_ticks_per_second = int(rate)
+
+func tp(x, y, z, node_name = "") -> void:
+	# Если node_name не передан, берем игрока
+	var target_name = node_name if node_name != "" else G.player.name
+	var node: Node3D = G.environment.get_node_or_null(NodePath(target_name))
 	if !node: return
-	node.position.x = x
-	node.position.y = y
-	node.position.z = z
+	node.position = Vector3(float(x), float(y), float(z))
 
-func attack(dmg: float, damage_types := {"melee":1}, node_name: String = G.player.name) -> void:
-	var node: Node3D = G.environment.get_node_or_null(node_name)
+func give(item_name: String, amount = "1") -> void:
+	G.player.inv.add_item(item_name, int(amount))
+
+func attack(dmg, damage_types = null, node_name = "") -> void:
+	var target_name = node_name if node_name != "" else G.player.name
+	var node: Node3D = G.environment.get_node_or_null(NodePath(target_name))
 	if !node: return
 	var health: Node = node.get_node_or_null("HealthComponent")
-	if health: health.take_damage(dmg, false, damage_types)
+	
+	# Сложные типы (как damage_types словарь) часто нельзя передать строкой через консоль
+	var d_types = damage_types if damage_types else {"melee": 1}
+	if health: health.take_damage(float(dmg), false, d_types)

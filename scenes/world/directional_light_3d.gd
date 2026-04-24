@@ -32,6 +32,13 @@ func _ready() -> void:
 	rotation_degrees.x = -150 # Early day
 
 
+@rpc("any_peer", "call_local")
+func sleep(delta: float) -> void:
+	if not is_multiplayer_authority(): return
+	for i in range(100):
+		rotation_degrees.x += time_speed * delta
+
+
 func _physics_process(delta: float) -> void:
 	if G.state_machine != "game": return
 	
@@ -40,16 +47,11 @@ func _physics_process(delta: float) -> void:
 		rotation_degrees.x += time_speed * delta
 		if night:
 			rotation_degrees.x += time_speed * delta # X2 SPEED
-		
-		# In sleeping time speed up x100
-		if G.player.state == G.player.STATE.SLEEP:
-			for i in range(100):
-				rotation_degrees.x += time_speed * delta
 	
 		if rotation_degrees.x > 180 and night != n.FALSE:
 			night = n.FALSE
 			rotation_degrees.x = -rotation_degrees.x
-			max_energy = randf_range(0.8, 2.5) #Случайная яркость дня
+			max_energy = randf_range(0.8, 1.5) #Случайная яркость дня
 			day_counter += 1
 			day_come.emit()
 		

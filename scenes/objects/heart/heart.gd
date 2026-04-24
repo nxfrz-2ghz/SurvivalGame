@@ -28,7 +28,6 @@ func on_damage() -> void:
 func summon(scene: PackedScene) -> void:
 	anim_sprite.anim_play.rpc("on_summon")
 	var pos: Vector3 = G.mob_spawner.get_random_spawn_position(self.position, corruption_size.x/3, corruption_size.x)
-	pos.y = 30
 	G.mob_spawner.spawn_mob(scene, pos)
 
 

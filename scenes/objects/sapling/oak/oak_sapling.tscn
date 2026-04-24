@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://cf7obnmylgmkk"]
+
+[ext_resource type="PackedScene" uid="uid://bw7rf7p5i55he" path="res://scenes/objects/sapling/base_sapling.tscn" id="1_gwl4w"]
+[ext_resource type="PackedScene" uid="uid://2dluf164puot" path="res://scenes/objects/tree/oak/oak_tree.tscn" id="2_6wjuc"]
+[ext_resource type="Texture2D" uid="uid://cni7spc1x6ia6" path="res://res/sprites/objects/tree_sapling.png" id="3_s7vcm"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_wsi53"]
+radius = 0.92801976
+
+[node name="OakSapling" unique_id=1331540241 instance=ExtResource("1_gwl4w")]
+tree = ExtResource("2_6wjuc")
+nname = "oak_sapling"
+
+[node name="CollisionShape3D" parent="." index="4" unique_id=1161658582]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.84498286, 0)
+shape = SubResource("SphereShape3D_wsi53")
+
+[node name="Sprite3D" parent="." index="5" unique_id=57594410]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4601141, 0)
+texture = ExtResource("3_s7vcm")

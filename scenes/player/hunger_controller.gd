@@ -5,8 +5,8 @@ signal heal(health: float)
 signal changed(current_hunger: float)
 
 const HUNGER_DAMAGE := 0.5
-const HUNGER_SPEED := 2
-const MAX_HUNGER := 1000
+const HUNGER_SPEED := 1
+const MAX_HUNGER := 800
 var current_hunger := MAX_HUNGER
 
 func _ready() -> void:
@@ -61,6 +61,9 @@ func _on_timer_timeout() -> void:
 		
 		if !G.player.progress_controller.unlocked_notes.has("NTV_3") and current_hunger <= MAX_HUNGER/2:
 			G.player.progress_controller.add_note("NTK_3")
+		
+		if G.player.state == G.player.STATE.SLEEP:
+			take_hunger(HUNGER_DAMAGE * 200)
 
 func on_attack() -> void:
 	take_hunger(HUNGER_SPEED * 5)

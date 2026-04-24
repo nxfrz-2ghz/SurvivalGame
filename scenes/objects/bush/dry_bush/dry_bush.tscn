@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://d37jxtky36gnj"]
 
 [ext_resource type="PackedScene" uid="uid://darxc13rlkwt7" path="res://scenes/objects/object.tscn" id="1_bb1kv"]
-[ext_resource type="Script" uid="uid://47e0kuarmfs1" path="res://scenes/objects/tree/spruce/spruce.gd" id="2_utei7"]
+[ext_resource type="Script" uid="uid://47e0kuarmfs1" path="res://scenes/objects/tree/spruce/spruce_tree.gd" id="2_utei7"]
 [ext_resource type="Texture2D" uid="uid://b5yv7mouet332" path="res://res/sprites/objects/berry_bush/dry_bush.png" id="3_bb1kv"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_bb1kv"]

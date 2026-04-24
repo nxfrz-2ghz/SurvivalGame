@@ -7,6 +7,7 @@ extends RigidBody3D
 
 
 func _ready() -> void:
+	if nname == "" or nname not in R.items: queue_free()
 	sprite.texture = R.items[self.nname]["texture"]
 	sprite.visibility_range_end = G.world.items_visible_range
 	

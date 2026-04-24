@@ -29,6 +29,8 @@ func update() -> void:
 				target_name += "\n[RIGHT CLICK] TO COLLECT"
 			if current_target.get("lvl_cost"):
 				target_name += "\n[RIGHT CLICK] TO OPEN"
+			if current_target.get("grow_state"):
+				target_name += "\nGrow: " + str(current_target.grow_state) + "/" + str(current_target.max_grow_state)
 		
 		if current_target.is_in_group("items"):
 			target_name += "\nPRESS [F] TO PICKUP"

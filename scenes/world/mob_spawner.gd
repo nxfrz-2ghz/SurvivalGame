@@ -117,4 +117,6 @@ func get_random_spawn_position(center: Vector3, min_spawn_radius := MIN_SPAWN_RA
 	var distance := randf_range(min_spawn_radius, max_spawn_radius)
 	
 	var offset := Vector3(cos(angle) * distance, 0, sin(angle) * distance)
-	return center + offset
+	var pos := center + offset
+	pos.y = parent._get_height(pos.x, pos.y)
+	return pos

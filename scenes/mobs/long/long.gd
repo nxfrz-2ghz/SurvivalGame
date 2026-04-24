@@ -18,7 +18,6 @@ func tp_near_player() -> void:
 	if health.current_health < health.max_health / 5: return
 	
 	self.position = G.mob_spawner.get_random_spawn_position(target_player.position, health.current_health, health.current_health)
-	self.position.y += 8.0
 	_on_rotate_cooldown_timeout()
 
 

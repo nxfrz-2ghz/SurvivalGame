@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://1oleq1fyx67g"]
+
+[ext_resource type="PackedScene" uid="uid://btaavxxs767ge" path="res://scenes/objects/tree/base_tree.tscn" id="1_xkq12"]
+[ext_resource type="Script" uid="uid://47e0kuarmfs1" path="res://scenes/objects/tree/spruce/spruce_tree.gd" id="2_wow87"]
+[ext_resource type="Texture2D" uid="uid://rc8qnarmvd3v" path="res://res/sprites/objects/tree/spruce.png" id="3_5vuvh"]
+
+[node name="SpruceTree" unique_id=108689247 instance=ExtResource("1_xkq12")]
+script = ExtResource("2_wow87")
+nname = "spruce_tree"
+
+[node name="HealthComponent" parent="." index="1" unique_id=1086116789]
+max_health = 4.0
+armor = 0.2
+
+[node name="EntityComponent" parent="." index="2" unique_id=1330161778]
+drop_items = {
+"log": 4
+}
+drop_chance = {
+"log": 0.6
+}
+exp_drop = 1.5
+
+[node name="Sprite3D" parent="." index="5" unique_id=57594410]
+texture = ExtResource("3_5vuvh")
