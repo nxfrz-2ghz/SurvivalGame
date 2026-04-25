@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://s322lfir2gd7" path="res://scenes/mobs/mob.tscn" id="1_524pu"]
 [ext_resource type="Script" uid="uid://c448h63f6k6n3" path="res://scenes/mobs/darkness_eye/darkness_eye.gd" id="2_clm3c"]
+[ext_resource type="PackedScene" uid="uid://ndw88ejwr7v3" path="res://components/attack_area_component/attack_area.tscn" id="3_e6pli"]
 [ext_resource type="Texture2D" uid="uid://cqvph7a67efsh" path="res://res/sprites/mobs/darkness_eye/eye0.png" id="3_s7jgl"]
 [ext_resource type="Texture2D" uid="uid://dhu605mq3ai6i" path="res://res/sprites/mobs/darkness_eye/eye1.png" id="4_e6pli"]
 [ext_resource type="Texture2D" uid="uid://f74p0qn2x4t8" path="res://res/sprites/mobs/darkness_eye/eye2.png" id="5_0v12d"]
@@ -47,17 +48,25 @@ max_health = 10.0
 [node name="EntityComponent" parent="." index="3" unique_id=1330161778]
 exp_drop = 4.0
 
-[node name="CollisionShape3D" parent="." index="4" unique_id=1649019193]
+[node name="AttackArea" parent="." index="4" unique_id=443406468 instance=ExtResource("3_e6pli")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.16563988, -1.846596)
+damage = 0.1
+damage_types = {
+"axe": 0.2,
+"melee": 1.0
+}
+
+[node name="CollisionShape3D" parent="." index="5" unique_id=1649019193]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3959961, 0)
 shape = SubResource("CapsuleShape3D_clm3c")
 
-[node name="AnimatedSprite3D" parent="." index="5" unique_id=1249191248]
+[node name="AnimatedSprite3D" parent="." index="6" unique_id=1249191248]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.36554074, 0)
 sprite_frames = SubResource("SpriteFrames_0w0fy")
 autoplay = "default"
 frame_progress = 0.45816362
 
-[node name="Shadow" parent="." index="6" unique_id=437352595]
+[node name="Shadow" parent="." index="7" unique_id=437352595]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, -2.5216517, 0)
 
 [connection signal="timeout" from="Timers/AttackCooldown" to="." method="_on_attack_cooldown_timeout"]

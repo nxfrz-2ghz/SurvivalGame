@@ -46,7 +46,7 @@ func apply_eat(eat_name: String) -> void:
 		current_fear -= R.items[eat_name]["fear_affect"] * 10
 
 func _on_timer_timeout() -> void:
-	if G.state_machine != "game": return
+	if S.state_machine != "game": return
 
 	last_stage = current_stage
 

@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://ndw88ejwr7v3"]
+
+[ext_resource type="Script" uid="uid://bqy7gmyqx147k" path="res://components/attack_area_component/attack_area.gd" id="1_6vye7"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xmd6l"]
+size = Vector3(1.5, 1.5, 2)
+
+[node name="AttackArea" type="Area3D" unique_id=443406468]
+collision_layer = 0
+collision_mask = 62
+script = ExtResource("1_6vye7")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=337723645]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1652832, 0)
+shape = SubResource("BoxShape3D_xmd6l")

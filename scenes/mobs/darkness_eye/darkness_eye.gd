@@ -1,8 +1,7 @@
 extends "res://scenes/mobs/mob.gd"
 
-const damage := 0.1
+@onready var attack_area := $AttackArea
 var target_player: CharacterBody3D
-
 
 func _ready() -> void:
 	if not is_multiplayer_authority(): return
@@ -12,16 +11,18 @@ func _ready() -> void:
 
 func _on_attack_cooldown_timeout() -> void:
 	if not is_multiplayer_authority(): return
-	if G.state_machine != "game": return
+	if S.state_machine != "game": return
 	target_player = get_target_player()
 	
 	var dist := global_position.distance_to(target_player.global_position)
 	
-	if dist < 3.0:
-		target_player.health.take_damage(damage)
+	if dist < 8.0:
+		attack_area.attack()
 
 
 func loop(_delta: float) -> void:
 	if not is_multiplayer_authority(): return
-	if is_instance_valid(target_player): walk((target_player.global_position - global_position).normalized(), speed)
+	if is_instance_valid(target_player):
+		look_at(target_player.position)
+		walk(-global_transform.basis.z, speed)
 	braking()

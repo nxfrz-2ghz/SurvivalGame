@@ -6,7 +6,7 @@ extends "res://scenes/objects/object.gd"
 
 
 func _on_grow_timer_timeout() -> void:
-	if G.state_machine != "game": return
+	if S.state_machine != "game": return
 	if not is_multiplayer_authority(): return
 	grow_state += 1
 	if grow_state >= max_grow_state:

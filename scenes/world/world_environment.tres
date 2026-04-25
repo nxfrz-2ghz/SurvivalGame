@@ -9,6 +9,7 @@ sky_material = ExtResource("1_o0hic")
 background_mode = 2
 sky = SubResource("Sky_3s6yk")
 ambient_light_color = Color(0.31431612, 0.31431612, 0.3143161, 1)
+glow_enabled = true
 fog_enabled = true
 fog_mode = 1
 fog_light_color = Color(0.5176471, 0.5529412, 0.60784316, 1)

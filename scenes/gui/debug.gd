@@ -2,7 +2,7 @@ extends Label
 
 func _physics_process(_delta: float) -> void:
 	if !visible: return
-	if G.state_machine != "game": return
+	if S.state_machine != "game": return
 	if not G.player: return
 	
 	text = "FPS: " + str(Engine.get_frames_per_second())

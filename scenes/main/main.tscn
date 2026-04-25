@@ -711,7 +711,7 @@ scroll_active = false
 
 [node name="HungerBar" type="ProgressBar" parent="GUI/HUD/BarBox" unique_id=137079756]
 layout_mode = 2
-max_value = 1000.0
+max_value = 800.0
 
 [node name="TextureRect" type="TextureRect" parent="GUI/HUD/BarBox/HungerBar" unique_id=1630351205]
 layout_mode = 0

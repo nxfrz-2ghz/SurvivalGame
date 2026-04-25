@@ -34,7 +34,7 @@ func apply_slot() -> void:
 
 
 func _input(_event: InputEvent) -> void:
-	if G.state_machine != "game": return
+	if S.state_machine != "game": return
 	if not is_multiplayer_authority(): return
 	
 	if Input.is_action_just_pressed("1"):
@@ -134,7 +134,7 @@ func add_item(item_name: String, amount: int = 1) -> void:
 	check_progress(item_name)
 
 	# 1. Сначала пытаемся добавить в существующие стаки того же типа
-	for i in range(0, MAX_SLOTS):
+	for i in range(0, MAX_SLOTS+1):
 		var slot = inventory[i]
 		if slot and slot["name"] == item_name and slot["amount"] < max_s:
 			var can_add = max_s - slot["amount"]
@@ -149,7 +149,7 @@ func add_item(item_name: String, amount: int = 1) -> void:
 				return
 
 	# 2. Если осталось что добавлять, ищем пустые слоты
-	for i in range(0, MAX_SLOTS):
+	for i in range(0, MAX_SLOTS+1):
 		if inventory[i] == null:
 			var added = min(max_s, remaining_amount)
 			inventory[i] = {
@@ -161,12 +161,12 @@ func add_item(item_name: String, amount: int = 1) -> void:
 			if remaining_amount <= 0:
 				break
 	
-	update.emit(inventory)
+	update_signals()
 	updatev.emit()
 
 func drop_item(slot_index: int, amount: int = 1) -> void:
 	$"../Audio/ActionsAudioPlayer3D".audio_play(R.sounds["actions"]["pickup"].resource_path)
-	if slot_index < 0 or slot_index >= MAX_SLOTS: return
+	if slot_index < 0 or slot_index >= MAX_SLOTS+1: return
 	
 	var slot = inventory[slot_index]
 	if slot:
@@ -175,5 +175,5 @@ func drop_item(slot_index: int, amount: int = 1) -> void:
 		else:
 			inventory[slot_index] = null # Удаляем предмет полностью
 		
-		update.emit(inventory)
+		update_signals()
 		updatev.emit()

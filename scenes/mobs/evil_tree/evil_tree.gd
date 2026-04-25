@@ -12,7 +12,7 @@ func apply_push(direction_vector: Vector3, velocity_power: float) -> void:
 
 func _on_attack_cooldown_timeout() -> void:
 	if not is_multiplayer_authority(): return
-	if G.state_machine != "game": return
+	if S.state_machine != "game": return
 	target_player = get_target_player()
 	
 	var dist := global_position.distance_to(target_player.global_position)

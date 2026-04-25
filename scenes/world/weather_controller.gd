@@ -66,7 +66,7 @@ func toggle_meteor_rain(is_active: bool) -> void:
 
 func _on_meteor_timer_timeout() -> void:
 	if not is_multiplayer_authority(): return
-	if G.state_machine != "game": return
+	if S.state_machine != "game": return
 	if env.environment != env.envs["default"]: return
 	
 	var spawn_pos: Vector3 = G.mob_spawner.get_random_spawn_position(G.player.position, 0.0, 10.0)
@@ -79,7 +79,7 @@ func _on_meteor_timer_timeout() -> void:
 
 func _on_timer_timeout() -> void:
 	if not is_multiplayer_authority(): return
-	if G.state_machine != "game": return
+	if S.state_machine != "game": return
 	if env.environment != env.envs["default"]: return
 	
 	toggle_fog.rpc(false)

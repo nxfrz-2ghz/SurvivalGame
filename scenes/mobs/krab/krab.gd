@@ -2,12 +2,12 @@ extends "res://scenes/mobs/mob.gd"
 
 @onready var attack_cooldown := $Timers/AttackCooldown
 @onready var dash_cooldown := $Timers/DashCooldown
+@onready var attack_area := $AttackArea
 
-const damage := 2.0
 const dash_power := 100.0
 const jump_velocity := 3.5
 const DETECTION_RADIUS := 16.0
-const ATTACK_RADIUS := 2.0
+const ATTACK_RADIUS := 8.0
 
 enum State {IDLE, WANDER, STALK}
 var state: State = State.IDLE
@@ -30,7 +30,7 @@ func loop(_delta: float) -> void:
 
 func _on_timer_timeout() -> void:
 	if not is_multiplayer_authority(): return
-	if G.state_machine != "game": return
+	if S.state_machine != "game": return
 	if state == State.IDLE:
 		state = State.WANDER
 	elif state == State.WANDER:
@@ -54,12 +54,12 @@ func _on_animated_sprite_3d_animation_finished() -> void:
 
 func update() -> void:
 	if not is_multiplayer_authority(): return
-	if G.state_machine != "game": return
+	if S.state_machine != "game": return
 	target_player = get_target_player()
 	var dist := global_position.distance_to(target_player.global_position)
 	
 	if dist < ATTACK_RADIUS and attack_cooldown.is_stopped():
-		target_player.health.take_damage(damage)
+		attack_area.attack()
 		sprite.anim_play.rpc("attack")
 		attack_cooldown.start()
 	elif dist < DETECTION_RADIUS:

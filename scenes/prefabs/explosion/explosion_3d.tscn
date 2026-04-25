@@ -33,7 +33,7 @@ func apply_explosion_effects():
 		var calculated_force = force / (1.0 + distance * falloff_factor)
 		
 		if body.has_node(\"HealthComponent\"):
-			body.health.take_damage(calculated_damage, {\"explosion\": 1.0})
+			body.health.take_damage(calculated_damage, false, {\"explosion\": 1.0})
 		
 		if body is RigidBody3D:
 			var dir = (body.global_position - global_position).normalized()

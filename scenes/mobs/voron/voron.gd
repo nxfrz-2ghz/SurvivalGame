@@ -10,7 +10,7 @@ func _ready() -> void:
 	self.rotation.z = 0
 
 func _physics_process(_delta: float) -> void:
-	if G.state_machine != "game": return
+	if S.state_machine != "game": return
 	if not is_multiplayer_authority(): return
 	
 	walk(-global_transform.basis.z, speed)

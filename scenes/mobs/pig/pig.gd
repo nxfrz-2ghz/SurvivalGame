@@ -17,7 +17,7 @@ func loop(_delta: float) -> void:
 
 func _on_timer_timeout() -> void:
 	if not is_multiplayer_authority(): return
-	if G.state_machine != "game": return
+	if S.state_machine != "game": return
 	
 	if state == STATE.IDLE:
 		state = STATE.WALK

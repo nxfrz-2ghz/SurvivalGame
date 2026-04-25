@@ -3,10 +3,6 @@ extends Node
 const item := preload("res://scenes/items/item.tscn")
 const throwable_item := preload("res://scenes/items/throwable_item.tscn")
 
-const OXIDING_SPEED := 50
-const dmg_to_get_ach_ultrakill := 10.0
-
-
 const sounds := {
 	"walk": {
 		"grass": [
@@ -418,6 +414,7 @@ const items := {
 	# ITEMS
 	"": {
 		"attack_speed": 1.2,
+		"is_splash": true,
 		"damage_types":
 			{
 				"melee": 1.0,
@@ -479,6 +476,7 @@ const items := {
 		"durability": 10,
 		"attack_speed": 2.0,
 		"damage": 1.8,
+		"is_splash": true,
 		"damage_types": {
 			"melee": 0.9,
 			"axe": 0.2,
@@ -714,6 +712,7 @@ const items := {
 		"durability": 650,
 		"attack_speed": 1.5,
 		"damage": 3.8,
+		"is_splash": true,
 		"damage_types": {
 			"melee": 0.9,
 			"axe": 0.2,
@@ -754,6 +753,7 @@ const items := {
 		"durability": 50,#30,
 		"attack_speed": 0.5,
 		"damage": 3.0,#"damage": 2.0,
+		"is_splash": true,
 		"damage_types": {
 			"melee": 0.5,
 			"heavy": 1.0,
@@ -773,6 +773,7 @@ const items := {
 			"energy": 1.0,
 		},
 		"damage": 2.0,
+		"is_splash": true,
 		"can_oxiding": "", # Костыльное угасание факела если долго его использовать
 	},
 	"raw_berry": {
@@ -808,6 +809,7 @@ const items := {
 		"stack_size": 20,
 		"attack_speed": 0.7,
 		"damage": 1.5,
+		"is_splash": true,
 		"damage_types": {
 			"melee": 0.8,
 			"axe": 0.3,
@@ -819,6 +821,7 @@ const items := {
 		"stack_size": 50,
 		"attack_speed": 0.5,
 		"damage": 2.0,
+		"is_splash": true,
 		"damage_types": {
 			"melee": 0.8,
 			"axe": 0.5,
@@ -886,7 +889,7 @@ const items := {
 		"heal": 0.5,
 		"attack_speed": 0.3,
 	},
-	"darkness_essncion": {
+	"darkness_essence": {
 		"texture": preload("res://res/sprites/items/darkness_essencion.png"),
 		"stack_size": 25,
 	},

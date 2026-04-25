@@ -92,7 +92,7 @@ func loop(_delta: float) -> void:
 	return
 
 func _physics_process(delta: float) -> void:
-	if G.state_machine != "game": return
+	if S.state_machine != "game": return
 	loop(delta)
 	if not is_multiplayer_authority(): return
 	

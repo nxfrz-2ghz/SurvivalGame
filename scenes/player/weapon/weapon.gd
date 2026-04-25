@@ -15,6 +15,7 @@ signal attack
 @onready var item_sprite := $Arms/ShakingContainer/SwayContainer/Sprites/Item
 
 var current_name: String
+var is_splash: float
 var damage: float
 var attack_speed: float
 var damage_types: Dictionary
@@ -71,18 +72,18 @@ func get_dig_drop(hit_position: Vector3) -> String:
 
 
 func check_corrosion_item() -> void:
-	if G.state_machine != "game": return
+	if S.state_machine != "game": return
 	
 	# Оксисление
 	if R.items[current_name].has("can_oxiding"):
-		if randi_range(0, R.OXIDING_SPEED) == 0:
+		if randi_range(0, S.OXIDING_SPEED) == 0:
 			var oxided_item: String = R.items[current_name]["can_oxiding"]
 			actions.inv.drop_item(actions.inv.current_item)
-			actions.inv.add_item(oxided_item)
+			if oxided_item: actions.inv.add_item(oxided_item)
 
 
 func regen() -> void:
-	if G.state_machine != "game": return
+	if S.state_machine != "game": return
 	
 	if G.player:
 		G.player.health.heal(float(health_rings)/20)
@@ -105,6 +106,7 @@ func use_item_durability() -> void:
 
 func choose_item(item: String = "") -> void:
 	current_name = item
+	is_splash = R.items[item].get("is_splash", false)
 	damage = R.items[item].get("damage", 1.0)
 	attack_speed = R.items[item].get("attack_speed", 1.0)
 	damage_types = R.items[item].get("damage_types", {"melee": 1.0})

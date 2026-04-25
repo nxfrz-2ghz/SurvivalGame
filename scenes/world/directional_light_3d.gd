@@ -40,7 +40,7 @@ func sleep(delta: float) -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if G.state_machine != "game": return
+	if S.state_machine != "game": return
 	
 	if is_multiplayer_authority():
 	

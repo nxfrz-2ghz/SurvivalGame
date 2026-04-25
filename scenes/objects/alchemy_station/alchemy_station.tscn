@@ -65,7 +65,6 @@ visible = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5509925, 0)
 visibility_range_end = 100.0
 billboard = 2
-shaded = true
 double_sided = false
 alpha_cut = 1
 texture = ExtResource("5_1uhg1")

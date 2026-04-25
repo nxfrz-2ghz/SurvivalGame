@@ -54,7 +54,7 @@ func take_damage(base_damage: float, ignore_armor := false, incoming_types: Dict
 		on_damage.emit()
 	
 	# Ачивка ваншота, если хп >= 10
-	if last_health == max_health and last_health >= R.dmg_to_get_ach_ultrakill and current_health <= 0.0:
+	if last_health == max_health and last_health >= S.dmg_to_get_ach_ultrakill and current_health <= 0.0:
 		G.player.progress_controller.add_achievement("ACH_7")
 	
 	if current_health <= 0:

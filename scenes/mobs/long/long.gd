@@ -1,8 +1,6 @@
 extends "res://scenes/mobs/mob.gd"
 
-@onready var attack_buildings_cooldown := $Timers/AttackCooldown
-
-const damage := 3.0
+@onready var attack_area := $AttackArea
 var target_player: CharacterBody3D
 
 
@@ -23,13 +21,13 @@ func tp_near_player() -> void:
 
 func _on_update_enemy_cooldown_timeout() -> void:
 	if not is_multiplayer_authority(): return
-	if G.state_machine != "game": return
+	if S.state_machine != "game": return
 	target_player = get_target_player()
 	
 	var dist := global_position.distance_to(target_player.global_position)
 	
 	if dist < 3.0:
-		target_player.health.take_damage(damage)
+		attack_area.attack()
 		tp_near_player()
 
 

@@ -16,7 +16,7 @@ func is_moving() -> bool:
 
 func _physics_process(_delta: float) -> void:
 	if not is_multiplayer_authority(): return
-	if G.state_machine != "game": return
+	if S.state_machine != "game": return
 	
 	if Input.is_action_pressed("shift") and is_moving():
 		energy -= 5

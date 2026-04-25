@@ -36,7 +36,7 @@ func take_hunger(hng: int) -> void:
 		take_damage.emit(HUNGER_DAMAGE, true)
 
 func _on_timer_timeout() -> void:
-	if G.state_machine != "game": return
+	if S.state_machine != "game": return
 	take_hunger(HUNGER_SPEED)
 	
 	if Input.is_action_pressed("space"):

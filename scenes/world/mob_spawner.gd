@@ -47,7 +47,7 @@ func _on_directional_light_3d_night_come() -> void:
 
 
 func _on_spawn_timer_timeout() -> void:
-	if G.state_machine != "game": return
+	if S.state_machine != "game": return
 	if !parent.server: return
 	
 	# Проверка лимита мобов

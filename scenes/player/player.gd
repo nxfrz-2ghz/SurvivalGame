@@ -86,10 +86,10 @@ func _ready() -> void:
 func _input(event: InputEvent) -> void:
 	if not is_multiplayer_authority(): return
 	
-	if Input.is_action_just_pressed("esc") and G.state_machine == "book":
+	if Input.is_action_just_pressed("esc") and S.state_machine == "book":
 		book.close_book.emit()
 	
-	if G.state_machine != "game": return
+	if S.state_machine != "game": return
 	if !camera.current: return
 	
 	if Input.is_action_just_pressed("f1"):
@@ -147,7 +147,7 @@ func _input(event: InputEvent) -> void:
 			
 			weapon.weapon_anim.speed_scale = atk_spd
 			weapon.weapon_anim.play("attack")
-			weapon.actions.attack(cur_dmg, weapon.damage_types, weapon.push_velocity + weapon.push_velocity * vel)
+			weapon.actions.attack(weapon.is_splash, cur_dmg, weapon.damage_types, weapon.push_velocity + weapon.push_velocity * vel)
 			weapon.attack.emit()
 		interact_ray.update()
 	
@@ -171,13 +171,12 @@ func _input(event: InputEvent) -> void:
 					G.text_message.add(tr("RPL_LVL_NOT_ENOUGH"))
 				return
 			
-			elif current_slot_data != null:
-				var item_in_arm = current_slot_data["name"]
-				var amount = current_slot_data["amount"]
-					
-				if collider.nname in R.exchangeable_items.keys():
-					var ex_items = R.exchangeable_items[collider.nname]
-					
+			if collider.nname in R.exchangeable_items.keys():
+				var ex_items = R.exchangeable_items[collider.nname]
+				
+				if current_slot_data != null:
+					var item_in_arm = current_slot_data["name"]
+					var amount = current_slot_data["amount"]
 					if ex_items.get(item_in_arm) and amount >= ex_items.get(item_in_arm)["amount"]:
 						if collider.has_node("CookComponent"): collider.cook.craft.rpc_id(1, item_in_arm)
 						elif collider.has_node("CraftComponent"): collider.craft.craft.rpc_id(1, item_in_arm)
@@ -189,6 +188,21 @@ func _input(event: InputEvent) -> void:
 						collider.cook.add_fuel.rpc_id(1)
 						inv.drop_item(current_slot_idx, 1)
 						return
+				
+				# Достать готовые предметы
+				if collider.has_node("CookComponent"):
+					for i in collider.cook.complete:
+						inv.add_item(i)
+					collider.cook.pick.rpc_id(1)
+				elif collider.has_node("CraftComponent"):
+					for i in collider.craft.complete:
+						inv.add_item(i)
+					collider.craft.pick.rpc_id(1)
+				return
+			
+			if current_slot_data != null:
+				var item_in_arm = current_slot_data["name"]
+				var amount = current_slot_data["amount"]
 				
 				# Использование предмета по коллайдеру на пкм
 				if !weapon.weapon_anim.is_playing():
@@ -218,18 +232,6 @@ func _input(event: InputEvent) -> void:
 							weapon.use_item_durability()
 							weapon.weapon_anim.speed_scale = weapon.attack_speed + float(weapon.speed_rings)/5
 							weapon.weapon_anim.play("use")
-			
-			# Достать готовые предметы
-			elif collider.nname in R.exchangeable_items.keys():
-				if collider.has_node("CookComponent"):
-					for i in collider.cook.complete:
-						inv.add_item(i)
-					collider.cook.pick.rpc_id(1)
-				elif collider.has_node("CraftComponent"):
-					for i in collider.craft.complete:
-						inv.add_item(i)
-					collider.craft.pick.rpc_id(1)
-				return
 		
 		# Использование предметов (items)
 		if current_slot_data != null:
@@ -305,14 +307,14 @@ func _input(event: InputEvent) -> void:
 
 
 func _on_open_book() -> void:
-	G.state_machine = "book"
+	S.state_machine = "book"
 	weapon.weapon_anim.play("book_open_page")
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	book.set_page("BK_MAIN")
 
 
 func _on_close_book() -> void:
-	G.state_machine = "game"
+	S.state_machine = "game"
 	weapon.weapon_anim.play("book_close_page")
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
@@ -489,7 +491,7 @@ func scale_y_control() -> void:
 
 func _physics_process(delta: float) -> void:
 	if not is_multiplayer_authority(): return
-	if G.state_machine != "game": return
+	if S.state_machine != "game": return
 	
 	moving(delta)
 	if Input.is_action_pressed("rmb") and R.items[weapon.current_name].get("throw_power"): state = STATE.AIM
@@ -514,7 +516,7 @@ func _on_start_emit_timer_timeout() -> void:
 	hunger.eat(0)
 	progress_controller.add_exp(0)
 	
-	if G.state_machine == "game":
+	if S.state_machine == "game":
 		inv.update_signals()
 	
 	# First Note

@@ -12,10 +12,10 @@ func _ready() -> void:
 
 var last_state: String
 func _on_console_opened() -> void:
-	last_state = G.state_machine
-	G.state_machine = "console"
+	last_state = S.state_machine
+	S.state_machine = "console"
 func _on_console_closed() -> void:
-	G.state_machine = last_state
+	S.state_machine = last_state
 
 func spawn(entity_name: String, amount, position, delay) -> void:
 	if last_state != "game": return

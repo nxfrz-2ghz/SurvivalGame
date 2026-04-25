@@ -22,17 +22,15 @@ max_health = 20.0
 
 [node name="EntityComponent" parent="." index="2" unique_id=1330161778]
 drop_items = {
-"armor_ring": 1,
-"brick": 10,
-"coal": 5,
+"armor_ring": 2,
+"coal": 3,
 "copper_ore": 3,
-"health_ring": 1,
+"health_ring": 2,
 "iron_ore": 3,
-"speed_ring": 1
+"speed_ring": 2
 }
 drop_chance = {
 "armor_ring": 0.1,
-"brick": 0.1,
 "coal": 0.3,
 "copper_ore": 0.3,
 "health_ring": 0.1,

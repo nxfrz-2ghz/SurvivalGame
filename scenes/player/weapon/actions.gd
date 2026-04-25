@@ -9,8 +9,8 @@ var crafting_mode := false:
 		$CraftZone.visible = value
 
 
-func attack(dmg: float, damage_types: Dictionary, push_velocity: float) -> void:
-	server_attack.rpc(dmg, damage_types, push_velocity, multiplayer.get_unique_id())
+func attack(is_splash: bool, dmg: float, damage_types: Dictionary, push_velocity: float) -> void:
+	server_attack.rpc(is_splash, dmg, damage_types, push_velocity, multiplayer.get_unique_id())
 
 
 func shoot(dmg: float, damage_types: Dictionary, push_velocity: float, item_name: String) -> void:
@@ -46,34 +46,19 @@ func client_drop_item(slot_index: int) -> void:
 
 
 @rpc("authority", "call_local")
-func server_attack(dmg: float, damage_types: Dictionary, push_velocity: float, peer_id: int) -> void:
+func server_attack(is_splash: bool, dmg: float, damage_types: Dictionary, push_velocity: float, peer_id: int) -> void:
 	if not multiplayer.is_server(): return
 	
 	var player = G.environment.get_node(str(peer_id))
 	var actions_node = player.weapon.actions
-	for body in actions_node.get_overlapping_bodies():
-		
-		# Отключение урона по себе от самого себя
-		if body.name == str(peer_id): continue
-		
-		# Урон по игрокам
-		if body.is_in_group("players"):
-			body.health.take_damage.rpc_id(int(body.name), dmg, false, damage_types)
-			body.apply_push.rpc_id(int(body.name), -actions_node.global_transform.basis.z.normalized() + Vector3.UP/2, push_velocity)
-		
-		# Урон по объектам
-		if body.is_in_group("objects") or body.is_in_group("buildings"):
-			body.health.take_damage.rpc_id(1, dmg, false, damage_types)
-		
-		if body.is_in_group("sub_blocks"):
-			body.get_parent().health.take_damage.rpc_id(1, dmg, false, damage_types)
-			# Останавливаем выполнение, тк в зоне коллизии куча микро блоков и каждый нанесет урон
-			return
-		
-		# Урон по мобам
-		if body.is_in_group("mobs"):
-			body.health.take_damage.rpc_id(1, dmg, false, damage_types)
-			body.apply_push(-actions_node.global_transform.basis.z.normalized() + Vector3.UP/2, push_velocity)
+	if is_splash:
+		for body in actions_node.get_overlapping_bodies():
+			# Отключение урона по себе от самого себя
+			if body.name == str(peer_id): continue
+			S.attack(body, actions_node, dmg, false, push_velocity, damage_types)
+	else:
+		if G.player.interact_ray.is_colliding():
+			S.attack(G.player.interact_ray.get_collider(), actions_node, dmg, false, push_velocity, damage_types)
 
 
 @rpc("authority", "call_local")

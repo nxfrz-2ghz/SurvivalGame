@@ -33,13 +33,13 @@ func summon(scene: PackedScene) -> void:
 
 func _on_regeneration_timer_timeout() -> void:
 	if not is_multiplayer_authority(): return
-	if G.state_machine != "game": return
+	if S.state_machine != "game": return
 	health.heal(health.max_health / 10)
 
 
 func _on_grow_timer_timeout() -> void:
 	if not is_multiplayer_authority(): return
-	if G.state_machine != "game": return
+	if S.state_machine != "game": return
 	if health.max_health < 60.0:
 		health.max_health += health.max_health / 30
 		
@@ -59,13 +59,13 @@ func _on_grow_timer_timeout() -> void:
 
 
 func _on_animated_sprite_3d_animation_finished() -> void:
-	if G.state_machine != "game": return
+	if S.state_machine != "game": return
 	anim_sprite.update_animation.rpc(health.current_health, health.max_health)
 
 
 func _on_summon_timer_timeout() -> void:
 	if not is_multiplayer_authority(): return
-	if G.state_machine != "game": return
+	if S.state_machine != "game": return
 	summon_timer.wait_time = randi_range(40, 60)
 	anim_sprite.anim_play.rpc("on_summon")
 	summon(spawn_mob)

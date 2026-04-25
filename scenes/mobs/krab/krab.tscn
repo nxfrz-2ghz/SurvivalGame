@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://s322lfir2gd7" path="res://scenes/mobs/mob.tscn" id="1_wgeeo"]
 [ext_resource type="Script" uid="uid://cmtrn4scvo1g1" path="res://scenes/mobs/krab/krab.gd" id="2_malmu"]
+[ext_resource type="PackedScene" uid="uid://ndw88ejwr7v3" path="res://components/attack_area_component/attack_area.tscn" id="3_a0y2q"]
 [ext_resource type="Script" uid="uid://xoj57qkfrhp4" path="res://scripts/anim_sprite_side_frames.gd" id="4_3p2n3"]
 [ext_resource type="SpriteFrames" uid="uid://cmeff6fgx34ct" path="res://scenes/mobs/krab/front.tres" id="4_a0y2q"]
 [ext_resource type="SpriteFrames" uid="uid://cuvu0anadkbhr" path="res://scenes/mobs/krab/back.tres" id="5_malmu"]
@@ -53,11 +54,21 @@ despawn_particles_size = 0.5
 despawn_sound_name = "meat"
 exp_drop = 2.0
 
-[node name="CollisionShape3D" parent="." index="4" unique_id=1649019193]
+[node name="AttackArea" parent="." index="4" unique_id=443406468 instance=ExtResource("3_a0y2q")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.70973736, -1.2247941)
+damage = 2.0
+damage_types = {
+"axe": 0.3,
+"melee": 1.0,
+"pickaxe": 0.3
+}
+push_velocity = 0.2
+
+[node name="CollisionShape3D" parent="." index="5" unique_id=1649019193]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.693563, 0)
 shape = SubResource("CapsuleShape3D_malmu")
 
-[node name="AnimatedSprite3D" parent="." index="5" unique_id=1249191248]
+[node name="AnimatedSprite3D" parent="." index="6" unique_id=1249191248]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 1.3930286, 0)
 sprite_frames = ExtResource("4_a0y2q")
 animation = &"idle"
@@ -67,7 +78,7 @@ frames_forward = ExtResource("4_a0y2q")
 frames_back = ExtResource("5_malmu")
 frames_side = ExtResource("6_a0y2q")
 
-[node name="MultiplayerSynchronizer2" type="MultiplayerSynchronizer" parent="." index="7" unique_id=1758408287]
+[node name="MultiplayerSynchronizer2" type="MultiplayerSynchronizer" parent="." index="8" unique_id=1758408287]
 replication_config = SubResource("SceneReplicationConfig_malmu")
 
 [connection signal="timeout" from="Timers/ChangeState" to="." method="_on_timer_timeout"]
