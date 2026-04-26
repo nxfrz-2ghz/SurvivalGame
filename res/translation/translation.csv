@@ -26,6 +26,7 @@ LBL_H9;SHIFT - RUN;SHIFT - БЕГ
 LBL_H10;ALT - SQUAT;ALT - ПРИСЕД
 LBL_H11;F1 - HIDE UI;F1 - Скрыть UI
 LBL_H12;F3 - DEBUG INFO;F3 - ОТЛАДКА
+SOUND_VOLUME_SCROLL;VOLUME;ГРОМКОСТЬ
 TGL_HOST;HOST;ХОСТ
 TGL_FULSCRN;Fullscreen;Во весь экран
 TGL_LANG_SWITCH;"[EN]/ru";"en/[RU]"

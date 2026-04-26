@@ -46,6 +46,12 @@ resists = {
 max_health = 10.0
 
 [node name="EntityComponent" parent="." index="3" unique_id=1330161778]
+drop_items = {
+"dark_essence": 2
+}
+drop_chance = {
+"dark_essence": 0.4
+}
 exp_drop = 4.0
 
 [node name="AttackArea" parent="." index="4" unique_id=443406468 instance=ExtResource("3_e6pli")]

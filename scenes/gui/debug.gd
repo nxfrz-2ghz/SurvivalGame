@@ -18,3 +18,4 @@ func _physics_process(_delta: float) -> void:
 	text += "Health: " + str(G.player.health.current_health) + "\n"
 	text += "Hunger: " + str(G.player.hunger.current_hunger) + "\n"
 	text += "Fear: " + str(G.player.fear.current_fear) + "\n"
+	text += "Temp: " + str(G.player.temp.temp) + "\n"

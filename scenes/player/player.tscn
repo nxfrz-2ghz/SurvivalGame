@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://dvoyamcy01saq" path="res://components/interact_ray/interact_ray.tscn" id="4_p47bc"]
 [ext_resource type="Script" uid="uid://detbfy8koc0e1" path="res://scenes/player/stamina_controller.gd" id="4_rw8a5"]
 [ext_resource type="Script" uid="uid://mobalnvn5dio" path="res://scenes/player/progress_controller.gd" id="6_iwuka"]
+[ext_resource type="Script" uid="uid://cs5l8qh3vif88" path="res://scenes/player/temperature_controller.gd" id="7_1u1sw"]
 [ext_resource type="Script" uid="uid://cf61xiewfie6w" path="res://scenes/player/light_controller.gd" id="7_ds1xl"]
 [ext_resource type="Script" uid="uid://cw5xjlkj437o" path="res://scenes/player/weapon/weapon.gd" id="7_kvlxm"]
 [ext_resource type="Texture2D" uid="uid://dh5m1mos2v01r" path="res://res/sprites/animations/attack_anim/attack1.png" id="8_lgqa7"]
@@ -1087,6 +1088,9 @@ script = ExtResource("3_j4nxn")
 
 [node name="FearController" type="Node3D" parent="." unique_id=1049717410]
 script = ExtResource("10_jrbya")
+
+[node name="TemperatureController" type="Node" parent="." unique_id=1674172444]
+script = ExtResource("7_1u1sw")
 
 [node name="LightController" type="Area3D" parent="." unique_id=2078281524]
 collision_layer = 0

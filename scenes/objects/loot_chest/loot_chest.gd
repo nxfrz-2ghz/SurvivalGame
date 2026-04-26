@@ -1,7 +1,7 @@
 extends "res://scenes/objects/object.gd"
 
 const explosion := preload("res://scenes/prefabs/explosion/explosion_3d.tscn")
-const chest_mimic_chance_percent := 1.0
+const chest_mimic_chance_percent := 10.0
 
 @export var lvl_cost: int
 @onready var label := $Label3D

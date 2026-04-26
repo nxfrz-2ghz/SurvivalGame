@@ -14,6 +14,7 @@ const night_chances := [
 	n.HORROR,
 ]
 
+const max_energy_day := 1.8
 @export var min_energy := min_night_energy[n.DEFAULT]
 @export var max_energy := 1.0
 const min_night_energy := {
@@ -51,7 +52,7 @@ func _physics_process(delta: float) -> void:
 		if rotation_degrees.x > 180 and night != n.FALSE:
 			night = n.FALSE
 			rotation_degrees.x = -rotation_degrees.x
-			max_energy = randf_range(0.8, 1.5) #Случайная яркость дня
+			max_energy = randf_range(max_energy_day/3, max_energy_day) #Случайная яркость дня
 			day_counter += 1
 			day_come.emit()
 		

@@ -66,6 +66,7 @@ func set_up_player(player: CharacterBody3D) -> void:
 	player.get_node("FearController").scare.connect(G.gui.hud.heart_cradiogram.trigger_scare)
 	player.get_node("FearController").shock.connect(G.gui.hud.heart_cradiogram.trigger_shock)
 	player.get_node("HungerController").changed.connect(G.gui.hud.bar_box.hunger_changed)
+	player.get_node("TemperatureController").changed.connect(G.gui.hud.bar_box.temp_changed)
 	player.get_node("ProgressController").changed.connect(G.gui.hud.bar_box.exp_changed)
 	player.get_node("StaminaController").changed.connect(G.gui.hud.stamina_bar.on_stamina_changed)
 	G.player = player

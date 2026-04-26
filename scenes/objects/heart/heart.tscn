@@ -197,7 +197,6 @@ texture = ExtResource("3_0a7st")
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, -0.6811723, 0)
 texture_albedo = ExtResource("27_1cmcs")
 texture_emission = ExtResource("27_1cmcs")
-distance_fade_enabled = true
 cull_mask = 4
 
 [node name="FallRay" parent="." index="8" unique_id=2065431078 instance=ExtResource("27_ws1c0")]

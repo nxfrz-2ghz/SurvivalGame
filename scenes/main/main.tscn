@@ -36,6 +36,7 @@
 [ext_resource type="Script" uid="uid://dddkx60gqd0pf" path="res://scenes/gui/load_chooser.gd" id="25_ii537"]
 [ext_resource type="Script" uid="uid://c4hd2l8yalwss" path="res://scenes/gui/delete_world_button.gd" id="26_rofvo"]
 [ext_resource type="Script" uid="uid://coxg27urrssnb" path="res://scenes/gui/settings_buttons/buttons/lang_button.gd" id="27_tbnf8"]
+[ext_resource type="Script" uid="uid://c27tog14f3spw" path="res://scenes/gui/settings_sliders/sliders/volume_slider.gd" id="30_gohbf"]
 [ext_resource type="Script" uid="uid://dgmy8kx2r10fi" path="res://scenes/gui/settings_buttons/buttons/shadows_button.gd" id="33_1k3ck"]
 [ext_resource type="Script" uid="uid://cmhic80ucvwxl" path="res://scenes/gui/settings_buttons/buttons/fog_button.gd" id="35_5nwjq"]
 [ext_resource type="Script" uid="uid://cch7xp3kou6hd" path="res://scenes/gui/restart_button.gd" id="36_6g32y"]
@@ -648,10 +649,10 @@ script = ExtResource("15_p8abn")
 custom_minimum_size = Vector2(150, 50)
 layout_mode = 3
 anchors_preset = 0
-offset_left = 34.0
-offset_top = 507.855
-offset_right = 184.0
-offset_bottom = 557.855
+offset_left = 40.0
+offset_top = 480.0
+offset_right = 190.0
+offset_bottom = 530.0
 size_flags_horizontal = 0
 script = ExtResource("20_r1bmu")
 
@@ -686,7 +687,7 @@ offset_top = -112.0
 offset_right = 200.0
 offset_bottom = -35.0
 grow_vertical = 0
-theme_override_constants/separation = 20
+theme_override_constants/separation = 30
 script = ExtResource("16_37hlw")
 
 [node name="ExpBar" type="ProgressBar" parent="GUI/HUD/BarBox" unique_id=1678378783]
@@ -695,8 +696,10 @@ max_value = 1.0
 
 [node name="TextureRect" type="TextureRect" parent="GUI/HUD/BarBox/ExpBar" unique_id=947489880]
 layout_mode = 0
-offset_right = 1155.0
-offset_bottom = 1145.0
+offset_left = -5.0
+offset_top = -5.0
+offset_right = 1595.0
+offset_bottom = 1545.0
 scale = Vector2(0.02, 0.02)
 texture = ExtResource("17_6llfj")
 
@@ -715,8 +718,10 @@ max_value = 800.0
 
 [node name="TextureRect" type="TextureRect" parent="GUI/HUD/BarBox/HungerBar" unique_id=1630351205]
 layout_mode = 0
-offset_right = 1155.0
-offset_bottom = 1145.0
+offset_left = -6.0
+offset_top = -13.0
+offset_right = 2094.0
+offset_bottom = 1987.0
 scale = Vector2(0.02, 0.02)
 texture = ExtResource("18_0bhws")
 
@@ -728,6 +733,44 @@ offset_bottom = -3.0
 bbcode_enabled = true
 text = "[pulse] Hunger:"
 scroll_active = false
+
+[node name="TempBar" type="ProgressBar" parent="GUI/HUD/BarBox" unique_id=1233263104]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+max_value = 200.0
+show_percentage = false
+
+[node name="TextureRect" type="TextureRect" parent="GUI/HUD/BarBox/TempBar" unique_id=1920485572]
+layout_mode = 0
+offset_left = -8.0
+offset_top = -5.0
+offset_right = 1892.0
+offset_bottom = 1795.0
+scale = Vector2(0.02, 0.02)
+
+[node name="Label" type="Label" parent="GUI/HUD/BarBox/TempBar" unique_id=1827049825]
+layout_mode = 0
+offset_top = -17.0
+offset_right = 107.0
+offset_bottom = -1.0
+text = "Temperature:"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/HUD/BarBox/TempBar" unique_id=267408636]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+bbcode_enabled = true
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Background" type="TextureRect" parent="GUI" unique_id=1984802104]
 anchors_preset = 8
@@ -942,6 +985,23 @@ theme_override_constants/margin_bottom = 15
 
 [node name="VBoxContainer" type="VBoxContainer" parent="GUI/MainMenu/HBoxContainer/VBoxContainer2/PanelContainer/MarginContainer" unique_id=889330797]
 layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GUI/MainMenu/HBoxContainer/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer" unique_id=1386260513]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Label" type="Label" parent="GUI/MainMenu/HBoxContainer/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1536094611]
+layout_mode = 2
+text = "SOUND_VOLUME_SCROLL"
+
+[node name="VolumeSlider" type="HSlider" parent="GUI/MainMenu/HBoxContainer/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=106805996]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.05
+value = 1.0
+script = ExtResource("30_gohbf")
+key = "sound_volume_slider"
 
 [node name="LangButton" type="CheckButton" parent="GUI/MainMenu/HBoxContainer/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer" unique_id=2047347558]
 layout_mode = 2
@@ -1301,6 +1361,23 @@ theme_override_constants/margin_bottom = 15
 
 [node name="VBoxContainer" type="VBoxContainer" parent="GUI/GameMenu/MarginContainer" unique_id=284833198]
 layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GUI/GameMenu/MarginContainer/VBoxContainer" unique_id=1704941091]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Label" type="Label" parent="GUI/GameMenu/MarginContainer/VBoxContainer/HBoxContainer" unique_id=207630944]
+layout_mode = 2
+text = "SOUND_VOLUME_SCROLL"
+
+[node name="VolumeSlider" type="HSlider" parent="GUI/GameMenu/MarginContainer/VBoxContainer/HBoxContainer" unique_id=2066947549]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.05
+value = 1.0
+script = ExtResource("30_gohbf")
+key = "sound_volume_slider"
 
 [node name="Continue" type="Button" parent="GUI/GameMenu/MarginContainer/VBoxContainer" unique_id=1708194090]
 layout_mode = 2

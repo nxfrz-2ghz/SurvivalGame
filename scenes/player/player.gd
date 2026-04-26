@@ -10,6 +10,7 @@ extends CharacterBody3D
 @onready var health := %HealthComponent
 @onready var hunger := $HungerController
 @onready var fear := $FearController
+@onready var temp := $TemperatureController
 @onready var stamina := $StaminaController
 @onready var camera := $Head/Camera/Camera3D
 @onready var arms := $Head/Weapon/Arms
@@ -51,6 +52,7 @@ func _ready() -> void:
 		arms.queue_free()
 		rain.queue_free()
 		fear.queue_free()
+		temp.queue_free()
 		light_controller.queue_free()
 	else:
 		# Переключаем себя на слой, который не видит камера
@@ -427,6 +429,8 @@ func moving(delta: float) -> void:
 	if hunger.current_hunger < hunger.MAX_HUNGER / 8:
 		speed *= 0.6
 	if Input.is_action_pressed("alt"):
+		speed *= 0.5
+	if temp.bad():
 		speed *= 0.5
 	
 	speed += weapon.speed_rings

@@ -19,7 +19,7 @@ const STEPS := {
 
 var type: String
 var step: float
-var max_attempts := 6
+var max_attempts := 8
 
 func set_item(nname: String) -> void:
 	if R.items[nname].has("is_building"):
@@ -46,11 +46,11 @@ func _physics_process(_delta: float) -> void:
 			if is_vertical:
 				area.global_rotation_degrees.y = snappedf(G.player.rotation_degrees.y, 90.0)
 				area.global_rotation_degrees.z = 0.0
-				area.global_position.y = snappedf(G.player.weapon.actions.global_position.y, 0.5) + 1.0
+				area.global_position.y = snappedf(G.player.weapon.actions.global_position.y, 1.0) + 1.0
 			else:
 				area.global_rotation_degrees.y = 0.0
 				area.global_rotation_degrees.z = snappedf(G.player.rotation_degrees.y, 90.0)
-				area.global_position.y = snappedf(G.player.weapon.actions.global_position.y, 0.5)
+				area.global_position.y = snappedf(G.player.weapon.actions.global_position.y, 1.0)
 		elif type == "block":
 			area.global_position.y = snappedf(G.player.weapon.actions.global_position.y, 0.5)
 		
