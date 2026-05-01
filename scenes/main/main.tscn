@@ -43,12 +43,17 @@
 [ext_resource type="Script" uid="uid://qn5hjxtc0hcf" path="res://scenes/gui/settings_buttons/buttons/contrast_grass_button.gd" id="36_g2upo"]
 [ext_resource type="Script" uid="uid://6h77dpruyvj4" path="res://scenes/gui/debug_menu.gd" id="37_62f45"]
 [ext_resource type="Script" uid="uid://bukq26l6kjfx0" path="res://scenes/gui/setting_lines/line_edits/mesh_visibility_range.gd" id="37_i6fjx"]
+[ext_resource type="Script" uid="uid://dnw2it2jlrq2h" path="res://scenes/gui/settings_buttons/buttons/volumetric_fog_button.gd" id="37_jucdw"]
 [ext_resource type="Script" uid="uid://ds0nxr7af78nr" path="res://scenes/gui/setting_lines/line_edits/grass_visibility_range.gd" id="38_7dg2i"]
+[ext_resource type="Script" uid="uid://dvdqp2mpyhgpm" path="res://scenes/gui/settings_sliders/sliders/render_scale_slider.gd" id="43_6miv3"]
 [ext_resource type="Script" uid="uid://cotb4ieafcayn" path="res://scenes/gui/setting_lines/line_edits/objects_visibility_range.gd" id="43_wcrab"]
 [ext_resource type="Script" uid="uid://cskiodujmd078" path="res://scenes/gui/setting_lines/line_edits/buildings_visibility_range.gd" id="44_gohbf"]
+[ext_resource type="Script" uid="uid://dv5vp55c1o145" path="res://scenes/gui/settings_sliders/sliders/upscale_slider.gd" id="44_yisfj"]
 [ext_resource type="Script" uid="uid://bwv87qx5mfgbm" path="res://scenes/gui/setting_lines/line_edits/items_visibility_range.gd" id="45_jucdw"]
 [ext_resource type="Script" uid="uid://b1ui5htwlne0y" path="res://scenes/gui/setting_lines/line_edits/mobs_visibility_range.gd" id="46_6miv3"]
 [ext_resource type="PackedScene" uid="uid://cgg667awjklv7" path="res://components/screensaver_component/screen_saver_component.tscn" id="48_wcrab"]
+[ext_resource type="Script" uid="uid://c5wlmiqohkjb3" path="res://scenes/gui/upgrade_menu.gd" id="52_ftp6y"]
+[ext_resource type="PackedScene" uid="uid://bef4qoo83ksmy" path="res://scenes/gui/id_button/id_button.tscn" id="53_pd34m"]
 
 [sub_resource type="GDScript" id="GDScript_ou6is"]
 script/source = "extends Node3D
@@ -319,13 +324,13 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -321.0
-offset_top = -90.0
-offset_right = 3778.9995
-offset_bottom = 330.0
+offset_left = -350.0
+offset_top = -70.0
+offset_right = 4331.71
+offset_bottom = 350.0
 grow_horizontal = 2
 grow_vertical = 0
-scale = Vector2(0.2, 0.2)
+scale = Vector2(0.15, 0.15)
 theme_override_constants/margin_left = 15
 theme_override_constants/margin_top = 15
 theme_override_constants/margin_right = 15
@@ -351,17 +356,46 @@ scale = Vector2(0.99999994, 0.99999994)
 [node name="ChooseSlot" type="TextureRect" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/Node2D" unique_id=1927921798]
 offset_right = 360.0
 offset_bottom = 360.0
-scale = Vector2(0.2, 0.2)
+scale = Vector2(0.14, 0.14)
 texture = ExtResource("4_l3cfh")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer" unique_id=705398714]
 layout_mode = 2
 size_flags_vertical = 8
 
-[node name="Slot1" type="TextureRect" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer" unique_id=1319886633]
+[node name="LeftSlot" type="TextureRect" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer" unique_id=201983172]
+custom_minimum_size = Vector2(320, 320)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+expand_mode = 1
+
+[node name="Label" type="Label" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer/LeftSlot" unique_id=779985910]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -23.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 72
+
+[node name="Spacing" type="TextureRect" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer" unique_id=1546937411]
+custom_minimum_size = Vector2(160, 320)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+expand_mode = 1
+
+[node name="Slot1" type="TextureRect" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer" unique_id=1319886633]
+custom_minimum_size = Vector2(320, 320)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+expand_mode = 1
 
 [node name="Label" type="Label" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer/Slot1" unique_id=1488276335]
 layout_mode = 1
@@ -376,12 +410,14 @@ grow_horizontal = 0
 grow_vertical = 0
 theme_override_font_sizes/font_size = 72
 
-[node name="Slot2" type="TextureRect" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer" unique_id=1837273929]
+[node name="Slot2" type="TextureRect" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer" unique_id=1253083442]
+custom_minimum_size = Vector2(320, 320)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+expand_mode = 1
 
-[node name="Label" type="Label" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer/Slot2" unique_id=405269966]
+[node name="Label" type="Label" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer/Slot2" unique_id=773391474]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -394,12 +430,14 @@ grow_horizontal = 0
 grow_vertical = 0
 theme_override_font_sizes/font_size = 72
 
-[node name="Slot3" type="TextureRect" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer" unique_id=2102281468]
+[node name="Slot3" type="TextureRect" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer" unique_id=109720084]
+custom_minimum_size = Vector2(320, 320)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+expand_mode = 1
 
-[node name="Label" type="Label" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer/Slot3" unique_id=1835129296]
+[node name="Label" type="Label" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer/Slot3" unique_id=24128544]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -412,12 +450,14 @@ grow_horizontal = 0
 grow_vertical = 0
 theme_override_font_sizes/font_size = 72
 
-[node name="Slot4" type="TextureRect" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer" unique_id=2147383876]
+[node name="Slot4" type="TextureRect" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer" unique_id=973987512]
+custom_minimum_size = Vector2(320, 320)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+expand_mode = 1
 
-[node name="Label" type="Label" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer/Slot4" unique_id=2104353183]
+[node name="Label" type="Label" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer/Slot4" unique_id=1221817683]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -430,12 +470,14 @@ grow_horizontal = 0
 grow_vertical = 0
 theme_override_font_sizes/font_size = 72
 
-[node name="Slot5" type="TextureRect" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer" unique_id=2047760069]
+[node name="Slot5" type="TextureRect" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer" unique_id=2030768507]
+custom_minimum_size = Vector2(320, 320)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+expand_mode = 1
 
-[node name="Label" type="Label" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer/Slot5" unique_id=426951881]
+[node name="Label" type="Label" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer/Slot5" unique_id=1696372644]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -448,12 +490,14 @@ grow_horizontal = 0
 grow_vertical = 0
 theme_override_font_sizes/font_size = 72
 
-[node name="Slot6" type="TextureRect" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer" unique_id=1013777157]
+[node name="Slot6" type="TextureRect" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer" unique_id=310553320]
+custom_minimum_size = Vector2(320, 320)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+expand_mode = 1
 
-[node name="Label" type="Label" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer/Slot6" unique_id=1707678397]
+[node name="Label" type="Label" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer/Slot6" unique_id=1258935180]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -466,12 +510,14 @@ grow_horizontal = 0
 grow_vertical = 0
 theme_override_font_sizes/font_size = 72
 
-[node name="Slot7" type="TextureRect" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer" unique_id=543484099]
+[node name="Slot7" type="TextureRect" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer" unique_id=547338740]
+custom_minimum_size = Vector2(320, 320)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+expand_mode = 1
 
-[node name="Label" type="Label" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer/Slot7" unique_id=1371951223]
+[node name="Label" type="Label" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer/Slot7" unique_id=1365347184]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -484,12 +530,14 @@ grow_horizontal = 0
 grow_vertical = 0
 theme_override_font_sizes/font_size = 72
 
-[node name="Slot8" type="TextureRect" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer" unique_id=772740000]
+[node name="Slot8" type="TextureRect" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer" unique_id=1627802423]
+custom_minimum_size = Vector2(320, 320)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+expand_mode = 1
 
-[node name="Label" type="Label" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer/Slot8" unique_id=1525999288]
+[node name="Label" type="Label" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer/Slot8" unique_id=787874535]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -502,12 +550,14 @@ grow_horizontal = 0
 grow_vertical = 0
 theme_override_font_sizes/font_size = 72
 
-[node name="Slot9" type="TextureRect" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer" unique_id=1492846186]
+[node name="Slot9" type="TextureRect" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer" unique_id=2104234374]
+custom_minimum_size = Vector2(320, 320)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+expand_mode = 1
 
-[node name="Label" type="Label" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer/Slot9" unique_id=678249906]
+[node name="Label" type="Label" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer/Slot9" unique_id=1936192498]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -520,12 +570,14 @@ grow_horizontal = 0
 grow_vertical = 0
 theme_override_font_sizes/font_size = 72
 
-[node name="Slot10" type="TextureRect" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer" unique_id=1547890133]
+[node name="Slot10" type="TextureRect" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer" unique_id=1762744421]
+custom_minimum_size = Vector2(320, 320)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+expand_mode = 1
 
-[node name="Label" type="Label" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer/Slot10" unique_id=1828558961]
+[node name="Label" type="Label" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer/Slot10" unique_id=1847620193]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -538,12 +590,14 @@ grow_horizontal = 0
 grow_vertical = 0
 theme_override_font_sizes/font_size = 72
 
-[node name="Slot11" type="TextureRect" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer" unique_id=43627915]
+[node name="Slot11" type="TextureRect" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer" unique_id=2030770621]
+custom_minimum_size = Vector2(320, 320)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+expand_mode = 1
 
-[node name="Label" type="Label" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer/Slot11" unique_id=1832655631]
+[node name="Label" type="Label" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer/Slot11" unique_id=1158697491]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -556,12 +610,14 @@ grow_horizontal = 0
 grow_vertical = 0
 theme_override_font_sizes/font_size = 72
 
-[node name="Slot12" type="TextureRect" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer" unique_id=2054664015]
+[node name="Slot12" type="TextureRect" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer" unique_id=1862986368]
+custom_minimum_size = Vector2(320, 320)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+expand_mode = 1
 
-[node name="Label" type="Label" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer/Slot12" unique_id=1069659240]
+[node name="Label" type="Label" parent="GUI/HUD/Inventory/PanelContainer/MarginContainer/HBoxContainer/Slot12" unique_id=436341002]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -683,8 +739,8 @@ anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 34.0
-offset_top = -112.0
-offset_right = 200.0
+offset_top = -153.0
+offset_right = 176.0
 offset_bottom = -35.0
 grow_vertical = 0
 theme_override_constants/separation = 30
@@ -1047,6 +1103,13 @@ layout_mode = 2
 button_pressed = true
 text = "TGL_FOG"
 script = ExtResource("35_5nwjq")
+key = "fog"
+
+[node name="VolumetricFogButton" type="CheckButton" parent="GUI/MainMenu/HBoxContainer/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer" unique_id=1026503313]
+layout_mode = 2
+button_pressed = true
+text = "TGL_VOLUMETRIC_FOG"
+script = ExtResource("37_jucdw")
 
 [node name="ContrastGrassButton" type="CheckButton" parent="GUI/MainMenu/HBoxContainer/VBoxContainer2/PanelContainer/MarginContainer/VBoxContainer" unique_id=1629504014]
 layout_mode = 2
@@ -1215,6 +1278,13 @@ text = "object_gen"
 script = ExtResource("25_7nlll")
 key = "object_gen"
 
+[node name="StructuresGen" type="CheckButton" parent="GUI/MainMenu/DebugMenu/MarginContainer/VBoxContainer" unique_id=1521367079]
+layout_mode = 2
+button_pressed = true
+text = "structures_gen"
+script = ExtResource("25_7nlll")
+key = "structures_gen"
+
 [node name="LootChestsGen" type="CheckButton" parent="GUI/MainMenu/DebugMenu/MarginContainer/VBoxContainer" unique_id=1550692929]
 layout_mode = 2
 button_pressed = true
@@ -1246,6 +1316,38 @@ key = "mobs_spawn"
 [node name="Label2" type="Label" parent="GUI/MainMenu/DebugMenu/MarginContainer/VBoxContainer" unique_id=1903937641]
 layout_mode = 2
 text = "[[[GRAPHICS]]]"
+
+[node name="HBoxContainer7" type="HBoxContainer" parent="GUI/MainMenu/DebugMenu/MarginContainer/VBoxContainer" unique_id=293739379]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="GUI/MainMenu/DebugMenu/MarginContainer/VBoxContainer/HBoxContainer7" unique_id=763580263]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "render_scale"
+
+[node name="RenderScaleSlider" type="HSlider" parent="GUI/MainMenu/DebugMenu/MarginContainer/VBoxContainer/HBoxContainer7" unique_id=1696898107]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.05
+value = 1.0
+script = ExtResource("43_6miv3")
+key = "render_scale_slider"
+
+[node name="HBoxContainer8" type="HBoxContainer" parent="GUI/MainMenu/DebugMenu/MarginContainer/VBoxContainer" unique_id=588917953]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="GUI/MainMenu/DebugMenu/MarginContainer/VBoxContainer/HBoxContainer8" unique_id=1997774508]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "upscale: no"
+
+[node name="UpscaleSlider" type="HSlider" parent="GUI/MainMenu/DebugMenu/MarginContainer/VBoxContainer/HBoxContainer8" unique_id=1260856788]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 2.0
+script = ExtResource("44_yisfj")
+key = "upscale_slider"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="GUI/MainMenu/DebugMenu/MarginContainer/VBoxContainer" unique_id=125463333]
 layout_mode = 2
@@ -1394,6 +1496,112 @@ text = "LBL_EXIT_WITHOUT_SAVE"
 [node name="Exit" type="Button" parent="GUI/GameMenu/MarginContainer/VBoxContainer" unique_id=1729223167]
 layout_mode = 2
 text = "LBL_SAVE_EXIT"
+
+[node name="UpgradeMenu" type="PanelContainer" parent="GUI" unique_id=916142742]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -96.5
+offset_top = -65.5
+offset_right = 96.5
+offset_bottom = 65.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("52_ftp6y")
+
+[node name="MarginContainer" type="MarginContainer" parent="GUI/UpgradeMenu" unique_id=376719692]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GUI/UpgradeMenu/MarginContainer" unique_id=890726193]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="RichTextLabel" type="RichTextLabel" parent="GUI/UpgradeMenu/MarginContainer/VBoxContainer" unique_id=1449003550]
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "[rainbow] CHOOSE UPGRADDE!"
+fit_content = true
+scroll_active = false
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GUI/UpgradeMenu/MarginContainer/VBoxContainer" unique_id=316674606]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GUI/UpgradeMenu/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1976146323]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="GUI/UpgradeMenu/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=2105254351]
+layout_mode = 2
+text = "LVL 3:"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" parent="GUI/UpgradeMenu/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1285330804 instance=ExtResource("53_pd34m")]
+layout_mode = 2
+text = "UNLOCK"
+id = "unlock_lvl3"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="GUI/UpgradeMenu/MarginContainer/VBoxContainer" unique_id=1445211299]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GUI/UpgradeMenu/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=406392]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="GUI/UpgradeMenu/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer" unique_id=1618023836]
+layout_mode = 2
+text = "LVL 2:"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" parent="GUI/UpgradeMenu/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer" unique_id=1198110797 instance=ExtResource("53_pd34m")]
+layout_mode = 2
+text = "UNLOCK"
+id = "unlock_lvl2"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="GUI/UpgradeMenu/MarginContainer/VBoxContainer" unique_id=610327296]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GUI/UpgradeMenu/MarginContainer/VBoxContainer/HBoxContainer3" unique_id=1258019584]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="GUI/UpgradeMenu/MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer" unique_id=1292918378]
+layout_mode = 2
+text = "LVL 1:"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" parent="GUI/UpgradeMenu/MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer" unique_id=65177858 instance=ExtResource("53_pd34m")]
+layout_mode = 2
+text = "UNLOCK"
+id = "unlock_lvl1"
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="GUI/UpgradeMenu/MarginContainer/VBoxContainer" unique_id=540411716]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GUI/UpgradeMenu/MarginContainer/VBoxContainer/HBoxContainer4" unique_id=735557336]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="GUI/UpgradeMenu/MarginContainer/VBoxContainer/HBoxContainer4/VBoxContainer" unique_id=1261413721]
+layout_mode = 2
+text = "LVL 0:"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" parent="GUI/UpgradeMenu/MarginContainer/VBoxContainer/HBoxContainer4/VBoxContainer" unique_id=838939259 instance=ExtResource("53_pd34m")]
+layout_mode = 2
+text = "UNLOCK"
+id = "unlock_lvl0"
 
 [node name="TimerOneSecond" type="Timer" parent="." unique_id=753860230]
 autostart = true

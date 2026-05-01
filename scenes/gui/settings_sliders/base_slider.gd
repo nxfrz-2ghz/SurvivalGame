@@ -1,4 +1,5 @@
 extends HSlider
+class_name key_slider
 
 @export var key: String
 

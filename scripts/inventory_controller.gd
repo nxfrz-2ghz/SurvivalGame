@@ -4,12 +4,14 @@ signal update(items: Dictionary)
 signal updatev
 signal set_hotbar_slot(pos: int)
 signal set_item_in_arm(item: String)
+signal set_item_in_left_arm(item: String)
 
 const MAX_SLOTS = 11
 
 # Структура предмета в слоте: {"name": String, "type": String, "amount": int}
 var inventory: Dictionary = {}
 var current_item := 0
+var left_arm: Dictionary
 
 
 func _ready() -> void:
@@ -20,6 +22,7 @@ func _ready() -> void:
 
 func update_signals() -> void:
 	set_hotbar_slot.emit(current_item)
+	set_item_in_left_arm.emit(left_arm)
 	update.emit(inventory)
 	set_item_in_arm.emit(inventory[current_item]["name"] if inventory[current_item] != null else "")
 
@@ -36,6 +39,7 @@ func apply_slot() -> void:
 func _input(_event: InputEvent) -> void:
 	if S.state_machine != "game": return
 	if not is_multiplayer_authority(): return
+	if Input.is_action_pressed("rmb"): return
 	
 	if Input.is_action_just_pressed("1"):
 		current_item = 0
@@ -74,6 +78,24 @@ func _input(_event: InputEvent) -> void:
 		current_item = 11
 		apply_slot()
 	
+	if Input.is_action_just_pressed("left_arm"):
+		var buffer: Dictionary
+		if inventory[current_item]:
+			buffer = inventory[current_item]
+		else:
+			buffer = {}
+		
+		if left_arm == {}:
+			inventory[current_item] = null
+		else:
+			inventory[current_item] = left_arm
+		
+		if buffer == {}:
+			left_arm = {}
+		else:
+			left_arm = buffer
+		
+		update_signals()
 	
 	if Input.is_action_pressed("up_mouse_wheel"):
 		current_item -= 1
@@ -90,6 +112,7 @@ func _input(_event: InputEvent) -> void:
 
 var now_choosed_slot: int
 func _physics_process(_delta: float) -> void:
+	if not is_multiplayer_authority(): return
 	if !%WeaponAnim.is_playing() and now_choosed_slot != current_item:
 		now_choosed_slot = current_item
 		update.emit(inventory)
@@ -120,19 +143,51 @@ func check_progress(item_name) -> void:
 
 ### --- ОСНОВНЫЕ ФУНКЦИИ ---
 
-func get_item(item_name: String) -> int:
+func get_item_amount(item_name: String) -> int:
 	for slot_idx in inventory:
 		if inventory[slot_idx] != null:
 			if inventory[slot_idx]["name"] == item_name:
 				return inventory[slot_idx]["amount"]
 	return 0
 
+func get_item_index(item_name: String) -> int:
+	for slot_index in inventory:
+		var item = inventory[slot_index]
+		if item and item.get("name") == item_name:
+			return slot_index
+	return -1 
+
 func add_item(item_name: String, amount: int = 1) -> void:
+	if !R.items.has(item_name): return
+	
 	$"../Audio/ActionsAudioPlayer3D".audio_play(R.sounds["actions"]["pickup"].resource_path)
 	var remaining_amount = amount
 	var max_s = R.items[item_name].get("stack_size", 1) # По умолчанию стак 1
 	check_progress(item_name)
-
+	
+	# --- НОВОЕ УСЛОВИЕ: Прямое попадание в руку ---
+	# 1. Проверяем, нет ли уже такого предмета в инвентаре
+	var already_has_item = false
+	for i in range(MAX_SLOTS + 1):
+		if inventory[i] and inventory[i]["name"] == item_name:
+			already_has_item = true
+			break
+	
+	# 2. Если предмета нет, он не стакается (max_s == 1) и рука (current_item) пуста
+	if not already_has_item and max_s == 1 and inventory[current_item] == null:
+		inventory[current_item] = {
+			"name": item_name,
+			"amount": 1
+		}
+		remaining_amount -= 1
+		
+		# Если это был единственный предмет, выходим сразу
+		if remaining_amount <= 0:
+			update_signals()
+			updatev.emit()
+			return
+	# ----------------------------------------------
+	
 	# 1. Сначала пытаемся добавить в существующие стаки того же типа
 	for i in range(0, MAX_SLOTS+1):
 		var slot = inventory[i]

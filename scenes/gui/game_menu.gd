@@ -1,9 +1,11 @@
 extends PanelContainer
 
+signal reload()
+
 var game: bool = false
 
 func _input(_event: InputEvent) -> void:
-	if S.state_machine == "book": return
+	if S.state_machine in ["book", "upgrade_table"]: return
 	
 	if Input.is_action_just_pressed("esc"):
 		if visible and S.state_machine == "game_menu":
@@ -26,9 +28,9 @@ func _on_save_pressed() -> void:
 	G.player.save_character()
 
 func _on_exit_without_save_pressed() -> void:
-	get_tree().reload_current_scene()
+	reload.emit()
 
 func _on_exit_pressed() -> void:
 	G.world.save_world()
 	G.player.save_character()
-	get_tree().reload_current_scene()
+	reload.emit()

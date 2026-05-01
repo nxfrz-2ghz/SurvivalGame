@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://b4tlkfcs45gbm"
 path.s3tc="res://.godot/imported/chest_mimic.png-837f0ad39d8671e151f17c8c85a13ba4.s3tc.ctex"
+path.etc2="res://.godot/imported/chest_mimic.png-837f0ad39d8671e151f17c8c85a13ba4.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://res/sprites/mobs/chest_mimic/chest_mimic.png"
-dest_files=["res://.godot/imported/chest_mimic.png-837f0ad39d8671e151f17c8c85a13ba4.s3tc.ctex"]
+dest_files=["res://.godot/imported/chest_mimic.png-837f0ad39d8671e151f17c8c85a13ba4.s3tc.ctex", "res://.godot/imported/chest_mimic.png-837f0ad39d8671e151f17c8c85a13ba4.etc2.ctex"]
 
 [params]
 

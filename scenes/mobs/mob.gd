@@ -13,6 +13,7 @@ extends CharacterBody3D
 
 @export var nname: String
 @export var speed := 0.0
+@export var weight := 1.0
 
 func _ready() -> void:
 	if not is_multiplayer_authority(): return
@@ -103,7 +104,7 @@ func _physics_process(delta: float) -> void:
 
 @rpc("any_peer", "call_local")
 func apply_push(direction_vector: Vector3, velocity_power: float) -> void:
-	velocity += direction_vector * velocity_power
+	velocity += direction_vector * velocity_power / weight
 
 func _on_update_timer_timeout() -> void:
 	if not is_multiplayer_authority(): return

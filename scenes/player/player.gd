@@ -25,7 +25,7 @@ extends CharacterBody3D
 @onready var rain := $RainParticles3D
 
 const SPEED = 3.0
-const JUMP_VELOCITY = 4.0
+const JUMP_VELOCITY = 4.5
 
 const RIGID_CAM := preload("res://scenes/player/rigid_cam/rigid_cam.tscn")
 
@@ -69,11 +69,12 @@ func _ready() -> void:
 		
 		inv.set_item_in_arm.connect(weapon.set_item_in_arm)
 		inv.updatev.connect(weapon.update_player_stats)
-		inv.update.emit(inv.inventory)
+		inv.update_signals()
 		
 		book.open_book.connect(_on_open_book)
 		book.close_book.connect(_on_close_book)
 		
+		health.died.connect(_on_health_component_died)
 		health.on_damage.connect($Head/Camera/AnimationPlayer.play_on_damage)
 		health.on_damage.connect(damage_audio_player.play_sound)
 		health.changed.connect(spawn_damage_perticle)
@@ -88,14 +89,29 @@ func _ready() -> void:
 func _input(event: InputEvent) -> void:
 	if not is_multiplayer_authority(): return
 	
-	if Input.is_action_just_pressed("esc") and S.state_machine == "book":
-		book.close_book.emit()
+	if Input.is_action_just_pressed("esc"):
+		if S.state_machine == "book":
+			book.close_book.emit()
+		elif S.state_machine == "upgrade_table":
+			G.upgrade_manager.hide()
+			S.state_machine = "game"
+			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	
 	if S.state_machine != "game": return
 	if !camera.current: return
 	
 	if Input.is_action_just_pressed("f1"):
 		arms.visible = !arms.visible
+	
+	if Input.is_action_just_pressed("f2") and !weapon.weapon_anim.is_playing():
+		if camera.position == Vector3.ZERO:
+			weapon.weapon_anim.play("third_view_move_cam")
+			sprite.set_layer_mask_value(1, true)
+			sprite.set_layer_mask_value(6, false)
+			label3d.set_layer_mask_value(1, true)
+			label3d.set_layer_mask_value(6, false)
+		else:
+			weapon.weapon_anim.play("first_view_move_cam")
 	
 	if event.is_action_pressed("lmb"): # или любая кнопка действия
 		if Input.get_mouse_mode() == Input.MOUSE_MODE_VISIBLE:
@@ -173,6 +189,12 @@ func _input(event: InputEvent) -> void:
 					G.text_message.add(tr("RPL_LVL_NOT_ENOUGH"))
 				return
 			
+			if collider.nname == "upgrade_table":
+				S.state_machine = "upgrade_table"
+				G.upgrade_manager.show_upgrades_on_lvls()
+				G.upgrade_manager.show()
+				Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+			
 			if collider.nname in R.exchangeable_items.keys():
 				var ex_items = R.exchangeable_items[collider.nname]
 				
@@ -245,6 +267,7 @@ func _input(event: InputEvent) -> void:
 				weapon.weapon_anim.play("use")
 				hunger.eat(R.items[item_name]["nutrition"])
 				fear.apply_eat(item_name)
+				temp.apply_eat(item_name)
 				inv.drop_item(current_slot_idx, 1)
 				actions_audio_player.audio_play(R.sounds["actions"]["eating"].resource_path)
 			
@@ -346,6 +369,10 @@ func _on_health_component_died() -> void:
 	progress_controller.spend_exp_by_lvl(progress_controller.lvl/1.6)
 	
 	self.position = Vector3(0, 300, 0)
+	health.heal(99999999.9)
+	hunger.eat(99999999)
+	fear.current_fear = 0
+	temp.temp = 0.0
 
 
 func respawn() -> void:
@@ -353,8 +380,9 @@ func respawn() -> void:
 	health.heal(99999999.9)
 	hunger.eat(99999999)
 	fear.current_fear = 0
+	temp.temp = 0.0
 	camera.current = true
-	camera.fov = 120.0
+	camera.fov = 150.0
 
 
 @rpc("any_peer", "call_local")
@@ -395,6 +423,9 @@ func moving(delta: float) -> void:
 		
 		if is_underwater():
 			gravity /= 3
+		if weapon.is_planer:
+			gravity /= 3
+			weapon.use_item_durability()
 		
 		velocity += gravity * delta
 	
@@ -449,6 +480,10 @@ func moving(delta: float) -> void:
 		if velocity:
 			velocity.x /= 1.5
 			velocity.z /= 1.5
+			
+			if weapon.is_planer:
+				velocity.x *= 1.2
+				velocity.z *= 1.2
 	
 	else:
 		arm_anim.play("idle")
@@ -548,6 +583,8 @@ func save_character() -> void:
 		"completed_achievements": progress_controller.completed_achievements,
 		"current exp": progress_controller.cur_exp,
 		"current lvl":  progress_controller.lvl,
+		"unlocked_upgrade_lvls": G.upgrade_manager.unlocked_lvls,
+		"unlocked_upgrades": G.upgrade_manager.unlocked_upgrades,
 	}
 	
 	var file := FileAccess.open(path, FileAccess.WRITE)
@@ -586,6 +623,8 @@ func load_character() -> void:
 		progress_controller.lvl = data.get("current lvl", 0)
 		progress_controller.unlocked_achievements = data.get("unlocked_achievements", [])
 		progress_controller.completed_achievements = data.get("completed_achievements", [])
+		G.upgrade_manager.unlocked_lvls = data.get("unlocked_upgrade_lvls", [null, null, null, null, null])
+		G.upgrade_manager.unlocked_upgrades = data.get("unlocked_upgrades", {})
 		
 		for item in data["inventory"].values():
 			if item:

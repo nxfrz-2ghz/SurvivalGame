@@ -16,6 +16,7 @@ signal attack
 
 var current_name: String
 var is_splash: float
+var is_planer: float
 var damage: float
 var attack_speed: float
 var damage_types: Dictionary
@@ -33,9 +34,9 @@ var armor_rings: int:
 		G.player.health.armor = float(value) / 2
 
 func update_player_stats() -> void:
-	health_rings = actions.inv.get_item("health_ring")
-	armor_rings = actions.inv.get_item("armor_ring")
-	speed_rings = actions.inv.get_item("speed_ring")
+	health_rings = actions.inv.get_item_amount("health_ring")
+	armor_rings = actions.inv.get_item_amount("armor_ring")
+	speed_rings = actions.inv.get_item_amount("speed_ring")
 
 
 func get_dig_drop(hit_position: Vector3) -> String:
@@ -107,6 +108,7 @@ func use_item_durability() -> void:
 func choose_item(item: String = "") -> void:
 	current_name = item
 	is_splash = R.items[item].get("is_splash", false)
+	is_planer = R.items[item].get("planer", false)
 	damage = R.items[item].get("damage", 1.0)
 	attack_speed = R.items[item].get("attack_speed", 1.0)
 	damage_types = R.items[item].get("damage_types", {"melee": 1.0})

@@ -1,11 +1,14 @@
 extends Node
 
 func _ready() -> void:
-	Console.add_command("spawn", spawn, ["entity_name", "amount", "position", "delay"], 1)
-	Console.add_command("tick", tick, ["rate"])
-	Console.add_command("tp", tp, ["x","y","z", "node_name"], 3)
-	Console.add_command("give", give, ["item_name", "amount"], 1)
-	Console.add_command("attack", attack, ["dmg","damage_types","node_name"], 1)
+	Console.add_command("spawn", request_spawn, ["entity_name", "amount", "position", "delay"], 1, "Spawn entity")
+	Console.add_command("tick", tick, ["rate"], 0, "Change game physics tickrate")
+	Console.add_command("tp", tp, ["x","y","z", "node_name"], 0, "Teleport entity to xyz")
+	Console.add_command("give", give, ["item_name", "amount"], 1, "Add Item to Inventory")
+	Console.add_command("attack", attack, ["dmg","node_name"], 1, "Take Damage to Entity")
+	Console.add_command("weather", weather, ["variant"], 0, "Set or Reser Current Weather")
+	Console.add_command("seed", print_seed, [], 0, "Get World Seed")
+	Console.add_command("name", get_collider_name, [], 0, "Print True Collider Name")
 	
 	Console.console_opened.connect(_on_console_opened)
 	Console.console_closed.connect(_on_console_closed)
@@ -17,6 +20,9 @@ func _on_console_opened() -> void:
 func _on_console_closed() -> void:
 	S.state_machine = last_state
 
+func request_spawn(entity_name: String, amount, position, delay) -> void:
+	spawn.rpc_id(1, entity_name, amount, position, delay)
+@rpc("any_peer", "call_local")
 func spawn(entity_name: String, amount, position, delay) -> void:
 	if last_state != "game": return
 	var type: String
@@ -71,28 +77,45 @@ func spawn(entity_name: String, amount, position, delay) -> void:
 		node.position = position
 		G.environment.add_child(node, true)
 
-# Измените объявления функций на такие:
-
 func tick(rate) -> void:
 	if !rate: rate = 60
 	Engine.physics_ticks_per_second = int(rate)
 
-func tp(x, y, z, node_name = "") -> void:
+func tp(x=0, y=0, z=0, node_name = "") -> void:
 	# Если node_name не передан, берем игрока
 	var target_name = node_name if node_name != "" else G.player.name
 	var node: Node3D = G.environment.get_node_or_null(NodePath(target_name))
 	if !node: return
 	node.position = Vector3(float(x), float(y), float(z))
 
-func give(item_name: String, amount = "1") -> void:
+func give(item_name: String, amount) -> void:
+	if !amount: amount = "1"
 	G.player.inv.add_item(item_name, int(amount))
 
-func attack(dmg, damage_types = null, node_name = "") -> void:
+func attack(dmg, node_name = "") -> void:
 	var target_name = node_name if node_name != "" else G.player.name
 	var node: Node3D = G.environment.get_node_or_null(NodePath(target_name))
 	if !node: return
 	var health: Node = node.get_node_or_null("HealthComponent")
-	
-	# Сложные типы (как damage_types словарь) часто нельзя передать строкой через консоль
-	var d_types = damage_types if damage_types else {"melee": 1}
-	if health: health.take_damage(float(dmg), false, d_types)
+	if health: health.take_damage(float(dmg), true)
+
+func weather(variant = "") -> void:
+	if variant == "":
+		G.world.weather.toggle_fog.rpc(false)
+		G.world.weather.toggle_rain.rpc(false)
+		G.world.weather.toggle_meteor_rain.rpc(false)
+	if variant == "fog":
+		G.world.weather.toggle_fog.rpc(true)
+	if variant == "rain":
+		G.world.weather.toggle_rain.rpc(true)
+	if variant == "meteor_rain":
+		G.world.weather.toggle_meteor_rain.rpc(true)
+
+func print_seed() -> void:
+	Console.print_line(G.world.world_seed)
+
+func get_collider_name() -> void:
+	if G.player.interact_ray.is_colliding():
+		Console.print_line(G.player.interact_ray.get_collider().name)
+	else:
+		Console.print_error("No Collider!")

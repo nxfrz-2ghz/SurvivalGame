@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dq0mm76mm658f"
 path.s3tc="res://.godot/imported/meteorite.png-c4c3cf435f224a2b4a37c048f38e054a.s3tc.ctex"
+path.etc2="res://.godot/imported/meteorite.png-c4c3cf435f224a2b4a37c048f38e054a.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://res/sprites/objects/meteorite.png"
-dest_files=["res://.godot/imported/meteorite.png-c4c3cf435f224a2b4a37c048f38e054a.s3tc.ctex"]
+dest_files=["res://.godot/imported/meteorite.png-c4c3cf435f224a2b4a37c048f38e054a.s3tc.ctex", "res://.godot/imported/meteorite.png-c4c3cf435f224a2b4a37c048f38e054a.etc2.ctex"]
 
 [params]
 

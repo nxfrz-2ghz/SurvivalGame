@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://xm8r265qvq4k"]
+
+[ext_resource type="Script" uid="uid://2ltlprlosdx7" path="res://scenes/structures/base_structure.gd" id="1_jmbyb"]
+
+[node name="BaseStructure" type="Area3D" unique_id=1600478975]
+script = ExtResource("1_jmbyb")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1723142105]

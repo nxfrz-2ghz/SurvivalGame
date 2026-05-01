@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://c1jlfqd8di4u5"
 path.s3tc="res://.godot/imported/round_shadow.png-f479dd0362d80a227d1fa461e576f0e2.s3tc.ctex"
+path.etc2="res://.godot/imported/round_shadow.png-f479dd0362d80a227d1fa461e576f0e2.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://res/sprites/objects/round_shadow.png"
-dest_files=["res://.godot/imported/round_shadow.png-f479dd0362d80a227d1fa461e576f0e2.s3tc.ctex"]
+dest_files=["res://.godot/imported/round_shadow.png-f479dd0362d80a227d1fa461e576f0e2.s3tc.ctex", "res://.godot/imported/round_shadow.png-f479dd0362d80a227d1fa461e576f0e2.etc2.ctex"]
 
 [params]
 

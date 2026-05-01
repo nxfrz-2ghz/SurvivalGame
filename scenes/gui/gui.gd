@@ -2,6 +2,7 @@ extends CanvasLayer
 
 @onready var main_menu = $MainMenu
 @onready var game_menu := $GameMenu
+@onready var upgrade_menu := $UpgradeMenu
 @onready var background := $Background
 @onready var hud = $HUD
 

@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://b5yv7mouet332"
 path.s3tc="res://.godot/imported/dry_bush.png-80b662ebc70440d3974e8d8fdce15f85.s3tc.ctex"
+path.etc2="res://.godot/imported/dry_bush.png-80b662ebc70440d3974e8d8fdce15f85.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://res/sprites/objects/berry_bush/dry_bush.png"
-dest_files=["res://.godot/imported/dry_bush.png-80b662ebc70440d3974e8d8fdce15f85.s3tc.ctex"]
+dest_files=["res://.godot/imported/dry_bush.png-80b662ebc70440d3974e8d8fdce15f85.s3tc.ctex", "res://.godot/imported/dry_bush.png-80b662ebc70440d3974e8d8fdce15f85.etc2.ctex"]
 
 [params]
 

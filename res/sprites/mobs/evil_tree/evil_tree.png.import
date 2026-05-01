@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://48ugd4k4l3cg"
 path.s3tc="res://.godot/imported/evil_tree.png-b270472d595c30c779999a96a23e2bdc.s3tc.ctex"
+path.etc2="res://.godot/imported/evil_tree.png-b270472d595c30c779999a96a23e2bdc.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://res/sprites/mobs/evil_tree/evil_tree.png"
-dest_files=["res://.godot/imported/evil_tree.png-b270472d595c30c779999a96a23e2bdc.s3tc.ctex"]
+dest_files=["res://.godot/imported/evil_tree.png-b270472d595c30c779999a96a23e2bdc.s3tc.ctex", "res://.godot/imported/evil_tree.png-b270472d595c30c779999a96a23e2bdc.etc2.ctex"]
 
 [params]
 

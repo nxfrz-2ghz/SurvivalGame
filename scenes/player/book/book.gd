@@ -6,17 +6,15 @@ signal close_book
 @onready var grid_page := $GridPage
 @onready var box_page := $BoxPage
 
-const button := preload("res://scenes/player/book/button/button.tscn")
-
 var current_page: Node
 
 
 func spawn_button(text: String) -> void:
-	var btn := button.instantiate()
+	var btn := id_button.new()
 	btn.text = tr(text)
 	btn.id = text
 	current_page.add_child(btn)
-	btn.set_page.connect(set_page)
+	btn.ppressed.connect(set_page)
 
 
 func spawn_label(text: String) -> void:

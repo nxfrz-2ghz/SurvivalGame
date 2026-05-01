@@ -22,6 +22,7 @@ animations = [{
 script = ExtResource("2_uyya2")
 nname = "chest_mimic"
 speed = 4.0
+weight = 2.0
 
 [node name="AttackCooldown" type="Timer" parent="Timers" parent_id_path=PackedInt32Array(1401815993) index="3" unique_id=902120343]
 autostart = true

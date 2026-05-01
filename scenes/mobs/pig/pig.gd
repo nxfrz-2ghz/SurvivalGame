@@ -3,7 +3,7 @@ extends "res://scenes/mobs/mob.gd"
 @onready var idle_sound_timer := $Timers/IdleSoundTimer
 @onready var run_timer := $Timers/RunTimer
 
-var last_pos: Vector3 # Безопасное место для побега
+@onready var last_pos: Vector3 = global_position # Безопасное место для побега
 
 enum STATE { IDLE, WALK, RUNAWAY}
 var state := STATE.IDLE

@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://d0rqsqbwasa30"]
+
+[ext_resource type="PackedScene" uid="uid://xm8r265qvq4k" path="res://scenes/structures/base_structure.tscn" id="1_8l0ld"]
+[ext_resource type="Script" uid="uid://bdghu12706aqq" path="res://scenes/structures/brick_pyramid/brick_pyramid.gd" id="2_iam7q"]
+[ext_resource type="PackedScene" uid="uid://bod6w2xqiqjvq" path="res://scenes/building/block/brick/brick_block.tscn" id="2_m5kmx"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_iam7q"]
+size = Vector3(15, 1, 15)
+
+[node name="BrickPyramid" unique_id=716886097 instance=ExtResource("1_8l0ld")]
+script = ExtResource("2_iam7q")
+block_scene = ExtResource("2_m5kmx")
+
+[node name="CollisionShape3D" parent="." index="0" unique_id=1723142105]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3505516, 0)
+shape = SubResource("BoxShape3D_iam7q")

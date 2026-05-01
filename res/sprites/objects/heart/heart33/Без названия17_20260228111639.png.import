@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://drhextkcjtri4"
 path.s3tc="res://.godot/imported/Без названия17_20260228111639.png-9e0c69e7fdfbebccc7f1fd15b8166fce.s3tc.ctex"
+path.etc2="res://.godot/imported/Без названия17_20260228111639.png-9e0c69e7fdfbebccc7f1fd15b8166fce.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://res/sprites/objects/heart/heart33/Без названия17_20260228111639.png"
-dest_files=["res://.godot/imported/Без названия17_20260228111639.png-9e0c69e7fdfbebccc7f1fd15b8166fce.s3tc.ctex"]
+dest_files=["res://.godot/imported/Без названия17_20260228111639.png-9e0c69e7fdfbebccc7f1fd15b8166fce.s3tc.ctex", "res://.godot/imported/Без названия17_20260228111639.png-9e0c69e7fdfbebccc7f1fd15b8166fce.etc2.ctex"]
 
 [params]
 

@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://c40l8e6xprun4"
 path.s3tc="res://.godot/imported/front2.png-a0430821e8f84e0e62593f7373825b3a.s3tc.ctex"
+path.etc2="res://.godot/imported/front2.png-a0430821e8f84e0e62593f7373825b3a.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://res/sprites/mobs/pig/front/front2.png"
-dest_files=["res://.godot/imported/front2.png-a0430821e8f84e0e62593f7373825b3a.s3tc.ctex"]
+dest_files=["res://.godot/imported/front2.png-a0430821e8f84e0e62593f7373825b3a.s3tc.ctex", "res://.godot/imported/front2.png-a0430821e8f84e0e62593f7373825b3a.etc2.ctex"]
 
 [params]
 

@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dvteuax27swj3"
 path.s3tc="res://.godot/imported/clay.png-3fb20df6a61473cbd1f605c07dab0b20.s3tc.ctex"
+path.etc2="res://.godot/imported/clay.png-3fb20df6a61473cbd1f605c07dab0b20.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://res/sprites/items/clay.png"
-dest_files=["res://.godot/imported/clay.png-3fb20df6a61473cbd1f605c07dab0b20.s3tc.ctex"]
+dest_files=["res://.godot/imported/clay.png-3fb20df6a61473cbd1f605c07dab0b20.s3tc.ctex", "res://.godot/imported/clay.png-3fb20df6a61473cbd1f605c07dab0b20.etc2.ctex"]
 
 [params]
 

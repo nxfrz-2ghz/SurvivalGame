@@ -12,7 +12,7 @@ var fog_tween: Tween
 var rain_tween: Tween
 var meteor_rain_tween: Tween
 
-@rpc("authority", "call_local")
+@rpc("any_peer", "call_local")
 func toggle_fog(is_active: bool) -> void:
 	fog = is_active
 	# Если старая анимация еще идет, прерываем её
@@ -27,7 +27,7 @@ func toggle_fog(is_active: bool) -> void:
 		.set_trans(Tween.TRANS_SINE)\
 		.set_ease(Tween.EASE_IN_OUT)
 
-@rpc("authority", "call_local")
+@rpc("any_peer", "call_local")
 func toggle_rain(is_active: bool) -> void:
 	rain = is_active
 	if rain_tween: rain_tween.kill()
@@ -49,7 +49,7 @@ func toggle_rain(is_active: bool) -> void:
 		rain_tween.tween_callback(audio_player.stop)
 		if G.player: G.player.rain.emitting = false
 
-@rpc("authority", "call_local")
+@rpc("any_peer", "call_local")
 func toggle_meteor_rain(is_active: bool) -> void:
 	meteor_rain = is_active
 	if meteor_rain_tween: meteor_rain_tween.kill()

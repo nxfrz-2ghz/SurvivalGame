@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://cetu0m2kc1cye"
 path.s3tc="res://.godot/imported/copper_knife.png-c3568fbe8eae674d4bf3d085a345e166.s3tc.ctex"
+path.etc2="res://.godot/imported/copper_knife.png-c3568fbe8eae674d4bf3d085a345e166.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://res/sprites/items/weapons/copper/copper_knife.png"
-dest_files=["res://.godot/imported/copper_knife.png-c3568fbe8eae674d4bf3d085a345e166.s3tc.ctex"]
+dest_files=["res://.godot/imported/copper_knife.png-c3568fbe8eae674d4bf3d085a345e166.s3tc.ctex", "res://.godot/imported/copper_knife.png-c3568fbe8eae674d4bf3d085a345e166.etc2.ctex"]
 
 [params]
 

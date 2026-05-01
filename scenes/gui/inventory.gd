@@ -15,10 +15,22 @@ extends MarginContainer
 	$PanelContainer/MarginContainer/HBoxContainer/Slot11,
 	$PanelContainer/MarginContainer/HBoxContainer/Slot12,
 ]
+@onready var left_slot := $PanelContainer/MarginContainer/HBoxContainer/LeftSlot
 
 
 func set_hotbar_slot(pos: int) -> void:
 	choose_slot.global_position = slot[pos].global_position
+
+func set_left_arm_slot(item: Dictionary) -> void:
+	var label = left_slot.get_node("Label")
+	if item == {}:
+		left_slot.texture = R.items["empty"]["texture"]
+		label.text = ""
+		label.hide()
+	else:
+		left_slot.texture = R.items[item["name"]]["texture"]
+		label.text = str(item["amount"]) if item["amount"] > 1 else ""
+		label.show()
 
 
 func update(inventory: Dictionary) -> void:

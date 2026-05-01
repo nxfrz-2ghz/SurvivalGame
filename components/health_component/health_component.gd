@@ -43,8 +43,10 @@ func take_damage(base_damage: float, ignore_armor := false, incoming_types: Dict
 		var resistance: float = resists.get(type, 1.0) 
 		total_damage += base_damage * multiplier * resistance
 	
-	if !ignore_armor:
-		total_damage -= armor
+	total_damage -= armor
+	
+	if ignore_armor:
+		total_damage = base_damage
 	
 	if total_damage > 0.0:
 		current_health -= total_damage

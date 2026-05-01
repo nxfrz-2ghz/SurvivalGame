@@ -15,6 +15,11 @@ func bad() -> bool:
 		return true
 	return false
 
+func apply_eat(eat_name: String) -> void:
+	if R.items[eat_name].has("temp_affect"):
+		temp += R.items[eat_name]["temp_affect"]
+		changed.emit(temp, max_temp)
+
 func _on_timer_timeout() -> void:
 	if S.state_machine != "game": return
 	

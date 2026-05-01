@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dk7wo66724omw"
 path.s3tc="res://.godot/imported/copper_ore.png-bd2fe39d3304c9b8d4d388fc35b94dea.s3tc.ctex"
+path.etc2="res://.godot/imported/copper_ore.png-bd2fe39d3304c9b8d4d388fc35b94dea.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://res/sprites/objects/copper_ore.png"
-dest_files=["res://.godot/imported/copper_ore.png-bd2fe39d3304c9b8d4d388fc35b94dea.s3tc.ctex"]
+dest_files=["res://.godot/imported/copper_ore.png-bd2fe39d3304c9b8d4d388fc35b94dea.s3tc.ctex", "res://.godot/imported/copper_ore.png-bd2fe39d3304c9b8d4d388fc35b94dea.etc2.ctex"]
 
 [params]
 

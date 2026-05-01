@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dy5dg73tyiio8"
 path.s3tc="res://.godot/imported/copper.png-bbac4153ca999503dc7c11601e592ae8.s3tc.ctex"
+path.etc2="res://.godot/imported/copper.png-bbac4153ca999503dc7c11601e592ae8.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://res/sprites/material_textures/copper.png"
-dest_files=["res://.godot/imported/copper.png-bbac4153ca999503dc7c11601e592ae8.s3tc.ctex"]
+dest_files=["res://.godot/imported/copper.png-bbac4153ca999503dc7c11601e592ae8.s3tc.ctex", "res://.godot/imported/copper.png-bbac4153ca999503dc7c11601e592ae8.etc2.ctex"]
 
 [params]
 

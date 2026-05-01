@@ -98,8 +98,9 @@ const sounds := {
 }
 
 const music := [
-	preload("res://res/music/wtf2.mp3"),
-	preload("res://res/music/wtf3ambient.mp3"),
+	preload("res://res/music/wtf0.ogg"),
+	preload("res://res/music/wtf2.ogg"),
+	preload("res://res/music/wtf3ambient.ogg"),
 ]
 
 const exchangeable_items := {
@@ -222,6 +223,17 @@ const buildings := {
 	},
 }
 
+const structures := {
+	"brick_pyramid": {
+		"scene": preload("res://scenes/structures/brick_pyramid/brick_pyramid.tscn"),
+		"chance": 0.1,
+	},
+	"upgrade_table": {
+		"scene": preload("res://scenes/objects/upgrade_table/upgrade_table.tscn"),
+		"chance": 0.05,
+	}
+}
+
 const objects := {
 	"grass": {
 		"scene": preload("res://scenes/objects/grass/grass.tscn"),
@@ -263,6 +275,10 @@ const objects := {
 	"meteorite": {
 		"scene": preload("res://scenes/objects/meteorite/meteorite.tscn"),
 	},
+	"ice_rock": {
+		"scene": preload("res://scenes/objects/ice_rock/ice_rock.tscn"),
+		"recipe": {"log": 6},
+	},
 	"campfire": {
 		"scene": preload("res://scenes/objects/campfire/campfire.tscn"),
 		"recipe": {"log": 3},
@@ -285,7 +301,11 @@ const objects := {
 	},
 	"loot_chest": {
 		"scene": preload("res://scenes/objects/loot_chest/loot_chest.tscn"),
+		"chance": 0.1,
 	},
+	"upgrade_table": {
+		"scene": preload("res://scenes/objects/upgrade_table/upgrade_table.tscn"),
+	}
 }
 
 const items := {
@@ -293,9 +313,9 @@ const items := {
 	"wood_wall": {
 		"texture": preload("res://res/sprites/items/building/wall.png"),
 		"recipe": {
-			"log":4,
+			"log":6,
 		},
-		"amount_craft": 2,
+		"amount_craft": 3,
 		"stack_size": 10,
 		"is_building": true,
 		"build_type": "wall",
@@ -303,9 +323,9 @@ const items := {
 	"stone_wall": {
 		"texture": preload("res://res/sprites/items/building/wall.png"),
 		"recipe": {
-			"stone":4,
+			"stone":6,
 		},
-		"amount_craft": 2,
+		"amount_craft": 3,
 		"stack_size": 10,
 		"is_building": true,
 		"build_type": "wall",
@@ -313,9 +333,9 @@ const items := {
 	"brick_wall": {
 		"texture": preload("res://res/sprites/items/building/wall.png"),
 		"recipe": {
-			"brick":4,
+			"brick":6,
 		},
-		"amount_craft": 2,
+		"amount_craft": 3,
 		"stack_size": 10,
 		"is_building": true,
 		"build_type": "wall",
@@ -323,9 +343,9 @@ const items := {
 	"copper_wall": {
 		"texture": preload("res://res/sprites/items/building/wall.png"),
 		"recipe": {
-			"copper_ingot":4,
+			"copper_ingot":6
 		},
-		"amount_craft": 2,
+		"amount_craft": 3,
 		"stack_size": 10,
 		"is_building": true,
 		"build_type": "wall",
@@ -333,9 +353,9 @@ const items := {
 	"iron_wall": {
 		"texture": preload("res://res/sprites/items/building/wall.png"),
 		"recipe": {
-			"iron_ingot":4,
+			"iron_ingot":6,
 		},
-		"amount_craft": 2,
+		"amount_craft": 3,
 		"stack_size": 10,
 		"is_building": true,
 		"build_type": "wall",
@@ -343,9 +363,9 @@ const items := {
 	"steel_wall": {
 		"texture": preload("res://res/sprites/items/building/wall.png"),
 		"recipe": {
-			"steel_ingotr":4,
+			"steel_ingotr":6,
 		},
-		"amount_craft": 2,
+		"amount_craft": 3,
 		"stack_size": 10,
 		"is_building": true,
 		"build_type": "wall",
@@ -363,9 +383,9 @@ const items := {
 	"stone_block": {
 		"texture": preload("res://res/sprites/items/building/block.png"),
 		"recipe": {
-			"stone":2,
+			"stone":4,
 		},
-		"amount_craft": 2,
+		"amount_craft": 4,
 		"stack_size": 30,
 		"is_building": true,
 		"build_type": "block",
@@ -373,9 +393,9 @@ const items := {
 	"brick_block": {
 		"texture": preload("res://res/sprites/items/building/block.png"),
 		"recipe": {
-			"brick":2,
+			"brick":4,
 		},
-		"amount_craft": 2,
+		"amount_craft": 4,
 		"stack_size": 30,
 		"is_building": true,
 		"build_type": "block",
@@ -383,9 +403,9 @@ const items := {
 	"copper_block": {
 		"texture": preload("res://res/sprites/items/building/block.png"),
 		"recipe": {
-			"copper_ingot":2,
+			"copper_ingot": 4,
 		},
-		"amount_craft": 2,
+		"amount_craft": 4,
 		"stack_size": 30,
 		"is_building": true,
 		"build_type": "block",
@@ -393,9 +413,9 @@ const items := {
 	"iron_block": {
 		"texture": preload("res://res/sprites/items/building/block.png"),
 		"recipe": {
-			"iron_ingot":2,
+			"iron_ingot": 4,
 		},
-		"amount_craft": 2,
+		"amount_craft": 4,
 		"stack_size": 30,
 		"is_building": true,
 		"build_type": "block",
@@ -403,9 +423,9 @@ const items := {
 	"steel_block": {
 		"texture": preload("res://res/sprites/items/building/block.png"),
 		"recipe": {
-			"steel_ingot":2,
+			"steel_ingot": 4,
 		},
-		"amount_craft": 2,
+		"amount_craft": 4,
 		"stack_size": 30,
 		"is_building": true,
 		"build_type": "block",
@@ -748,11 +768,11 @@ const items := {
 	"wooden_hammer": {
 		"texture": preload("res://res/sprites/items/weapons/wooden_hammer.png"),
 		"recipe": {
-			"log":5,#"log":2,
+			"log":5,
 		},
-		"durability": 50,#30,
+		"durability": 50,
 		"attack_speed": 0.5,
-		"damage": 3.0,#"damage": 2.0,
+		"damage": 3.0,
 		"is_splash": true,
 		"damage_types": {
 			"melee": 0.5,
@@ -832,6 +852,13 @@ const items := {
 		"billboard": true,
 		"explose": false,
 	},
+	"ice": {
+		"texture": preload("res://res/sprites/items/ice.png"),
+		"stack_size": 30,
+		"durability": 5,
+		"nutrition": 10,
+		"temp_affect": -5.0,
+	},
 	"copper_ore": {
 		"texture": preload("res://res/sprites/items/copper_ore.png"),
 		"stack_size": 30,
@@ -886,7 +913,18 @@ const items := {
 		"recipe": {
 			"grass_fiber": 5,
 		},
-		"heal": 0.5,
+		"heal": 1.5,
+		"attack_speed": 0.3,
+	},
+	"planer": {
+		"texture": preload("res://res/sprites/items/planer.png"),
+		"recipe": {
+			"grass_fiber": 4,
+			"log": 3,
+			"copper_bar": 1,
+		},
+		"planer": true,
+		"durability": 90000,
 		"attack_speed": 0.3,
 	},
 	"darkness_essence": {

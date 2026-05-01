@@ -16,8 +16,7 @@ func eat(hng: int) -> void:
 	if current_hunger < MAX_HUNGER:
 		current_hunger += hng
 	else:
-		heal.emit(float(hng)/50) # heal if overeating
-	current_hunger = clamp(current_hunger, 0, MAX_HUNGER)
+		heal.emit(float(hng)/10) # heal if overeating
 	changed.emit(current_hunger)
 	
 func take_hunger(hng: int) -> void:

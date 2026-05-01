@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bea8w7ucsanab"
 path.s3tc="res://.godot/imported/right0.png-c79061b99f79d40ec7f606ac86d15d51.s3tc.ctex"
+path.etc2="res://.godot/imported/right0.png-c79061b99f79d40ec7f606ac86d15d51.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://res/sprites/mobs/pig/right/right0.png"
-dest_files=["res://.godot/imported/right0.png-c79061b99f79d40ec7f606ac86d15d51.s3tc.ctex"]
+dest_files=["res://.godot/imported/right0.png-c79061b99f79d40ec7f606ac86d15d51.s3tc.ctex", "res://.godot/imported/right0.png-c79061b99f79d40ec7f606ac86d15d51.etc2.ctex"]
 
 [params]
 

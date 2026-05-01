@@ -57,7 +57,7 @@ func _on_timer_timeout() -> void:
 
 	# День/ночь
 	if G.time_controller.night:
-		current_fear += 1
+		current_fear += 2
 	else:
 		current_fear -= 1
 

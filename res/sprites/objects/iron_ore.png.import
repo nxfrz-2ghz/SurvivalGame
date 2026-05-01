@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://cfuet63b7wtr4"
 path.s3tc="res://.godot/imported/iron_ore.png-13073ad78a7cd45ed1508ae06bea72ec.s3tc.ctex"
+path.etc2="res://.godot/imported/iron_ore.png-13073ad78a7cd45ed1508ae06bea72ec.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://res/sprites/objects/iron_ore.png"
-dest_files=["res://.godot/imported/iron_ore.png-13073ad78a7cd45ed1508ae06bea72ec.s3tc.ctex"]
+dest_files=["res://.godot/imported/iron_ore.png-13073ad78a7cd45ed1508ae06bea72ec.s3tc.ctex", "res://.godot/imported/iron_ore.png-13073ad78a7cd45ed1508ae06bea72ec.etc2.ctex"]
 
 [params]
 

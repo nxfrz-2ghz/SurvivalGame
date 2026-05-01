@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dhu605mq3ai6i"
 path.s3tc="res://.godot/imported/eye1.png-e9c7f6bf815e69231c6a8a0a44ea98f8.s3tc.ctex"
+path.etc2="res://.godot/imported/eye1.png-e9c7f6bf815e69231c6a8a0a44ea98f8.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://res/sprites/mobs/darkness_eye/eye1.png"
-dest_files=["res://.godot/imported/eye1.png-e9c7f6bf815e69231c6a8a0a44ea98f8.s3tc.ctex"]
+dest_files=["res://.godot/imported/eye1.png-e9c7f6bf815e69231c6a8a0a44ea98f8.s3tc.ctex", "res://.godot/imported/eye1.png-e9c7f6bf815e69231c6a8a0a44ea98f8.etc2.ctex"]
 
 [params]
 

@@ -8,4 +8,5 @@ var mob_spawner: Node
 var text_message: RichTextLabel
 var screen_text: CanvasItem
 var timer_1sec: Timer
+var upgrade_manager: Node
 var player: CharacterBody3D

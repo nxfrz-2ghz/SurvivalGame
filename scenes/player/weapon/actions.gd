@@ -57,7 +57,7 @@ func server_attack(is_splash: bool, dmg: float, damage_types: Dictionary, push_v
 			if body.name == str(peer_id): continue
 			S.attack(body, actions_node, dmg, false, push_velocity, damage_types)
 	else:
-		if G.player.interact_ray.is_colliding():
+		if player.interact_ray.is_colliding():
 			S.attack(G.player.interact_ray.get_collider(), actions_node, dmg, false, push_velocity, damage_types)
 
 

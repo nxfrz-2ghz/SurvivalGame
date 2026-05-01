@@ -47,10 +47,10 @@ max_health = 10.0
 
 [node name="EntityComponent" parent="." index="3" unique_id=1330161778]
 drop_items = {
-"dark_essence": 2
+"darkness_essence": 1
 }
 drop_chance = {
-"dark_essence": 0.4
+"darkness_essence": 0.5
 }
 exp_drop = 4.0
 

@@ -1,4 +1,5 @@
 extends LineEdit
+class_name key_line
 
 @export var key: String
 

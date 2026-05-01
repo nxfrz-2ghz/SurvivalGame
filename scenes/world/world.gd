@@ -16,9 +16,10 @@ const BIOME_CONFIG = {
 		# Objects
 		"ground": {
 			"grass": {"weight": 25, "density": 0.01},
-			"oak_tree": {"weight": 55, "density": 0.04},
+			"oak_tree": {"weight": 50, "density": 0.04},
 			"stone": {"weight": 5, "density": 0.02},
 			"berry_bush" : {"weight": 10, "density": 0.05},
+		  "oak_sapling" : {"weight": 10, "density": 0.05},
 		},
 		"sand": {
 			"grass": {"weight": 25, "density": 0.01},
@@ -28,9 +29,11 @@ const BIOME_CONFIG = {
 		},
 		"snow": {
 			"grass": {"weight": 25, "density": 0.01},
-			"spruce_tree": {"weight": 55, "density": 0.04},
+			"spruce_tree": {"weight": 50, "density": 0.04},
 			"stone": {"weight": 5, "density": 0.02},
-			"berry_bush" : {"weight": 10, "density": 0.05},
+			"berry_bush" : {"weight": 7, "density": 0.05},
+			"spruce_sapling" : {"weight": 7, "density": 0.05},
+			"dry_bush" : {"weight": 6, "density": 0.05},
 		},
 	},
 	Biome.ORE_PLATEAU: {
@@ -52,9 +55,10 @@ const BIOME_CONFIG = {
 		},
 		"snow": {
 			#ice, saphire?
-			"rock": {"weight": 50, "density": 0.05},
-			"copper_ore": {"weight": 30, "density": 0.03},
-			"iron_ore": {"weight": 20, "density": 0.03},
+			"rock": {"weight": 40, "density": 0.05},
+			"ice_rock": {"weight": 30, "density": 0.05},
+			"copper_ore": {"weight": 20, "density": 0.03},
+			"iron_ore": {"weight": 10, "density": 0.03},
 		},
 	},
 	Biome.MOUNTAINS: {
@@ -71,7 +75,7 @@ const BIOME_CONFIG = {
 		},
 		"sand": {},
 		"snow": {
-			"rock": {"weight": 45, "density": 0.01},
+			"ice_rock": {"weight": 45, "density": 0.01},
 			"copper_ore": {"weight": 10, "density": 0.005},
 			"iron_ore": {"weight": 10, "density": 0.005},
 			"spruce_tree": {"weight": 30, "density": 0.01},
@@ -84,7 +88,7 @@ const BIOME_CONFIG = {
 		
 		# Objects
 		"ground": {
-			"grass": {"weight": 92, "density": 0.005},
+			"grass": {"weight": 92, "density": 0.01},
 			"stone": {"weight": 3, "density": 0.01},
 			"oak_tree": {"weight": 2, "density": 0.01},
 			"berry_bush" : {"weight": 2, "density": 0.04},
@@ -97,6 +101,7 @@ const BIOME_CONFIG = {
 		"snow": {
 			"grass": {"weight": 1, "density": 0.005},
 			"stone": {"weight": 3, "density": 0.01},
+			"ice_rock": {"weight": 10, "density": 0.01},
 			"spruce_tree": {"weight": 4, "density": 0.01},
 			"berry_bush" : {"weight": 1, "density": 0.04},
 		},
@@ -139,14 +144,16 @@ var temp_noise: FastNoiseLite
 const WATER_LEVEL := -5.5
 const CLAY_LEVEL := -7.5
 
-const spacing := 1.0     # Расстояние между вершинами
+const spacing := 1.0     # Расстояние пропуска
 # object gen
-const OBJ_SPAWN_STEP := 1.5  # Генерируем объекты с шагом (экономит спавны)
-const LOOT_SPAWN_STEP := 50.0
+const OBJ_SPAWN_STEP := 1.5
+const LOOT_SPAWN_STEP := 53.0
+const STRUCTURES_SPAWN_STEP := 78.0
 # drop gen
-const DROP_SPAWN_STEP := 25.0  # Генерируем предметы с шагом (экономит спавны)
+const DROP_SPAWN_STEP := 27.0
 # mesh gen
-const CHUNK_SIZE := 64  # Размер одного чанка в вершинах
+const mesh_spacing := 3.0     # Расстояние между вершинами
+const CHUNK_SIZE := 32  # Размер одного чанка в вершинах
 const CHUNK_VERTEX_COUNT := CHUNK_SIZE + 1
 const noise_scale := 5.0
 
@@ -218,13 +225,13 @@ func _init_noise() -> void:
 	
 	# Шум для определения биомов
 	biome_noise = FastNoiseLite.new()
-	biome_noise.seed = world_seed + 1
+	biome_noise.seed = world_seed + 112342
 	biome_noise.noise_type = FastNoiseLite.TYPE_PERLIN
 	biome_noise.frequency = 0.05
 	
 	# Шум для определения температуры
 	temp_noise = FastNoiseLite.new()
-	temp_noise.seed = world_seed + 2
+	temp_noise.seed = world_seed + 21234
 	temp_noise.noise_type = FastNoiseLite.TYPE_PERLIN
 	temp_noise.frequency = 0.002
 	
@@ -243,8 +250,9 @@ func _init_noise() -> void:
 
 
 func _generate_terrain() -> void:
-	var offset := (world_size - 1) * spacing / 2.0
-	var chunks_count := ceili(float(world_size) / float(CHUNK_SIZE))
+	var mesh_verts := ceili(float(world_size) / (mesh_spacing / spacing))
+	var offset := (mesh_verts - 1) * mesh_spacing / 2.0
+	var chunks_count := ceili(float(mesh_verts) / float(CHUNK_SIZE))
 	
 	for chunk_z in range(chunks_count):
 		for chunk_x in range(chunks_count):
@@ -253,22 +261,22 @@ func _generate_terrain() -> void:
 			
 			var start_x := chunk_x * CHUNK_SIZE
 			var start_z := chunk_z * CHUNK_SIZE
-			var end_x := mini(start_x + CHUNK_SIZE, world_size - 1)
-			var end_z := mini(start_z + CHUNK_SIZE, world_size - 1)
+			var end_x := mini(start_x + CHUNK_SIZE, mesh_verts - 1)
+			var end_z := mini(start_z + CHUNK_SIZE, mesh_verts - 1)
 			
 			var vertex_map := {}
 			var vertex_index := 0
 			
 			for z in range(start_z, end_z + 1):
 				for x in range(start_x, end_x + 1):
-					var pos_x := x * spacing - offset
-					var pos_z := z * spacing - offset
+					var pos_x := x * mesh_spacing - offset
+					var pos_z := z * mesh_spacing - offset
 					var height_y := _get_height(pos_x, pos_z)
 					
 					# Крутизна — сравниваем высоту с соседними точками
 					var h_right := _get_height(pos_x + spacing, pos_z)
 					var h_down  := _get_height(pos_x, pos_z + spacing)
-					var slope: float= max(abs(height_y - h_right), abs(height_y - h_down))
+					var slope: float = max(abs(height_y - h_right), abs(height_y - h_down))
 					var steepness := clampf(slope / 2.0, 0.0, 1.0)  # 0=плоско, 1=скала
 					
 					# Подводная глина
@@ -281,7 +289,7 @@ func _generate_terrain() -> void:
 						clay = 0.0
 					
 					st.set_color(Color(steepness, 1.0 - temp, clay, 0.0))
-					st.set_uv(Vector2(float(x) / float(world_size - 1), float(z) / float(world_size - 1)))
+					st.set_uv(Vector2(float(x) / float(mesh_verts - 1), float(z) / float(mesh_verts - 1)))
 					st.add_vertex(Vector3(pos_x, height_y, pos_z))
 					
 					vertex_map[Vector2i(x, z)] = vertex_index
@@ -319,8 +327,8 @@ func _generate_terrain() -> void:
 			mesh_instance.set_layer_mask_value(2, true) # Enable shadow decal support
 			mesh_instance.set_layer_mask_value(3, true) # Enable corruption decal support
 			collision.add_to_group("optimized_sync")
-			terrain.call_deferred("add_child", mesh_instance)
-			terrain.call_deferred("add_child", collision)
+			terrain.add_child(mesh_instance, true)
+			terrain.add_child(collision, true)
 
 func _generate_grass() -> void:
 	G.screen_text.text("Generating Grass...")
@@ -361,7 +369,7 @@ func _generate_grass() -> void:
 					
 					# Проверка температуры
 					var temp := _get_temp(world_x, world_z)
-					if temp < TEMP_BORDER_SAND or temp > TEMP_BORDER_GROUND: continue
+					if temp < TEMP_BORDER_SAND*0.9 or temp > TEMP_BORDER_GROUND*1.1: continue
 					
 					# Уменьшаем колво травы
 					if rng.randf() > GRASS_DENSITY: continue
@@ -394,11 +402,12 @@ func _generate_grass() -> void:
 			mmi.visibility_range_end = grass_visible_range
 			mmi.set_layer_mask_value(2, true) # Enable shadow decal support
 			mmi.set_layer_mask_value(3, true) # Enable corruption decal support
-			terrain.call_deferred("add_child", mmi)
+			terrain.add_child(mmi, true)
 
 func _generate_water() -> void:
-	var offset := (world_size - 1) * spacing / 2.0
-	var chunks_count := ceili(float(world_size) / float(CHUNK_SIZE))
+	var mesh_verts := ceili(float(world_size) / (mesh_spacing / spacing))
+	var offset := (mesh_verts - 1) * mesh_spacing / 2.0
+	var chunks_count := ceili(float(mesh_verts) / float(CHUNK_SIZE))
 	
 	for chunk_z in range(chunks_count):
 		for chunk_x in range(chunks_count):
@@ -408,39 +417,36 @@ func _generate_water() -> void:
 			
 			var start_x := chunk_x * CHUNK_SIZE
 			var start_z := chunk_z * CHUNK_SIZE
-			var end_x := mini(start_x + CHUNK_SIZE, world_size - 1)
-			var end_z := mini(start_z + CHUNK_SIZE, world_size - 1)
+			var end_x := mini(start_x + CHUNK_SIZE, mesh_verts - 1)
+			var end_z := mini(start_z + CHUNK_SIZE, mesh_verts - 1)
 			
 			var vertex_map := {}
 			var vertex_index := 0
 			
 			for z in range(start_z, end_z + 1):
 				for x in range(start_x, end_x + 1):
-					var pos_x := x * spacing - offset
-					var pos_z := z * spacing - offset
+					var pos_x := x * mesh_spacing - offset
+					var pos_z := z * mesh_spacing - offset
 					var terrain_h := _get_height(pos_x, pos_z)
 					
-					# Вершину воды добавляем только там где terrain ниже уровня воды
 					if terrain_h < WATER_LEVEL:
 						has_water = true
 					
-					st.set_uv(Vector2(float(x) / float(world_size - 1), float(z) / float(world_size - 1)))
+					st.set_uv(Vector2(float(x) / float(mesh_verts - 1), float(z) / float(mesh_verts - 1)))
 					st.add_vertex(Vector3(pos_x, WATER_LEVEL, pos_z))
 					vertex_map[Vector2i(x, z)] = vertex_index
 					vertex_index += 1
 			
 			if not has_water:
-				continue  # пропускаем чанки без воды
+				continue
 			
 			for z in range(start_z, end_z):
 				for x in range(start_x, end_x):
-					# Проверяем что хотя бы одна вершина квада — над водой
 					var any_underwater := false
 					for check in [Vector2i(x,z), Vector2i(x+1,z), Vector2i(x,z+1), Vector2i(x+1,z+1)]:
-						var px: float = check.x * spacing - offset
-						var pz: float = check.y * spacing - offset
-						var h := _get_height(px, pz)
-						if h < WATER_LEVEL:
+						var px: float = check.x * mesh_spacing - offset
+						var pz: float = check.y * mesh_spacing - offset
+						if _get_height(px, pz) < WATER_LEVEL:
 							any_underwater = true
 							break
 					
@@ -460,12 +466,10 @@ func _generate_water() -> void:
 			mesh_instance.mesh = st.commit()
 			mesh_instance.material_override = water_material
 			mesh_instance.visibility_range_end = terrain_visible_range
-			terrain.call_deferred("add_child", mesh_instance)
+			terrain.add_child(mesh_instance, true)
 
 
 func _generate_objects() -> void:
-	G.screen_text.text("Spawning objects...")
-	await get_tree().process_frame
 	
 	var offset := (world_size - 1) * spacing / 2.0
 	var rng := RandomNumberGenerator.new()
@@ -501,18 +505,15 @@ func _generate_objects() -> void:
 					# Высота спавна — берем с того же шума, чтобы объект стоял на поверхности
 					var spawn_y := _get_height(world_x, world_z)
 					instance.position = Vector3(world_x, spawn_y, world_z)
-					G.environment.call_deferred("add_child", instance, true)
+					G.environment.add_child(instance, true)
 			
 			gz += OBJ_SPAWN_STEP
 		gx += OBJ_SPAWN_STEP
 
 func _generate_loot_chests() -> void:
-	G.screen_text.text("Spawning loot...")
-	await get_tree().process_frame
-	
 	var offset := (world_size - 1) * spacing / 2.0
 	var rng = RandomNumberGenerator.new()
-	rng.seed = int(world_seed+1)
+	rng.seed = int(world_seed+546459)
 	
 	var gx := 0.0
 	var gz := 0.0
@@ -521,16 +522,45 @@ func _generate_loot_chests() -> void:
 		while gz < world_size:
 			var world_x := gx * spacing - offset
 			var world_z := gz * spacing - offset
+			if rng.randf() > R.objects.get("loot_chest")["chance"]:
+				gz += LOOT_SPAWN_STEP
+				continue
 			var obj_scene: PackedScene = R.objects.get("loot_chest")["scene"]
 			if obj_scene:
 				var instance := obj_scene.instantiate()
 				var spawn_y := _get_height(world_x, world_z)
 				instance.position = Vector3(world_x, spawn_y, world_z)
 				instance.lvl_cost = randi_range(2, 8)
-				G.environment.call_deferred("add_child", instance, true)
+				G.environment.add_child(instance, true)
 			
 			gz += LOOT_SPAWN_STEP
 		gx += LOOT_SPAWN_STEP
+
+func _generate_structures() -> void:
+	var offset := (world_size - 1) * spacing / 2.0
+	var rng = RandomNumberGenerator.new()
+	rng.seed = int(world_seed+3245637)
+	
+	var gx := 0.0
+	var gz := 0.0
+	while gx < world_size:
+		gz = 0
+		while gz < world_size:
+			var world_x := gx * spacing - offset
+			var world_z := gz * spacing - offset
+			var structure: String = R.structures.keys().pick_random()
+			if rng.randf() > R.structures[structure]["chance"]:
+				gz += STRUCTURES_SPAWN_STEP
+				continue
+			var obj_scene: PackedScene = R.structures[R.structures.keys().pick_random()]["scene"]
+			if obj_scene:
+				var instance := obj_scene.instantiate()
+				var spawn_y := _get_height(world_x, world_z)
+				instance.position = Vector3(world_x, spawn_y, world_z)
+				G.environment.add_child(instance, true)
+			
+			gz += STRUCTURES_SPAWN_STEP
+		gx += STRUCTURES_SPAWN_STEP
 
 func _generate_items() -> void:
 	G.screen_text.text("Spawning items...")
@@ -549,14 +579,14 @@ func _generate_items() -> void:
 			var world_x := gx * spacing - offset
 			var world_z := gz * spacing - offset
 			
-			var spawn_y := +_get_height(world_x, world_z)
+			var spawn_y := _get_height(world_x, world_z)
 			
 			# Не спавним предметы под водой
 			if spawn_y >= WATER_LEVEL:
 				var instance: RigidBody3D = R.item.instantiate()
 				instance.position = Vector3(world_x, spawn_y, world_z)
 				instance.nname = "stone"
-				G.environment.call_deferred("add_child", instance, true)
+				G.environment.add_child(instance, true)
 			
 			gz += DROP_SPAWN_STEP
 		gx += DROP_SPAWN_STEP
@@ -566,6 +596,7 @@ func _generate_items() -> void:
 
 func _generate_world() -> void:
 	
+	await get_tree().process_frame
 	if server:
 		weather.toggle_fog.rpc(false)
 		weather.toggle_rain.rpc(false)
@@ -590,12 +621,23 @@ func _generate_world() -> void:
 	if !server: return
 	
 	if G.gui.main_menu.debug.objects_gen.button_pressed:
+		G.screen_text.text("Spawning objects...")
+		await get_tree().process_frame
 		_generate_objects()
 	
 	if G.gui.main_menu.debug.loot_chests_gen.button_pressed:
+		G.screen_text.text("Spawning loot...")
+		await get_tree().process_frame
 		_generate_loot_chests()
 	
+	if G.gui.main_menu.debug.structures_gen.button_pressed:
+		G.screen_text.text("Spawning structures...")
+		await get_tree().process_frame
+		_generate_structures()
+	
 	if G.gui.main_menu.debug.items_gen.button_pressed:
+		G.screen_text.text("Spawning items...")
+		await get_tree().process_frame
 		_generate_items()
 
 
@@ -799,14 +841,17 @@ func load_world() -> void:
 	_init_noise()
 	
 	if G.gui.main_menu.debug.terrain_gen.button_pressed:
+		await get_tree().process_frame
 		G.screen_text.text("Generating Terrain...")
 		await get_tree().process_frame
 		_generate_terrain()
 	if G.gui.main_menu.debug.grass_gen.button_pressed:
+		await get_tree().process_frame
 		G.screen_text.text("Generating Grass...")
 		await get_tree().process_frame
 		_generate_grass()
 	if G.gui.main_menu.debug.water_gen.button_pressed:
+		await get_tree().process_frame
 		G.screen_text.text("Generating Water...")
 		await get_tree().process_frame
 		_generate_water()

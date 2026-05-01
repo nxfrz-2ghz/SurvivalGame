@@ -1,28 +1,10 @@
 [gd_scene format=3 uid="uid://kqqogxrnnqyf"]
 
-[sub_resource type="GDScript" id="GDScript_mbkog"]
-script/source = "extends RayCast3D
-
-@onready var parent := get_parent()
-
-
-func _ready() -> void:
-	self.global_rotation = self.rotation # Избавляемся от вращения родителя
-
-
-func _physics_process(_delta: float) -> void:
-	if !$Timer.is_stopped(): return
-	if not is_colliding():
-		parent.global_position.y -= 0.1
-	else:
-		if is_multiplayer_authority() and position.y < G.world.WATER_LEVEL:
-			parent.health.take_damage(9999999.0)
-		self.queue_free()
-"
+[ext_resource type="Script" uid="uid://ox0gium5an2t" path="res://components/fall_ray/fall_ray.gd" id="1_4p2cw"]
 
 [node name="FallRay" type="RayCast3D" unique_id=2065431078]
 target_position = Vector3(0, -0.12, 0)
-script = SubResource("GDScript_mbkog")
+script = ExtResource("1_4p2cw")
 
 [node name="Timer" type="Timer" parent="." unique_id=1416286650]
 wait_time = 0.3

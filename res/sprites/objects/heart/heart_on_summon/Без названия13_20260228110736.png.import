@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://cbud6xieuyof5"
 path.s3tc="res://.godot/imported/Без названия13_20260228110736.png-97a6c8b3d3cea37d80b5058aa4c528e6.s3tc.ctex"
+path.etc2="res://.godot/imported/Без названия13_20260228110736.png-97a6c8b3d3cea37d80b5058aa4c528e6.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://res/sprites/objects/heart/heart_on_summon/Без названия13_20260228110736.png"
-dest_files=["res://.godot/imported/Без названия13_20260228110736.png-97a6c8b3d3cea37d80b5058aa4c528e6.s3tc.ctex"]
+dest_files=["res://.godot/imported/Без названия13_20260228110736.png-97a6c8b3d3cea37d80b5058aa4c528e6.s3tc.ctex", "res://.godot/imported/Без названия13_20260228110736.png-97a6c8b3d3cea37d80b5058aa4c528e6.etc2.ctex"]
 
 [params]
 

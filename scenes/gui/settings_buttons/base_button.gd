@@ -1,4 +1,5 @@
 extends CheckButton
+class_name KeyButton
 
 @export var key: String
 

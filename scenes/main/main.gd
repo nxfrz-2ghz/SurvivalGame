@@ -8,6 +8,20 @@ var enet_peer := ENetMultiplayerPeer.new()
 func _ready() -> void:
 	if OS.get_name() == "Web":
 		G.text_message.add("HINT: web version cant support volumetic fog and multiplayer, for better expirience recommended play full downlowdable version")
+	
+	G.gui.game_menu.reload.connect(_on_reload)
+
+
+func _on_reload() -> void:
+	# 1. Останавливаем сетевое взаимодействие
+	multiplayer.multiplayer_peer = null
+	enet_peer.close()
+	
+	# 2. Обнуляем ссылки в глобальных синглтонах, чтобы не было "previously freed"
+	G.player = null
+	
+	# 3. Перезагружаем сцену
+	get_tree().reload_current_scene()
 
 
 func _input(_event: InputEvent) -> void:
@@ -54,6 +68,7 @@ func set_up_player(player: CharacterBody3D) -> void:
 	player.get_node("%InventoryController").update.connect(G.gui.hud.inventory.update)
 	player.get_node("%InventoryController").set_hotbar_slot.connect(G.gui.hud.inventory.set_hotbar_slot)
 	player.get_node("%InventoryController").set_item_in_arm.connect(G.gui.hud.choosed_item_display.on_choosed)
+	player.get_node("%InventoryController").set_item_in_left_arm.connect(G.gui.hud.inventory.set_left_arm_slot)
 	player.get_node("%Book").open_book.connect(G.gui.hud.inventory.hide)
 	player.get_node("%Book").close_book.connect(G.gui.hud.inventory.show)
 	player.get_node("%Book").open_book.connect(G.gui.hud.aim.hide)

@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dg3cbqcpg6hbc"
 path.s3tc="res://.godot/imported/furnace_t2_on.png-94058fdbf33e65323ac9852f0602dae0.s3tc.ctex"
+path.etc2="res://.godot/imported/furnace_t2_on.png-94058fdbf33e65323ac9852f0602dae0.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://res/sprites/objects/furnace_t2/furnace_t2_on.png"
-dest_files=["res://.godot/imported/furnace_t2_on.png-94058fdbf33e65323ac9852f0602dae0.s3tc.ctex"]
+dest_files=["res://.godot/imported/furnace_t2_on.png-94058fdbf33e65323ac9852f0602dae0.s3tc.ctex", "res://.godot/imported/furnace_t2_on.png-94058fdbf33e65323ac9852f0602dae0.etc2.ctex"]
 
 [params]
 

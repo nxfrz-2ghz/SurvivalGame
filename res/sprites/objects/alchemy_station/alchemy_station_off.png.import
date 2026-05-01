@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bl6i6b7wl6vli"
 path.s3tc="res://.godot/imported/alchemy_station_off.png-6321ce3f58489b95a31518972e0b3058.s3tc.ctex"
+path.etc2="res://.godot/imported/alchemy_station_off.png-6321ce3f58489b95a31518972e0b3058.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://res/sprites/objects/alchemy_station/alchemy_station_off.png"
-dest_files=["res://.godot/imported/alchemy_station_off.png-6321ce3f58489b95a31518972e0b3058.s3tc.ctex"]
+dest_files=["res://.godot/imported/alchemy_station_off.png-6321ce3f58489b95a31518972e0b3058.s3tc.ctex", "res://.godot/imported/alchemy_station_off.png-6321ce3f58489b95a31518972e0b3058.etc2.ctex"]
 
 [params]
 

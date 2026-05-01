@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://ca1p2ncs28w44"
 path.s3tc="res://.godot/imported/idle.png-fde314330473ba4971a7ce1a987b9556.s3tc.ctex"
+path.etc2="res://.godot/imported/idle.png-fde314330473ba4971a7ce1a987b9556.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://res/sprites/mobs/krab/front/idle.png"
-dest_files=["res://.godot/imported/idle.png-fde314330473ba4971a7ce1a987b9556.s3tc.ctex"]
+dest_files=["res://.godot/imported/idle.png-fde314330473ba4971a7ce1a987b9556.s3tc.ctex", "res://.godot/imported/idle.png-fde314330473ba4971a7ce1a987b9556.etc2.ctex"]
 
 [params]
 
