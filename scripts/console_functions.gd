@@ -97,7 +97,7 @@ func attack(dmg, node_name = "") -> void:
 	var node: Node3D = G.environment.get_node_or_null(NodePath(target_name))
 	if !node: return
 	var health: Node = node.get_node_or_null("HealthComponent")
-	if health: health.take_damage(float(dmg), true)
+	if health: health.take_damage(float(dmg), get_multiplayer_authority(), true)
 
 func weather(variant = "") -> void:
 	if variant == "":

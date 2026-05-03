@@ -3,10 +3,10 @@
 [ext_resource type="PackedScene" uid="uid://darxc13rlkwt7" path="res://scenes/objects/object.tscn" id="1_ep212"]
 [ext_resource type="Script" uid="uid://b71ecjck7lq17" path="res://scenes/objects/upgrade_table/upgrade_table.gd" id="2_0st2x"]
 [ext_resource type="Texture2D" uid="uid://b6337lp0p0uv4" path="res://res/sprites/objects/upgrade_table/upgrade_table.png" id="3_niaco"]
-[ext_resource type="Texture2D" uid="uid://c6xb3nrq7sqmp" path="res://res/sprites/objects/upgrade_table/upgrade_crystall0.png" id="4_7q54m"]
-[ext_resource type="Texture2D" uid="uid://cysjgvn0fvc6i" path="res://res/sprites/objects/upgrade_table/upgrade_crystall3.png" id="5_7kgeu"]
-[ext_resource type="Texture2D" uid="uid://yqfmoxv0qu54" path="res://res/sprites/objects/upgrade_table/upgrade_crystall2.png" id="6_hnen3"]
-[ext_resource type="Texture2D" uid="uid://c8tnx3y1guxjf" path="res://res/sprites/objects/upgrade_table/upgrade_crystall1.png" id="7_rojqk"]
+[ext_resource type="Texture2D" uid="uid://c6xb3nrq7sqmp" path="res://res/sprites/objects/upgrade_table/0.png" id="4_7q54m"]
+[ext_resource type="Texture2D" uid="uid://cysjgvn0fvc6i" path="res://res/sprites/objects/upgrade_table/1.png" id="5_7kgeu"]
+[ext_resource type="Texture2D" uid="uid://yqfmoxv0qu54" path="res://res/sprites/objects/upgrade_table/3.png" id="6_hnen3"]
+[ext_resource type="Texture2D" uid="uid://c8tnx3y1guxjf" path="res://res/sprites/objects/upgrade_table/2.png" id="7_rojqk"]
 [ext_resource type="Script" uid="uid://bhy8y2bjtem3r" path="res://scenes/objects/upgrade_table/crystall_sprite_3d.gd" id="8_niaco"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_niaco"]
@@ -23,10 +23,10 @@ animations = [{
 "texture": ExtResource("5_7kgeu")
 }, {
 "duration": 1.0,
-"texture": ExtResource("6_hnen3")
+"texture": ExtResource("7_rojqk")
 }, {
 "duration": 1.0,
-"texture": ExtResource("7_rojqk")
+"texture": ExtResource("6_hnen3")
 }],
 "loop": true,
 "name": &"default",
@@ -62,5 +62,5 @@ double_sided = false
 alpha_cut = 1
 sprite_frames = SubResource("SpriteFrames_qyche")
 autoplay = "default"
-frame_progress = 0.68795085
+frame_progress = 0.8975325
 script = ExtResource("8_niaco")

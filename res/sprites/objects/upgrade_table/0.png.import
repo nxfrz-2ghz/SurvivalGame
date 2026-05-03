@@ -2,9 +2,9 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cysjgvn0fvc6i"
-path.s3tc="res://.godot/imported/upgrade_crystall3.png-7927ad103f78c80510f2185f35f774a6.s3tc.ctex"
-path.etc2="res://.godot/imported/upgrade_crystall3.png-7927ad103f78c80510f2185f35f774a6.etc2.ctex"
+uid="uid://c6xb3nrq7sqmp"
+path.s3tc="res://.godot/imported/0.png-9b3d74b661739207dc883214a503f706.s3tc.ctex"
+path.etc2="res://.godot/imported/0.png-9b3d74b661739207dc883214a503f706.etc2.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
@@ -12,8 +12,8 @@ metadata={
 
 [deps]
 
-source_file="res://res/sprites/objects/upgrade_table/upgrade_crystall3.png"
-dest_files=["res://.godot/imported/upgrade_crystall3.png-7927ad103f78c80510f2185f35f774a6.s3tc.ctex", "res://.godot/imported/upgrade_crystall3.png-7927ad103f78c80510f2185f35f774a6.etc2.ctex"]
+source_file="res://res/sprites/objects/upgrade_table/0.png"
+dest_files=["res://.godot/imported/0.png-9b3d74b661739207dc883214a503f706.s3tc.ctex", "res://.godot/imported/0.png-9b3d74b661739207dc883214a503f706.etc2.ctex"]
 
 [params]
 

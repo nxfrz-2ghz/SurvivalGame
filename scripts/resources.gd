@@ -135,6 +135,7 @@ const exchangeable_items := {
 	},
 	"alchemy_station": {
 		"log": {"amount": 3, "output": "coal", "speed": 5},
+		"blood": {"amount": 5, "output": "raw_meat", "speed": 8},
 	},
 }
 
@@ -461,7 +462,7 @@ const items := {
 			"stone":2,
 		},
 		"durability": 50,
-		"on_crack_drop_items": {"stone":2,},
+		"on_crack_drop_items": {"stone":1,},
 		"attack_speed": 1.0,
 		"damage": 2.0,
 		"damage_types": {
@@ -477,7 +478,7 @@ const items := {
 			"stone":3,
 		},
 		"durability": 30,
-		"on_crack_drop_items": {"stone":2,},
+		"on_crack_drop_items": {"stone":1,},
 		"attack_speed": 1.0,
 		"damage": 2.0,
 		"damage_types": {
@@ -634,6 +635,7 @@ const items := {
 		"recipe": {
 			"iron_ingot": 3,
 		},
+		"attack_speed": 0.6,
 		"on_use_drop": {"blood": 1},
 		"on_use_damage": 2.0,
 		"durability": 200,

@@ -6,6 +6,7 @@ extends RigidBody3D
 @export var damage := 0.0
 @export var damage_types := {"melee": 0.1}
 @export var push_velocity := 0.0
+@export var remote_peer := 0
 @export var item_name: String
 @export var texture_path: String
 @export var despawn_chance: float
@@ -37,7 +38,7 @@ func _on_body_entered(body: Node) -> void:
 	if not is_multiplayer_authority(): return
 	
 	if body.has_node("HealthComponent"):
-		body.health.take_damage(damage, false, damage_types)
+		body.health.take_damage(damage, false, remote_peer, damage_types)
 		if body is CharacterBody3D:
 			body.apply_push(self.global_transform.basis.z.normalized() + Vector3.UP/2, push_velocity)
 		

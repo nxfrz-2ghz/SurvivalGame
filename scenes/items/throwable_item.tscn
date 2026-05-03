@@ -39,15 +39,6 @@ can_sleep = false
 contact_monitor = true
 max_contacts_reported = 3
 script = ExtResource("1_moyqu")
-damage = null
-damage_types = null
-push_velocity = null
-item_name = null
-texture_path = null
-despawn_chance = null
-throw_power = null
-billboard = null
-explose = null
 
 [node name="Sprite3D" type="Sprite3D" parent="." unique_id=1619062091]
 transform = Transform3D(-3.5365304e-06, -0.00013257872, 0.39999992, -0.3998577, 0.010666183, 0, -0.010666183, -0.3998577, -0.0001326259, 0, 0, 0)

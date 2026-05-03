@@ -539,28 +539,50 @@ func _generate_loot_chests() -> void:
 func _generate_structures() -> void:
 	var offset := (world_size - 1) * spacing / 2.0
 	var rng = RandomNumberGenerator.new()
-	rng.seed = int(world_seed+3245637)
+	rng.seed = int(world_seed + 3245637)
 	
+	# 1. Стандартный цикл генерации по сетке
 	var gx := 0.0
-	var gz := 0.0
 	while gx < world_size:
-		gz = 0
+		var gz := 0.0
 		while gz < world_size:
 			var world_x := gx * spacing - offset
 			var world_z := gz * spacing - offset
-			var structure: String = R.structures.keys().pick_random()
-			if rng.randf() > R.structures[structure]["chance"]:
-				gz += STRUCTURES_SPAWN_STEP
-				continue
-			var obj_scene: PackedScene = R.structures[R.structures.keys().pick_random()]["scene"]
-			if obj_scene:
-				var instance := obj_scene.instantiate()
-				var spawn_y := _get_height(world_x, world_z)
-				instance.position = Vector3(world_x, spawn_y, world_z)
-				G.environment.add_child(instance, true)
+			
+			var structure_key: String = R.structures.keys().pick_random()
+			
+			if rng.randf() <= R.structures[structure_key]["chance"]:
+				_spawn_structure(structure_key, world_x, world_z)
 			
 			gz += STRUCTURES_SPAWN_STEP
 		gx += STRUCTURES_SPAWN_STEP
+
+	# 2. ПРОВЕРКА ДЛЯ КАЖДОЙ СТРУКТУРЫ ИЗ СПИСКА
+	var existing_children = G.environment.get_children()
+	
+	for s_name in R.structures.keys():
+		var found = false
+		
+		# Ищем, есть ли в мире хотя бы один объект с таким nname
+		for child in existing_children:
+			if "nname" in child and child.nname == s_name:
+				found = true
+				break
+		
+		# Если структура данного типа не появилась — спавним её принудительно
+		if not found:
+			var rand_x := rng.randf_range(0, world_size) * spacing - offset
+			var rand_z := rng.randf_range(0, world_size) * spacing - offset
+			_spawn_structure(s_name, rand_x, rand_z)
+
+# Вспомогательная функция для спавна
+func _spawn_structure(key: String, x: float, z: float) -> void:
+	var obj_scene: PackedScene = R.structures[key]["scene"]
+	if obj_scene:
+		var instance := obj_scene.instantiate()
+		var spawn_y := _get_height(x, z)
+		instance.position = Vector3(x, spawn_y, z)
+		G.environment.add_child(instance, true)
 
 func _generate_items() -> void:
 	G.screen_text.text("Spawning items...")

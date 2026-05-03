@@ -6,6 +6,7 @@ extends CharacterBody3D
 @onready var interact_ray := %InteractRay
 @onready var ground_ray := $Head/GroundRay
 @onready var weapon := %Weapon
+@onready var shoot_controller := $Head/Weapon/ShootController
 @onready var arm_anim := %ArmAnim
 @onready var health := %HealthComponent
 @onready var hunger := $HungerController
@@ -54,6 +55,7 @@ func _ready() -> void:
 		fear.queue_free()
 		temp.queue_free()
 		light_controller.queue_free()
+		shoot_controller.queue_free()
 	else:
 		# Переключаем себя на слой, который не видит камера
 		sprite.set_layer_mask_value(1, false)
@@ -103,7 +105,7 @@ func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("f1"):
 		arms.visible = !arms.visible
 	
-	if Input.is_action_just_pressed("f2") and !weapon.weapon_anim.is_playing():
+	if Input.is_action_just_pressed("f2") and is_anim_stopped():
 		if camera.position == Vector3.ZERO:
 			weapon.weapon_anim.play("third_view_move_cam")
 			sprite.set_layer_mask_value(1, true)
@@ -126,7 +128,7 @@ func _input(event: InputEvent) -> void:
 	var current_slot_idx: int = inv.current_item
 	var current_slot_data = inv.inventory[current_slot_idx]
 	
-	if Input.is_action_just_pressed("lmb") and !weapon.weapon_anim.is_playing():
+	if Input.is_action_just_pressed("lmb") and is_anim_stopped():
 		if weapon.actions.crafting_mode:
 			weapon.actions.craft()
 		else:
@@ -226,10 +228,10 @@ func _input(event: InputEvent) -> void:
 			
 			if current_slot_data != null:
 				var item_in_arm = current_slot_data["name"]
-				var amount = current_slot_data["amount"]
+				#var amount = current_slot_data["amount"]
 				
 				# Использование предмета по коллайдеру на пкм
-				if !weapon.weapon_anim.is_playing():
+				if is_anim_stopped():
 					# Смена состояния постройки
 					if R.items[item_in_arm].has("change_buildings"):
 						if R.items[item_in_arm]["change_buildings"] == "state":
@@ -262,7 +264,7 @@ func _input(event: InputEvent) -> void:
 			var item_name = current_slot_data["name"]
 			
 			# Еда
-			if R.items[item_name].get("nutrition") and !weapon.weapon_anim.is_playing():
+			if R.items[item_name].get("nutrition") and is_anim_stopped():
 				weapon.weapon_anim.speed_scale = weapon.attack_speed + float(weapon.speed_rings)/5
 				weapon.weapon_anim.play("use")
 				hunger.eat(R.items[item_name]["nutrition"])
@@ -272,7 +274,7 @@ func _input(event: InputEvent) -> void:
 				actions_audio_player.audio_play(R.sounds["actions"]["eating"].resource_path)
 			
 			# Лечение
-			if R.items[item_name].get("heal") and !weapon.weapon_anim.is_playing():
+			if R.items[item_name].get("heal") and is_anim_stopped():
 				weapon.weapon_anim.speed_scale = weapon.attack_speed + float(weapon.speed_rings)/5
 				weapon.weapon_anim.play("use")
 				health.heal(R.items[item_name]["heal"])
@@ -283,11 +285,6 @@ func _input(event: InputEvent) -> void:
 			elif R.items[item_name].get("is_building"):
 				weapon.actions.build(item_name, weapon.build.area.global_position, weapon.build.area.global_rotation)
 				inv.drop_item(current_slot_idx, 1)
-			
-			# Стрельба
-			elif R.items[item_name].get("throw_power") and !weapon.weapon_anim.is_playing():
-				weapon.weapon_anim.speed_scale = weapon.attack_speed + float(weapon.speed_rings)/5
-				weapon.weapon_anim.play("aim")
 			
 			# Получение предмета при использовании
 			if R.items[item_name].has("on_use_drop"):
@@ -304,21 +301,9 @@ func _input(event: InputEvent) -> void:
 				weapon.weapon_anim.speed_scale = weapon.attack_speed + float(weapon.speed_rings)/5
 				weapon.weapon_anim.play("use")
 	
-	if Input.is_action_just_released("rmb") and weapon.weapon_anim.is_playing() and current_slot_data != null and R.items[current_slot_data["name"]].get("throw_power"):
-		# Если прицеливания еще не закончилась то отмена
-		if weapon.weapon_anim.current_animation == "aim":
-			weapon.weapon_anim.speed_scale = -1.5
-		# Если же анимация готовности к выстрелу то выстрел
-		else:
-			var current_name: String = current_slot_data["name"]
-			if R.items[current_name].get("texture") != null:
-				weapon.actions.shoot(weapon.damage, weapon.damage_types, weapon.push_velocity, current_name)
-				inv.drop_item(inv.current_item, 1)
-			weapon.weapon_anim.play("throw")
-	
 	if Input.is_action_pressed("shift"): return
 	
-	if Input.is_action_just_pressed("pickup") and !weapon.weapon_anim.is_playing():
+	if Input.is_action_just_pressed("pickup") and is_anim_stopped():
 		weapon.weapon_anim.play("pickup")
 	
 	if Input.is_action_just_pressed("drop"):
@@ -327,7 +312,7 @@ func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("craft"):
 		weapon.actions.crafting_mode = !weapon.actions.crafting_mode
 	
-	if Input.is_action_just_pressed("open_book") and !weapon.weapon_anim.is_playing():
+	if Input.is_action_just_pressed("open_book") and is_anim_stopped():
 		book.open_book.emit()
 
 
@@ -364,23 +349,29 @@ func _on_health_component_died() -> void:
 		if item != null and item.has("amount"):
 			# Выбрасываем предмет столько раз, сколько указано в amount
 			for k in range(item["amount"]):
-					weapon.actions.drop(slot_idx)
-	
-	progress_controller.spend_exp_by_lvl(progress_controller.lvl/1.6)
+				if G.upgrade_manager.unlocked_upgrades["UPGR_TBL-1-2"] and randf() >= 0.5: continue
+				weapon.actions.drop(slot_idx)
 	
 	self.position = Vector3(0, 300, 0)
-	health.heal(99999999.9)
-	hunger.eat(99999999)
-	fear.current_fear = 0
-	temp.temp = 0.0
+	health.heal(3.0)
+	hunger.eat(10)
+	fear.current_fear = floori(fear.current_fear*0.75)
+	temp.temp = floori(temp.temp*0.75)
 
 
-func respawn() -> void:
-	self.position = Vector3(0, 100, 0)
-	health.heal(99999999.9)
-	hunger.eat(99999999)
-	fear.current_fear = 0
-	temp.temp = 0.0
+func respawn(after_death := true, spawn_pos := Vector3(0, 100, 0)) -> void:
+	if after_death:
+		var on_death_lvl_spend_modifier := 0.8
+		if G.upgrade_manager.unlocked_upgrades["UPGR_TBL-0-2"]:
+			on_death_lvl_spend_modifier /= 2
+		progress_controller.spend_exp_by_lvl(progress_controller.lvl*on_death_lvl_spend_modifier)
+		
+		health.heal(99999999.9)
+		hunger.eat(99999999)
+		fear.current_fear = 0
+		temp.temp = 0.0
+	
+	self.position = spawn_pos
 	camera.current = true
 	camera.fov = 150.0
 
@@ -414,6 +405,10 @@ func is_underwater() -> bool:
 	return position.y < G.world.WATER_LEVEL
 
 
+func is_anim_stopped() -> bool:
+	return !weapon.weapon_anim.is_playing() and !shoot_controller.anim_player.is_playing()
+
+
 func moving(delta: float) -> void:
 	
 	var gravity := get_gravity()
@@ -430,7 +425,7 @@ func moving(delta: float) -> void:
 		velocity += gravity * delta
 	
 	if Input.is_action_pressed("space") and (is_on_floor() or is_underwater()):
-		velocity.y = JUMP_VELOCITY
+		velocity.y = JUMP_VELOCITY + JUMP_VELOCITY/10 * G.upgrade_manager.unlocked_upgrades["UPGR_TBL-1-1"]
 	
 	var input_dir := Input.get_vector("left", "right", "up", "down")
 	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
@@ -623,8 +618,11 @@ func load_character() -> void:
 		progress_controller.lvl = data.get("current lvl", 0)
 		progress_controller.unlocked_achievements = data.get("unlocked_achievements", [])
 		progress_controller.completed_achievements = data.get("completed_achievements", [])
-		G.upgrade_manager.unlocked_lvls = data.get("unlocked_upgrade_lvls", [null, null, null, null, null])
-		G.upgrade_manager.unlocked_upgrades = data.get("unlocked_upgrades", {})
+		
+		if data.get("unlocked_upgrade_lvls"):
+			G.upgrade_manager.unlocked_lvls = data.get("unlocked_upgrade_lvls")
+		if data.get("unlocked_upgrades"):
+			G.upgrade_manager.unlocked_upgrades = data.get("unlocked_upgrades")
 		
 		for item in data["inventory"].values():
 			if item:

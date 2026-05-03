@@ -18,7 +18,7 @@ func get_damage() -> float:
 func _on_body_entered(body: Node) -> void:
 	var node_health := body.get_node_or_null("HealthComponent")
 	if node_health:
-		node_health.take_damage(get_damage(), false, damage_type)
+		node_health.take_damage(get_damage(), false, 0, damage_type)
 		
 	var died_particles := R.particles["explose"].instantiate()
 	if despawn_sound_name:

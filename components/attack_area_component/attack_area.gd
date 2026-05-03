@@ -8,4 +8,4 @@ func attack() -> void:
 	var bodies := get_overlapping_bodies()
 	
 	for body in bodies:
-		S.attack(body, self, damage, false, push_velocity, damage_types)
+		S.attack(body, self, damage, false, 0, push_velocity, damage_types)

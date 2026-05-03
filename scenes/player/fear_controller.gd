@@ -43,7 +43,7 @@ func apply_change(node: Node) -> void:
 
 func apply_eat(eat_name: String) -> void:
 	if R.items[eat_name].has("fear_affect"):
-		current_fear -= R.items[eat_name]["fear_affect"] * 10
+		current_fear -= R.items[eat_name]["fear_affect"] * 10 + ceili(G.upgrade_manager.unlocked_upgrades["UPGR_TBL-2-1"] / 2)
 
 func _on_timer_timeout() -> void:
 	if S.state_machine != "game": return

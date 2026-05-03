@@ -5,7 +5,7 @@ signal attack
 @onready var weapon_anim := %WeaponAnim
 @onready var actions := $Actions
 @onready var build := $BuildingController
-@onready var throw_sprite := $ThrowSprite
+@onready var throw_sprite := $ShootController/ThrowSprite
 
 @onready var light2d := $Arms/ShakingContainer/SwayContainer/Sprites/Item/FireParticles2D/PointLight2D
 @onready var light3d := $OmniLight3D
@@ -93,7 +93,7 @@ func regen() -> void:
 func use_item_durability() -> void:
 	check_corrosion_item()
 	if current_name != null and R.items[current_name].has("durability"):
-		if randi_range(0, R.items[current_name]["durability"] + (R.items[current_name]["durability"] * armor_rings / 3)) == 0:
+		if randi_range(0, R.items[current_name]["durability"] + (R.items[current_name]["durability"] * armor_rings / 3) + G.upgrade_manager.unlocked_upgrades["UPGR_TBL-1-0"]) == 0:
 			var item_name := current_name # Сохранеяем имя предмета, чтобы после удаления сигналы не обновили его на ""
 			actions.inv.drop_item(actions.inv.current_item)
 			

@@ -23,6 +23,11 @@ func _ready() -> void:
 	current_health = max_health
 
 
+@rpc("any_peer", "call_local")
+func vampirism(total_health: float) -> void:
+	heal(total_health/30 * G.upgrade_manager.unlocked_upgrades["UPGR_TBL-2-0"])
+
+
 func heal(health: float) -> void:
 	last_health = current_health
 	
@@ -33,7 +38,7 @@ func heal(health: float) -> void:
 
 
 @rpc("any_peer", "call_local")
-func take_damage(base_damage: float, ignore_armor := false, incoming_types: Dictionary = {"melee": 1.0}) -> void:
+func take_damage(base_damage: float, ignore_armor := false, remote_peer := 0, incoming_types: Dictionary = {"melee": 1.0}) -> void:
 	last_health = current_health
 	
 	var total_damage = 0.0
@@ -55,9 +60,16 @@ func take_damage(base_damage: float, ignore_armor := false, incoming_types: Dict
 		changed.emit(current_health, max_health, last_health)
 		on_damage.emit()
 	
-	# Ачивка ваншота, если хп >= 10
-	if last_health == max_health and last_health >= S.dmg_to_get_ach_ultrakill and current_health <= 0.0:
-		G.player.progress_controller.add_achievement("ACH_7")
+	# Если это игрок а не моб
+	if remote_peer != 0:
+		
+		# Ачивка ваншота, если хп >= 10
+		if last_health == max_health and last_health >= S.dmg_to_get_ach_ultrakill and current_health <= 0.0:
+			G.player.progress_controller.add_achievement.rpc_id(remote_peer, "ACH_7")
+		
+		# Возвращение оповещения о нанесении урона
+		if total_damage > 0.0:
+			G.player.health.vampirism.rpc_id(remote_peer, total_damage)
 	
 	if current_health <= 0:
 		died.emit()

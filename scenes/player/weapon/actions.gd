@@ -14,7 +14,7 @@ func attack(is_splash: bool, dmg: float, damage_types: Dictionary, push_velocity
 
 
 func shoot(dmg: float, damage_types: Dictionary, push_velocity: float, item_name: String) -> void:
-	server_shoot.rpc(dmg, damage_types, push_velocity, item_name, multiplayer.get_unique_id())
+	server_shoot.rpc(dmg, damage_types, get_multiplayer_authority(), push_velocity, item_name, multiplayer.get_unique_id())
 
 
 func pickup() -> void:
@@ -55,14 +55,14 @@ func server_attack(is_splash: bool, dmg: float, damage_types: Dictionary, push_v
 		for body in actions_node.get_overlapping_bodies():
 			# Отключение урона по себе от самого себя
 			if body.name == str(peer_id): continue
-			S.attack(body, actions_node, dmg, false, push_velocity, damage_types)
+			S.attack(body, actions_node, dmg, false, get_multiplayer_authority(), push_velocity, damage_types)
 	else:
 		if player.interact_ray.is_colliding():
-			S.attack(G.player.interact_ray.get_collider(), actions_node, dmg, false, push_velocity, damage_types)
+			S.attack(G.player.interact_ray.get_collider(), actions_node, dmg, false, get_multiplayer_authority(),  push_velocity, damage_types)
 
 
 @rpc("authority", "call_local")
-func server_shoot(dmg: float, damage_types: Dictionary, push_velocity: float, item_name: String, peer_id: int) -> void:
+func server_shoot(dmg: float, damage_types: Dictionary, remote_peer: int, push_velocity: float, item_name: String, peer_id: int) -> void:
 	if not multiplayer.is_server(): return
 	
 	var player = G.environment.get_node(str(peer_id))
@@ -75,6 +75,7 @@ func server_shoot(dmg: float, damage_types: Dictionary, push_velocity: float, it
 	throwable_item.texture_path = R.items[item_name]["texture"].resource_path
 	throwable_item.despawn_chance = R.items[item_name]["throw_drop_chance"]
 	throwable_item.damage = dmg
+	throwable_item.remote_peer = remote_peer
 	throwable_item.damage_types = damage_types
 	throwable_item.push_velocity = push_velocity
 	throwable_item.throw_power = R.items[item_name]["throw_power"]

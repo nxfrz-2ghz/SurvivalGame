@@ -69,6 +69,7 @@ func show_achievement(ach_name: String) -> bool:
 	else:
 		return false
 
+@rpc("any_peer", "call_local")
 func add_achievement(ach_name: String) -> void:
 	if completed_achievements.has(ach_name): return
 	unlocked_achievements.append(ach_name)

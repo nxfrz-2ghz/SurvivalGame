@@ -2,7 +2,8 @@ extends Node
 
 signal changed(current: float, maximum: float)
 
-var MAX_ENERGY: int = 1000
+const MAX_ENERGY: int = 1000
+const WASTE_ENERGY_SPEED: int = 1
 var energy := MAX_ENERGY
 
 func is_moving() -> bool:
@@ -18,8 +19,12 @@ func _physics_process(_delta: float) -> void:
 	if not is_multiplayer_authority(): return
 	if S.state_machine != "game": return
 	
+	var wes := WASTE_ENERGY_SPEED
+	var stamina_upgrs: int = G.upgrade_manager.unlocked_upgrades["UPGR_TBL-0-1"]
+	wes -= wes/20 * stamina_upgrs
+	
 	if Input.is_action_pressed("shift") and is_moving():
-		energy -= 5
+		energy -= 5 * wes
 	else:
 		if is_moving():
 			energy += 1
