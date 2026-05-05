@@ -1,5 +1,5 @@
-extends Button
-class_name id_button
+extends SoundButton
+class_name IDButton
 
 signal ppressed(page_name: String)
 

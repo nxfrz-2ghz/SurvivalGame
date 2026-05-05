@@ -10,7 +10,7 @@ var current_page: Node
 
 
 func spawn_button(text: String) -> void:
-	var btn := id_button.new()
+	var btn := IDButton.new()
 	btn.text = tr(text)
 	btn.id = text
 	current_page.add_child(btn)

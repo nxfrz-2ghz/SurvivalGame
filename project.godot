@@ -23,13 +23,13 @@ config/icon="res://icon.svg"
 
 G="*res://scripts/service_locator.gd"
 R="*res://scripts/resources.gd"
-E="*uid://dqmiwo5v5st18"
 DiskControl="*uid://cdnannsrse4u4"
 Console="*uid://ouiu5xh1cs8n"
 CursorController="uid://dg5tm667gptn4"
 ConsoleFunctions="uid://c0r8gqg3mbhte"
 NodeOptimizer="*uid://dg38yrvl3c6ff"
 S="*uid://c7r16comth4ps"
+ButtonSound="*uid://05dkbxy07cta"
 
 [display]
 

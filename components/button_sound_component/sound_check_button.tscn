@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://cya7nd8d25dnu"]
+
+[ext_resource type="Script" uid="uid://d52egraf1ql0" path="res://components/button_sound_component/sound_check_button.gd" id="1_84rnu"]
+
+[node name="SoundCheckButton" type="CheckButton" unique_id=702326169]
+offset_right = 44.0
+offset_bottom = 24.0
+script = ExtResource("1_84rnu")

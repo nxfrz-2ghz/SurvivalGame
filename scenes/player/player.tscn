@@ -5,7 +5,6 @@
 [ext_resource type="Script" uid="uid://dknrk65skptje" path="res://scripts/base_audio_player_rpc.gd" id="2_hyqqp"]
 [ext_resource type="PackedScene" uid="uid://7a46ke42vayn" path="res://scenes/player/book/book.tscn" id="2_rw8a5"]
 [ext_resource type="Script" uid="uid://o5ox0n51dvy3" path="res://scenes/player/head.gd" id="2_rxibo"]
-[ext_resource type="Script" uid="uid://d15gnbwci6yhk" path="res://scenes/player/camera.gd" id="3_244u8"]
 [ext_resource type="Script" uid="uid://bft4xupj4n3bk" path="res://scenes/player/take_damage_audio.gd" id="3_ds1xl"]
 [ext_resource type="Script" uid="uid://dhu0i8rhtp7a3" path="res://scenes/player/hunger_controller.gd" id="3_j4nxn"]
 [ext_resource type="Script" uid="uid://b52ief0l2f0vj" path="res://scripts/inventory_controller.gd" id="3_uf5tr"]
@@ -1382,7 +1381,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68520355, 0)
 script = ExtResource("2_rxibo")
 
 [node name="Camera" type="Node3D" parent="Head" unique_id=1053448815]
-script = ExtResource("3_244u8")
 
 [node name="Camera3D" type="Camera3D" parent="Head/Camera" unique_id=585511788]
 cull_mask = 1048543

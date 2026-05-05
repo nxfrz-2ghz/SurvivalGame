@@ -16,7 +16,7 @@ extends Node
 }
 
 const unlock_cost := {
-	"raw_berries": 10,
+	"raw_berry": 10,
 	"stone": 30,
 	"copper_block": 8,
 	"blood": 15,
@@ -94,7 +94,7 @@ func show_upgrades_on_lvls() -> void:
 	for lvl in range(0, lvls_amount):
 		if unlocked_lvls[lvl]: # if unlocked
 			for upgr in upgrades[lvl].keys():
-				var btn := id_button.new()
+				var btn := IDButton.new()
 				btn.text = tr(upgr) + " (" + str(int(unlocked_upgrades.get(upgr, 0))) + "/" + str(int(upgrades[lvl][upgr])) + ")"
 				btn.id = upgr
 				btn.ppressed.connect(on_id_button_pressed)
@@ -120,6 +120,9 @@ func on_id_button_pressed(id: String) -> void:
 		var item_name: String = unlock_cost.keys()[lvl]
 		var item_amount: int = unlock_cost.values()[lvl]
 		var inv: Node = G.player.inv
+		
+		# Разблокировка уровней только по порядку
+		if lvl > 0 and unlocked_lvls[lvl-1] == false: return
 		
 		if inv.get_item_amount(item_name) >= item_amount:
 			lvls["unlock_button"][lvl].text = "🔓 UNLOCKED!"

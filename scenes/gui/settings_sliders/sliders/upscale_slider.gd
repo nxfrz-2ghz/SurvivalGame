@@ -1,4 +1,4 @@
-extends "res://scenes/gui/settings_sliders/base_slider.gd"
+extends "res://scenes/gui/settings_sliders/key_slider.gd"
 
 func apply(val: float) -> void:
 	if val == 0:

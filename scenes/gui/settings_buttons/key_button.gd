@@ -1,9 +1,10 @@
-extends CheckButton
+extends SoundCheckButton
 class_name KeyButton
 
 @export var key: String
 
 func _ready() -> void:
+	super()
 	toggled.connect(_on_toggled)
 	if DiskControl.has(key):
 		var val = DiskControl.take(key)

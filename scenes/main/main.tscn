@@ -30,12 +30,13 @@
 [ext_resource type="Script" uid="uid://1edbclpx56bk" path="res://scenes/gui/background.gd" id="20_tbnf8"]
 [ext_resource type="Script" uid="uid://dytq3mhb6tscq" path="res://scenes/gui/settings_buttons/buttons/fullscreen_button.gd" id="22_37hlw"]
 [ext_resource type="Script" uid="uid://deo4mus5ovkdy" path="res://scenes/gui/settings_buttons/buttons/vsync_button.gd" id="23_6llfj"]
-[ext_resource type="Script" uid="uid://dhmt4xs0ug4pa" path="res://scenes/gui/setting_lines/base_line.gd" id="24_62atk"]
+[ext_resource type="Script" uid="uid://dhmt4xs0ug4pa" path="res://scenes/gui/setting_lines/key_line.gd" id="24_62atk"]
 [ext_resource type="Script" uid="uid://blu7tqmrvrtv4" path="res://scenes/gui/setting_lines/line_edits/player_line_edit.gd" id="24_i7in8"]
-[ext_resource type="Script" uid="uid://2tjf6mas0khi" path="res://scenes/gui/settings_buttons/base_button.gd" id="25_7nlll"]
+[ext_resource type="Script" uid="uid://2tjf6mas0khi" path="res://scenes/gui/settings_buttons/key_button.gd" id="25_7nlll"]
 [ext_resource type="Script" uid="uid://dddkx60gqd0pf" path="res://scenes/gui/load_chooser.gd" id="25_ii537"]
 [ext_resource type="Script" uid="uid://c4hd2l8yalwss" path="res://scenes/gui/delete_world_button.gd" id="26_rofvo"]
 [ext_resource type="Script" uid="uid://coxg27urrssnb" path="res://scenes/gui/settings_buttons/buttons/lang_button.gd" id="27_tbnf8"]
+[ext_resource type="Script" uid="uid://dsw0qxosmpdy7" path="res://components/button_sound_component/sound_button.gd" id="28_qjyke"]
 [ext_resource type="Script" uid="uid://c27tog14f3spw" path="res://scenes/gui/settings_sliders/sliders/volume_slider.gd" id="30_gohbf"]
 [ext_resource type="Script" uid="uid://dgmy8kx2r10fi" path="res://scenes/gui/settings_buttons/buttons/shadows_button.gd" id="33_1k3ck"]
 [ext_resource type="Script" uid="uid://cmhic80ucvwxl" path="res://scenes/gui/settings_buttons/buttons/fog_button.gd" id="35_5nwjq"]
@@ -952,9 +953,11 @@ text = "LBL_WORLD_GENERATION_KEY"
 layout_mode = 2
 placeholder_text = "PLC_SKIP_FOR_RAND"
 
-[node name="CreateButton" type="Button" parent="GUI/MainMenu/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1630802734]
+[node name="CreateButton" type="Button" parent="GUI/MainMenu/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=582170580]
 layout_mode = 2
 text = "BTN_CREATE"
+script = ExtResource("28_qjyke")
+metadata/_custom_type_script = "uid://dsw0qxosmpdy7"
 
 [node name="Load" type="Label" parent="GUI/MainMenu/VBoxContainer" unique_id=1056547938]
 layout_mode = 2
@@ -987,9 +990,11 @@ layout_mode = 2
 text = "BTN_DEL"
 script = ExtResource("26_rofvo")
 
-[node name="LoadButton" type="Button" parent="GUI/MainMenu/VBoxContainer/PanelContainer2/MarginContainer/VBoxContainer" unique_id=665671850]
+[node name="LoadButton" type="Button" parent="GUI/MainMenu/VBoxContainer/PanelContainer2/MarginContainer/VBoxContainer" unique_id=1749027251]
 layout_mode = 2
 text = "BTN_LOAD"
+script = ExtResource("28_qjyke")
+metadata/_custom_type_script = "uid://dsw0qxosmpdy7"
 
 [node name="Join" type="Label" parent="GUI/MainMenu/VBoxContainer" unique_id=183064634]
 layout_mode = 2
@@ -1015,9 +1020,11 @@ alignment = 1
 script = ExtResource("24_62atk")
 key = "join_ip_addres"
 
-[node name="JoinButton" type="Button" parent="GUI/MainMenu/VBoxContainer/PanelContainer3/MarginContainer/VBoxContainer" unique_id=776928020]
+[node name="JoinButton" type="Button" parent="GUI/MainMenu/VBoxContainer/PanelContainer3/MarginContainer/VBoxContainer" unique_id=708122764]
 layout_mode = 2
 text = "BTN_JOIN"
+script = ExtResource("28_qjyke")
+metadata/_custom_type_script = "uid://dsw0qxosmpdy7"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="GUI/MainMenu" unique_id=1182752835]
 layout_mode = 2
@@ -1222,19 +1229,21 @@ layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
 
-[node name="RestartButton" type="Button" parent="GUI/MainMenu/SystemButtons" unique_id=399177720]
+[node name="RestartButton" type="Button" parent="GUI/MainMenu/SystemButtons" unique_id=1093292407]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
 text = "BTN_RESTART_GAME"
 script = ExtResource("36_6g32y")
+metadata/_custom_type_script = "uid://dsw0qxosmpdy7"
 
-[node name="LeaveButton" type="Button" parent="GUI/MainMenu/SystemButtons" unique_id=1336085257]
+[node name="LeaveButton" type="Button" parent="GUI/MainMenu/SystemButtons" unique_id=2143048882]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
 text = "BTN_LEAVE_GAME"
 script = ExtResource("11_blune")
+metadata/_custom_type_script = "uid://dsw0qxosmpdy7"
 
 [node name="DebugMenu" type="PanelContainer" parent="GUI/MainMenu" unique_id=1340887986]
 visible = false
@@ -1481,21 +1490,29 @@ value = 1.0
 script = ExtResource("30_gohbf")
 key = "sound_volume_slider"
 
-[node name="Continue" type="Button" parent="GUI/GameMenu/MarginContainer/VBoxContainer" unique_id=1708194090]
+[node name="Continue" type="Button" parent="GUI/GameMenu/MarginContainer/VBoxContainer" unique_id=362439236]
 layout_mode = 2
 text = "LBL_CONTINUE"
+script = ExtResource("28_qjyke")
+metadata/_custom_type_script = "uid://dsw0qxosmpdy7"
 
-[node name="Save" type="Button" parent="GUI/GameMenu/MarginContainer/VBoxContainer" unique_id=34751071]
+[node name="Save" type="Button" parent="GUI/GameMenu/MarginContainer/VBoxContainer" unique_id=799868619]
 layout_mode = 2
 text = "LBL_SAVE_WORLD"
+script = ExtResource("28_qjyke")
+metadata/_custom_type_script = "uid://dsw0qxosmpdy7"
 
-[node name="ExitWithoutSave" type="Button" parent="GUI/GameMenu/MarginContainer/VBoxContainer" unique_id=2076947994]
+[node name="ExitWithoutSave" type="Button" parent="GUI/GameMenu/MarginContainer/VBoxContainer" unique_id=827278259]
 layout_mode = 2
 text = "LBL_EXIT_WITHOUT_SAVE"
+script = ExtResource("28_qjyke")
+metadata/_custom_type_script = "uid://dsw0qxosmpdy7"
 
-[node name="Exit" type="Button" parent="GUI/GameMenu/MarginContainer/VBoxContainer" unique_id=1729223167]
+[node name="Exit" type="Button" parent="GUI/GameMenu/MarginContainer/VBoxContainer" unique_id=248043249]
 layout_mode = 2
 text = "LBL_SAVE_EXIT"
+script = ExtResource("28_qjyke")
+metadata/_custom_type_script = "uid://dsw0qxosmpdy7"
 
 [node name="UpgradeMenu" type="PanelContainer" parent="GUI" unique_id=916142742]
 visible = false

@@ -1,4 +1,4 @@
-extends Button
+extends SoundButton
 
 func _on_pressed() -> void:
 	if G.gui.main_menu.world_chooser.text != "":

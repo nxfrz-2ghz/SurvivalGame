@@ -1,4 +1,4 @@
-extends "res://scenes/gui/settings_buttons/base_button.gd"
+extends "res://scenes/gui/settings_buttons/key_button.gd"
 
 func _ready() -> void:
 	toggled.connect(_on_toggled)

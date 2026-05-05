@@ -49,6 +49,7 @@ func _ready() -> void:
 		label3d.set_layer_mask_value(1, true)
 		label3d.set_layer_mask_value(6, false)
 		
+		camera.queue_free()
 		interact_ray.queue_free()
 		arms.queue_free()
 		rain.queue_free()

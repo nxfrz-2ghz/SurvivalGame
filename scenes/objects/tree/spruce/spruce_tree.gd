@@ -1,6 +1,6 @@
 extends "res://scenes/objects/object.gd"
 
-const evil_tree_spawn_chance_percent := 1.0
+const evil_tree_spawn_chance_percent := 1.7
 
 @rpc("authority", "call_local")
 func on_damage() -> void:
